@@ -16,8 +16,8 @@ oil.main(function()
 	end
 	function testEC:get_component_state(comp)
 		print("get_component_state")
-		print(testEC.state)
-		return testEC.state
+		print(self.state)
+		return self.state
 	end
 	function testEC:get_kind()
 		print("get_kind")
@@ -25,17 +25,17 @@ oil.main(function()
 	end
 	function testEC:activate_component(comp)
 		print("activate_component")
-		testEC.state = 2
+		self.state = 2
 		return 0
 	end
 	function testEC:deactivate_component(comp)
 		print("deactivate_component")
-		testEC.state = 1
+		self.state = 1
 		return 0
 	end
 	function testEC:get_profile()
 		print("get_profile")
-		return {kind=0,rate=1000.0,owner=testEC.rtc, participants={},
+		return {kind=0,rate=1000.0,owner=self.rtc, participants={},
 				 properties={}}
 	end
 
@@ -64,7 +64,7 @@ oil.main(function()
 	end
 	function testComp:get_owned_contexts()
 		print("get_owned_contexts")
-		return {testComp.ec}
+		return {self.ec}
 	end
 	function testComp:get_participating_contexts()
 		print("get_participating_contexts")
@@ -76,8 +76,8 @@ oil.main(function()
 	end
 	function testComp:get_context(exec_handle)
 		print("get_context")
-		print(testComp.ec)
-		return testComp.ec
+
+		return self.ec
 	end
 	function testComp:get_context_handle(cxt)
 		print("get_context_handle")

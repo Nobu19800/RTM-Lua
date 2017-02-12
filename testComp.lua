@@ -1,7 +1,24 @@
 require "oil"
 
+local coroutine = require "coroutine"
+
+ExecutionContext = {}
+ExecutionContext.new = function()
+	local obj = {}
+	obj.run = function()
+		while true do
+			print("run")
+			coroutine.yield(1)
+		end
+	end
+	return obj
+end
+
+
 
 oil.main(function()
+
+
 
 
 
@@ -109,6 +126,7 @@ oil.main(function()
 	local orb = oil.init{ flavor = "intercepted;corba;typed;cooperative;base", port=2810 }
 	oil.newthread(orb.run, orb)
 
+
 	orb:loadidlfile("CosNaming.idl")
 	orb:loadidlfile("hello.idl")
 	orb:loadidlfile("RTC.idl")
@@ -136,5 +154,9 @@ oil.main(function()
 	ns = orb:newproxy(name,"IDL:omg.org/CosNaming/NamingContext:1.0")
 
 	ns:rebind({{id="testComp",kind="rtc"}},testComp)
+
+
+	ec = ExecutionContext.new()
+	oil.newthread(ec.run)
 
 end)

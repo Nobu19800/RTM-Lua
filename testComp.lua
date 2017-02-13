@@ -128,7 +128,7 @@ oil.main(function()
 
 
 	orb:loadidlfile("CosNaming.idl")
-	orb:loadidlfile("hello.idl")
+
 	orb:loadidlfile("RTC.idl")
 	orb:loadidlfile("OpenRTM.idl")
 

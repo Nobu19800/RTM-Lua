@@ -2,12 +2,14 @@ require "oil"
 
 local coroutine = require "coroutine"
 
+
 ExecutionContext = {}
 ExecutionContext.new = function()
 	local obj = {}
 	obj.run = function()
 		while true do
 			print("run")
+			oil.tasks:suspend(1)
 			coroutine.yield(1)
 		end
 	end

@@ -1,6 +1,7 @@
 require "oil"
 
-local coroutine = require "coroutine"
+
+
 
 
 ExecutionContext = {}
@@ -19,12 +20,13 @@ end
 
 
 oil.main(function()
-
-
-
-
-
-	local testEC = {state=1}
+	local testEC = {}
+	function testEC:init(props, orb)
+		self.LifeCycleState = orb.types:lookup("::RTC::LifeCycleState").labelvalue
+		self.state = self.LifeCycleState.INACTIVE_STATE
+		self.ReturnCode_t = orb.types:lookup("::RTC::ReturnCode_t").labelvalue
+		self.ExecutionKind = orb.types:lookup("::RTC::ExecutionKind").labelvalue
+	end
 	function testEC:is_running()
 		print("is_running")
 		return true
@@ -40,25 +42,28 @@ oil.main(function()
 	end
 	function testEC:get_kind()
 		print("get_kind")
-		return 0
+		return self.ExecutionKind.PERIODIC
 	end
 	function testEC:activate_component(comp)
 		print("activate_component")
-		self.state = 2
-		return 0
+		self.state = self.LifeCycleState.ACTIVE_STATE
+		return self.ReturnCode_t.RTC_OK
 	end
 	function testEC:deactivate_component(comp)
 		print("deactivate_component")
-		self.state = 1
-		return 0
+		self.state = self.LifeCycleState.INACTIVE_STATE
+		return self.ReturnCode_t.RTC_OK
 	end
 	function testEC:get_profile()
-		print("get_profile")
-		return {kind=0,rate=1000.0,owner=self.rtc, participants={},
+		return {kind=self.ExecutionKind.PERIODIC,rate=1000.0,owner=self.rtc, participants={},
 				 properties={}}
 	end
 
 	local testComp = {}
+	function testComp:initialize(orb)
+		self.ReturnCode_t = orb.types:lookup("::RTC::ReturnCode_t").labelvalue
+		return self.ReturnCode_t.RTC_OK
+	end
 	function testComp:get_component_profile()
 		print("get_component_profile")
 		return {instance_name="testComp",type_name="testComp",
@@ -74,9 +79,7 @@ oil.main(function()
 				  }
 				  }
 	end
-	function testComp:initialize()
-		return 0
-	end
+
 	function testComp:get_ports()
 		print("get_ports")
 		return {}
@@ -107,8 +110,8 @@ oil.main(function()
 	local testPort = {}
 	function testPort:get_port_profile()
 		print("get_port_profile")
-		return {name="testPort",interfaces={},port_ref=nil,connector_profiles={},
-				 owner=nil, properties={}}
+		return {name="testPort",interfaces={},port_ref=oil.corba.idl.null,connector_profiles={},
+				 owner=oil.corba.idl.null, properties={}}
 	end
 	function testPort:get_connector_profiles()
 		print("get_connector_profiles")
@@ -138,7 +141,9 @@ oil.main(function()
 
 
 	testComp = orb:newservant(testComp, "testComp", "IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
+	testComp:initialize(orb)
 	testEC = orb:newservant(testEC, nil, "IDL:omg.org/RTC/ExecutionContextService:1.0")
+	testEC:init(nil, orb)
 	testComp.ec = testEC
 	testEC.rtc = testComp
 

@@ -21,6 +21,8 @@
 #ifndef DataInPort_idl
 #define DataInPort_idl
 
+#pragma prefix "openrtm.aist.go.jp"
+
 module OpenRTM
 {
   enum PortStatus

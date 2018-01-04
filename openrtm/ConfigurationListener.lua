@@ -2,13 +2,14 @@
 Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
-local ComponentActionListener= {}
-_G["openrtm.ComponentActionListener""] = ComponentActionListener
+local ConfigurationListener= {}
+_G["openrtm.ConfigurationListener"] = ConfigurationListener
 
-ComponentActionListener.init = function()
+ConfigurationListener.ConfigurationListeners = {}
+ConfigurationListener.ConfigurationListeners.new = function()
 	local obj = {}
 	return obj
 end
 
 
-return ComponentActionListener
+return ConfigurationListener

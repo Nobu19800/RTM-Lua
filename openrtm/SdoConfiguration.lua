@@ -3,12 +3,222 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local SdoConfiguration= {}
-_G["openrtm.SdoConfiguration""] = SdoConfiguration
+_G["openrtm.SdoConfiguration"] = SdoConfiguration
 
-SdoConfiguration.init = function()
+local oil = require "oil"
+local NVUtil = require "openrtm.NVUtil"
+local Properties = require "openrtm.Properties"
+
+SdoConfiguration.Configuration_impl = {}
+
+
+
+local toConfigurationSet = function(conf, prop)
+	conf.description = prop:getProperty("description")
+	conf.id = prop:getName()
+	--print(prop)
+	NVUtil.copyFromProperties(conf.configuration_data, prop)
+end
+
+SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 	local obj = {}
+
+	obj._deviceProfile = {device_type="",manufacturer="",model="",version="",properties={}}
+	obj._serviceProfiles = {}
+	obj._parameters = {}
+	obj._configsets = configAdmin
+	obj._sdoservice = sdoServiceAdmin
+
+	obj._organizations = {}
+
+
+
+
+	local Manager = require "openrtm.Manager"
+	local svr = Manager:instance():getORB():newservant(obj, nil, "IDL:org.omg/SDOPackage/Configuration:1.0")
+	local str = Manager:instance():getORB():tostring(svr)
+	obj._objref = Manager:instance():getORB():newproxy(str,"IDL:org.omg/SDOPackage/Configuration:1.0")
+
+	obj._rtcout = Manager:instance():getLogbuf("rtobject.sdo_config")
+
+
+	function obj:getObjRef()
+		return self._objref
+	end
+
+
+	function obj:get_configuration_set(config_id)
+		self._rtcout:RTC_TRACE("get_configuration_set("..config_id..")")
+		if config_id == "" then
+			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+					description="ID is empty"
+				})
+		end
+
+		if not self._configsets:haveConfig(config_id) then
+			self._rtcout:RTC_ERROR("No such ConfigurationSet")
+			error(self._orb:newexcept{"SDOPackage::InternalError",
+					description="No such ConfigurationSet"
+				})
+		end
+
+
+
+		local configset = self._configsets:getConfigurationSet(config_id)
+
+
+		local config = {id="",description="",configuration_data={}}
+		toConfigurationSet(config, configset)
+		return config
+	end
+
+
+	function obj:get_active_configuration_set()
+		self._rtcout:RTC_TRACE("get_active_configuration_set()")
+		if not self._configsets:isActive() then
+			error(self._orb:newexcept{"SDOPackage::NotAvailable",
+					description="NotAvailable: Configuration.get_active_configuration_set()"
+			})
+		end
+
+
+
+		config = {id="",description="",configuration_data={}}
+		toConfigurationSet(config, self._configsets:getActiveConfigurationSet())
+		return config
+	end
+
+
+	function obj:activate_configuration_set(config_id)
+		self._rtcout:RTC_TRACE("activate_configuration_set("..config_id..")")
+		if config_id == "" then
+			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+					description="ID is empty."
+			})
+		end
+
+		if self._configsets:activateConfigurationSet(config_id) then
+			return true
+		else
+			error(self._orb:newexcept{"SDOPackage::InternalError",
+					description="Configuration.activate_configuration_set()."
+			})
+		end
+	end
+
+
+	function obj:set_configuration_set_values(configuration_set)
+		self._rtcout:RTC_TRACE("set_configuration_set_values()")
+		if configuration_set == nil or configuration_set.id == "" then
+			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+					description="ID is empty."
+			})
+		end
+
+		ret = nil
+		local success, exception = oil.pcall(
+			function()
+				conf = Properties.new({key=configuration_set.id})
+				toProperties(conf, configuration_set)
+
+				ret = self._configsets.setConfigurationSetValues(conf)
+		end)
+		if not success then
+			self._rtcout:RTC_ERROR(exception)
+			error(self._orb:newexcept{"SDOPackage::InternalError",
+					description="Configuration::set_configuration_set_values()"
+			})
+		end
+		return ret
+	end
+
+	function obj:set_device_profile(dProfile)
+		self._rtcout:RTC_TRACE("set_device_profile()")
+		error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+					description="dProfile is empty."
+			})
+	end
+
+	function obj:add_service_profile(sProfile)
+		self._rtcout:RTC_TRACE("add_service_profile()")
+		error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+					description="sProfile is empty."
+			})
+	end
+
+	function obj:add_organization(org)
+		self._rtcout:RTC_TRACE("add_organization()")
+		error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+					description="org is empty."
+			})
+	end
+
+	function obj:remove_service_profile(id_)
+		self._rtcout:RTC_TRACE("remove_service_profile("..id_..")")
+		error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+					description="id is empty."
+			})
+	end
+
+	function obj:remove_organization(organization_id)
+		self._rtcout:RTC_TRACE("remove_organization("..organization_id..")")
+		error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+					description="id is empty."
+			})
+	end
+
+
+	function obj:get_configuration_parameters()
+		self._rtcout:RTC_TRACE("get_configuration_parameters()")
+		return self._parameters
+	end
+
+	function obj:get_configuration_parameter_values()
+		self._rtcout:RTC_TRACE("get_configuration_parameter_values()")
+		local nvlist = {}
+		return nvlist
+	end
+
+	function obj:set_configuration_parameter(name, value)
+		self._rtcout:RTC_TRACE("set_configuration_parameter("..name..", value)")
+		error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+					description="Name/Value is empty."
+			})
+	end
+
+
+	function obj:get_configuration_sets()
+		self._rtcout:RTC_TRACE("get_configuration_sets()")
+		local config_sets = {}
+		local success, exception = oil.pcall(
+			function()
+				local cf = self._configsets:getConfigurationSets()
+
+				local len_ = table.maxn(cf)
+
+				for i = 1,len_ do
+					config_sets[i] = {id="",description="",configuration_data={}}
+					toConfigurationSet(config_sets[i], cf[i])
+				end
+			end)
+		if not success then
+			--print(exception)
+			self._rtcout:RTC_ERROR(exception)
+			error(self._orb:newexcept{"SDOPackage::InternalError",
+					description="Configuration.get_configuration_sets"
+			})
+		end
+
+		return config_sets
+	end
+
+
+
+
 	return obj
 end
+
+
 
 
 return SdoConfiguration

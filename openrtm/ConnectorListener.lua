@@ -3,9 +3,12 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local ConnectorListener= {}
-_G["openrtm.ConnectorListener""] = ConnectorListener
+_G["openrtm.ConnectorListener"] = ConnectorListener
 
-ConnectorListener.init = function()
+
+ConnectorListener.ConnectorListeners = {}
+
+ConnectorListener.ConnectorListeners.new = function()
 	local obj = {}
 	return obj
 end

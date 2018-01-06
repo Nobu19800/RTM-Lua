@@ -77,6 +77,30 @@ NVUtil.getPortStatus = function(ret_code)
 end
 
 
+NVUtil.getPortStatus_RTC = function(ret_code)
+	--print(ret_code)
+	if type(ret_code) == "string" then
+		local Manager = require "openrtm.Manager"
+		local _PortStatus = Manager:instance():getORB().types:lookup("::RTC::PortStatus").labelvalue
+
+		if ret_code == "PORT_OK" then
+			return _PortStatus.PORT_OK
+		elseif ret_code == "PORT_ERROR" then
+			return _PortStatus.PORT_ERROR
+		elseif ret_code == "BUFFER_FULL" then
+			return _PortStatus.BUFFER_FULL
+		elseif ret_code == "BUFFER_EMPTY" then
+			return _PortStatus.BUFFER_EMPTY
+		elseif ret_code == "BUFFER_TIMEOUT" then
+			return _PortStatus.BUFFER_TIMEOUT
+		elseif ret_code == "UNKNOWN_ERROR" then
+			return _PortStatus.UNKNOWN_ERROR
+		end
+	end
+	return ret_code
+end
+
+
 
 NVUtil.copyToProperties = function(prop, nvlist)
 	for i, nv in ipairs(nvlist) do

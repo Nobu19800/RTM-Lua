@@ -40,12 +40,12 @@ ConsoleOut.new = function()
 		return self._ReturnCode_t.RTC_OK
 	end
 	function obj:onExecute(ec_id)
-		--if self._inIn:isNew() then
+		if self._inIn:isNew() then
 			local data = self._inIn:read()
 			print("Received: ", data)
 			print("Received: ", data.data)
 			print("TimeStamp: ", data.tm.sec, "[s] ", data.tm.nsec, "[ns]")
-		--end
+		end
 		return self._ReturnCode_t.RTC_OK
 	end
 

@@ -6,7 +6,7 @@ local SystemLogger= {}
 _G["openrtm.SystemLogger"] = SystemLogger
 
 SystemLogger.LogStream = {}
-local NO_LOGGER = true
+local NO_LOGGER = false
 SystemLogger.LogStream.new = function()
 	local obj = {}
 	function obj:getLogger(name)

@@ -40,12 +40,17 @@ RTObjectStateMachine.new = function(id, comp)
     obj._dfcVar  = nil
     obj._fsmVar  = nil
     obj._modeVar = nil
-    --obj._rtObjPtr = nil
+    obj._rtObjPtr = nil
 
 
 
 	function obj:setComponentAction(comp)
-		self._caVar = comp
+		if comp.getObjRef == nil then
+			self._caVar = comp
+		else
+			self._rtObjPtr = comp
+			self._caVar = comp:getObjRef()
+		end
 	end
 	function obj:setDataFlowComponentAction(comp)
 	end
@@ -99,87 +104,108 @@ RTObjectStateMachine.new = function(id, comp)
 		self._sm:goTo(state+1)
     end
 
+	function obj:getComponentObj()
+
+		if self._rtObjPtr ~= nil then
+			return self._rtObjPtr
+		elseif self._caVar ~= nil then
+			return self._caVar
+		else
+			return nil
+		end
+	end
 	function obj:onStartup()
-		if self._caVar ~= nil then
-			self._caVar:on_startup(self._id)
+		local comp = self:getComponentObj()
+		if comp ~= nil then
+			comp:on_startup(self._id)
 		end
 	end
 	function obj:onShutdown()
-		if self._caVar ~= nil then
-			self._caVar:on_shutdown(self._id)
+		local comp = self:getComponentObj()
+		if comp ~= nil then
+			comp:on_shutdown(self._id)
 		end
 	end
 	function obj:onActivated(st)
+		local comp = self:getComponentObj()
 		--print(self._caVar)
 		--print("test",self._caVar)
-		if self._caVar == nil then
+		if comp == nil then
 			return
 		end
 		--local ret = self._caVar:on_activated(self._id)
 		--print(type(ret), type(self._ReturnCode_t.RTC_OK))
 		--if ret ~= "RTC_OK" then
 		--print("aaaa")
-		if NVUtil.getReturnCode(self._caVar:on_activated(self._id)) ~= self._ReturnCode_t.RTC_OK then
+		if NVUtil.getReturnCode(comp:on_activated(self._id)) ~= self._ReturnCode_t.RTC_OK then
 			--print("onActivated:ERROR")
 			self._sm:goTo(self._LifeCycleState.ERROR_STATE+1)
 		end
 		--print("OK")
     end
 	function obj:onDeactivated(st)
-		if self._caVar == nil then
+		local comp = self:getComponentObj()
+		if comp == nil then
 			return
 		end
-		self._caVar:on_deactivated(self._id)
+		comp:on_deactivated(self._id)
     end
 	function obj:onAborting(st)
-		if self._caVar == nil then
+		local comp = self:getComponentObj()
+		if comp == nil then
 			return
 		end
-		self._caVar:on_aborting(self._id)
+		comp:on_aborting(self._id)
     end
 	function obj:onError(st)
-		if self._caVar == nil then
+		local comp = self:getComponentObj()
+		if comp == nil then
 			return
 		end
-		self._caVar:on_error(self._id)
+		comp:on_error(self._id)
     end
 	function obj:onReset(st)
-		if self._caVar == nil then
+		local comp = self:getComponentObj()
+		if comp == nil then
 			return
 		end
-		if NVUtil.getReturnCode(self._caVar:on_reset(self._id)) ~= self._ReturnCode_t.RTC_OK then
+		if NVUtil.getReturnCode(comp:on_reset(self._id)) ~= self._ReturnCode_t.RTC_OK then
 			self._sm:goTo(self._LifeCycleState.ERROR_STATE+1)
 		end
     end
 	function obj:onExecute(st)
-		if self._caVar == nil then
+		local comp = self:getComponentObj()
+		if comp == nil then
 			return
 		end
-		if NVUtil.getReturnCode(self._caVar:on_execute(self._id)) ~= self._ReturnCode_t.RTC_OK then
+		if NVUtil.getReturnCode(comp:on_execute(self._id)) ~= self._ReturnCode_t.RTC_OK then
 			--print("onExecute:ERROR")
 			self._sm:goTo(self._LifeCycleState.ERROR_STATE+1)
 		end
     end
 	function obj:onStateUpdate(st)
-		if self._caVar == nil then
+		local comp = self:getComponentObj()
+		if comp == nil then
 			return
 		end
-		if NVUtil.getReturnCode(self._caVar:on_state_update(self._id)) ~= self._ReturnCode_t.RTC_OK then
+		if NVUtil.getReturnCode(comp:on_state_update(self._id)) ~= self._ReturnCode_t.RTC_OK then
 			--print("onStateUpdate:ERROR")
 			self._sm:goTo(self._LifeCycleState.ERROR_STATE+1)
 		end
     end
 	function obj:onRateChanged(st)
-		if self._caVar == nil then
+		local comp = self:getComponentObj()
+		if comp == nil then
 			return
 		end
-		local ret = self._caVar:on_rate_changed(self._id)
+		local ret = comp:on_rate_changed(self._id)
 		if ret ~= self._ReturnCode_t.RTC_OK then
 			self._sm:goTo(self._LifeCycleState.ERROR_STATE+1)
 		end
 		return ret
     end
 	function obj:onAction(st)
+		local comp = self:getComponentObj()
 		if self._fsmVar == nil then
 			return
 		end
@@ -188,6 +214,7 @@ RTObjectStateMachine.new = function(id, comp)
 		end
     end
 	function obj:onModeChanged(st)
+		local comp = self:getComponentObj()
 		if self._modeVar == nil then
 			return
 		end

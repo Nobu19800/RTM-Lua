@@ -395,6 +395,30 @@ ExecutionContextBase.new = function(name)
 	end
 
 
+	function obj:stop()
+		self._rtcout:RTC_TRACE("stop()")
+		local ret_ = self:onStopping()
+		if ret_ ~= self._ReturnCode_t.RTC_OK then
+			self._rtcout:RTC_ERROR("onStopping() failed. Stopping EC aborted.")
+			return ret_
+		end
+
+		ret_ = self._worker:stop()
+		if ret_ ~= self._ReturnCode_t.RTC_OK then
+			self._rtcout:RTC_ERROR("Invoking on_shutdown() for each RTC failed.")
+			return ret_
+		end
+
+		ret_ = self:onStopped()
+		if ret_ ~= self._ReturnCode_t.RTC_OK then
+			self._rtcout:RTC_ERROR("onStopped() failed. Stopped EC aborted.")
+			return ret_
+		end
+
+		return ret_
+	end
+
+
 
 	return obj
 end

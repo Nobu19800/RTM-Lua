@@ -308,14 +308,14 @@ Properties.new = function(argv)
 		for i = 1, length do
 			s = string.sub(_str,i,i)
 			if (s == ":" or s == "=") and not StringUtil.isEscaped(_str, i) then
-				table.insert(key,string.sub(_str,1,i))
+				table.insert(key,string.sub(_str,1,i-1))
 				table.insert(value,string.sub(_str,i+1))
 				return
 			end
 		end
 		for i = 1, length do
 			if s == " " and not StringUtil.isEscaped(_str, i) then
-				table.insert(key,string.sub(_str,1,i))
+				table.insert(key,string.sub(_str,1,i-1))
 				table.insert(value,string.sub(_str,i+1))
 				return
 			end

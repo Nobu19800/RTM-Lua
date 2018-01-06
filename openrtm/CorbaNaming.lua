@@ -129,6 +129,21 @@ CorbaNaming.new = function(orb, name_server)
 
 	end
 
+	function obj:unbind(name)
+		local name_ = name
+		if type(name) == "string" then
+			name_ = self:toName(name)
+		end
+
+		local success, exception = oil.pcall(
+			function()
+				self._rootContext:unbind(name_)
+			end)
+		if not success then
+			print(exception)
+		end
+    end
+
 	return obj
 end
 

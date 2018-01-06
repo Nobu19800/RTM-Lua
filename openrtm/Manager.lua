@@ -94,31 +94,50 @@ if ORB_Dummy_ENABLE then
 		return ref
 	end
 
-	function ORB_Dummy:newencoder(cdr)
+	function ORB_Dummy:newencoder()
 		local encoder = {}
 		encoder.data = 0
-		encoder.cdr = cdr
 		function encoder:put(data, data_type)
 			self.data = data
 		end
 		function encoder:getdata()
+
 			return self.data
 		end
-		function encoder:get(data_type)
-			return self.cdr
-		end
+
 
 		return encoder
 	end
 
+	function ORB_Dummy:newdecoder(cdr)
+		local decoder = {}
+		decoder.cdr = cdr
+
+		function decoder:get(data_type)
+			return self.cdr
+		end
+
+		return decoder
+	end
 
 
+	function ORB_Dummy:deactivate(object)
+
+	end
 
 	Dummy_NameServer = {}
 
 	Dummy_NameServer.new = function()
 		local obj = {}
 		function obj:rebind(name_list, obj)
+			print("rebind:")
+			for i, name in ipairs(name_list) do
+				print(name.id, name.kind)
+			end
+		end
+
+		function obj:unbind(name_list)
+			print("unbind:")
 			for i, name in ipairs(name_list) do
 				print(name.id, name.kind)
 			end
@@ -229,6 +248,8 @@ function FactoryPredicate(argv)
 		--print(factory:profile())
 		--print(_prop:)
 		--print(self._impleid,_prop:getProperty("implementation_id"))
+		--print(self._impleid, self._vendor, self._category, self._version)
+		--print(_prop:getProperty("implementation_id"), _prop:getProperty("vendor"), _prop:getProperty("category"), _prop:getProperty("implementation_id"))
 		if self._impleid ~= _prop:getProperty("implementation_id") then
 			return false
 		end
@@ -238,7 +259,7 @@ function FactoryPredicate(argv)
 		if self._category  ~= "" and self._category  ~= _prop:getProperty("category") then
 			return false
 		end
-		if self._version  ~= "" and self._version  ~= _prop:getProperty("_version ") then
+		if self._version  ~= "" and self._version  ~= _prop:getProperty("version") then
 			return false
 		end
 
@@ -312,6 +333,7 @@ function Manager:init(argv)
 	self:initTimer()
 	self._finalized = Finalized.new()
     self._listeners = ManagerActionListeners.new()
+	self._initThread = nil
 end
 
 
@@ -351,6 +373,7 @@ end
 
 function Manager:runManager()
 	oil.main(function()
+
 		self:initORB()
 		oil.newthread(self._orb.run, self._orb)
 		self:initManagerServant()
@@ -360,6 +383,9 @@ function Manager:runManager()
 
 		if self._initProc ~= nil then
 			self._initProc(self)
+		end
+		if self._initThread ~= nil then
+			oil.newthread(self._initThread, self)
 		end
 		--self._orb:run()
 	end)
@@ -527,13 +553,48 @@ function Manager:registerComponent(comp)
     return true
 end
 function Manager:unregisterComponent(comp)
+    self._rtcout:RTC_TRACE("Manager.unregisterComponent("..comp:getInstanceName()..")")
+    self._compManager:unregisterObject(comp:getInstanceName())
+    names = comp:getNamingNames()
 
+    --self._listeners.naming_:preUnbind(comp, names)
+    for i,name in ipairs(names) do
+		self._rtcout:RTC_TRACE("Unbind name: "..name)
+		self._namingManager:unbindObject(name)
+	end
+    --self._listeners.naming_:postUnbind(comp, names)
 end
 function Manager:createContext(ec_args)
 
 end
-function Manager:deleteComponent(instance_name, comp)
+function Manager:deleteComponent(argv)
+	if argv.instance_name ~= nil then
+		self._rtcout.RTC_TRACE("Manager.deleteComponent("..instance_name..")")
+		local _comp = self._compManager:find(instance_name)
+		if _comp ~= nil then
+			self._rtcout:RTC_WARN("RTC "..instance_name.." was not found in manager.")
+			return
+		end
+		self:deleteComponent({comp=_comp})
+	elseif argv.comp ~= nil then
+		self._rtcout:RTC_TRACE("Manager.deleteComponent(RTObject_impl)")
 
+		self:unregisterComponent(comp)
+
+		local comp_id = comp:getProperties()
+		local factory = self._factory:find(comp_id)
+		--print(comp_id)
+
+		if factory == nil then
+			self._rtcout:RTC_DEBUG("Factory not found: "..
+                               comp_id:getProperty("implementation_id"))
+			return
+		else
+			self._rtcout:RTC_DEBUG("Factory found: "..
+                               comp_id:getProperty("implementation_id"))
+			factory:destroy(comp)
+		end
+	end
 end
 function Manager:getComponent(instance_name)
     self._rtcout:RTC_TRACE("Manager.getComponent("..instance_name..")")
@@ -604,17 +665,27 @@ function Manager:initORB()
 	if ORB_Dummy_ENABLE then
 		self._orb = ORB_Dummy
 	else
-		self._orb = oil.init{ flavor = "intercepted;corba;typed;cooperative;base", port=2818 }
+		self._orb = oil.init{ flavor = "intercepted;corba;typed;cooperative;base" }
 
-		self._orb:loadidlfile("CosNaming.idl")
-		self._orb:loadidlfile("RTC.idl")
-		self._orb:loadidlfile("OpenRTM.idl")
-		self._orb:loadidlfile("DataPort.idl")
-		self._orb:loadidlfile("Manager.idl")
-		self._orb:loadidlfile("InterfaceDataTypes.idl")
+		self._orb:loadidlfile(Manager:findIdLFile("CosNaming.idl"))
+		self._orb:loadidlfile(Manager:findIdLFile("RTC.idl"))
+		self._orb:loadidlfile(Manager:findIdLFile("OpenRTM.idl"))
+		self._orb:loadidlfile(Manager:findIdLFile("DataPort.idl"))
+		self._orb:loadidlfile(Manager:findIdLFile("Manager.idl"))
+		self._orb:loadidlfile(Manager:findIdLFile("InterfaceDataTypes.idl"))
 	end
 	self._ReturnCode_t = self._orb.types:lookup("::RTC::ReturnCode_t").labelvalue
 end
+
+function Manager:findIdLFile(name)
+	if openrtm_idl_path == nil then
+		openrtm_idl_path = "./idl/Filename"
+	end
+	local _str,_ret = string.gsub(openrtm_idl_path, "Filename", name)
+	--print(_str)
+	return _str
+end
+
 function Manager:createORBOptions()
 
 end
@@ -625,7 +696,7 @@ function Manager:createORBEndpointOption(opt, endpoints)
 
 end
 function Manager:shutdownORB()
-
+	self._orb:shutdown()
 end
 function Manager:initNaming()
 	self._rtcout:RTC_TRACE("Manager.initNaming()")
@@ -720,10 +791,20 @@ function Manager:cleanupComponent(comp)
 
 end
 function Manager:cleanupComponents()
+    self._rtcout:RTC_VERBOSE("Manager.cleanupComponents()")
 
+    self._rtcout:RTC_VERBOSE(table.maxn(self._finalized.comps).." components are marked as finalized.")
+    for i, _comp in ipairs(self._finalized.comps) do
+		self:deleteComponent({comp=_comp})
+	end
+
+    self._finalized.comps = {}
 end
-function Manager:notifyFinalized(comp)
+function Manager:notifyFinalized(_comp)
+    self._rtcout:RTC_TRACE("Manager.notifyFinalized()")
 
+    --table.insert(self._finalized.comps, _comp)
+	self:deleteComponent({comp=_comp})
 end
 function Manager:procComponentArgs(comp_arg, comp_id, comp_conf)
 	id_and_conf_str = StringUtil.split(comp_arg, "?")
@@ -983,13 +1064,18 @@ function Manager:setModuleInitProc(proc)
 	self._initProc = proc
 end
 
+function Manager:setinitThread(thread)
+	self._initThread = thread
+end
+
 function Manager:cdrMarshal(data, dataType)
+
 	local encoder = self._orb:newencoder()
 	encoder:put(data, self._orb.types:lookup(dataType))
 	local cdr = encoder:getdata()
-	for i=1,#cdr do
-		print(i,string.byte(string.sub(cdr,i,i)))
-	end
+	--for i=1,#cdr do
+	--	print(i,string.byte(string.sub(cdr,i,i)))
+	--end
 	if #cdr == 0 then
 	elseif #cdr == 2 then
 		cdr = string.sub(cdr,2)
@@ -998,9 +1084,9 @@ function Manager:cdrMarshal(data, dataType)
 	else
 		cdr = string.sub(cdr,5)
 	end
-	for i=1,#cdr do
-		print(i,string.byte(string.sub(cdr,i,i)))
-	end
+	--for i=1,#cdr do
+	--	print(i,string.byte(string.sub(cdr,i,i)))
+	--end
 	return cdr
 end
 

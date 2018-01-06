@@ -7,6 +7,10 @@ local FactoryInit= function()
 	local InPortCorbaCdrProviderInit = InPortCorbaCdrProvider.InPortCorbaCdrProviderInit
 	local InPortCorbaCdrConsumer = require "openrtm.InPortCorbaCdrConsumer"
 	local InPortCorbaCdrConsumerInit = InPortCorbaCdrConsumer.InPortCorbaCdrConsumerInit
+	local OutPortCorbaCdrProvider = require "openrtm.OutPortCorbaCdrProvider"
+	local OutPortCorbaCdrProviderInit = OutPortCorbaCdrProvider.OutPortCorbaCdrProviderInit
+	local OutPortCorbaCdrConsumer = require "openrtm.OutPortCorbaCdrConsumer"
+	local OutPortCorbaCdrConsumerInit = OutPortCorbaCdrConsumer.OutPortCorbaCdrConsumerInit
 	local NumberingPolicy = require "openrtm.NumberingPolicy"
 	local DefaultNumberingPolicyInit = NumberingPolicy.DefaultNumberingPolicyInit
 	local CdrRingBuffer = require "openrtm.CdrRingBuffer"
@@ -18,6 +22,8 @@ local FactoryInit= function()
 
 	InPortCorbaCdrConsumerInit()
 	InPortCorbaCdrProviderInit()
+	OutPortCorbaCdrConsumerInit()
+	OutPortCorbaCdrProviderInit()
 	DefaultNumberingPolicyInit()
 
 	PublisherFlushInit()

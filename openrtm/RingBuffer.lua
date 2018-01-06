@@ -97,6 +97,7 @@ RingBuffer.new = function(length)
 		if self:full() then
 			self:advanceRptr()
 		end
+
 		self:put(value)
 		self:advanceWptr(1)
 		return BufferStatus.BUFFER_OK

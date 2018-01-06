@@ -26,7 +26,7 @@ local ConnectorBase = require "openrtm.ConnectorBase"
 local ConnectorInfo = ConnectorBase.ConnectorInfo
 
 local OutPortPushConnector = require "openrtm.OutPortPushConnector"
-
+local OutPortPullConnector = require "openrtm.OutPortPullConnector"
 
 
 OutPortBase.new = function(name, data_type)
@@ -347,6 +347,37 @@ OutPortBase.new = function(name, data_type)
 			return nil
 		end
 		return ret
+	end
+
+	function obj:createProvider(cprof, prop)
+
+		if prop:getProperty("interface_type") == "" or
+			  not StringUtil.includes(self._providerTypes, prop:getProperty("interface_type")) then
+			self._rtcout:RTC_ERROR("no provider found")
+			self._rtcout:RTC_DEBUG("interface_type:  "..prop:getProperty("interface_type"))
+			self._rtcout:RTC_DEBUG("interface_types: "..
+								 StringUtil.flatten(self._providerTypes))
+			return nil
+		end
+
+		self._rtcout:RTC_DEBUG("interface_type: "..prop:getProperty("interface_type"))
+		local provider = OutPortProviderFactory:instance():createObject(prop:getProperty("interface_type"))
+
+		if provider ~= nil then
+			self._rtcout:RTC_DEBUG("provider created")
+			provider:init(prop:getNode("provider"))
+
+			if not provider:publishInterface(cprof.properties) then
+				self._rtcout:RTC_ERROR("publishing interface information error")
+				OutPortProviderFactory:instance():deleteObject(provider)
+				return nil
+			end
+
+			return provider
+		end
+
+		self._rtcout:RTC_ERROR("provider creation failed")
+		return nil
 	end
 	function obj:createConsumer(cprof, prop)
 		--print(prop:getProperty("interface_type"))

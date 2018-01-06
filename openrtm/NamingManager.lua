@@ -57,6 +57,19 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 
     end
 
+	function obj:unbindObject(name)
+		self._rtcout:RTC_TRACE("unbindObject(name  = "..name..")")
+		local success, exception = oil.pcall(
+			function()
+				self._cosnaming:unbind(name)
+			end)
+		if not success then
+			--print(exception)
+			self._rtcout.RTC_ERROR(exception)
+		end
+
+	end
+
 	return obj
 end
 
@@ -160,6 +173,25 @@ NamingManager.new = function(manager)
 		end
 		table.insert(self._compNames, NamingManager.Comps.new(name, rtobj))
     end
+
+	function obj:unbindObject(name)
+		self._rtcout:RTC_TRACE("NamingManager::unbindObject("..name..")")
+		for i,n in ipairs(self._names) do
+			if n.ns ~= nil then
+				n.ns:unbindObject(name)
+			end
+		end
+		self:unregisterCompName(name)
+		self:unregisterMgrName(name)
+		self:unregisterPortName(name)
+	end
+
+	function obj:unregisterCompName(name)
+	end
+	function obj:unregisterMgrName(name)
+	end
+	function obj:unregisterPortName(name)
+	end
 	return obj
 end
 

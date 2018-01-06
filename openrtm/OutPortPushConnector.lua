@@ -31,7 +31,7 @@ OutPortPushConnector.new = function(info, consumer, listeners, buffer)
 		local Manager = require "openrtm.Manager"
 
 		local cdr_data = Manager:instance():cdrMarshal(data._data, data._type)
-		print(#cdr_data)
+		--print(#cdr_data)
 
 		return self._publisher:write(cdr_data, 0, 0)
 	end

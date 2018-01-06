@@ -150,9 +150,12 @@ CorbaPort.new = function(name)
 	end
 
 
-	function obj:registerConsumer(instance_name, type_name, consumer)
+	function obj:registerConsumer(instance_name, type_name, consumer, idl_file)
 		self._rtcout:RTC_TRACE("registerConsumer()")
-
+		if idl_file ~= nil then
+			local Manager = require "openrtm.Manager"
+			Manager:instance():getORB():loadidlfile(idl_file)
+		end
 		if not self:appendInterface(instance_name, type_name, self._PortInterfacePolarity.REQUIRED) then
 			return false
 		end
@@ -228,13 +231,13 @@ CorbaPort.new = function(name)
 			local ior = {}
 			--print(nv, consumer)
 			--print(self:findProvider(nv, consumer, ior))
-			if self:findProvider(nv, consumer, ior) and len(ior) > 0 then
+			if self:findProvider(nv, consumer, ior) and table.maxn(ior) > 0 then
 
 				self:setObject(ior[1], consumer)
 
 			else
 				ior = {}
-				--print(self:findProviderOld(nv, consumer, ior))
+				--print(self:findProviderOld(nv, consumer, ior), table.maxn(ior))
 				if self:findProviderOld(nv, consumer, ior) and table.maxn(ior) > 0 then
 
 					self:setObject(ior[1], consumer)
@@ -331,6 +334,7 @@ CorbaPort.new = function(name)
 
 		local index = NVUtil.find_index(nv, olddesc)
 
+
 		if index < 0 then
 			return false
 		end
@@ -338,6 +342,7 @@ CorbaPort.new = function(name)
 
 
 		local ior_ = NVUtil.any_from_any(nv[index].value)
+		--print(ior_)
 
 		if ior_ == "" then
 			self._rtcout:RTC_WARN("Cannot extract Provider IOR string")

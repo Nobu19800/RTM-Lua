@@ -138,6 +138,7 @@ RTObject.new = function(manager)
 	obj._outports = {}
 	obj._actionListeners = ComponentActionListeners.new()
 	obj._portconnListeners = PortConnectListeners.new()
+	obj._svr = nil
 
 	obj._ReturnCode_t = obj._orb.types:lookup("::RTC::ReturnCode_t").labelvalue
 
@@ -226,6 +227,7 @@ RTObject.new = function(manager)
 		end
 		local ret = self:on_finalize()
 		self:shutdown()
+		return ret
 	end
 
 	function obj:getProperties()
@@ -384,6 +386,39 @@ RTObject.new = function(manager)
 	end
 	function obj:preOnInitialize(ec_id)
 		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_INITIALIZE]:notify(ec_id)
+	end
+	function obj:preOnFinalize(ec_id)
+		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_FINALIZE]:notify(ec_id)
+	end
+	function obj:preOnStartup(ec_id)
+		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_STARTUP]:notify(ec_id)
+	end
+	function obj:preOnShutdown(ec_id)
+		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_SHUTDOWN]:notify(ec_id)
+	end
+	function obj:preOnActivated(ec_id)
+		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_ACTIVATED]:notify(ec_id)
+	end
+	function obj:preOnDeactivated(ec_id)
+		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_DEACTIVATED]:notify(ec_id)
+	end
+	function obj:preOnAborting(ec_id)
+		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_ABORTING]:notify(ec_id)
+	end
+	function obj:preOnError(ec_id)
+		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_ERROR]:notify(ec_id)
+	end
+	function obj:preOnReset(ec_id)
+		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_RESET]:notify(ec_id)
+	end
+	function obj:preOnExecute(ec_id)
+		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_EXECUTE]:notify(ec_id)
+	end
+	function obj:preOnStateUpdate(ec_id)
+		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_STATE_UPDATE]:notify(ec_id)
+	end
+	function obj:preOnRateChanged(ec_id)
+		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_RATE_CHANGED]:notify(ec_id)
 	end
 	function obj:bindContext(exec_context)
 		self._rtcout:RTC_TRACE("bindContext()")
@@ -951,9 +986,82 @@ RTObject.new = function(manager)
 	end
 
 	function obj:createRef()
-		local svr = self._orb:newservant(self, nil, "IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
-		local str = self._orb:tostring(svr)
+		self._svr = self._orb:newservant(self, nil, "IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
+		local str = self._orb:tostring(self._svr)
 		self._objref = self._orb:newproxy(str,"IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
+	end
+
+
+	function obj:on_finalize()
+		self._rtcout:RTC_TRACE("on_finalize()")
+		local ret = self._ReturnCode_t.RTC_ERROR
+		local success, exception = oil.pcall(
+			function()
+				self:preOnFinalize(0)
+				ret = self:onFinalize()
+			end)
+		if not success then
+			--print(exception)
+			self._rtcout:RTC_ERROR(exception)
+			ret = self._ReturnCode_t.RTC_ERROR
+		end
+		self:postOnFinalize(0, ret)
+		return ret
+	end
+
+
+	function obj:shutdown()
+		self._rtcout:RTC_TRACE("shutdown()")
+		local success, exception = oil.pcall(
+			function()
+				self:finalizePorts()
+				self:finalizeContexts()
+				--self._orb:deactivate(self._SdoConfigImpl)
+				--self._orb:deactivate(self._objref)
+				self._SdoConfigImpl:deactivate()
+				if self._svr ~= nil then
+					self._orb:deactivate(self._svr)
+				end
+				self._sdoservice:exit()
+			end)
+		if not success then
+			--print(exception)
+			self._rtcout:RTC_ERROR(exception)
+		end
+
+		if self._manager ~= nil then
+			self._rtcout:RTC_DEBUG("Cleanup on Manager")
+			self._manager:notifyFinalized(self)
+		end
+
+		self._actionListeners = nil
+		self._portconnListeners = nil
+
+	end
+
+	function obj:finalizePorts()
+		self._rtcout:RTC_TRACE("finalizePorts()")
+		self._portAdmin:finalizePorts()
+		self._inports = {}
+		self._outports = {}
+    end
+
+
+	function obj:finalizeContexts()
+		self._rtcout:RTC_TRACE("finalizeContexts()")
+
+		for i,ec in ipairs(self._eclist) do
+			ec:stop()
+			local success, exception = oil.pcall(
+				function()
+					--self._orb:deactivate(ec)
+				end)
+			if not success then
+			end
+			ec:exit()
+		end
+
+		self._eclist = {}
 	end
 
 

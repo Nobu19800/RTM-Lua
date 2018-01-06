@@ -95,6 +95,7 @@ PortAdmin.new = function(orb)
 			--print(#self._portRefs)
 			CORBA_SeqUtil.erase_if(self._portRefs, find_port_name.new(tmp))
 			--print(#self._portRefs)
+			port:deactivate()
 
 
 			port:setPortRef(oil.corba.idl.null)
@@ -117,6 +118,13 @@ PortAdmin.new = function(orb)
 		return self._portRefs
 	end
 
+	function obj:finalizePorts()
+		self:deactivatePorts()
+		local ports = self._portServants:getObjects()
+		for i, port in ipairs(ports) do
+			self:removePort(port)
+		end
+	end
 
 	return obj
 end

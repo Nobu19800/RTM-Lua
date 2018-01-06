@@ -57,6 +57,7 @@ CorbaConsumer.new = function(interfaceType, consumer)
 		obj._var = consumer._var
 	end
 	function obj:setObject(obj)
+
 		if not self:_setObject(obj) then
 			self:releaseObject()
 			return false
@@ -75,6 +76,8 @@ CorbaConsumer.new = function(interfaceType, consumer)
 		local ret = true
 		local success, exception = oil.pcall(
 			function()
+				--print(ior)
+				--print(self._interfaceType)
 				local Manager = require "openrtm.Manager"
 				local orb = Manager:instance():getORB()
 				local obj = orb:newproxy(ior,self._interfaceType)
@@ -85,7 +88,7 @@ CorbaConsumer.new = function(interfaceType, consumer)
 				self._var = self._objref
 			end)
 		if not success then
-			--print(exception)
+			print(exception)
 			return false
 		end
 

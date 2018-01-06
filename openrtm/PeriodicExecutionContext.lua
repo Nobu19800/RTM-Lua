@@ -75,13 +75,15 @@ PeriodicExecutionContext.new = function()
 				if count_ > 1000 then
 					self._rtcout:RTC_PARANOID("sleeping...")
 				end
+				--print(period_:toDouble())
 				slptm_ = period_:toDouble() - (t1_ - t0_)
 				--print(slptm_)
 				oil.tasks:suspend(slptm_)
 			else
 				coroutine.yield(1)
 			end
-			oil.tasks:suspend(1)
+
+			--oil.tasks:suspend(1)
 
 
 			if count_ > 1000 then

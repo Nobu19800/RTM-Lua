@@ -29,6 +29,8 @@ local ConnectorBase = require "openrtm.ConnectorBase"
 local ConnectorInfo = ConnectorBase.ConnectorInfo
 
 local InPortPushConnector = require "openrtm.InPortPushConnector"
+local InPortPullConnector = require "openrtm.InPortPullConnector"
+
 
 InPortBase.new = function(name, data_type)
 	local obj = {}
@@ -139,7 +141,7 @@ InPortBase.new = function(name, data_type)
 
 		factory = InPortProviderFactory:instance()
 		provider_types  = factory:getIdentifiers()
-		self._rtcout:RTC_PARANOID("available OutPortProviders: "..StringUtil.flatten(provider_types))
+		self._rtcout:RTC_PARANOID("available InPortProviders: "..StringUtil.flatten(provider_types))
 		tmp_str = StringUtil.normalize(self._properties:getProperty("provider_types"))
 		if self._properties:hasKey("provider_types") and tmp_str  ~= "all" then
 			self._rtcout:RTC_DEBUG("allowed providers: "..self._properties:getProperty("allowed"))
@@ -290,6 +292,7 @@ InPortBase.new = function(name, data_type)
 			if connector == nil then
 				return self._ReturnCode_t.RTC_ERROR
 			end
+			connector:setDataType(self._data_type)
 
 			local ret = connector:setConnectorInfo(profile)
 			if ret == self._ReturnCode_t.RTC_OK then
@@ -405,6 +408,37 @@ InPortBase.new = function(name, data_type)
 		self._rtcout:RTC_ERROR("provider creation failed")
 		return nil
 	end
+
+
+	function obj:createConsumer(cprof, prop)
+		if prop:getProperty("interface_type") == "" or
+			  not StringUtil.includes(self._consumerTypes, prop:getProperty("interface_type")) then
+			self._rtcout:RTC_ERROR("no consumer found")
+			self._rtcout:RTC_DEBUG("interface_type:  "..prop:getProperty("interface_type"))
+			self._rtcout:RTC_DEBUG("interface_types: "..
+								 StringUtil.flatten(self._consumerTypes))
+			return nil
+		end
+
+		self._rtcout:RTC_DEBUG("interface_type: "..prop:getProperty("interface_type"))
+		local consumer = OutPortConsumerFactory:instance():createObject(prop:getProperty("interface_type"))
+
+		if consumer ~= nil then
+			self._rtcout:RTC_DEBUG("consumer created")
+			consumer:init(prop:getNode("consumer"))
+
+			if not consumer:subscribeInterface(cprof.properties) then
+				self._rtcout:RTC_ERROR("interface subscription failed.")
+				OutPortConsumerFactory:instance():deleteObject(consumer)
+				return nil
+			end
+			return consumer
+		end
+
+		self._rtcout:RTC_ERROR("consumer creation failed")
+		return nil
+	end
+
 	function obj:getConnectorById(id)
 		self._rtcout:RTC_TRACE("getConnectorById(id = "..id..")")
 

@@ -24,7 +24,7 @@ InPortPushConnector.new = function(info, provider, listeners, buffer)
 	function obj:read(data)
 		self._rtcout:RTC_TRACE("read()")
 
-
+		local ret = BufferStatus.BUFFER_OK
 		if self._buffer == nil then
 			return DataPortStatus.PRECONDITION_NOT_MET
 		end

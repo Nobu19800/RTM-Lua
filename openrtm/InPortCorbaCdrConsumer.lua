@@ -34,12 +34,13 @@ InPortCorbaCdrConsumer.new = function()
 
 	function obj:put(data)
 		self._rtcout:RTC_PARANOID("put()")
-		ret = DataPortStatus.PORT_OK
+		local ret = DataPortStatus.PORT_OK
 		local success, exception = oil.pcall(
 			function()
-				inportcdr = self:getObject()
+				local inportcdr = self:getObject()
 				if inportcdr ~= oil.corba.idl.null then
 					ret = self:convertReturnCode(inportcdr:put(data))
+					ret = NVUtil.getPortStatus(ret)
 					return
 				end
 				ret = DataPortStatus.CONNECTION_LOST

@@ -60,7 +60,8 @@ ExecutionContextWorker.new = function()
 
 		self._rtcout:RTC_DEBUG("bindContext returns id = "..id_)
 
-		local comp_ = rtc:getObjRef()
+		--local comp_ = rtc:getObjRef()
+		local comp_ = rtc
 		table.insert(self._comps, RTObjectStateMachine.new(id_, comp_))
 		self._rtcout:RTC_DEBUG("bindComponent() succeeded.")
 		return self._ReturnCode_t.RTC_OK

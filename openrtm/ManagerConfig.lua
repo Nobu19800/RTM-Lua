@@ -23,7 +23,9 @@ ManagerConfig.new = function(argv)
 		prop:setDefaults(default_config)
 		if self:findConfigFile() then
 			local fd = io.open(self._configFile, "r")
+			--print(fs)
 			prop:load(fd)
+			--print(prop)
 			--print(prop)
 			fd:close()
 		end

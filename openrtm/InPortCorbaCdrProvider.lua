@@ -39,8 +39,8 @@ InPortCorbaCdrProvider.new = function()
 
     table.insert(obj._properties, NVUtil.newNV("dataport.corba_cdr.inport_ior",
 													str))
-    table.insert(obj._properties, NVUtil.newNV("dataport.corba_cdr.inport_ref",
-													obj._objref))
+    --table.insert(obj._properties, NVUtil.newNV("dataport.corba_cdr.inport_ref",
+	--												obj._objref))
 	--print(obj._properties)
 	--for i,v in ipairs(obj._properties) do
 	--	print(i,v)

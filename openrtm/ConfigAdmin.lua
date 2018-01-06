@@ -159,7 +159,8 @@ ConfigAdmin.new = function(configsets)
 			local prop = self._configsets:getNode(config_set)
 			for i, param in ipairs(self._params) do
 				if prop:hasKey(param.name) then
-					param:update(prop.getProperty(param.name))
+					--print(type(param.name))
+					param:update(prop:getProperty(param.name))
 				end
 			end
 			self:onUpdate(config_set)
@@ -190,7 +191,7 @@ ConfigAdmin.new = function(configsets)
     end
 
 	function obj:isExist(param_name)
-		if self._params == "" then
+		if table.maxn(self._params) == 0 then
 			return false
 		end
 
@@ -254,7 +255,7 @@ ConfigAdmin.new = function(configsets)
 			return false
 		end
 
-		p = self._configsets:getNode(node_)
+		local p = self._configsets:getNode(node_)
 
 
 		p:mergeProperties(config_set)

@@ -102,6 +102,7 @@ PortBase.new = function(name)
     obj._connectionLimit   = -1
     obj._portconnListeners = nil
 	obj._properties = Properties.new()
+	obj._svr = nil
 
 	function obj:get_port_profile()
 		self._rtcout:RTC_TRACE("get_port_profile()")
@@ -114,7 +115,7 @@ PortBase.new = function(name)
 							ports=con.ports,
 							properties={}}
 			for j,conf in ipairs(con.properties) do
-				con.properties[j] = NVUtil.any_from_any(conf)
+				con.properties[j] = {name=conf.name, value=NVUtil.any_from_any(conf.value)}
 			end
 			table.insert(connectors, conn_prof)
 		end
@@ -369,8 +370,11 @@ PortBase.new = function(name)
 							properties={}}
 
 		for i,v in ipairs(connector_profile.properties) do
-			conn_prof.properties[i] = NVUtil.any_from_any(v)
+			conn_prof.properties[i] = {name=v.name, value=NVUtil.any_from_any(v.value)}
+			--print(v.name, v.value)
+			--print(conn_prof.properties[i].name, conn_prof.properties[i].value)
 		end
+
 
 		return self._ReturnCode_t.RTC_OK, conn_prof
 	end
@@ -535,7 +539,7 @@ PortBase.new = function(name)
 			end]]
 			local prop = {}
 			for i, v in ipairs(connector_profile.properties) do
-				prop[i] = NVUtil.any_from_any(v)
+				prop[i] = {name=v.name, value=NVUtil.any_from_any(v.value)}
 			end
 			connector_profile.properties = prop
 			return p:notify_connect(connector_profile)
@@ -685,10 +689,17 @@ PortBase.new = function(name)
 	function obj:createRef()
 		--print("createRef")
 		local Manager = require "openrtm.Manager"
-		local svr = Manager:instance():getORB():newservant(self, nil, "IDL:omg.org/RTC/PortService:1.0")
-		local str = Manager:instance():getORB():tostring(svr)
+		self._svr = Manager:instance():getORB():newservant(self, nil, "IDL:omg.org/RTC/PortService:1.0")
+		local str = Manager:instance():getORB():tostring(self._svr)
 		self._objref = Manager:instance():getORB():newproxy(str,"IDL:omg.org/RTC/PortService:1.0")
 		self._profile.port_ref = self._objref
+	end
+
+	function obj:deactivate()
+		local Manager = require "openrtm.Manager"
+		if self._svr ~= nil then
+			Manager:instance():getORB():deactivate(self._svr)
+		end
 	end
 
 	return obj

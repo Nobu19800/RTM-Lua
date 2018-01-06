@@ -20,6 +20,10 @@ local toConfigurationSet = function(conf, prop)
 	NVUtil.copyFromProperties(conf.configuration_data, prop)
 end
 
+local toProperties = function(prop, conf)
+	NVUtil.copyToProperties(prop, conf.configuration_data)
+end
+
 SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 	local obj = {}
 
@@ -35,8 +39,8 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 
 
 	local Manager = require "openrtm.Manager"
-	local svr = Manager:instance():getORB():newservant(obj, nil, "IDL:org.omg/SDOPackage/Configuration:1.0")
-	local str = Manager:instance():getORB():tostring(svr)
+	obj._svr = Manager:instance():getORB():newservant(obj, nil, "IDL:org.omg/SDOPackage/Configuration:1.0")
+	local str = Manager:instance():getORB():tostring(obj._svr)
 	obj._objref = Manager:instance():getORB():newproxy(str,"IDL:org.omg/SDOPackage/Configuration:1.0")
 
 	obj._rtcout = Manager:instance():getLogbuf("rtobject.sdo_config")
@@ -45,6 +49,12 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 	function obj:getObjRef()
 		return self._objref
 	end
+
+	function obj:deactivate()
+		local Manager = require "openrtm.Manager"
+		Manager:instance():getORB():deactivate(self._svr)
+	end
+
 
 
 	function obj:get_configuration_set(config_id)
@@ -121,7 +131,7 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 				conf = Properties.new({key=configuration_set.id})
 				toProperties(conf, configuration_set)
 
-				ret = self._configsets.setConfigurationSetValues(conf)
+				ret = self._configsets:setConfigurationSetValues(conf)
 		end)
 		if not success then
 			self._rtcout:RTC_ERROR(exception)
@@ -211,6 +221,8 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 
 		return config_sets
 	end
+
+
 
 
 

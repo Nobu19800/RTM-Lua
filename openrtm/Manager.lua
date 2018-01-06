@@ -679,9 +679,9 @@ end
 
 function Manager:findIdLFile(name)
 	if openrtm_idl_path == nil then
-		openrtm_idl_path = "./idl/Filename"
+		openrtm_idl_path = "./idl"
 	end
-	local _str,_ret = string.gsub(openrtm_idl_path, "Filename", name)
+	local _str = openrtm_idl_path.."/"..name
 	--print(_str)
 	return _str
 end

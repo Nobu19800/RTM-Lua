@@ -1,7 +1,7 @@
 
-openrtm_idl_path = "../idl/Filename"
+openrtm_idl_path = "../idl"
 
-local oil = require "oil"
+
 local Manager = require "openrtm.Manager"
 local Factory = require "openrtm.Factory"
 local Properties = require "openrtm.Properties"

@@ -80,7 +80,7 @@ InPortDSConsumer.new = function()
 		self._rtcout:RTC_TRACE("subscribeFromIor()")
 
 		local index = NVUtil.find_index(properties,
-                                           "dataport.corba_cdr.inport_ior")
+                                           "dataport.data_service.inport_ior")
 		--print(index)
 		if index < 0 then
 			self._rtcout:RTC_ERROR("inport_ior not found")
@@ -121,7 +121,7 @@ InPortDSConsumer.new = function()
 	function obj:subscribeFromRef(properties)
 		self._rtcout:RTC_TRACE("subscribeFromRef()")
 		local index = NVUtil.find_index(properties,
-										"dataport.corba_cdr.inport_ref")
+										"dataport.data_service.inport_ref")
 		if index < 0 then
 			self._rtcout:RTC_ERROR("inport_ref not found")
 			return false
@@ -154,7 +154,7 @@ InPortDSConsumer.new = function()
 	function obj:unsubscribeFromIor(properties)
 		self._rtcout:RTC_TRACE("unsubscribeFromIor()")
 		local index = NVUtil.find_index(properties,
-										"dataport.corba_cdr.inport_ior")
+										"dataport.data_service.inport_ior")
 		if index < 0 then
 			self._rtcout:RTC_ERROR("inport_ior not found")
 			return false
@@ -184,7 +184,7 @@ InPortDSConsumer.new = function()
 	function obj:unsubscribeFromRef(self, properties)
 		self._rtcout:RTC_TRACE("unsubscribeFromRef()")
 		local index = NVUtil.find_index(properties,
-										"dataport.corba_cdr.inport_ref")
+										"dataport.data_service.inport_ref")
 
 		if index < 0 then
 			return false

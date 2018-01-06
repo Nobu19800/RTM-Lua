@@ -26,9 +26,9 @@ OutPortDSProvider.new = function()
 	local str = orb:tostring(svr)
 	obj._objref = orb:newproxy(str,"IDL:omg.org/RTC/DataPullService:1.0")
 
-	table.insert(obj._properties, NVUtil.newNV("dataport.corba_cdr.outport_ior",
+	table.insert(obj._properties, NVUtil.newNV("dataport.data_service.outport_ior",
 													str))
-    --table.insert(obj._properties, NVUtil.newNV("dataport.corba_cdr.outport_ref",
+    --table.insert(obj._properties, NVUtil.newNV("dataport.data_service.outport_ref",
 	--												obj._objref))
 
 	obj._listeners = nil

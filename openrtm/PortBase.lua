@@ -350,6 +350,7 @@ PortBase.new = function(name)
 		end
 
 
+
 		for i, ret in ipairs(retval) do
 			--print(i,ret)
 			if ret ~= self._ReturnCode_t.RTC_OK then
@@ -357,6 +358,7 @@ PortBase.new = function(name)
 				return ret, connector_profile
 			end
 		end
+
 
 
 		if self._onConnected ~= nil then
@@ -601,7 +603,9 @@ PortBase.new = function(name)
 		table.insert(self._profile.properties, {name=_key, value=_value})
 	end
 	function obj:appendProperty(key, value)
+		--print(key, value)
 		NVUtil.appendStringValue(self._profile.properties, key, value)
+		--print(self._profile.properties)
 	end
 	function obj:unsubscribeInterfaces(connector_profile)
 		return self._ReturnCode_t.BAD_PARAMETER

@@ -83,16 +83,20 @@ OutPortBase.new = function(name, data_type)
 
 		self._properties:mergeProperties(prop)
 
+
 		self:configure()
+
 
 		self:initConsumers()
 		self:initProviders()
+
 
 		num = tonumber(self._properties:getProperty("connection_limit","-1"))
 		if num == nil then
 			self._rtcout:RTC_ERROR("invalid connection_limit value: "..self._properties:getProperty("connection_limit"))
 		end
 		self:setConnectionLimit(num)
+
     end
 	function obj:configure()
 	end
@@ -106,6 +110,7 @@ OutPortBase.new = function(name, data_type)
 		self._rtcout:RTC_PARANOID("available InPortConsumer: "..StringUtil.flatten(consumer_types))
 		tmp_str = StringUtil.normalize(self._properties:getProperty("consumer_types"))
 		--print(self._properties:getProperty("consumer_types"))
+
 		if self._properties:hasKey("consumer_types") and tmp_str  ~= "all" then
 			self._rtcout:RTC_DEBUG("allowed consumers: "..self._properties:getProperty("consumer_types"))
 
@@ -121,7 +126,9 @@ OutPortBase.new = function(name, data_type)
 			for i, v in ipairs(active_types) do
 				consumer_types[#consumer_types+1] = v
 			end
+
 		end
+
 
 
 
@@ -132,6 +139,8 @@ OutPortBase.new = function(name, data_type)
 				self:appendProperty("dataport.interface_type",consumer_type)
 			end
 		end
+
+
 
 		self._consumerTypes = consumer_types
 	end
@@ -179,8 +188,10 @@ OutPortBase.new = function(name, data_type)
 
 
 
+		--print(self._properties)
 
 		local prop = Properties.new(self._properties)
+
 
 		local conn_prop = Properties.new()
 
@@ -190,8 +201,8 @@ OutPortBase.new = function(name, data_type)
 
 		prop:mergeProperties(conn_prop:getNode("dataport"))
 
-		prop:mergeProperties(conn_prop:getNode("dataport.outport"))
 
+		prop:mergeProperties(conn_prop:getNode("dataport.outport"))
 
 
 		local dflow_type = StringUtil.normalize(prop:getProperty("dataflow_type"))
@@ -199,11 +210,21 @@ OutPortBase.new = function(name, data_type)
 										cprof.connector_id,
 										CORBA_SeqUtil.refToVstring(cprof.ports),
 										prop)
+
+		--[[local success, exception = oil.pcall(
+			function()
+				print(prop)
+			end)
+		print(exception)]]
 		--print(dflow_type)
+		--print(prop)
+		--print(dflow_type)
+		--print(prop)
 		if dflow_type == "push" then
 			self._rtcout:RTC_PARANOID("dataflow_type = push .... create PushConnector")
 
 			consumer = self:createConsumer(cprof, prop)
+
 			--print(consumer)
 			if consumer == nil then
 				return self._ReturnCode_t.BAD_PARAMETER
@@ -212,6 +233,7 @@ OutPortBase.new = function(name, data_type)
 
 			connector = self:createConnector(cprof, prop, {consumer_ = consumer})
 			--print(connector)
+
 
 
 			if connector == nil then

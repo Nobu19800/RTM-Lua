@@ -396,9 +396,9 @@ Properties.new = function(argv)
 		if table.maxn(curr.leaf) == 0 then
 			--print("test",curr.default_value, curr.value)
 			if curr.value == "" then
-				out[1] = out[1]..": "..curr.default_value.."\n"
+				out[1] = out[1]..": "..tostring(curr.default_value).."\n"
 			else
-				out[1] = out[1]..": "..curr.value.."\n"
+				out[1] = out[1]..": "..tostring(curr.value).."\n"
 			end
 			return out[1]
 		end

@@ -1,4 +1,5 @@
-
+package.path = "..\\lua\\?.lua"
+package.cpath = "..\\clibs\\?.dll;"
 openrtm_idl_path = "../idl"
 
 
@@ -13,7 +14,7 @@ local CorbaConsumer = require "openrtm.CorbaConsumer"
 local CorbaPort = require "openrtm.CorbaPort"
 
 
-seqin_spec = {
+local seqin_spec = {
   "implementation_id","SeqIn",
   "type_name","SequenceInComponent",
   "description","Sequence InPort component",
@@ -28,8 +29,8 @@ seqin_spec = {
 
 
 
-SeqIn = {}
-SeqIn.new = function()
+local SeqIn = {}
+SeqIn.new = function(manager)
 	local obj = {}
 	setmetatable(obj, {__index=RTObject.new(manager)})
 	function obj:onInitialize()
@@ -140,20 +141,26 @@ SeqIn.new = function()
 	return obj
 end
 
-SeqInInit = function(manager)
+local SeqInInit = function(manager)
 	local prof = Properties.new({defaults_str=seqin_spec})
 	manager:registerFactory(prof, SeqIn.new, Factory.Delete)
 end
 
-function MyModuleInit(manager)
+local MyModuleInit = function(manager)
 	SeqInInit(manager)
 	local comp = manager:createComponent("SeqIn")
 end
 
 
-manager = Manager
-manager:init({})
-manager:setModuleInitProc(MyModuleInit)
-manager:activateManager()
-manager:runManager()
+
+if Manager.is_main() then
+	local manager = Manager
+	manager:init(arg)
+	manager:setModuleInitProc(MyModuleInit)
+	manager:activateManager()
+	manager:runManager()
+else
+	SeqIn.Init = SeqInInit
+	return SeqIn
+end
 

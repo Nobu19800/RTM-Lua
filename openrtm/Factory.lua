@@ -57,7 +57,8 @@ Factory.FactoryLua.new = function(profile, new_func, delete_func, policy)
 		local ret = nil
 		local success, exception = oil.pcall(
 			function()
-				local rtobj = self:_New(mgr)
+				--print(mgr)
+				local rtobj = self._New(mgr)
 				if rtobj == nil then
 					return nil
 				end
@@ -76,7 +77,7 @@ Factory.FactoryLua.new = function(profile, new_func, delete_func, policy)
 	function obj:destroy(mgr)
 		self._Number = self._Number - 1
 		self._policy:onDelete(comp)
-		self:_Delete(comp)
+		self._Delete(comp)
 	end
 
 

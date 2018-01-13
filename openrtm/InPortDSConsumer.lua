@@ -14,6 +14,7 @@ local NVUtil = require "openrtm.NVUtil"
 
 local Factory = require "openrtm.Factory"
 local InPortConsumerFactory = InPortConsumer.InPortConsumerFactory
+local RTCUtil = require "openrtm.RTCUtil"
 
 
 
@@ -99,7 +100,7 @@ InPortDSConsumer.new = function()
 
 		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
-		local _obj = orb:newproxy(ior,"IDL:omg.org/RTC/DataPushService:1.0")
+		local _obj = RTCUtil.newproxy(orb, ior,"IDL:omg.org/RTC/DataPushService:1.0")
 
 
 		if _obj == nil then
@@ -171,7 +172,7 @@ InPortDSConsumer.new = function()
 
 		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
-		local var = orb:newproxy(ior,"IDL:omg.org/RTC/DataPushService:1.0")
+		local var = RTCUtil.newproxy(orb, ior,"IDL:omg.org/RTC/DataPushService:1.0")
 		if not NVUtil._is_equivalent(self:_ptr(true), var) then
 			self._rtcout:RTC_ERROR("connector property inconsistency")
 			return false

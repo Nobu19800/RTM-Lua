@@ -235,7 +235,7 @@ Properties.new = function(argv)
 		return names
 	end
 	function obj:size()
-		return table.maxn(self:propertyNames())
+		return #self:propertyNames()
 	end
 	function obj:findNode(key)
 		if key == nil then
@@ -345,7 +345,7 @@ Properties.new = function(argv)
 		if _next == nil then
 			return nil
 		end
-		if index < table.maxn(keys) then
+		if index < #keys then
 			index = index + 1
 			return _next:_getNode(keys, index, _next)
 		else
@@ -393,7 +393,7 @@ Properties.new = function(argv)
 		if index ~= 0 then
 			out[1] = out[1]..self:indent(index).."- "..curr.name
 		end
-		if table.maxn(curr.leaf) == 0 then
+		if #curr.leaf == 0 then
 			--print("test",curr.default_value, curr.value)
 			if curr.value == "" then
 				out[1] = out[1]..": "..tostring(curr.default_value).."\n"

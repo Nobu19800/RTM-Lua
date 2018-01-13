@@ -8,6 +8,7 @@ _G["openrtm.ManagerServant"] = ManagerServant
 local StringUtil = require "openrtm.StringUtil"
 local NVUtil = require "openrtm.NVUtil"
 local oil = require "oil"
+local RTCUtil = require "openrtm.RTCUtil"
 
 ManagerServant.init = function()
 	local obj = {}
@@ -28,7 +29,7 @@ ManagerServant.CompParam.new = function(module_name)
 	obj = {}
 	module_name = StringUtil.split(comp_arg, "?")[1]
 	param_list = StringUtil.split(module_name, ":")
-	if table.maxn(param_list) < table.maxn(ManagerServant.CompParam.prof_list) then
+	if #param_list < #ManagerServant.CompParam.prof_list then
 		obj._type = "RTC"
 		obj._vendor = ""
 		obj._category = ""
@@ -60,9 +61,7 @@ ManagerServant.new = function()
 				--print(self._mgr:getConfig())
 				local id = self._mgr:getConfig():getProperty("manager.name")
 				local svr = self._mgr:getORB():newservant(self, id, "IDL:RTM/Manager:1.0")
-				local str = self._mgr:getORB():tostring(svr)
-				--print(str)
-				self._objref = self._mgr:getORB():newproxy(str,"IDL:RTM/Manager:1.0")
+				self._objref = RTCUtil.getReference(self._mgr:getORB(), svr, "IDL:RTM/Manager:1.0")
 				--print(str)
 				--print(self._objref:_non_existent())
 			end)
@@ -216,7 +215,7 @@ ManagerServant.new = function()
 	end
 
 	function obj:get_slave_managers()
-		self._rtcout:RTC_TRACE("get_slave_managers(), "..table.maxn(self._slaves).." slaves")
+		self._rtcout:RTC_TRACE("get_slave_managers(), "..#self._slaves.." slaves")
 		return self._slaves
 	end
 

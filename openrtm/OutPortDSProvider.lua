@@ -11,6 +11,8 @@ local BufferStatus = require "openrtm.BufferStatus"
 local Factory = require "openrtm.Factory"
 local OutPortProviderFactory = OutPortProvider.OutPortProviderFactory
 
+local RTCUtil = require "openrtm.RTCUtil"
+
 OutPortDSProvider.new = function()
 	local obj = {}
 	setmetatable(obj, {__index=OutPortProvider.new()})
@@ -24,7 +26,7 @@ OutPortDSProvider.new = function()
 	local orb = Manager:instance():getORB()
 	local svr = orb:newservant(obj, nil, "IDL:omg.org/RTC/DataPullService:1.0")
 	local str = orb:tostring(svr)
-	obj._objref = orb:newproxy(str,"IDL:omg.org/RTC/DataPullService:1.0")
+	obj._objref = RTCUtil.getReference(orb, svr, "IDL:omg.org/RTC/DataPullService:1.0")
 
 	table.insert(obj._properties, NVUtil.newNV("dataport.data_service.outport_ior",
 													str))

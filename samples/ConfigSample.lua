@@ -1,4 +1,5 @@
-
+package.path = "..\\lua\\?.lua"
+package.cpath = "..\\clibs\\?.dll;"
 openrtm_idl_path = "../idl"
 
 
@@ -13,7 +14,7 @@ local CorbaConsumer = require "openrtm.CorbaConsumer"
 local CorbaPort = require "openrtm.CorbaPort"
 
 
-configsample_spec = {
+local configsample_spec = {
   "implementation_id","ConfigSample",
   "type_name","ConfigSample",
   "description","MyService Consumer Sample component",
@@ -41,8 +42,8 @@ configsample_spec = {
 
 
 
-ConfigSample = {}
-ConfigSample.new = function()
+local ConfigSample = {}
+ConfigSample.new = function(manager)
 	local obj = {}
 	setmetatable(obj, {__index=RTObject.new(manager)})
 	function obj:onInitialize()
@@ -93,20 +94,25 @@ ConfigSample.new = function()
 	return obj
 end
 
-ConfigSampleInit = function(manager)
+local ConfigSampleInit = function(manager)
 	local prof = Properties.new({defaults_str=configsample_spec})
 	manager:registerFactory(prof, ConfigSample.new, Factory.Delete)
 end
 
-function MyModuleInit(manager)
+local MyModuleInit = function(manager)
 	ConfigSampleInit(manager)
 	local comp = manager:createComponent("ConfigSample")
 end
 
 
-manager = Manager
-manager:init({})
-manager:setModuleInitProc(MyModuleInit)
-manager:activateManager()
-manager:runManager()
+if Manager.is_main() then
+	local manager = Manager
+	manager:init(arg)
+	manager:setModuleInitProc(MyModuleInit)
+	manager:activateManager()
+	manager:runManager()
+else
+	ConfigSample.Init = ConfigSampleInit
+	return ConfigSample
+end
 

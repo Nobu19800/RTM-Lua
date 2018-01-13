@@ -14,6 +14,7 @@ local BufferStatus = require "openrtm.BufferStatus"
 
 local Factory = require "openrtm.Factory"
 local InPortProviderFactory = InPortProvider.InPortProviderFactory
+local RTCUtil = require "openrtm.RTCUtil"
 
 
 InPortCorbaCdrProvider.new = function()
@@ -27,7 +28,8 @@ InPortCorbaCdrProvider.new = function()
 	local orb = Manager:instance():getORB()
 	local svr = orb:newservant(obj, nil, "IDL:openrtm.aist.go.jp/OpenRTM/InPortCdr:1.0")
 	local str = orb:tostring(svr)
-	obj._objref = orb:newproxy(str,"IDL:openrtm.aist.go.jp/OpenRTM/InPortCdr:1.0")
+	obj._objref = RTCUtil.getReference(orb, svr, "IDL:openrtm.aist.go.jp/OpenRTM/InPortCdr:1.0")
+
 
 
     obj._buffer = nil

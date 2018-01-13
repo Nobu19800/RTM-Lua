@@ -7,7 +7,7 @@ _G["openrtm.CorbaConsumer"] = CorbaConsumer
 
 
 local oil = require "oil"
-
+local RTCUtil = require "openrtm.RTCUtil"
 
 
 CorbaConsumer.CorbaConsumerBase = {}
@@ -80,8 +80,8 @@ CorbaConsumer.new = function(interfaceType, consumer)
 				--print(self._interfaceType)
 				local Manager = require "openrtm.Manager"
 				local orb = Manager:instance():getORB()
-				local obj = orb:newproxy(ior,self._interfaceType)
-				if not self:_setObject(obj) then
+				local obj_ = RTCUtil.newproxy(orb, ior,self._interfaceType)
+				if not self:_setObject(obj_) then
 					self:releaseObject()
 					ret = false
 				end

@@ -1,4 +1,5 @@
-
+package.path = "..\\lua\\?.lua"
+package.cpath = "..\\clibs\\?.dll;"
 openrtm_idl_path = "../idl"
 
 
@@ -13,7 +14,7 @@ local CorbaConsumer = require "openrtm.CorbaConsumer"
 local CorbaPort = require "openrtm.CorbaPort"
 
 
-myserviceconsumer_spec = {
+local myserviceconsumer_spec = {
   "implementation_id","MyServiceConsumer",
   "type_name","MyServiceConsumer",
   "description","MyService Consumer Sample component",
@@ -42,8 +43,8 @@ seq_print.new = function()
 end
 
 
-MyServiceConsumer = {}
-MyServiceConsumer.new = function()
+local MyServiceConsumer = {}
+MyServiceConsumer.new = function(manager)
 	local obj = {}
 	setmetatable(obj, {__index=RTObject.new(manager)})
 	function obj:onInitialize()
@@ -106,20 +107,26 @@ MyServiceConsumer.new = function()
 	return obj
 end
 
-MyServiceConsumerInit = function(manager)
+local MyServiceConsumerInit = function(manager)
 	local prof = Properties.new({defaults_str=myserviceconsumer_spec})
 	manager:registerFactory(prof, MyServiceConsumer.new, Factory.Delete)
 end
 
-function MyModuleInit(manager)
+local MyModuleInit = function(manager)
 	MyServiceConsumerInit(manager)
 	local comp = manager:createComponent("MyServiceConsumer")
 end
 
 
-manager = Manager
-manager:init({})
-manager:setModuleInitProc(MyModuleInit)
-manager:activateManager()
-manager:runManager()
+if Manager.is_main() then
+	local manager = Manager
+	manager:init(arg)
+	manager:setModuleInitProc(MyModuleInit)
+	manager:activateManager()
+	manager:runManager()
+else
+	MyServiceConsumer.Init = MyServiceConsumerInit
+	return MyServiceConsumer
+end
+
 

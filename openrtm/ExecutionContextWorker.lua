@@ -52,6 +52,7 @@ ExecutionContextWorker.new = function()
 			return self._ReturnCode_t.BAD_PARAMETER
 		end
 		local ec_ = self:getECRef()
+		--print(ec_)
 		local id_ = rtc:bindContext(ec_)
 		if id_ < 0 or id_ > ECOTHER_OFFSET then
 			self._rtcout:RTC_ERROR("bindContext returns invalid id: "..id_)
@@ -81,7 +82,7 @@ ExecutionContextWorker.new = function()
 			comp:onStartup()
 		end
 
-		self._rtcout:RTC_DEBUG(table.maxn(self._comps).." components started.")
+		self._rtcout:RTC_DEBUG(#self._comps.." components started.")
 		self._running = true
 		return self._ReturnCode_t.RTC_OK
 	end

@@ -231,14 +231,14 @@ CorbaPort.new = function(name)
 			local ior = {}
 			--print(nv, consumer)
 			--print(self:findProvider(nv, consumer, ior))
-			if self:findProvider(nv, consumer, ior) and table.maxn(ior) > 0 then
+			if self:findProvider(nv, consumer, ior) and #ior > 0 then
 
 				self:setObject(ior[1], consumer)
 
 			else
 				ior = {}
-				--print(self:findProviderOld(nv, consumer, ior), table.maxn(ior))
-				if self:findProviderOld(nv, consumer, ior) and table.maxn(ior) > 0 then
+				--print(self:findProviderOld(nv, consumer, ior), #ior)
+				if self:findProviderOld(nv, consumer, ior) and #ior > 0 then
 
 					self:setObject(ior[1], consumer)
 				else
@@ -263,12 +263,12 @@ CorbaPort.new = function(name)
 
 		for i, consumer in ipairs(self._consumers) do
 			local ior = {}
-			if self:findProvider(nv, consumer, ior) and table.maxn(ior) > 0 then
+			if self:findProvider(nv, consumer, ior) and #ior > 0 then
 				self._rtcout:RTC_DEBUG("Correspoinding consumer found.")
 				self:releaseObject(ior[1], consumer)
 			else
 				ior = {}
-				if self:findProviderOld(nv, consumer, ior) and table.maxn(ior) > 0 then
+				if self:findProviderOld(nv, consumer, ior) and #ior > 0 then
 					self._rtcout:RTC_DEBUG("Correspoinding consumer found.")
 					self:releaseObject(ior[1], consumer)
 				end

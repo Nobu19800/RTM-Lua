@@ -16,7 +16,7 @@ local ECFactory = require "openrtm.ECFactory"
 local Task = require "openrtm.Task"
 local oil = require "oil"
 
-
+local RTCUtil = require "openrtm.RTCUtil"
 
 
 
@@ -35,11 +35,10 @@ PeriodicExecutionContext.new = function()
 
 	--ref = Manager:instance():getORB():tostring(obj)
 	local svr = Manager:instance():getORB():newservant(obj, nil, "IDL:omg.org/RTC/ExecutionContextService:1.0")
-	local str = Manager:instance():getORB():tostring(svr)
-	local ref = Manager:instance():getORB():newproxy(str,"IDL:omg.org/RTC/ExecutionContextService:1.0")
+	local ref = RTCUtil.getReference(Manager:instance():getORB(), svr, "IDL:omg.org/RTC/ExecutionContextService:1.0")
 	--print(ref:_non_existent())
 	--print(ref:start())
-
+	--print(svr)
 	obj:setObjRef(ref)
     obj:setKind(obj._ExecutionKind.PERIODIC)
     obj:setRate(1.0 / DEFAULT_PERIOD)

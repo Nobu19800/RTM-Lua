@@ -1,4 +1,5 @@
-
+package.path = "..\\lua\\?.lua"
+package.cpath = "..\\clibs\\?.dll;"
 openrtm_idl_path = "../idl"
 
 
@@ -13,7 +14,7 @@ local CorbaConsumer = require "openrtm.CorbaConsumer"
 local CorbaPort = require "openrtm.CorbaPort"
 
 
-consoleout_spec = {
+local consoleout_spec = {
   "implementation_id","ConsoleOut",
   "type_name","ConsoleOut",
   "description","Console input component",
@@ -28,8 +29,8 @@ consoleout_spec = {
 
 
 
-ConsoleOut = {}
-ConsoleOut.new = function()
+local ConsoleOut = {}
+ConsoleOut.new = function(manager)
 	local obj = {}
 	setmetatable(obj, {__index=RTObject.new(manager)})
 	function obj:onInitialize()
@@ -52,20 +53,26 @@ ConsoleOut.new = function()
 	return obj
 end
 
-ConsoleOutInit = function(manager)
+local ConsoleOutInit = function(manager)
 	local prof = Properties.new({defaults_str=consoleout_spec})
 	manager:registerFactory(prof, ConsoleOut.new, Factory.Delete)
 end
 
-function MyModuleInit(manager)
+local MyModuleInit = function(manager)
 	ConsoleOutInit(manager)
 	local comp = manager:createComponent("ConsoleOut")
 end
 
 
-manager = Manager
-manager:init({})
-manager:setModuleInitProc(MyModuleInit)
-manager:activateManager()
-manager:runManager()
+if Manager.is_main() then
+	local manager = Manager
+	manager:init(arg)
+	manager:setModuleInitProc(MyModuleInit)
+	manager:activateManager()
+	manager:runManager()
+else
+	ConsoleOut.Init = ConsoleOutInit
+	return ConsoleOut
+end
+
 

@@ -34,7 +34,7 @@ OutPort.new = function(name, value, data_type, buffer)
 			self._OnWrite(value)
 		end
 
-		local conn_size = table.maxn(self._connectors)
+		local conn_size = #self._connectors
 		if conn_size == 0 then
 			return false
 		end

@@ -16,8 +16,8 @@ end
 
 NVUtil.copyFromProperties = function(nv, prop)
 	keys = prop:propertyNames()
-	keys_len = table.maxn(keys)
-	nv_len = table.maxn(nv)
+	keys_len = #keys
+	nv_len = #nv
 	if nv_len > 0 then
 		for i = 1,nv_len do
 			nv[i] = nil
@@ -178,17 +178,32 @@ NVUtil.find = function(nv, name)
 end
 
 NVUtil._is_equivalent = function(obj1, obj2, obj1_ref, obj2_ref)
-
-	if obj1._is_equivalent == nil then
-		if obj2._is_equivalent == nil then
-			return obj1_ref(obj1):_is_equivalent(obj2_ref(obj2))
+	if oil.VERSION == "OiL 0.4 beta" then
+		if obj1._is_equivalent == nil then
+			if obj2._is_equivalent == nil then
+				return obj1_ref(obj1):_is_equivalent(obj2_ref(obj2))
+			else
+				return obj1_ref(obj1):_is_equivalent(obj2)
+			end
 		else
-			return obj1_ref(obj1):_is_equivalent(obj2)
-		end
-	else
-		if obj2._is_equivalent == nil then
+			if obj2._is_equivalent == nil then
 
-			return obj1:_is_equivalent(obj2_ref(obj2))
+				return obj1:_is_equivalent(obj2_ref(obj2))
+			else
+				return obj1:_is_equivalent(obj2)
+			end
+		end
+	elseif oil.VERSION == "OiL 0.5" then
+		if obj1._is_equivalent == nil then
+
+			obj1 = obj1_ref(obj1)
+		end
+		if obj2._is_equivalent == nil then
+			obj2 = obj1_ref(obj2)
+		end
+		--print(obj1,obj2,(obj1 == obj2))
+		if obj1._is_equivalent == nil or obj2._is_equivalent == nil then
+			return (obj1 == obj2)
 		else
 			return obj1:_is_equivalent(obj2)
 		end

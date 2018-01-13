@@ -11,6 +11,8 @@ local BufferStatus = require "openrtm.BufferStatus"
 local Factory = require "openrtm.Factory"
 local OutPortProviderFactory = OutPortProvider.OutPortProviderFactory
 
+local RTCUtil = require "openrtm.RTCUtil"
+
 OutPortCorbaCdrProvider.new = function()
 	local obj = {}
 	setmetatable(obj, {__index=OutPortProvider.new()})
@@ -24,7 +26,7 @@ OutPortCorbaCdrProvider.new = function()
 	local orb = Manager:instance():getORB()
 	local svr = orb:newservant(obj, nil, "IDL:openrtm.aist.go.jp/OpenRTM/OutPortCdr:1.0")
 	local str = orb:tostring(svr)
-	obj._objref = orb:newproxy(str,"IDL:openrtm.aist.go.jp/OpenRTM/OutPortCdr:1.0")
+	obj._objref = RTCUtil.getReference(orb, svr,"IDL:openrtm.aist.go.jp/OpenRTM/OutPortCdr:1.0")
 
 	table.insert(obj._properties, NVUtil.newNV("dataport.corba_cdr.outport_ior",
 													str))

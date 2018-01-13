@@ -37,6 +37,7 @@ Config.new = function(name, var, def_val, trans)
 		end
 		self.string_value = val
 
+
 		local ret, value = self._trans(self._var._value, val)
 		if ret then
 			self._var._value = value
@@ -80,13 +81,16 @@ ConfigAdmin.new = function(configsets)
 		end
 
 		local ret, value = trans(var._value, def_val)
+		--if type(value) == "table" then
+		--	print(#value)
+		--end
 		var._value = value
 		if not ret then
 			return false
 		end
 		local conf_ = Config.new(param_name, var, def_val, trans)
 		table.insert(self._params, conf_)
-		--print(table.maxn(self._params))
+		--print(#self._params)
 		conf_:setCallback(function(config_param, config_value)self:onUpdateParam(config_param, config_value) end)
 		--print(self:getActiveId())
 		self:update(self:getActiveId(), param_name)
@@ -160,6 +164,7 @@ ConfigAdmin.new = function(configsets)
 			for i, param in ipairs(self._params) do
 				if prop:hasKey(param.name) then
 					--print(type(param.name))
+					--print(prop:getProperty(param.name))
 					param:update(prop:getProperty(param.name))
 				end
 			end
@@ -191,7 +196,7 @@ ConfigAdmin.new = function(configsets)
     end
 
 	function obj:isExist(param_name)
-		if table.maxn(self._params) == 0 then
+		if #self._params == 0 then
 			return false
 		end
 

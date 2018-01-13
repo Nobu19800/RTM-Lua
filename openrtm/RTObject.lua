@@ -22,6 +22,7 @@ local ExecutionContextFactory = ExecutionContextBase.ExecutionContextFactory
 local StringUtil = require "openrtm.StringUtil"
 local NVUtil = require "openrtm.NVUtil"
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
+local RTCUtil = require "openrtm.RTCUtil"
 
 
 RTObject.ECOTHER_OFFSET = 1000
@@ -75,6 +76,7 @@ ec_find.new = function(_ec)
 					--	print( k, v )
 					--end
 					--print(self._ec:get_profile())
+					--print(self._ec, ecs)
 					ret = NVUtil._is_equivalent(self._ec, ecs, self._ec.getObjRef, ecs.getObjRef)
 					--local Manager = require "openrtm.Manager"
 					--local orb = Manager:instance():getORB()
@@ -95,7 +97,7 @@ end
 
 RTObject.new = function(manager)
 	local obj = {}
-
+	--print(manager)
 	obj._manager = manager
 	obj._orb = obj._manager:getORB()
 	--print(obj._orb)
@@ -341,7 +343,7 @@ RTObject.new = function(manager)
 			end
 		end
 
-		if table.maxn(self._eclist) == 0 then
+		if #self._eclist == 0 then
 			default_opts = Properties.new()
 			ec_type_ = "PeriodicExecutionContext"
 			local ec_ = ExecutionContextFactory:instance():createObject(ec_type_)
@@ -421,11 +423,12 @@ RTObject.new = function(manager)
 		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_RATE_CHANGED]:notify(ec_id)
 	end
 	function obj:bindContext(exec_context)
+		--print(exec_context)
 		self._rtcout:RTC_TRACE("bindContext()")
 		if exec_context == nil then
 			return -1
 		end
-		for i =1,table.maxn(self._ecMine) do
+		for i =1,#self._ecMine do
 			if self._ecMine[i] == nil then
 				self._ecMine[i] = exec_context
 				self:onAttachExecutionContext(i)
@@ -433,7 +436,7 @@ RTObject.new = function(manager)
 			end
 		end
 		table.insert(self._ecMine, exec_context)
-		return table.maxn(self._ecMine) - 1
+		return #self._ecMine - 1
 	end
 	function obj:on_startup(ec_id)
 		self._rtcout:RTC_TRACE("on_startup("..ec_id..")")
@@ -741,7 +744,9 @@ RTObject.new = function(manager)
 	function obj:get_context_handle(cxt)
 		self._rtcout:RTC_TRACE("get_context_handle()")
 
-
+		--for i,v in ipairs(self._ecMine) do
+		--	print(v)
+		--end
 		num = CORBA_SeqUtil.find(self._ecMine, ec_find.new(cxt))
 		--print(num)
 		if num ~= -1 then
@@ -906,6 +911,7 @@ RTObject.new = function(manager)
 				 parent = self._profile.parent,
 				 properties = self._profile.properties}
 		NVUtil.copyFromProperties(self._profile.properties, self._properties)
+		--print(oil.corba.idl.null)
 		return prop_
 	end
 
@@ -987,8 +993,8 @@ RTObject.new = function(manager)
 
 	function obj:createRef()
 		self._svr = self._orb:newservant(self, nil, "IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
-		local str = self._orb:tostring(self._svr)
-		self._objref = self._orb:newproxy(str,"IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
+		--print(type(self._svr))
+		self._objref = RTCUtil.getReference(self._orb, self._svr, "IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
 	end
 
 

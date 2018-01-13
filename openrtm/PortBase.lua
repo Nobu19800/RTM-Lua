@@ -16,7 +16,7 @@ local PortConnectRetListenerType = PortConnectListener.PortConnectRetListenerTyp
 
 local uuid4 = require "LUA-RFC-4122-UUID-Generator.uuid4"
 
-
+local RTCUtil = require "openrtm.RTCUtil"
 
 
 
@@ -216,7 +216,7 @@ PortBase.new = function(name)
 
 
 
-		if table.maxn(prof.ports) < 1 then
+		if #prof.ports < 1 then
 			self._rtcout:RTC_FATAL("ConnectorProfile has empty port list.")
 			return self._ReturnCode_t.PRECONDITION_NOT_MET
 		end
@@ -333,7 +333,7 @@ PortBase.new = function(name)
 
 		self:onSubscribeInterfaces(self:getName(), connector_profile, retval[3])
 
-		self._rtcout:RTC_PARANOID(table.maxn(self._profile.connector_profiles).." connectors are existing")
+		self._rtcout:RTC_PARANOID(#self._profile.connector_profiles.." connectors are existing")
 
 
 		local index = self:findConnProfileIndex(connector_profile.connector_id)
@@ -341,7 +341,7 @@ PortBase.new = function(name)
 		--print(index)
 		if index < 0 then
 			table.insert(self._profile.connector_profiles, connector_profile)
-			--print(table.maxn(self._profile.connector_profiles))
+			--print(#self._profile.connector_profiles)
 			self._rtcout:RTC_PARANOID("New connector_id. Push backed.")
 
 		else
@@ -402,7 +402,7 @@ PortBase.new = function(name)
 
 
 	function obj:connectors()
-		self._rtcout:RTC_TRACE("connectors(): size = "..table.maxn(self._connectors))
+		self._rtcout:RTC_TRACE("connectors(): size = "..#self._connectors)
 		return self._connectors
 	end
 
@@ -507,10 +507,10 @@ PortBase.new = function(name)
 
 	function obj:_publishInterfaces()
 		if not (self._connectionLimit < 0) then
-			if self._connectionLimit <= table.maxn(self._profile.connector_profiles) then
+			if self._connectionLimit <= #self._profile.connector_profiles then
 				self._rtcout:RTC_PARANOID("Connected number has reached the limitation.")
 				self._rtcout:RTC_PARANOID("Can connect the port up to "..self._connectionLimit.." ports.")
-				self._rtcout:RTC_PARANOID(table.maxn(self._profile.connector_profiles).." connectors are existing")
+				self._rtcout:RTC_PARANOID(#self._profile.connector_profiles.." connectors are existing")
 				return self._ReturnCode_t.RTC_ERROR
 			end
 		end
@@ -557,7 +557,7 @@ PortBase.new = function(name)
 			return self._ReturnCode_t.BAD_PARAMETER
 		end
 
-		if index == table.maxn(connector_profile.ports) then
+		if index == #connector_profile.ports then
 			return self._ReturnCode_t.RTC_OK
 		end
 
@@ -667,7 +667,7 @@ PortBase.new = function(name)
 
 
 		local retcode = self._ReturnCode_t.RTC_OK
-		local len_ = table.maxn(plist)
+		local len_ = #plist
 		self._rtcout:RTC_DEBUG("disconnecting "..len_.." connections.")
 
 
@@ -694,8 +694,7 @@ PortBase.new = function(name)
 		--print("createRef")
 		local Manager = require "openrtm.Manager"
 		self._svr = Manager:instance():getORB():newservant(self, nil, "IDL:omg.org/RTC/PortService:1.0")
-		local str = Manager:instance():getORB():tostring(self._svr)
-		self._objref = Manager:instance():getORB():newproxy(str,"IDL:omg.org/RTC/PortService:1.0")
+		self._objref = RTCUtil.getReference(Manager:instance():getORB(), self._svr, "IDL:omg.org/RTC/PortService:1.0")
 		self._profile.port_ref = self._objref
 	end
 

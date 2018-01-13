@@ -103,13 +103,13 @@ GlobalFactory.Factory.new = function()
 
 		tmp = obj
 		self._objects[obj].destructor_(obj)
-		--print(table.maxn(self._objects))
+		--print(#self._objects)
 
 		--for k,v in pairs(self._objects) do
 		--	print(k,v)
 		--end
 		self._objects[obj] = nil
-		--print(table.maxn(self._objects))
+		--print(#self._objects)
 		return GlobalFactory.Factory.FACTORY_OK
 	end
 

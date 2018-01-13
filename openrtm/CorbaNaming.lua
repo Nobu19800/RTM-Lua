@@ -7,6 +7,7 @@ _G["openrtm.CorbaNaming"] = CorbaNaming
 
 local oil = require "oil"
 local StringUtil = require "openrtm.StringUtil"
+local RTCUtil = require "openrtm.RTCUtil"
 
 
 
@@ -21,7 +22,7 @@ CorbaNaming.new = function(orb, name_server)
 		obj._nameServer = "corbaloc:iiop:"..name_server.."/NameService"
 		local success, exception = oil.pcall(
 			function()
-				obj._rootContext = obj._orb:newproxy(obj._nameServer,"IDL:omg.org/CosNaming/NamingContext:1.0")
+				obj._rootContext = RTCUtil.newproxy(obj._orb, obj._nameServer,"IDL:omg.org/CosNaming/NamingContext:1.0")
 				--print(self._rootContext)
 				--if self._rootContext == nil then
 				--	print("CorbaNaming: Failed to narrow the root naming context.")
@@ -61,7 +62,7 @@ CorbaNaming.new = function(orb, name_server)
 		end
 	end
 	function obj:rebindRecursive(context, name_list, obj)
-		local length = table.maxn(name_list)
+		local length = #name_list
 		for i =1,length do
 			if i == length then
 				--print("test1")
@@ -100,26 +101,26 @@ CorbaNaming.new = function(orb, name_server)
 		for i, comp in ipairs(name_comps) do
 			local s = StringUtil.split(comp,"%.")
 			name_list[i] = {}
-			if table.maxn(s) == 1 then
+			if #s == 1 then
 				name_list[i].id = comp
 				name_list[i].kind = ""
 			else
 				local n = ""
-				for i=1,table.maxn(s)-1 do
+				for i=1,#s-1 do
 					n = n..s[i]
-					if i ~= table.maxn(s)-1 then
+					if i ~= #s-1 then
 						n = n.."."
 					end
 				end
 				name_list[i].id = n
-				name_list[i].kind = s[table.maxn(s)]
+				name_list[i].kind = s[#s]
 			end
 		end
 		return name_list
 	end
 	function obj:subName(name_list, begin, _end)
 		if _end == nil  or _end < 1 then
-			_end = table.maxn(name_list)
+			_end = #name_list
 		end
 		sub_name = {}
 		for i =begin,_end do

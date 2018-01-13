@@ -8,6 +8,7 @@ _G["openrtm.SdoConfiguration"] = SdoConfiguration
 local oil = require "oil"
 local NVUtil = require "openrtm.NVUtil"
 local Properties = require "openrtm.Properties"
+local RTCUtil = require "openrtm.RTCUtil"
 
 SdoConfiguration.Configuration_impl = {}
 
@@ -39,11 +40,12 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 
 
 	local Manager = require "openrtm.Manager"
-	obj._svr = Manager:instance():getORB():newservant(obj, nil, "IDL:org.omg/SDOPackage/Configuration:1.0")
-	local str = Manager:instance():getORB():tostring(obj._svr)
-	obj._objref = Manager:instance():getORB():newproxy(str,"IDL:org.omg/SDOPackage/Configuration:1.0")
+	obj._orb = Manager:instance():getORB()
+	obj._svr = obj._orb:newservant(obj, nil, "IDL:org.omg/SDOPackage/Configuration:1.0")
+	obj._objref = RTCUtil.getReference(obj._orb, obj._svr, "IDL:org.omg/SDOPackage/Configuration:1.0")
 
 	obj._rtcout = Manager:instance():getLogbuf("rtobject.sdo_config")
+
 
 
 	function obj:getObjRef()
@@ -204,7 +206,7 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 			function()
 				local cf = self._configsets:getConfigurationSets()
 
-				local len_ = table.maxn(cf)
+				local len_ = #cf
 
 				for i = 1,len_ do
 					config_sets[i] = {id="",description="",configuration_data={}}

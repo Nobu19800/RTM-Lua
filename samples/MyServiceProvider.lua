@@ -1,4 +1,5 @@
-
+package.path = "..\\lua\\?.lua"
+package.cpath = "..\\clibs\\?.dll;"
 openrtm_idl_path = "../idl"
 
 
@@ -13,7 +14,7 @@ local CorbaConsumer = require "openrtm.CorbaConsumer"
 local CorbaPort = require "openrtm.CorbaPort"
 
 
-myserviceprovider_spec = {
+local myserviceprovider_spec = {
   "implementation_id","MyServiceProvider",
   "type_name","MyServiceProvider",
   "description","MyService Provider Sample component",
@@ -42,7 +43,7 @@ seq_print.new = function()
 end
 
 
-MyServiceSVC_impl = {}
+local MyServiceSVC_impl = {}
 MyServiceSVC_impl.new = function()
 	local obj = {}
 	obj._echoList = {}
@@ -87,8 +88,8 @@ MyServiceSVC_impl.new = function()
 end
 
 
-MyServiceProvider = {}
-MyServiceProvider.new = function()
+local MyServiceProvider = {}
+MyServiceProvider.new = function(manager)
 	local obj = {}
 	setmetatable(obj, {__index=RTObject.new(manager)})
 	function obj:onInitialize()
@@ -106,20 +107,24 @@ MyServiceProvider.new = function()
 	return obj
 end
 
-MyServiceProviderInit = function(manager)
+local MyServiceProviderInit = function(manager)
 	local prof = Properties.new({defaults_str=myserviceprovider_spec})
 	manager:registerFactory(prof, MyServiceProvider.new, Factory.Delete)
 end
 
-function MyModuleInit(manager)
+local MyModuleInit = function(manager)
 	MyServiceProviderInit(manager)
 	local comp = manager:createComponent("MyServiceProvider")
 end
 
 
-manager = Manager
-manager:init({})
-manager:setModuleInitProc(MyModuleInit)
-manager:activateManager()
-manager:runManager()
-
+if Manager.is_main() then
+	local manager = Manager
+	manager:init(arg)
+	manager:setModuleInitProc(MyModuleInit)
+	manager:activateManager()
+	manager:runManager()
+else
+	MyServiceProvider.Init = MyServiceProviderInit
+	return MyServiceProvider
+end

@@ -18,6 +18,10 @@ StringUtil.eraseTailBlank = function(_str)
 	return string.gsub(_str, "^%s*(.-)", "%1")
 end
 
+StringUtil.eraseBothEndsBlank = function(_str)
+	return string.gsub(_str, "^%s*(.-)%s*$", "%1")
+end
+
 StringUtil.normalize = function(_str)
 	ret = string.gsub(_str, "^%s*(.-)%s*$", "%1")
 	return string.lower(ret)
@@ -119,7 +123,7 @@ StringUtil.split = function(input, delimiter)
 	local result = {}
 	local pat = "(.-)" .. delimiter .. "()"
     local lastPos
-    for part, pos in string.gfind(input, pat) do
+    for part, pos in string.gmatch(input, pat) do
 		table.insert(result, part)
         lastPos = pos
     end
@@ -205,7 +209,7 @@ StringUtil.flatten = function(sv, delimiter)
 	if delimiter == nil then
 		delimiter = ", "
 	end
-	if table.maxn(sv) == 0 then
+	if #sv == 0 then
 		return ""
 	end
 	local _str = table.concat(sv, delimiter)
@@ -254,10 +258,11 @@ StringUtil.includes = function(_list, value, ignore_case)
 end
 
 StringUtil._stringToList = function(_type, _str)
-	local list_ = StringUtil.split(",")
+
+	local list_ = StringUtil.split(_str, ",")
 	local ans = {}
 	if #_type < #list_ then
-		local sub = #_type - #list_
+		local sub = #list_ - #_type
 		for i = 1,sub do
 			table.insert(_type, _type[1])
 		end
@@ -269,11 +274,12 @@ StringUtil._stringToList = function(_type, _str)
 	end
 	for i = 1,#list_ do
 		if type(_type[i]) == "number" then
-			table.insert(ans, tonumber(_str[i]))
+			table.insert(ans, tonumber(list_[i]))
 		elseif type(_type[i]) == "string" then
-			table.insert(ans, tostring(_str[i]))
+			table.insert(ans, tostring(list_[i]))
 		end
 	end
+
 	return true, ans
 
 

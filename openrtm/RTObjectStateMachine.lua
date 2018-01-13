@@ -95,7 +95,7 @@ RTObjectStateMachine.new = function(id, comp)
 		--print("abcde")
 
 
-
+		--print(comp, self._rtobj)
 		return NVUtil._is_equivalent(comp, self._rtobj, comp.getObjRef, self._rtobj.getObjRef)
 		--return (comp:getInstanceName()==self._rtobj:getInstanceName())
 	end

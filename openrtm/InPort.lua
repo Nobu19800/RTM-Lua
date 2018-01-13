@@ -44,7 +44,7 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 
 
 
-		if table.maxn(self._connectors) == 0 then
+		if #self._connectors == 0 then
 			self._rtcout:RTC_DEBUG("no connectors")
 			return false
 		end
@@ -61,7 +61,7 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 
 	function obj:isEmpty()
 		self._rtcout:RTC_TRACE("isEmpty()")
-		if table.maxn(self._connectors) == 0 then
+		if #self._connectors == 0 then
 			self._rtcout:RTC_DEBUG("no connectors")
 			return true
 		end
@@ -88,7 +88,7 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 
 
 
-		if table.maxn(self._outPortConnectorList) > 0 then
+		if #self._outPortConnectorList > 0 then
 			ret, data = self._outPortConnectorList[1]:read()
 
 			if ret then
@@ -101,7 +101,7 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 			end
 		end
 
-		if table.maxn(self._connectors) == 0 then
+		if #self._connectors == 0 then
 			self._rtcout:RTC_DEBUG("no connectors")
 			return self._value
 		end

@@ -27,6 +27,9 @@ local PeriodicExecutionContextInit = PeriodicExecutionContext.PeriodicExecutionC
 local Factory = require "openrtm.Factory"
 local FactoryLua = Factory.FactoryLua
 
+
+
+
 if ORB_Dummy_ENABLE == nil then
 	ORB_Dummy_ENABLE = false
 end
@@ -172,8 +175,11 @@ if ORB_Dummy_ENABLE then
 
 
 
-	function ORB_Dummy:newproxy(ref, idl)
+	function ORB_Dummy:newproxy(ref, proxy,idl)
 		local ret = ref
+		if oil.VERSION == "OiL 0.4 beta" then
+			idl = proxy
+		end
 
 		if idl == "IDL:omg.org/CosNaming/NamingContext:1.0" then
 			ret = NameServer_dummy
@@ -665,7 +671,11 @@ function Manager:initORB()
 	if ORB_Dummy_ENABLE then
 		self._orb = ORB_Dummy
 	else
-		self._orb = oil.init{ flavor = "intercepted;corba;typed;cooperative;base" }
+		self._orb = oil.init{ flavor = "cooperative;corba;intercepted;typed;base;" }
+
+		if oil.VERSION == "OiL 0.5" then
+			oil.corba.idl.null = nil
+		end
 
 		self._orb:loadidlfile(Manager:findIdLFile("CosNaming.idl"))
 		self._orb:loadidlfile(Manager:findIdLFile("RTC.idl"))
@@ -793,7 +803,7 @@ end
 function Manager:cleanupComponents()
     self._rtcout:RTC_VERBOSE("Manager.cleanupComponents()")
 
-    self._rtcout:RTC_VERBOSE(table.maxn(self._finalized.comps).." components are marked as finalized.")
+    self._rtcout:RTC_VERBOSE(#self._finalized.comps.." components are marked as finalized.")
     for i, _comp in ipairs(self._finalized.comps) do
 		self:deleteComponent({comp=_comp})
 	end
@@ -815,12 +825,12 @@ function Manager:procComponentArgs(comp_arg, comp_id, comp_conf)
 		table.insert(id_and_conf, v)
 	end
 	--StringUtil.print_table(id_and_conf)
-	if table.maxn(id_and_conf) ~= 1 and table.maxn(id_and_conf) ~= 2 then
+	if #id_and_conf ~= 1 and #id_and_conf ~= 2 then
 		self._rtcout:RTC_ERROR("Invalid arguments. Two or more '?'")
 		return false
 	end
 	prof = CompParam.prof_list
-	param_num = table.maxn(prof)
+	param_num = #prof
 	--print(prof[1],id_and_conf[1])
 	if id_and_conf[1]:find(":") == nil then
 		id_and_conf[1] = prof[1]..":::"..id_and_conf[1].."::"
@@ -835,7 +845,7 @@ function Manager:procComponentArgs(comp_arg, comp_id, comp_conf)
 		v = StringUtil.eraseTailBlank(v)
 		table.insert(id, v)
 	end
-	if table.maxn(id) ~= param_num then
+	if #id ~= param_num then
 		self._rtcout:RTC_ERROR("Invalid RTC id format.")
 		return false
 	end
@@ -852,7 +862,7 @@ function Manager:procComponentArgs(comp_arg, comp_id, comp_conf)
 		self._rtcout:RTC_TRACE("RTC basic profile "..prof[i]..": "..id[i])
 	end
 
-	if table.maxn(id_and_conf) == 2 then
+	if #id_and_conf == 2 then
 		conf_str = StringUtil.split(id_and_conf[2], "&")
 		conf = {}
 		for k, v in pairs(conf_str) do
@@ -860,7 +870,7 @@ function Manager:procComponentArgs(comp_arg, comp_id, comp_conf)
 			v = StringUtil.eraseTailBlank(v)
 			table.insert(conf, v)
 		end
-		for i = 1,table.maxn(conf) do
+		for i = 1,#conf do
 			keyval_str = StringUtil.split(conf[i], "=")
 			keyval = {}
 			for k, v in pairs(keyval_str) do
@@ -868,7 +878,7 @@ function Manager:procComponentArgs(comp_arg, comp_id, comp_conf)
 				v = StringUtil.eraseTailBlank(v)
 				table.insert(keyval, v)
 			end
-			if table.maxn(keyval) > 1 then
+			if #keyval > 1 then
 				comp_conf:setProperty(keyval[1],keyval[2])
 				self._rtcout:RTC_TRACE("RTC property "..keyval[0]..": "..keyval[1])
 			end
@@ -1103,6 +1113,11 @@ function Manager:cdrUnmarshal(cdr, dataType)
 	local decoder = self._orb:newdecoder(cdr)
 	local _data = decoder:get(self._orb.types:lookup(dataType))
 	return _data
+end
+
+
+Manager.is_main = function()
+	return (debug.getinfo(4 + (offset or 0)) == nil)
 end
 
 

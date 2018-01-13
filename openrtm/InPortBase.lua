@@ -125,7 +125,7 @@ InPortBase.new = function(name, data_type)
 
 
 
-		if table.maxn(consumer_types) > 0 then
+		if #consumer_types > 0 then
 			self._rtcout:RTC_PARANOID("dataflow_type pull is supported")
 			self:appendProperty("dataport.dataflow_type", "pull")
 			for i, consumer_type in ipairs(consumer_types) do
@@ -162,7 +162,7 @@ InPortBase.new = function(name, data_type)
 
 
 
-		if table.maxn(provider_types) > 0 then
+		if #provider_types > 0 then
 			self._rtcout:RTC_PARANOID("dataflow_type push is supported")
 			self:appendProperty("dataport.dataflow_type", "push")
 			for i, provider_type in ipairs(provider_types) do
@@ -359,7 +359,7 @@ InPortBase.new = function(name, data_type)
 
 
 				table.insert(self._connectors, connector)
-				self._rtcout:RTC_PARANOID("connector push backed: "..table.maxn(self._connectors))
+				self._rtcout:RTC_PARANOID("connector push backed: "..#self._connectors)
 				ret = connector
 				return
 			end)

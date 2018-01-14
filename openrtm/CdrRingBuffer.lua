@@ -18,7 +18,7 @@ CdrRingBuffer.new = function()
 end
 
 
-CdrRingBuffer.CdrRingBufferInit = function()
+CdrRingBuffer.Init = function()
 	CdrBufferFactory:instance():addFactory("ring_buffer",
 		CdrRingBuffer.new,
 		Factory.Delete)

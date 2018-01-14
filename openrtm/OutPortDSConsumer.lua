@@ -316,7 +316,7 @@ OutPortDSConsumer.new = function()
 end
 
 
-OutPortDSConsumer.OutPortDSConsumerInit = function()
+OutPortDSConsumer.Init = function()
 	OutPortConsumerFactory:instance():addFactory("data_service",
 		OutPortDSConsumer.new,
 		Factory.Delete)

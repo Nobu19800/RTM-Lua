@@ -167,7 +167,7 @@ InPortDSProvider.new = function()
 end
 
 
-InPortDSProvider.InPortDSProviderInit = function()
+InPortDSProvider.Init = function()
 	InPortProviderFactory:instance():addFactory("data_service",
 		InPortDSProvider.new,
 		Factory.Delete)

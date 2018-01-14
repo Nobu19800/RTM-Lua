@@ -325,6 +325,7 @@ RTObject.new = function(manager)
 			--print(ec_arg_)
 			local ret_aec = false
 			for i,aec in ipairs(avail_ec_) do
+				--print(aec)
 				if ec_type_ == aec then
 					ret_aec = true
 
@@ -795,7 +796,7 @@ RTObject.new = function(manager)
 		end
 
 		port:init(self._properties:getNode(propkey))
-		port:setOwner(self:getObjRef())
+		port:setOwner(self)
 
 
 		return self._portAdmin:addPort(port)
@@ -812,7 +813,7 @@ RTObject.new = function(manager)
 		prop_:mergeProperties(self._properties:getNode("port.inport.dataport"))
 		inport:init(prop_)
 
-		inport:setOwner(self:getObjRef())
+		inport:setOwner(self)
 		inport:setPortConnectListenerHolder(self._portconnListeners)
 		self:onAddPort(inport:getPortProfile())
 
@@ -840,7 +841,7 @@ RTObject.new = function(manager)
 		prop_:mergeProperties(self._properties:getNode("port.outport.dataport"))
 		outport:init(prop_)
 
-		outport:setOwner(self:getObjRef())
+		outport:setOwner(self)
 		outport:setPortConnectListenerHolder(self._portconnListeners)
 		self:onAddPort(outport:getPortProfile())
 

@@ -117,7 +117,7 @@ end
 
 StringUtil.split = function(input, delimiter)
 	--print(input:find(delimiter))
-	if input:find(delimiter) == nil then
+	if string.find(input, delimiter) == nil then
 		return { input }
 	end
 	local result = {}
@@ -306,6 +306,60 @@ StringUtil.stringTo = function(_type, _str)
 		return false, _type
 	end
 
+end
+
+
+StringUtil.createopt = function(options)
+	local ret = {}
+	local pos = 1
+	while pos <= #options do
+		local opt = string.sub(options,pos,pos)
+		ret[opt] = {}
+		pos = pos + 1
+		if pos <= #options then
+			local opt2 = string.sub(options,pos,pos)
+			if opt2 == ":" then
+				ret[opt].optarg = true
+				pos = pos + 1
+			else
+				ret[opt].optarg = false
+			end
+		end
+	end
+	return ret
+end
+
+
+StringUtil.getopt = function(arg, options)
+	local ret = {}
+	local pos = 1
+	local opt = StringUtil.createopt(options)
+	--for i,v in pairs(opt) do
+	--	print(i,v.value)
+	--end
+	while pos <= #arg do
+		arg[pos] = StringUtil.eraseBothEndsBlank(arg[pos])
+		if #arg[pos] <= 1 then
+			pos = pos + 1
+		elseif string.sub(arg[pos],1,1) == "-" then
+			local _id = string.sub(arg[pos],2)
+			if opt[_id] ~= nil then
+				local v = {id=_id}
+				if opt[_id].optarg then
+					pos = pos+1
+					if pos <= #arg then
+						v.optarg = arg[pos]
+					end
+				end
+				--print(v)
+				table.insert(ret, v)
+			end
+			pos = pos + 1
+		else
+			pos = pos + 1
+		end
+	end
+	return ret
 end
 
 return StringUtil

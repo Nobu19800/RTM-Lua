@@ -234,7 +234,7 @@ InPortDSConsumer.new = function()
 end
 
 
-InPortDSConsumer.InPortDSConsumerInit = function()
+InPortDSConsumer.Init = function()
 	InPortConsumerFactory:instance():addFactory("data_service",
 		InPortDSConsumer.new,
 		Factory.Delete)

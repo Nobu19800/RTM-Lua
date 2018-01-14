@@ -33,7 +33,6 @@ CorbaNaming.new = function(orb, name_server)
 		end
 	end
 	function obj:rebindByString(string_name, obj, force)
-		--print("aaaaaa")
 		if force == nil then
 			force = true
 		end

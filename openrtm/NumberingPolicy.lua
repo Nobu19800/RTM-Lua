@@ -22,9 +22,9 @@ NumberingPolicy.new = function()
 end
 
 
-NumberingPolicy.DefaultNumberingPolicy = {}
+NumberingPolicy.ProcessUniquePolicy = {}
 
-NumberingPolicy.DefaultNumberingPolicy.new = function()
+NumberingPolicy.ProcessUniquePolicy.new = function()
 	local obj = {}
 	obj._num = 0
 	obj._objects = {}
@@ -56,9 +56,9 @@ NumberingPolicy.DefaultNumberingPolicy.new = function()
 	return obj
 end
 
-NumberingPolicy.DefaultNumberingPolicyInit = function()
+NumberingPolicy.ProcessUniquePolicy.Init = function()
 	NumberingPolicyFactory:instance():addFactory("process_unique",
-		NumberingPolicy.DefaultNumberingPolicy.new,
+		NumberingPolicy.ProcessUniquePolicy.new,
 		Factory.Delete)
 end
 

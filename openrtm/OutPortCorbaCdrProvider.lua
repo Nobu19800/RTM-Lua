@@ -159,7 +159,7 @@ OutPortCorbaCdrProvider.new = function()
 end
 
 
-OutPortCorbaCdrProvider.OutPortCorbaCdrProviderInit = function()
+OutPortCorbaCdrProvider.Init = function()
 	OutPortProviderFactory:instance():addFactory("corba_cdr",
 		OutPortCorbaCdrProvider.new,
 		Factory.Delete)

@@ -152,7 +152,7 @@ PublisherFlush.new = function()
 end
 
 
-PublisherFlush.PublisherFlushInit = function()
+PublisherFlush.Init = function()
 	PublisherFactory:instance():addFactory("flush",
 		PublisherFlush.new,
 		Factory.Delete)

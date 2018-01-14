@@ -636,13 +636,17 @@ PortBase.new = function(name)
 
 
 		local plist = StringUtil.split(self._profile.name, "%.")
-		if self._ownerInstanceName ~= "" then
+		if self._ownerInstanceName == "" then
 			self._rtcout:RTC_ERROR("Owner is not set.")
 			self._rtcout:RTC_ERROR("addXXXPort() should be called in onInitialize().")
 		end
 		local portname = self._ownerInstanceName.."."..plist[#plist]
 
-		self._profile.owner = owner
+		if owner.getObjRef == nil then
+			self._profile.owner = owner
+		else
+			self._profile.owner = owner:getObjRef()
+		end
 		self._profile.name = portname
 	end
 

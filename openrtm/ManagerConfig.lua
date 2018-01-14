@@ -7,6 +7,7 @@ _G["openrtm.ManagerConfig"] = ManagerConfig
 
 local Properties = require "openrtm.Properties"
 local default_config = require "openrtm.DefaultConfiguration"
+local StringUtil = require "openrtm.StringUtil"
 
 
 local config_file_path = {"./rtc.conf"}
@@ -40,6 +41,34 @@ ManagerConfig.new = function(argv)
 		return prop
 	end
 	function obj:parseArgs(_argv)
+		local opts = StringUtil.getopt(_argv, "adlf:o:p:")
+		--print(_argv)
+
+		for i, opt in ipairs(opts) do
+			--print(opt)
+			--print(opt.id, opt.optarg)
+			if opt.id == "a" then
+				self._argprop:setProperty("manager.corba_servant", "NO")
+			elseif opt.id == "f" then
+				self._configFile = opt.optarg
+			elseif opt.id == "l" then
+				self._configFile = opt.optarg
+			elseif opt.id == "o" then
+				local pos = string.find(opt.optarg, ":")
+				if pos ~= nil then
+					local idx = string.sub(opt.optarg,1,pos-1)
+					local value = string.sub(opt.optarg,pos+1)
+					--print(idx, value)
+					self._argprop:setProperty(idx, value)
+				end
+			elseif opt.id == "p" then
+				local arg_ = ":"..tostring(opt.optarg)
+				self._argprop:setProperty("corba.endpoints", arg_)
+			elseif opt.id == "d" then
+				self._isMaster = true
+			end
+		end
+
 	end
 
 	function obj:findConfigFile()

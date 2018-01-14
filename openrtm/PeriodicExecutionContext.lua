@@ -60,8 +60,8 @@ PeriodicExecutionContext.new = function()
 			local t1_ = os.clock()
 			local period_ = self:getPeriod()
 			if count_ > 1000 then
-				exctm_ = t1_ - t0_
-				slptm_ = period_:toDouble() - exctm_
+				local exctm_ = t1_ - t0_
+				local slptm_ = period_:toDouble() - exctm_
 				self._rtcout:RTC_PARANOID("Period:    "..period_:toDouble().." [s]")
 				self._rtcout:RTC_PARANOID("Execution: "..exctm_.." [s]")
 				self._rtcout:RTC_PARANOID("Sleep:     "..slptm_.." [s]")
@@ -75,7 +75,7 @@ PeriodicExecutionContext.new = function()
 					self._rtcout:RTC_PARANOID("sleeping...")
 				end
 				--print(period_:toDouble())
-				slptm_ = period_:toDouble() - (t1_ - t0_)
+				local slptm_ = period_:toDouble() - (t1_ - t0_)
 				--print(slptm_)
 				oil.tasks:suspend(slptm_)
 			else
@@ -86,7 +86,7 @@ PeriodicExecutionContext.new = function()
 
 
 			if count_ > 1000 then
-				t3_ = os.clock()
+				local t3_ = os.clock()
 				self._rtcout:RTC_PARANOID("Slept:     "..(t3_ - t2_).." [s]")
 				count_ = 0
 			end
@@ -123,7 +123,7 @@ PeriodicExecutionContext.new = function()
 	return obj
 end
 
-PeriodicExecutionContext.PeriodicExecutionContextInit = function(manager)
+PeriodicExecutionContext.Init = function(manager)
 	ExecutionContextFactory:instance():addFactory("PeriodicExecutionContext",
 		PeriodicExecutionContext.new,
 		ECFactory.ECDelete)

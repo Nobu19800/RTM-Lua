@@ -236,7 +236,7 @@ InPortCorbaCdrConsumer.new = function()
 end
 
 
-InPortCorbaCdrConsumer.InPortCorbaCdrConsumerInit = function()
+InPortCorbaCdrConsumer.Init = function()
 	InPortConsumerFactory:instance():addFactory("corba_cdr",
 		InPortCorbaCdrConsumer.new,
 		Factory.Delete)

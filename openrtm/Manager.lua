@@ -23,9 +23,9 @@ local CompParam = ManagerServant.CompParam
 local NamingManager = require "openrtm.NamingManager"
 local FactoryInit = require "openrtm.FactoryInit"
 local PeriodicExecutionContext = require "openrtm.PeriodicExecutionContext"
-local PeriodicExecutionContextInit = PeriodicExecutionContext.PeriodicExecutionContextInit
 local Factory = require "openrtm.Factory"
 local FactoryLua = Factory.FactoryLua
+local OpenHRPExecutionContext = require "openrtm.OpenHRPExecutionContext"
 
 
 
@@ -377,11 +377,19 @@ function Manager:activateManager()
 	return true
 end
 
-function Manager:runManager()
+function Manager:runManager(no_block)
+	if no_block == nil then
+		no_block = false
+	end
 	oil.main(function()
 
 		self:initORB()
-		oil.newthread(self._orb.run, self._orb)
+		if no_block then
+			oil.newthread(self._orb.step, self._orb)
+		else
+			oil.newthread(self._orb.run, self._orb)
+		end
+
 		self:initManagerServant()
 
 		self:initNaming()
@@ -396,6 +404,13 @@ function Manager:runManager()
 		--self._orb:run()
 	end)
 end
+
+function Manager:step()
+	oil.main(function()
+		oil.newthread(self._orb.step, self._orb)
+	end)
+end
+
 
 function Manager:loadModule(fname, initfunc)
 	self._listeners.module_:preLoad(fname, initfunc)
@@ -735,7 +750,8 @@ function Manager:shutdownNaming()
 end
 function Manager:initExecContext()
 	self._rtcout:RTC_TRACE("Manager.initExecContext()")
-	PeriodicExecutionContextInit(self)
+	PeriodicExecutionContext.Init(self)
+	OpenHRPExecutionContext.Init(self)
 	return true
 end
 function Manager:initComposite()

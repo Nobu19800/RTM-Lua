@@ -167,7 +167,7 @@ InPortCorbaCdrProvider.new = function()
 end
 
 
-InPortCorbaCdrProvider.InPortCorbaCdrProviderInit = function()
+InPortCorbaCdrProvider.Init = function()
 	InPortProviderFactory:instance():addFactory("corba_cdr",
 		InPortCorbaCdrProvider.new,
 		Factory.Delete)

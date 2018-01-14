@@ -159,7 +159,7 @@ OutPortDSProvider.new = function()
 end
 
 
-OutPortDSProvider.OutPortDSProviderInit = function()
+OutPortDSProvider.Init = function()
 	OutPortProviderFactory:instance():addFactory("data_service",
 		OutPortDSProvider.new,
 		Factory.Delete)

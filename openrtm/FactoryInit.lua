@@ -12,33 +12,27 @@ local FactoryInit= function()
 	--local OutPortCorbaCdrConsumer = require "openrtm.OutPortCorbaCdrConsumer"
 	--local OutPortCorbaCdrConsumerInit = OutPortCorbaCdrConsumer.OutPortCorbaCdrConsumerInit
 	local InPortDSProvider = require "openrtm.InPortDSProvider"
-	local InPortDSProviderInit = InPortDSProvider.InPortDSProviderInit
 	local InPortDSConsumer = require "openrtm.InPortDSConsumer"
-	local InPortDSConsumerInit = InPortDSConsumer.InPortDSConsumerInit
 	local OutPortDSProvider = require "openrtm.OutPortDSProvider"
-	local OutPortDSProviderInit = OutPortDSProvider.OutPortDSProviderInit
 	local OutPortDSConsumer = require "openrtm.OutPortDSConsumer"
-	local OutPortDSConsumerInit = OutPortDSConsumer.OutPortDSConsumerInit
 	local NumberingPolicy = require "openrtm.NumberingPolicy"
-	local DefaultNumberingPolicyInit = NumberingPolicy.DefaultNumberingPolicyInit
+	local ProcessUniquePolicy = NumberingPolicy.ProcessUniquePolicy
 	local CdrRingBuffer = require "openrtm.CdrRingBuffer"
-	local CdrRingBufferInit = CdrRingBuffer.CdrRingBufferInit
 	local PublisherFlush = require "openrtm.PublisherFlush"
-	local PublisherFlushInit = PublisherFlush.PublisherFlushInit
 
-	CdrRingBufferInit()
+	CdrRingBuffer.Init()
 
 	--InPortCorbaCdrConsumerInit()
 	--InPortCorbaCdrProviderInit()
 	--OutPortCorbaCdrConsumerInit()
 	--OutPortCorbaCdrProviderInit()
-	InPortDSConsumerInit()
-	InPortDSProviderInit()
-	OutPortDSConsumerInit()
-	OutPortDSProviderInit()
-	DefaultNumberingPolicyInit()
+	InPortDSConsumer.Init()
+	InPortDSProvider.Init()
+	OutPortDSConsumer.Init()
+	OutPortDSProvider.Init()
+	ProcessUniquePolicy.Init()
 
-	PublisherFlushInit()
+	PublisherFlush.Init()
 end
 
 _G["openrtm.FactoryInit"] = FactoryInit

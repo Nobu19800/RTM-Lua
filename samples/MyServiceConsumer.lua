@@ -1,6 +1,6 @@
 package.path = "..\\lua\\?.lua"
 package.cpath = "..\\clibs\\?.dll;"
-openrtm_idl_path = "../idl"
+
 
 
 local Manager = require "openrtm.Manager"
@@ -15,16 +15,16 @@ local CorbaPort = require "openrtm.CorbaPort"
 
 
 local myserviceconsumer_spec = {
-  "implementation_id","MyServiceConsumer",
-  "type_name","MyServiceConsumer",
-  "description","MyService Consumer Sample component",
-  "version","1.0",
-  "vendor","Nobuhiko Miyamoto",
-  "category","example",
-  "activity_type","DataFlowComponent",
-  "max_instance","10",
-  "language","Lua",
-  "lang_type","script"}
+  ["implementation_id"]="MyServiceConsumer",
+  ["type_name"]="MyServiceConsumer",
+  ["description"]="MyService Consumer Sample component",
+  ["version"]="1.0",
+  ["vendor"]="Nobuhiko Miyamoto",
+  ["category"]="example",
+  ["activity_type"]="DataFlowComponent",
+  ["max_instance"]="10",
+  ["language"]="Lua",
+  ["lang_type"]="script"}
 
 
 
@@ -107,13 +107,13 @@ MyServiceConsumer.new = function(manager)
 	return obj
 end
 
-local MyServiceConsumerInit = function(manager)
+MyServiceConsumer.Init = function(manager)
 	local prof = Properties.new({defaults_str=myserviceconsumer_spec})
 	manager:registerFactory(prof, MyServiceConsumer.new, Factory.Delete)
 end
 
 local MyModuleInit = function(manager)
-	MyServiceConsumerInit(manager)
+	MyServiceConsumer.Init(manager)
 	local comp = manager:createComponent("MyServiceConsumer")
 end
 
@@ -125,7 +125,6 @@ if Manager.is_main() then
 	manager:activateManager()
 	manager:runManager()
 else
-	MyServiceConsumer.Init = MyServiceConsumerInit
 	return MyServiceConsumer
 end
 

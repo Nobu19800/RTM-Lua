@@ -1,6 +1,6 @@
 package.path = "..\\lua\\?.lua"
 package.cpath = "..\\clibs\\?.dll;"
-openrtm_idl_path = "../idl"
+
 
 
 local Manager = require "openrtm.Manager"
@@ -15,23 +15,23 @@ local CorbaPort = require "openrtm.CorbaPort"
 
 
 local configsample_spec = {
-  "implementation_id","ConfigSample",
-  "type_name","ConfigSample",
-  "description","MyService Consumer Sample component",
-  "version","1.0",
-  "vendor","Nobuhiko Miyamoto",
-  "category","example",
-  "activity_type","DataFlowComponent",
-  "max_instance","10",
-  "language","Lua",
-  "lang_type","script",
-  "conf.default.int_param0", "0",
-  "conf.default.int_param1", "1",
-  "conf.default.double_param0", "0.11",
-  "conf.default.double_param1", "9.9",
-  "conf.default.str_param0", "hoge",
-  "conf.default.str_param1", "dara",
-  "conf.default.vector_param0", "0.0,1.0,2.0,3.0,4.0"}
+  ["implementation_id"]="ConfigSample",
+  ["type_name"]="ConfigSample",
+  ["description"]="MyService Consumer Sample component",
+  ["version"]="1.0",
+  ["vendor"]="Nobuhiko Miyamoto",
+  ["category"]="example",
+  ["activity_type"]="DataFlowComponent",
+  ["max_instance"]="10",
+  ["language"]="Lua",
+  ["lang_type"]="script",
+  ["conf.default.int_param0"]="0",
+  ["conf.default.int_param1"]="1",
+  ["conf.default.double_param0"]="0.11",
+  ["conf.default.double_param1"]="9.9",
+  ["conf.default.str_param0"]="hoge",
+  ["conf.default.str_param1"]="dara",
+  ["conf.default.vector_param0"]="0.0,1.0,2.0,3.0,4.0"}
 
 
 
@@ -94,13 +94,13 @@ ConfigSample.new = function(manager)
 	return obj
 end
 
-local ConfigSampleInit = function(manager)
+ConfigSample.Init = function(manager)
 	local prof = Properties.new({defaults_str=configsample_spec})
 	manager:registerFactory(prof, ConfigSample.new, Factory.Delete)
 end
 
 local MyModuleInit = function(manager)
-	ConfigSampleInit(manager)
+	ConfigSample.Init(manager)
 	local comp = manager:createComponent("ConfigSample")
 end
 
@@ -112,7 +112,6 @@ if Manager.is_main() then
 	manager:activateManager()
 	manager:runManager()
 else
-	ConfigSample.Init = ConfigSampleInit
 	return ConfigSample
 end
 

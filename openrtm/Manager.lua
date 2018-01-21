@@ -325,6 +325,9 @@ Finalized.new = function()
 end
 
 function Manager:init(argv)
+	if argv == nil then
+		argv = {}
+	end
 	self._initProc = nil
 	self._ecs = {}
 	self._orb = nil
@@ -703,10 +706,9 @@ function Manager:initORB()
 end
 
 function Manager:findIdLFile(name)
-	if openrtm_idl_path == nil then
-		openrtm_idl_path = "./idl"
-	end
-	local _str = openrtm_idl_path.."/"..name
+	local fpath = StringUtil.dirname(debug.getinfo(1)["short_src"])
+	--print(fpath)
+	local _str = string.gsub(fpath,"\\","/").."../../idl/"..name
 	--print(_str)
 	return _str
 end

@@ -1,6 +1,5 @@
 package.path = "..\\lua\\?.lua"
 package.cpath = "..\\clibs\\?.dll;"
-openrtm_idl_path = "../idl"
 
 
 local Manager = require "openrtm.Manager"
@@ -15,16 +14,16 @@ local CorbaPort = require "openrtm.CorbaPort"
 
 
 local consolein_spec = {
-  "implementation_id","ConsoleIn",
-  "type_name","ConsoleIn",
-  "description","Console output component",
-  "version","1.0",
-  "vendor","Nobuhiko Miyamoto",
-  "category","example",
-  "activity_type","DataFlowComponent",
-  "max_instance","10",
-  "language","Lua",
-  "lang_type","script"}
+  ["implementation_id"]="ConsoleIn",
+  ["type_name"]="ConsoleIn",
+  ["description"]="Console output component",
+  ["version"]="1.0",
+  ["vendor"]="Nobuhiko Miyamoto",
+  ["category"]="example",
+  ["activity_type"]="DataFlowComponent",
+  ["max_instance"]="10",
+  ["language"]="Lua",
+  ["lang_type"]="script"}
 
 
 
@@ -52,13 +51,13 @@ ConsoleIn.new = function(manager)
 	return obj
 end
 
-local ConsoleInInit = function(manager)
+ConsoleIn.Init = function(manager)
 	local prof = Properties.new({defaults_str=consolein_spec})
 	manager:registerFactory(prof, ConsoleIn.new, Factory.Delete)
 end
 
 local MyModuleInit = function(manager)
-	ConsoleInInit(manager)
+	ConsoleIn.Init(manager)
 	local comp = manager:createComponent("ConsoleIn")
 end
 
@@ -71,7 +70,6 @@ if Manager.is_main() then
 	manager:activateManager()
 	manager:runManager()
 else
-	ConsoleIn.Init = ConsoleInInit
 	return ConsoleIn
 end
 

@@ -1,6 +1,6 @@
 package.path = "..\\lua\\?.lua"
 package.cpath = "..\\clibs\\?.dll;"
-openrtm_idl_path = "../idl"
+
 
 
 local Manager = require "openrtm.Manager"
@@ -15,16 +15,16 @@ local CorbaPort = require "openrtm.CorbaPort"
 
 
 local seqin_spec = {
-  "implementation_id","SeqIn",
-  "type_name","SequenceInComponent",
-  "description","Sequence InPort component",
-  "version","1.0",
-  "vendor","Nobuhiko Miyamoto",
-  "category","example",
-  "activity_type","DataFlowComponent",
-  "max_instance","10",
-  "language","Lua",
-  "lang_type","script"}
+  ["implementation_id"]="SeqIn",
+  ["type_name"]="SequenceInComponent",
+  ["description"]="Sequence InPort component",
+  ["version"]="1.0",
+  ["vendor"]="Nobuhiko Miyamoto",
+  ["category"]="example",
+  ["activity_type"]="DataFlowComponent",
+  ["max_instance"]="10",
+  ["language"]="Lua",
+  ["lang_type"]="script"}
 
 
 
@@ -141,13 +141,13 @@ SeqIn.new = function(manager)
 	return obj
 end
 
-local SeqInInit = function(manager)
+SeqIn.Init = function(manager)
 	local prof = Properties.new({defaults_str=seqin_spec})
 	manager:registerFactory(prof, SeqIn.new, Factory.Delete)
 end
 
 local MyModuleInit = function(manager)
-	SeqInInit(manager)
+	SeqIn.Init(manager)
 	local comp = manager:createComponent("SeqIn")
 end
 
@@ -160,7 +160,6 @@ if Manager.is_main() then
 	manager:activateManager()
 	manager:runManager()
 else
-	SeqIn.Init = SeqInInit
 	return SeqIn
 end
 

@@ -1,6 +1,6 @@
 package.path = "..\\lua\\?.lua"
 package.cpath = "..\\clibs\\?.dll;"
-openrtm_idl_path = "../idl"
+
 
 
 local Manager = require "openrtm.Manager"
@@ -15,16 +15,16 @@ local CorbaPort = require "openrtm.CorbaPort"
 
 
 local seqout_spec = {
-  "implementation_id","SeqOut",
-  "type_name","SequenceOutComponent",
-  "description","Sequence OutPort component",
-  "version","1.0",
-  "vendor","Nobuhiko Miyamoto",
-  "category","example",
-  "activity_type","DataFlowComponent",
-  "max_instance","10",
-  "language","Lua",
-  "lang_type","script"}
+  ["implementation_id"]="SeqOut",
+  ["type_name"]="SequenceOutComponent",
+  ["description"]="Sequence OutPort component",
+  ["version"]="1.0",
+  ["vendor"]="Nobuhiko Miyamoto",
+  ["category"]="example",
+  ["activity_type"]="DataFlowComponent",
+  ["max_instance"]="10",
+  ["language"]="Lua",
+  ["lang_type"]="script"}
 
 
 
@@ -128,13 +128,13 @@ SeqOut.new = function(manager)
 	return obj
 end
 
-local SeqOutInit = function(manager)
+SeqOut.Init = function(manager)
 	local prof = Properties.new({defaults_str=seqout_spec})
 	manager:registerFactory(prof, SeqOut.new, Factory.Delete)
 end
 
 local MyModuleInit = function(manager)
-	SeqOutInit(manager)
+	SeqOut.Init(manager)
 	local comp = manager:createComponent("SeqOut")
 end
 
@@ -146,7 +146,6 @@ if Manager.is_main() then
 	manager:activateManager()
 	manager:runManager()
 else
-	SeqOut.Init = SeqOutInit
 	return SeqOut
 end
 

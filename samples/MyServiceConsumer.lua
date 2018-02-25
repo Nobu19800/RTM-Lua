@@ -1,19 +1,16 @@
+---------------------------------
+--! @file MyServiceConsumer.lua
+--! @brief サービスポート(コンシューマ側)のRTCサンプル
+---------------------------------
+
 package.path = "..\\lua\\?.lua"
 package.cpath = "..\\clibs\\?.dll;"
 
 
 
-local Manager = require "openrtm.Manager"
-local Factory = require "openrtm.Factory"
-local Properties = require "openrtm.Properties"
-local RTObject = require "openrtm.RTObject"
+local openrtm  = require "openrtm"
 
-local InPort = require "openrtm.InPort"
-local OutPort = require "openrtm.OutPort"
-local CorbaConsumer = require "openrtm.CorbaConsumer"
-local CorbaPort = require "openrtm.CorbaPort"
-
-
+-- RTCの仕様をテーブルで定義する
 local myserviceconsumer_spec = {
   ["implementation_id"]="MyServiceConsumer",
   ["type_name"]="MyServiceConsumer",
@@ -30,10 +27,14 @@ local myserviceconsumer_spec = {
 
 local seq_print  = {}
 
-
+-- 配列を標準出力する関数オブジェクト
+-- @return 関数オブジェクト
 seq_print.new = function()
 	local obj = {}
 	obj._cnt  = 0
+	-- 配列を標準出力する
+	-- @param self 自身のオブジェクト
+	-- @param val 要素
 	local call_func = function(self, val)
 		print(self._cnt, ": ", val)
 		self._cnt = self._cnt + 1
@@ -44,17 +45,31 @@ end
 
 
 local MyServiceConsumer = {}
+
+-- RTCの初期化
+-- @param manager マネージャ
+-- @return RTC
 MyServiceConsumer.new = function(manager)
 	local obj = {}
-	setmetatable(obj, {__index=RTObject.new(manager)})
+	-- RTObjectをメタオブジェクトに設定する
+	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
+	-- 初期化時のコールバック関数
+	-- @return リターンコード
 	function obj:onInitialize()
-		self._myServicePort = CorbaPort.new("MyService")
-		self._myservice0 = CorbaConsumer.new("IDL:SimpleService/MyService:1.0")
+		-- サービスポート生成
+		self._myServicePort = openrtm.CorbaPort.new("MyService")
+		-- コンシューマオブジェクト生成
+		self._myservice0 = openrtm.CorbaConsumer.new("IDL:SimpleService/MyService:1.0")
+		-- サービスポートにコンシューマオブジェクトを登録
 		self._myServicePort:registerConsumer("myservice0", "MyService", self._myservice0, "../idl/MyService.idl")
+		-- ポート追加
 		self:addPort(self._myServicePort)
 
 		return self._ReturnCode_t.RTC_OK
 	end
+	-- アクティブ状態の時の実行関数
+	-- @param ec_id 実行コンテキストのID
+	-- @return リターンコード
 	function obj:onExecute(ec_id)
 		print("\n")
 		print("Command list: ")
@@ -66,29 +81,33 @@ MyServiceConsumer.new = function(manager)
 		io.write("> ")
 		local args = io.read()
 
-		local StringUtil = require "openrtm.StringUtil"
-		local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
+
 		local oil = require "oil"
 
-		local argv = StringUtil.split(args, " ")
-		argv[#argv] = StringUtil.eraseTailBlank(argv[#argv])
+		local argv = openrtm.StringUtil.split(args, " ")
+		argv[#argv] = openrtm.StringUtil.eraseTailBlank(argv[#argv])
 
 		local success, exception = oil.pcall(
 			function()
 				if argv[1] == "echo" and table.maxn(argv) > 1 then
+					-- echoオペレーション実行
 					print("echo() finished: ", self._myservice0:_ptr():echo(argv[2]))
 				elseif argv[1] == "set_value" and table.maxn(argv) > 1 then
 					local val = tonumber(argv[2])
+					-- set_valueオペレーション実行
 					self._myservice0:_ptr():set_value(val)
 					print("Set remote value: ", val)
 				elseif argv[1] == "get_value" then
+					-- get_valueオペレーション実行
 					local retval = self._myservice0:_ptr():get_value()
 					print("Current remote value: ", retval)
 				elseif argv[1] == "get_echo_history" then
-					CORBA_SeqUtil.for_each(self._myservice0:_ptr():get_echo_history(),
+					-- get_echo_historyオペレーション実行
+					openrtm.CORBA_SeqUtil.for_each(self._myservice0:_ptr():get_echo_history(),
 												  seq_print.new())
 				elseif argv[1] == "get_value_history" then
-					CORBA_SeqUtil.for_each(self._myservice0._ptr().get_value_history(),
+					-- get_value_historyオペレーション実行
+					openrtm.CORBA_SeqUtil.for_each(self._myservice0._ptr().get_value_history(),
 												  seq_print.new())
 				else
 					print("Invalid command or argument(s).")
@@ -107,19 +126,24 @@ MyServiceConsumer.new = function(manager)
 	return obj
 end
 
+-- MyServiceConsumerコンポーネントの生成ファクトリ登録関数
+-- @param manager マネージャ
 MyServiceConsumer.Init = function(manager)
-	local prof = Properties.new({defaults_str=myserviceconsumer_spec})
-	manager:registerFactory(prof, MyServiceConsumer.new, Factory.Delete)
+	local prof = openrtm.Properties.new({defaults_map=myserviceconsumer_spec})
+	manager:registerFactory(prof, MyServiceConsumer.new, openrtm.Factory.Delete)
 end
 
+-- MyServiceConsumerコンポーネント生成
+-- @param manager マネージャ
 local MyModuleInit = function(manager)
 	MyServiceConsumer.Init(manager)
 	local comp = manager:createComponent("MyServiceConsumer")
 end
 
-
-if Manager.is_main() then
-	local manager = Manager
+-- MyServiceConsumer.luaを直接実行している場合はマネージャの起動を行う
+-- ロードして実行している場合はテーブルを返す
+if openrtm.Manager.is_main() then
+	local manager = openrtm.Manager
 	manager:init(arg)
 	manager:setModuleInitProc(MyModuleInit)
 	manager:activateManager()

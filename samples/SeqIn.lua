@@ -1,19 +1,17 @@
+---------------------------------
+--! @file SeqIn.lua
+--! @brief シーケンス型入力のRTCサンプル
+---------------------------------
+
 package.path = "..\\lua\\?.lua"
 package.cpath = "..\\clibs\\?.dll;"
 
 
 
-local Manager = require "openrtm.Manager"
-local Factory = require "openrtm.Factory"
-local Properties = require "openrtm.Properties"
-local RTObject = require "openrtm.RTObject"
-
-local InPort = require "openrtm.InPort"
-local OutPort = require "openrtm.OutPort"
-local CorbaConsumer = require "openrtm.CorbaConsumer"
-local CorbaPort = require "openrtm.CorbaPort"
+local openrtm  = require "openrtm"
 
 
+-- RTCの仕様をテーブルで定義する
 local seqin_spec = {
   ["implementation_id"]="SeqIn",
   ["type_name"]="SequenceInComponent",
@@ -30,10 +28,18 @@ local seqin_spec = {
 
 
 local SeqIn = {}
+
+-- RTCの初期化
+-- @param manager マネージャ
+-- @return RTC
 SeqIn.new = function(manager)
 	local obj = {}
-	setmetatable(obj, {__index=RTObject.new(manager)})
+	-- RTObjectをメタオブジェクトに設定する
+	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
+	-- 初期化時のコールバック関数
+	-- @return リターンコード
 	function obj:onInitialize()
+		-- データ格納変数
 		self._d_octet = {tm={sec=0,nsec=0},data=0}
 		self._d_short = {tm={sec=0,nsec=0},data=0}
 		self._d_long = {tm={sec=0,nsec=0},data=0}
@@ -45,18 +51,19 @@ SeqIn.new = function(manager)
 		self._d_floatSeq = {tm={sec=0,nsec=0},data={}}
 		self._d_doubleSeq = {tm={sec=0,nsec=0},data={}}
 
-		self._octetIn = InPort.new("Octet",self._d_octet,"::RTC::TimedOctet")
-		self._shortIn = InPort.new("Short",self._d_short,"::RTC::TimedShort")
-		self._longIn = InPort.new("Long",self._d_long,"::RTC::TimedLong")
-		self._floatIn = InPort.new("Float",self._d_float,"::RTC::TimedFloat")
-		self._doubleIn = InPort.new("Double",self._d_double,"::RTC::TimedDouble")
-		self._octetSeqIn = InPort.new("OctetSeq",self._d_octetSeq,"::RTC::TimedOctetSeq")
-		self._shortSeqIn = InPort.new("ShortSeq",self._d_shortSeq,"::RTC::TimedShortSeq")
-		self._longSeqIn = InPort.new("LongSeq",self._d_longSeq,"::RTC::TimedLongSeq")
-		self._floatSeqIn = InPort.new("FloatSeq",self._d_floatSeq,"::RTC::TimedFloatSeq")
-		self._doubleSeqIn = InPort.new("DoubleSeq",self._d_doubleSeq,"::RTC::TimedDoubleSeq")
+		-- インポート生成
+		self._octetIn = openrtm.InPort.new("Octet",self._d_octet,"::RTC::TimedOctet")
+		self._shortIn = openrtm.InPort.new("Short",self._d_short,"::RTC::TimedShort")
+		self._longIn = openrtm.InPort.new("Long",self._d_long,"::RTC::TimedLong")
+		self._floatIn = openrtm.InPort.new("Float",self._d_float,"::RTC::TimedFloat")
+		self._doubleIn = openrtm.InPort.new("Double",self._d_double,"::RTC::TimedDouble")
+		self._octetSeqIn = openrtm.InPort.new("OctetSeq",self._d_octetSeq,"::RTC::TimedOctetSeq")
+		self._shortSeqIn = openrtm.InPort.new("ShortSeq",self._d_shortSeq,"::RTC::TimedShortSeq")
+		self._longSeqIn = openrtm.InPort.new("LongSeq",self._d_longSeq,"::RTC::TimedLongSeq")
+		self._floatSeqIn = openrtm.InPort.new("FloatSeq",self._d_floatSeq,"::RTC::TimedFloatSeq")
+		self._doubleSeqIn = openrtm.InPort.new("DoubleSeq",self._d_doubleSeq,"::RTC::TimedDoubleSeq")
 
-
+		-- ポート追加
 		self:addInPort("Octet",self._octetIn)
 		self:addInPort("Short",self._shortIn)
 		self:addInPort("Long",self._longIn)
@@ -70,7 +77,11 @@ SeqIn.new = function(manager)
 
 		return self._ReturnCode_t.RTC_OK
 	end
+	-- アクティブ状態の時の実行関数
+	-- @param ec_id 実行コンテキストのID
+	-- @return リターンコード
 	function obj:onExecute(ec_id)
+		-- データ読み込み
 		local octet_  = self._octetIn:read()
 		local short_  = self._shortIn:read()
 		local long_   = self._longIn:read()
@@ -141,20 +152,25 @@ SeqIn.new = function(manager)
 	return obj
 end
 
+-- SeqInコンポーネントの生成ファクトリ登録関数
+-- @param manager マネージャ
 SeqIn.Init = function(manager)
-	local prof = Properties.new({defaults_str=seqin_spec})
-	manager:registerFactory(prof, SeqIn.new, Factory.Delete)
+	local prof = openrtm.Properties.new({defaults_map=seqin_spec})
+	manager:registerFactory(prof, SeqIn.new, openrtm.Factory.Delete)
 end
 
+-- SeqInコンポーネント生成
+-- @param manager マネージャ
 local MyModuleInit = function(manager)
 	SeqIn.Init(manager)
 	local comp = manager:createComponent("SeqIn")
 end
 
 
-
-if Manager.is_main() then
-	local manager = Manager
+-- SeqIn.luaを直接実行している場合はマネージャの起動を行う
+-- ロードして実行している場合はテーブルを返す
+if openrtm.Manager.is_main() then
+	local manager = openrtm.Manager
 	manager:init(arg)
 	manager:setModuleInitProc(MyModuleInit)
 	manager:activateManager()

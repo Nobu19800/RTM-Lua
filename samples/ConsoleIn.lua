@@ -1,18 +1,16 @@
+---------------------------------
+--! @file ConsoleIn.lua
+--! @brief アウトポート出力のRTCサンプル
+---------------------------------
+
 package.path = "..\\lua\\?.lua"
 package.cpath = "..\\clibs\\?.dll;"
 
 
-local Manager = require "openrtm.Manager"
-local Factory = require "openrtm.Factory"
-local Properties = require "openrtm.Properties"
-local RTObject = require "openrtm.RTObject"
-
-local InPort = require "openrtm.InPort"
-local OutPort = require "openrtm.OutPort"
-local CorbaConsumer = require "openrtm.CorbaConsumer"
-local CorbaPort = require "openrtm.CorbaPort"
+local openrtm  = require "openrtm"
 
 
+-- RTCの仕様をテーブルで定義する
 local consolein_spec = {
   ["implementation_id"]="ConsoleIn",
   ["type_name"]="ConsoleIn",
@@ -29,21 +27,37 @@ local consolein_spec = {
 
 
 local ConsoleIn = {}
+
+-- RTCの初期化
+-- @param manager マネージャ
+-- @return RTC
 ConsoleIn.new = function(manager)
 	local obj = {}
-	setmetatable(obj, {__index=RTObject.new(manager)})
+	-- RTObjectをメタオブジェクトに設定する
+	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
+	-- 初期化時のコールバック関数
+	-- @return リターンコード
 	function obj:onInitialize()
+		-- データ格納変数
 		self._d_out = {tm={sec=0,nsec=0},data=0}
-		self._outOut = OutPort.new("out",self._d_out,"::RTC::TimedLong")
+		-- アウトポート生成
+		self._outOut = openrtm.OutPort.new("out",self._d_out,"::RTC::TimedLong")
+		-- ポート追加
 		self:addOutPort("out",self._outOut)
 
 		return self._ReturnCode_t.RTC_OK
 	end
+	-- アクティブ状態の時の実行関数
+	-- @param ec_id 実行コンテキストのID
+	-- @return リターンコード
 	function obj:onExecute(ec_id)
 		io.write("Please input number: ")
 		local data = tonumber(io.read())
+		-- 出力データ格納
 		self._d_out.data = data
-		OutPort.setTimestamp(self._d_out)
+		-- 出力データにタイムスタンプ設定
+		openrtm.OutPort.setTimestamp(self._d_out)
+		-- データ書き込み
 		self._outOut:write()
 		return self._ReturnCode_t.RTC_OK
 	end
@@ -51,20 +65,25 @@ ConsoleIn.new = function(manager)
 	return obj
 end
 
+-- ConsoleInコンポーネントの生成ファクトリ登録関数
+-- @param manager マネージャ
 ConsoleIn.Init = function(manager)
-	local prof = Properties.new({defaults_str=consolein_spec})
-	manager:registerFactory(prof, ConsoleIn.new, Factory.Delete)
+	local prof = openrtm.Properties.new({defaults_map=consolein_spec})
+	manager:registerFactory(prof, ConsoleIn.new, openrtm.Factory.Delete)
 end
 
+-- ConsoleInコンポーネント生成
+-- @param manager マネージャ
 local MyModuleInit = function(manager)
 	ConsoleIn.Init(manager)
 	local comp = manager:createComponent("ConsoleIn")
 end
 
 
-
-if Manager.is_main() then
-	local manager = Manager
+-- ConsoleIn.luaを直接実行している場合はマネージャの起動を行う
+-- ロードして実行している場合はテーブルを返す
+if openrtm.Manager.is_main() then
+	local manager = openrtm.Manager
 	manager:init(arg)
 	manager:setModuleInitProc(MyModuleInit)
 	manager:activateManager()

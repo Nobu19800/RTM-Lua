@@ -1,19 +1,17 @@
+---------------------------------
+--! @file ConfigSample.lua
+--! @brief コンフィギュレーションパラメータ変更のRTCサンプル
+---------------------------------
+
 package.path = "..\\lua\\?.lua"
 package.cpath = "..\\clibs\\?.dll;"
 
 
-
-local Manager = require "openrtm.Manager"
-local Factory = require "openrtm.Factory"
-local Properties = require "openrtm.Properties"
-local RTObject = require "openrtm.RTObject"
-
-local InPort = require "openrtm.InPort"
-local OutPort = require "openrtm.OutPort"
-local CorbaConsumer = require "openrtm.CorbaConsumer"
-local CorbaPort = require "openrtm.CorbaPort"
+local openrtm  = require "openrtm"
 
 
+
+-- RTCの仕様をテーブルで定義する
 local configsample_spec = {
   ["implementation_id"]="ConfigSample",
   ["type_name"]="ConfigSample",
@@ -25,6 +23,7 @@ local configsample_spec = {
   ["max_instance"]="10",
   ["language"]="Lua",
   ["lang_type"]="script",
+  -- コンフィギュレーションパラメータは[conf.セット名.パラメータ名]=[値]で指定
   ["conf.default.int_param0"]="0",
   ["conf.default.int_param1"]="1",
   ["conf.default.double_param0"]="0.11",
@@ -43,10 +42,18 @@ local configsample_spec = {
 
 
 local ConfigSample = {}
+
+-- RTCの初期化
+-- @param manager マネージャ
+-- @return RTC
 ConfigSample.new = function(manager)
 	local obj = {}
-	setmetatable(obj, {__index=RTObject.new(manager)})
+	-- RTObjectをメタオブジェクトに設定する
+	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
+	-- 初期化時のコールバック関数
+	-- @return リターンコード
 	function obj:onInitialize()
+		-- コンフィギュレーションパラメータをバインドする変数
 		self._int_param0 = {_value=0}
 		self._int_param1 = {_value=1}
 		self._double_param0 = {_value=0.11}
@@ -55,7 +62,7 @@ ConfigSample.new = function(manager)
 		self._str_param1 = {_value="dara"}
 		self._vector_param0 = {_value={0.0, 1.0, 2.0, 3.0, 4.0}}
 
-
+		-- コンフィギュレーションパラメータを変数にバインドする
 		self:bindParameter("int_param0", self._int_param0, "0")
 		self:bindParameter("int_param1", self._int_param1, "1")
 		self:bindParameter("double_param0", self._double_param0, "0.11")
@@ -68,6 +75,9 @@ ConfigSample.new = function(manager)
 		print("\n Please change configuration values from RTSystemEditor")
 		return self._ReturnCode_t.RTC_OK
 	end
+	-- アクティブ状態の時の実行関数
+	-- @param ec_id 実行コンテキストのID
+	-- @return リターンコード
 	function obj:onExecute(ec_id)
 		local c = "                    "
 		print("---------------------------------------")
@@ -94,19 +104,24 @@ ConfigSample.new = function(manager)
 	return obj
 end
 
+-- ConfigSampleコンポーネントの生成ファクトリ登録関数
+-- @param manager マネージャ
 ConfigSample.Init = function(manager)
-	local prof = Properties.new({defaults_str=configsample_spec})
-	manager:registerFactory(prof, ConfigSample.new, Factory.Delete)
+	local prof = openrtm.Properties.new({defaults_map=configsample_spec})
+	manager:registerFactory(prof, ConfigSample.new, openrtm.Factory.Delete)
 end
 
+-- ConfigSampleコンポーネント生成
+-- @param manager マネージャ
 local MyModuleInit = function(manager)
 	ConfigSample.Init(manager)
 	local comp = manager:createComponent("ConfigSample")
 end
 
-
-if Manager.is_main() then
-	local manager = Manager
+-- ConfigSample.luaを直接実行している場合はマネージャの起動を行う
+-- ロードして実行している場合はテーブルを返す
+if openrtm.Manager.is_main() then
+	local manager = openrtm.Manager
 	manager:init(arg)
 	manager:setModuleInitProc(MyModuleInit)
 	manager:activateManager()

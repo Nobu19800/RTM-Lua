@@ -1,0 +1,132 @@
+---------------------------------
+--! @file ExecutionContextProfile.lua
+--! @brief 実行コンテキストのプロファイル保持クラス定義
+---------------------------------
+
+--[[
+Copyright (c) 2017 Nobuhiko Miyamoto
+]]
+
+local ExecutionContextProfile= {}
+_G["openrtm.ExecutionContextProfile"] = ExecutionContextProfile
+
+local oil = require "oil"
+
+local TimeValue = require "openrtm.TimeValue"
+local NVUtil = require "openrtm.NVUtil"
+
+
+local DEFAULT_PERIOD = 0.000001
+
+
+
+
+-- 実行コンテキストのプロファイル保持オブジェクト初期化関数
+-- @param kind 種別
+-- @return 実行コンテキストのプロファイル保持オブジェクト
+ExecutionContextProfile.new = function(kind)
+	local obj = {}
+	local Manager = require "openrtm.Manager"
+	obj._ExecutionKind = Manager:instance():getORB().types:lookup("::RTC::ExecutionKind").labelvalue
+	obj._ReturnCode_t = Manager:instance():getORB().types:lookup("::RTC::ReturnCode_t").labelvalue
+
+	if kind == nil then
+		kind = obj._ExecutionKind.PERIODIC
+	end
+	obj._rtcout = Manager:instance():getLogbuf("periodic_ecprofile")
+	obj._period = TimeValue.new(DEFAULT_PERIOD)
+    obj._rtcout:RTC_TRACE("ExecutionContextProfile.__init__()")
+    obj._rtcout:RTC_DEBUG("Actual rate: "..obj._period:sec().." [sec], "..obj._period:usec().." [usec]")
+    obj._ref = oil.corba.idl.null
+    obj._profile = {kind=obj._ExecutionKind.PERIODIC,
+					rate=1.0/obj._period:toDouble(),
+					owner=oil.corba.idl.null, participants={},
+					properties={}}
+					
+	-- 実行コンテキスト終了
+	function obj:exit()
+		self._rtcout:RTC_TRACE("exit")
+		self._profile.owner = oil.corba.idl.null
+		self._profile.participants = {}
+		self._profile.properties = {}
+		self._ref = oil.corba.idl.null
+	end
+	-- 実行周期設定
+	-- @param rate 実行周期
+	-- @return リターンコード
+	function obj:setRate(rate)
+		self._rtcout:RTC_TRACE("setRate("..rate..")")
+		if rate <= 0.0 then
+			return self._ReturnCode_t.BAD_PARAMETER
+		end
+		self._profile.rate = rate
+		self._period = TimeValue.new(1.0 / rate)
+		return self._ReturnCode_t.RTC_OK
+	end
+	-- プロパティ設定
+	-- @param props プロパティ
+	function obj:setProperties(props)
+		self._rtcout:RTC_TRACE("setProperties()")
+		self._rtcout:RTC_DEBUG(props)
+		NVUtil.copyFromProperties(self._profile.properties, props)
+	end
+	-- オブジェクトリファレンス設定
+	-- @param ec_ptr オブジェクトリファレンス
+	function obj:setObjRef(ec_ptr)
+		self._rtcout:RTC_TRACE("setObjRef()")
+		self._ref = ec_ptr
+	end
+	-- オブジェクトリファレンス取得
+	-- @return オブジェクトリファレンス
+	function obj:getObjRef()
+		self._rtcout:RTC_TRACE("getObjRef()")
+		return self._ref
+	end
+	-- 種別設定
+	-- @param kind 種別
+	-- @return リターンコード
+	function obj:setKind(kind)
+		if kind < self._ExecutionKind.PERIODIC or kind > self._ExecutionKind.OTHER then
+			self._rtcout:RTC_ERROR("Invalid kind is given. "..kind)
+			return self._ReturnCode_t.BAD_PARAMETER
+		end
+
+		self._rtcout:RTC_TRACE("setKind("..self:getKindString(kind)..")")
+		--print(self:getKindString(kind))
+		self._profile.kind = kind
+		return self._ReturnCode_t.RTC_OK
+	end
+	-- 実行コンテキストの種別を文字列に変換
+	-- @param kind 種別
+	-- @return 文字列に変換した種別
+	function obj:getKindString(kind)
+		kinds_ = {"PERIODIC", "EVENT_DRIVEN", "OTHER"}
+		if kind == nil then
+			kind_ = self._profile.kind
+		else
+			kind_ = kind
+		end
+
+		if kind_ < self._ExecutionKind.PERIODIC or kind_ > self._ExecutionKind.OTHER then
+			return ""
+		end
+
+		return kinds_[kind_+1]
+	end
+	-- 実行周期取得
+	-- @return 実行周期
+	function obj:getPeriod()
+		return self._period
+	end
+	-- プロファイル取得
+	-- @return プロファイル
+	function obj:getProfile()
+		self._rtcout:RTC_TRACE("getProfile()")
+		return self._profile
+	end
+
+	return obj
+end
+
+
+return ExecutionContextProfile

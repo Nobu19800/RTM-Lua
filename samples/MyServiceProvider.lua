@@ -1,19 +1,16 @@
+---------------------------------
+--! @file MyServiceProvider.lua
+--! @brief サービスポート(コンシューマ側)のRTCサンプル
+---------------------------------
+
 package.path = "..\\lua\\?.lua"
 package.cpath = "..\\clibs\\?.dll;"
 
 
 
-local Manager = require "openrtm.Manager"
-local Factory = require "openrtm.Factory"
-local Properties = require "openrtm.Properties"
-local RTObject = require "openrtm.RTObject"
+local openrtm  = require "openrtm"
 
-local InPort = require "openrtm.InPort"
-local OutPort = require "openrtm.OutPort"
-local CorbaConsumer = require "openrtm.CorbaConsumer"
-local CorbaPort = require "openrtm.CorbaPort"
-
-
+-- RTCの仕様をテーブルで定義する
 local myserviceprovider_spec = {
   ["implementation_id"]="MyServiceProvider",
   ["type_name"]="MyServiceProvider",
@@ -30,10 +27,14 @@ local myserviceprovider_spec = {
 
 local seq_print  = {}
 
-
+-- 配列を標準出力する関数オブジェクト
+-- @return 関数オブジェクト
 seq_print.new = function()
 	local obj = {}
 	obj._cnt  = 0
+	-- 配列を標準出力する
+	-- @param self 自身のオブジェクト
+	-- @param val 要素
 	local call_func = function(self, val)
 		print(self._cnt, ": ", val)
 		self._cnt = self._cnt + 1
@@ -44,43 +45,57 @@ end
 
 
 local MyServiceSVC_impl = {}
+
+-- サービスプロバイダ初期化
+-- @return サービスプロバイダ
 MyServiceSVC_impl.new = function()
 	local obj = {}
 	obj._echoList = {}
     obj._valueList = {}
     obj._value = 0
+    -- echoオペレーション
+    -- @param msg 入力文字列
+    -- @return msgと同じ文字列
 	function obj:echo(msg)
 		table.insert(self._echoList, msg)
 		print("MyService::echo() was called.")
 		local oil = require "oil"
 		for i =1,10 do
 			print("Message: ", msg)
-			oil.tasks:suspend(0.1)
+			openrtm.Timer.sleep(0.1)
 		end
 		print("MyService::echo() was finished.")
 		return msg
 	end
+	-- get_echo_historyオペレーション
+    -- @return echoリスト
 	function obj:get_echo_history()
 		local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 		print("MyService::get_echo_history() was called.")
-		CORBA_SeqUtil.for_each(self._echoList, seq_print.new())
+		openrtm.CORBA_SeqUtil.for_each(self._echoList, seq_print.new())
 		return self._echoList
 	end
+	-- set_valueオペレーション
+    -- @param value 設定値
 	function obj:set_value(value)
 		table.insert(self._valueList, value)
 		self._value = value
 		print("MyService::set_value() was called.")
 		print("Current value: ", self._value)
 	end
+	-- get_valueオペレーション
+    -- @return 現在の設定値
 	function obj:get_value()
 		print("MyService::get_value() was called.")
 		print("Current value: ", self._value)
 		return self._value
 	end
+	-- get_value_historyオペレーション
+    -- @return 値リスト
 	function obj:get_value_history()
 		local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 		print("MyService::get_value_history() was called.")
-		CORBA_SeqUtil.for_each(self._valueList, seq_print.new())
+		openrtm.CORBA_SeqUtil.for_each(self._valueList, seq_print.new())
 		return self._valueList
 	end
 
@@ -89,14 +104,24 @@ end
 
 
 local MyServiceProvider = {}
+
+-- RTCの初期化
+-- @param manager マネージャ
+-- @return RTC
 MyServiceProvider.new = function(manager)
 	local obj = {}
-	setmetatable(obj, {__index=RTObject.new(manager)})
+	-- RTObjectをメタオブジェクトに設定する
+	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
+	-- 初期化時のコールバック関数
+	-- @return リターンコード
 	function obj:onInitialize()
-		self._myServicePort = CorbaPort.new("MyService")
+		-- サービスポート生成
+		self._myServicePort = openrtm.CorbaPort.new("MyService")
+		-- プロバイダオブジェクト生成
 		self._myservice0 = MyServiceSVC_impl.new()
+		-- サービスポートにプロバイダオブジェクトを登録
 		self._myServicePort:registerProvider("myservice0", "MyService", self._myservice0, "../idl/MyService.idl", "IDL:SimpleService/MyService:1.0")
-
+		-- ポート追加
 		self:addPort(self._myServicePort)
 
 		return self._ReturnCode_t.RTC_OK
@@ -107,19 +132,24 @@ MyServiceProvider.new = function(manager)
 	return obj
 end
 
+-- MyServiceProviderコンポーネントの生成ファクトリ登録関数
+-- @param manager マネージャ
 MyServiceProvider.Init = function(manager)
-	local prof = Properties.new({defaults_str=myserviceprovider_spec})
-	manager:registerFactory(prof, MyServiceProvider.new, Factory.Delete)
+	local prof = openrtm.Properties.new({defaults_map=myserviceprovider_spec})
+	manager:registerFactory(prof, MyServiceProvider.new, openrtm.Factory.Delete)
 end
 
+-- MyServiceProviderコンポーネント生成
+-- @param manager マネージャ
 local MyModuleInit = function(manager)
 	MyServiceProvider.Init(manager)
 	local comp = manager:createComponent("MyServiceProvider")
 end
 
-
-if Manager.is_main() then
-	local manager = Manager
+-- MyServiceProvider.luaを直接実行している場合はマネージャの起動を行う
+-- ロードして実行している場合はテーブルを返す
+if openrtm.Manager.is_main() then
+	local manager = openrtm.Manager
 	manager:init(arg)
 	manager:setModuleInitProc(MyModuleInit)
 	manager:activateManager()

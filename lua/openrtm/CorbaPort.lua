@@ -20,9 +20,10 @@ local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 CorbaProviderHolder = {}
 
 -- プロバイダ保持オブジェクト初期化関数
--- @param type_name 種別名
+-- @param type_name 型名
 -- @param instance_name インスタンス名
 -- @param servant サーバント
+-- @return プロバイダ保持オブジェクト
 CorbaProviderHolder.new = function(type_name, instance_name, servant)
 	local obj = {}
 
@@ -54,10 +55,12 @@ CorbaProviderHolder.new = function(type_name, instance_name, servant)
 	end
 
 	-- インターフェースのアクティブ化
+	-- RTCのアクティブ化時にインターフェースのアクティブ化を行い使用可能にする
 	function obj:activate()
     end
 
 	-- インターフェースの非アクティブ化
+	-- RTCの非アクティブ化時にインターフェースの非アクティブ化を行い使用不可にする
 	function obj:deactivate()
     end
 
@@ -91,13 +94,13 @@ CorbaConsumerHolder.new = function(type_name, instance_name, consumer, owner)
     function obj:instanceName()
 		return self._instanceName
 	end
-	-- 種別名取得
-	-- @return 種別名
+	-- 型名取得
+	-- @return 型名
 	function obj:typeName()
 		return self._typeName
 	end
 	-- 記述子取得
-	-- @return 記述子
+	-- @return 記述子(型名.インスタンス名)
 	function obj:descriptor()
 		return self._typeName.."."..self._instanceName
 	end
@@ -163,10 +166,10 @@ CorbaPort.new = function(name)
 
 	-- プロバイダ登録
 	-- @param instance_name インスタンス名
-	-- @param type_name 種別名
+	-- @param type_name 型名
 	-- @param provider プロバイダオブジェクト
-	-- @param idl_file idlファイルパス
-	-- @param interface_type インターフェース型
+	-- @param idl_file idlファイルパス(例："../idl/MyService.idl")
+	-- @param interface_type インターフェース型(例："IDL:SimpleService/MyService:1.0")
 	-- @return true：登録成功、false：登録失敗
 	function obj:registerProvider(instance_name, type_name, provider, idl_file, interface_type)
 		self._rtcout:RTC_TRACE("registerProvider(instance="..instance_name..", type_name="..type_name..")")
@@ -197,8 +200,8 @@ CorbaPort.new = function(name)
 
 	-- コンシューマ登録
 	-- @param instance_name インスタンス名
-	-- @param type_name 種別名
-	-- @param idl_file IDLファイルパス
+	-- @param type_name 型名
+	-- @param idl_file IDLファイルパス(例："../idl/MyService.idl")
 	-- @return true：登録成功、false：登録失敗
 	function obj:registerConsumer(instance_name, type_name, consumer, idl_file)
 		self._rtcout:RTC_TRACE("registerConsumer()")
@@ -218,22 +221,30 @@ CorbaPort.new = function(name)
 	end
 
 	-- インターフェースのアクティブ化
+	-- RTCアクティブ化時にインターフェースのアクティブ化を行い使用可能にする
 	function obj:activateInterfaces()
+		self._rtcout:RTC_TRACE("activateInterfaces()")
 		for i, provider in ipairs(self._providers) do
 			provider:activate()
 		end
     end
 
 	-- インターフェースの非アクティブ化
+	-- RTC非アクティブ化時にインターフェースの非アクティブ化を行い使用不可にする
 	function obj:deactivateInterfaces()
+		self._rtcout:RTC_TRACE("deactivateInterfaces()")
 		for i, provider in ipairs(self._providers) do
 			provider:deactivate()
 		end
     end
 
 	-- コネクタプロファイルにオブジェクトを設定する
+	-- 以下の要素名にIOR文字列を登録
+	-- RTC名.port.ポート名
+	-- port.型名.インスタンス名
 	-- @param connector_profile コネクタプロファイル
 	-- @return リターンコード
+	-- RTC_OK：登録成功、RTC_ERROR：コネクタ数上限により登録失敗
 	function obj:publishInterfaces(connector_profile)
 		self._rtcout:RTC_TRACE("publishInterfaces()")
 
@@ -264,8 +275,14 @@ CorbaPort.new = function(name)
 	end
 
 	-- コネクタプロファイルからオブジェクトリファレンスを設定する
+	-- 以下の要素名からIOR文字列を取り出してオブジェクトリファレンスを取得
+	-- RTC名.port.ポート名
+	-- port.型名.インスタンス名
 	-- @param connector_profile コネクタプロファイル
 	-- @return リターンコード
+	-- RTC_OK：設定成功、RTC_ERROR：設定失敗、オブジェクトリファレンスが取得できない
+	-- 「port.connection.strictness」の要素が「strict」に設定されている場合は、
+	-- オブジェクトリファレンスを取得できなかった場合にRTC_ERRORになる
 	function obj:subscribeInterfaces(connector_profile)
 		self._rtcout:RTC_TRACE("subscribeInterfaces()")
 		local nv = connector_profile.properties
@@ -313,6 +330,9 @@ CorbaPort.new = function(name)
 	end
 
 	-- コネクタプロファイルのオブジェクトリファレンスの設定を解除
+	-- 以下の要素名からIOR文字列を取り出してオブジェクトリファレンスを取得
+	-- RTC名.port.ポート名
+	-- port.型名.インスタンス名
 	-- @param connector_profile コネクタプロファイル
  	function obj:unsubscribeInterfaces(connector_profile)
 		self._rtcout:RTC_TRACE("unsubscribeInterfaces()")
@@ -336,6 +356,8 @@ CorbaPort.new = function(name)
     end
 
 	-- コネクタプロファイルのプロパティからIOR文字列を取得
+	-- 以下からオブジェクトリファレンスを保持している要素名を取得する
+	-- RTC名.port.ポート名.required.型名.インスタンス名
 	-- @param nv コネクタプロファイルのプロパティ
 	-- @param cons コンシューマ保持オブジェクト
 	-- @param iorstr IOR文字列リスト
@@ -385,6 +407,8 @@ CorbaPort.new = function(name)
 	end
 
 	-- コネクタプロファイルのプロパティからIOR文字列を取得
+	-- 以下の要素名からオブジェクトリファレンスを取得する
+	-- port.型名.インスタンス名
 	-- @param nv コネクタプロファイルのプロパティ
 	-- @param cons コンシューマ保持オブジェクト
 	-- @param iorstr IOR文字列リスト
@@ -467,21 +491,7 @@ CorbaPort.new = function(name)
 		return false
 	end
 
-	-- プロバイダのアクティブ化
-	function obj:activateInterfaces()
-		self._rtcout:RTC_TRACE("activateInterfaces()")
-		for i, provider in ipairs(self._providers) do
-			provider:activate()
-		end
-	end
 
-	-- プロバイダの非アクティブ化
-	function obj:deactivateInterfaces()
-		self._rtcout:RTC_TRACE("deactivateInterfaces()")
-		for i, provider in ipairs(self._providers) do
-			provider:deactivate()
-		end
-	end
 
 
 

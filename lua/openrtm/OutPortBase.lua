@@ -111,6 +111,9 @@ OutPortBase.new = function(name, data_type)
 	function obj:configure()
 	end
     -- 利用可能なサービスコンシューマ一覧初期化
+    -- InPortConsumerFactoryからサービスコンシューマ一覧を取得する
+    -- 「consumer_types」のプロパティが「all」の場合は、
+    -- 利用可能なサービスコンシューマを全て利用可能にする
 	function obj:initConsumers()
 		self._rtcout:RTC_TRACE("initConsumers()")
 
@@ -156,6 +159,9 @@ OutPortBase.new = function(name, data_type)
 		self._consumerTypes = consumer_types
 	end
 	-- 利用可能なサービスプロバイダ一覧初期化
+	-- OutPortProviderFactoryからサービスプロバイダ一覧を取得する
+    -- 「provider_types」のプロパティが「all」の場合は、
+    -- 利用可能なサービスプロバイダを全て利用可能にする
 	function obj:initProviders()
 		self._rtcout:RTC_TRACE("initProviders()")
 
@@ -195,8 +201,15 @@ OutPortBase.new = function(name, data_type)
 	end
 
 	-- コネクタプロファイルからインターフェース取得
+	-- push型の場合はコンシューマ生成して、コネクタを生成する
 	-- @param cprof コネクタプロファイル
+	-- コネクタプロファイルの以下のノードからプロパティを取得
+	-- dataport
+	-- dataport.outport
 	-- @return リターンコード
+	-- RTC_OK：正常終了
+	-- BAD_PARAMETER：コンシューマ生成失敗、不正なデータフロー型
+	-- RTC_ERROR：コネクタ生成失敗
 	function obj:subscribeInterfaces(cprof)
 		self._rtcout:RTC_TRACE("subscribeInterfaces()")
 
@@ -282,9 +295,16 @@ OutPortBase.new = function(name, data_type)
 		return self._ReturnCode_t.BAD_PARAMETER
 	end
 
-	-- プロバイダの初期化してンターフェースをコネクタプロファイルに登録
+	-- プロバイダの初期化してインターフェースをコネクタプロファイルに登録
+	-- pull型の場合はプロバイダを生成して、コネクタを生成する
 	-- @param cprof コネクタプロファイル
+	-- コネクタプロファイルの以下のノードからプロパティを取得
+	-- dataport
+	-- dataport.outport
 	-- @return リターンコード
+	-- RTC_OK：正常終了
+	-- BAD_PARAMETER：プロバイダの初期化失敗、不正なデータフロー型
+	-- RTC_ERROR：コネクタ生成失敗
 	function obj:publishInterfaces(cprof)
 		self._rtcout:RTC_TRACE("publishInterfaces()")
 
@@ -394,6 +414,8 @@ OutPortBase.new = function(name, data_type)
 	end
 
 	-- サービスプロバイダ作成
+	-- 「interface_type」の要素にインターフェース型を指定
+	-- 「provider」のノードにプロバイダのプロパティを指定
 	-- @param cprof コネクタプロファイル
 	-- @param prop プロパティ
 	-- @return プロバイダ
@@ -429,6 +451,8 @@ OutPortBase.new = function(name, data_type)
 	end
 	
 	-- サービスコンシューマ作成
+	-- 「interface_type」の要素にインターフェース型を指定
+	-- 「consumer」のノードにコンシューマのプロパティを指定
 	-- @param cprof コネクタプロファイル
 	-- @param prop プロパティ
 	-- @return コンシューマ

@@ -1,6 +1,6 @@
 ---------------------------------
 --! @file CorbaNaming.lua
---! @brief ネームサーバヘルパクラス定義
+--! @brief ネームサーバーヘルパクラス定義
 ---------------------------------
 
 --[[
@@ -15,9 +15,9 @@ local StringUtil = require "openrtm.StringUtil"
 local RTCUtil = require "openrtm.RTCUtil"
 
 
--- ネームサーバヘルパオブジェクト初期化
+-- ネームサーバーヘルパオブジェクト初期化
 -- @param orb ORBオブジェクト
--- @param name_server ネームサーバーのアドレス
+-- @param name_server ネームサーバーのアドレス(例：localhost:2809)
 -- @return ネームサーバヘルパオブジェクト
 CorbaNaming.new = function(orb, name_server)
 	local obj = {}
@@ -41,6 +41,8 @@ CorbaNaming.new = function(orb, name_server)
 		end
 	end
 	-- ネームサーバーにオブジェクトを登録
+	-- 登録パスは以下のように設定する
+	-- test1.host_cxt/test2.rtc
 	-- @param string_name 登録パス(文字列)
 	-- @param obj オブジェクトリファレンス
 	-- @param force trueの場合には同じパスに登録済みの場合でも強制的に上書きする
@@ -52,6 +54,8 @@ CorbaNaming.new = function(orb, name_server)
 		self:rebind(self:toName(string_name), obj, force)
 	end
 	-- ネームサーバーにオブジェクトを登録
+	-- Nameリストは以下のように指定
+	-- {{id="id1",kind="kind1"},...}
 	-- @param name_list 登録パス(Nameリスト)
 	-- @param obj オブジェクトリファレンス
 	-- @param force trueの場合には同じパスに登録済みの場合でも強制的に上書きする
@@ -78,6 +82,8 @@ CorbaNaming.new = function(orb, name_server)
 	end
 	-- ネームサーバーにオブジェクトを登録する
 	-- 指定パスのコンテキストがない場合は生成する
+	-- Nameリストは以下のように指定
+	-- {{id="id1",kind="kind1"},...}
 	-- @param context ルートコンテキスト
 	-- @param name_list 登録パス(Nameリスト)
 	function obj:rebindRecursive(context, name_list, obj)
@@ -112,8 +118,12 @@ CorbaNaming.new = function(orb, name_server)
 	end
 
 	-- 文字列をNameリストに変換
+	-- 文字列で以下のように設定する
+	-- test1.host_cxt/test2.rtc
 	-- @param 設定パス(文字列)
 	-- @return 設定パス(Nameリスト)
+	-- 戻り値は以下のようになる
+	-- {{id="test1",kind="host_cxt"},{id="test2",kind="rtc"}}
 	function obj:toName(sname)
 		if sname == nil then
 			error("CosNaming.NamingContext.InvalidName")
@@ -144,6 +154,8 @@ CorbaNaming.new = function(orb, name_server)
 		return name_list
 	end
 	-- Nameリストから、指定したインデックス間の要素を抽出する
+	-- Nameリストは以下のように指定
+	-- {{id="id1",kind="kind1"},...}
 	-- @param Nameリスト
 	-- @param begin 開始インデックス
 	-- @param _end 終了インデックス
@@ -161,6 +173,8 @@ CorbaNaming.new = function(orb, name_server)
 	end
 
 	-- ネームサーバーから指定パスのオブジェクトを削除
+	-- Nameリストは以下のように指定
+	-- {{id="id1",kind="kind1"},...}
 	-- @param name 削除パス(Nameオブジェクト)
 	function obj:unbind(name)
 		local name_ = name

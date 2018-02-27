@@ -47,7 +47,7 @@ InPortPushConnector.new = function(info, provider, listeners, buffer)
 			ret = self._buffer:read(data)
 			--print(data._data)
 		else
-			tmp = {_data=data}
+			local tmp = {_data=data}
 			ret = self._buffer:read(tmp)
 		end
 

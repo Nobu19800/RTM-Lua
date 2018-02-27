@@ -1,6 +1,7 @@
 ---------------------------------
 --! @file ExecutionContextBase.lua
 --! @brief 実行コンテキスト基底クラス定義
+--! 実行コンテキストを作成する場合はExecutionContextBaseをメタテーブルに設定する
 ---------------------------------
 
 --[[
@@ -60,8 +61,10 @@ ExecutionContextBase.new = function(name)
 		self._worker:exit()
 	end
 	-- 実行周期を設定する
+	-- 「rate」の要素名から実行周期を取得する
 	-- @param props プロパティ
 	-- @return true：設定成功、false：設定失敗
+	-- 実行周期を数値に変換できなかった場合はfalse
 	function obj:setExecutionRate(props)
 		if props:findNode("rate") then
 			rate_ = tonumber(props:getProperty("rate"))
@@ -76,6 +79,8 @@ ExecutionContextBase.new = function(name)
 	-- 実行周期設定
 	-- @param rate 実行周期
 	-- @return リターンコード
+	-- RTC_OK：onSettingRate、onSetRateがRTC_OKを返す
+	-- BAD_PARAMETER：不正な周期を指定
 	function obj:setRate(rate)
 		self._rtcout:RTC_TRACE("setRate("..rate..")")
 		ret_ = self._profile:setRate(self:onSettingRate(rate))
@@ -118,6 +123,8 @@ ExecutionContextBase.new = function(name)
     -- 実行コンテキストの種類設定
     -- @param 実行コンテキストの種類
     -- @return リターンコード
+    -- RTC_OK：正常に設定
+    -- BAD_PARAMETER：RTC::ExecutionKindに定義のない値
 	function obj:setKind(kind)
 		return self._profile:setKind(kind)
 	end
@@ -125,6 +132,9 @@ ExecutionContextBase.new = function(name)
 	-- 実行コンテキストにRTCを関連付ける
 	-- @param rtc RTC
 	-- @return リターンコード
+	-- RTC_OK：正常にバインド
+	-- BAD_PARAMETER：RTCが不正
+	-- RTC_ERROR：実行コンテキストが不正
 	function obj:bindComponent(rtc)
 		return self._worker:bindComponent(rtc)
 	end
@@ -137,6 +147,8 @@ ExecutionContextBase.new = function(name)
 
 	-- 実行コンテキストを開始する
 	-- @return リターンコード
+	-- RTC_OK：onStarting、onStartedがRTC_OKを返す
+	-- PRECONDITION_NOT_MET：既に実行状態
 	function obj:start()
 		self._rtcout:RTC_TRACE("start()")
 		ret_ = self:onStarting()
@@ -317,14 +329,17 @@ ExecutionContextBase.new = function(name)
 		return profile
 	end
 	-- RTC実行前に呼び出す処理
+	-- onActivated、onAborting、onDeactivated、onResetが実行される
 	function obj:invokeWorkerPreDo()
 		self._worker:invokeWorkerPreDo()
     end
     -- RTC実行時に呼び出す処理
+    -- onExecute、onErrorが実行される
 	function obj:invokeWorkerDo()
 		self._worker:invokeWorkerDo()
     end
     -- RTC実行後に呼び出す処理
+    -- onStateUpdateが実行される
 	function obj:invokeWorkerPostDo()
 		self._worker:invokeWorkerPostDo()
     end
@@ -336,6 +351,9 @@ ExecutionContextBase.new = function(name)
 	-- RTCのアクティブ化
 	-- @param comp RTC
 	-- @return リターンコード
+	-- RTC_OK：onActivating、onActivatedがRTC_OKを返す
+	-- BAD_PARAMETER：指定RTCがバインドされていない
+	-- PRECONDITION_NOT_MET：非アクティブ状態以外の状態
 	function obj:activateComponent(comp)
 		self._rtcout:RTC_TRACE("activateComponent()")
 		ret_ = self:onActivating(comp)
@@ -374,6 +392,9 @@ ExecutionContextBase.new = function(name)
 	-- RTCの非アクティブ化
 	-- @param comp RTC
 	-- @return リターンコード
+	-- RTC_OK：onDeactivating、onDeactivated
+	-- BAD_PARAMETER：指定RTCがバインドされていない
+	-- PRECONDITION_NOT_MET：アクティブ状態以外の状態
 	function obj:deactivateComponent(comp)
 		self._rtcout:RTC_TRACE("deactivateComponent()")
 		ret_ = self:onDeactivating(comp)
@@ -410,6 +431,9 @@ ExecutionContextBase.new = function(name)
 	-- RTCのリセット
 	-- @param comp RTC
 	-- @return リターンコード
+	-- RTC_OK：onResetting、onReset
+	-- BAD_PARAMETER：指定RTCがバインドされていない
+	-- PRECONDITION_NOT_MET：エラー状態以外の状態
 	function obj:resetComponent(comp)
 		self._rtcout:RTC_TRACE("resetComponent()")
 		ret_ = self:onResetting(comp)
@@ -571,6 +595,8 @@ ExecutionContextBase.new = function(name)
 
 	-- 実行コンテキストの停止
 	-- @return リターンコード
+	-- RTC_OK：onStopping、onStoppedがRTC_OKを返す
+	-- PRECONDITION_NOT_MET：既に停止状態
 	function obj:stop()
 		self._rtcout:RTC_TRACE("stop()")
 		local ret_ = self:onStopping()

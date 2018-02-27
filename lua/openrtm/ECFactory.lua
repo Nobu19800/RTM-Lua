@@ -25,6 +25,7 @@ ECFactory.ECFactoryBase.new = function()
 	-- 実行コンテキスト名取得
 	-- @return 実行コンテキスト名
 	function obj:name()
+		return ""
 	end
 	-- 実行コンテキスト生成
 	-- @return 実行コンテキスト
@@ -42,7 +43,9 @@ ECFactory.ECFactoryLua = {}
 -- 実行コンテキスト生成ファクトリの初期化関数
 -- @param name 実行コンテキスト名
 -- @param new_func 実行コンテキスト初期化関数
+-- 実行コンテキストを返す関数を指定する
 -- @param delete_func 実行コンテキスト削除関数
+-- 実行コンテキストを引数とする関数を指定
 -- @return 実行コンテキスト生成ファクトリ
 ECFactory.ECFactoryLua.new = function(name, new_func, delete_func)
 	local obj = {}

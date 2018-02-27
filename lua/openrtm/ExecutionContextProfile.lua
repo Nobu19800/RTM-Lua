@@ -54,6 +54,8 @@ ExecutionContextProfile.new = function(kind)
 	-- 実行周期設定
 	-- @param rate 実行周期
 	-- @return リターンコード
+	-- RTC_OK：onSettingRate、onSetRateがRTC_OKを返す
+	-- BAD_PARAMETER：不正な周期を指定
 	function obj:setRate(rate)
 		self._rtcout:RTC_TRACE("setRate("..rate..")")
 		if rate <= 0.0 then
@@ -85,6 +87,8 @@ ExecutionContextProfile.new = function(kind)
 	-- 種別設定
 	-- @param kind 種別
 	-- @return リターンコード
+	-- RTC_OK：正常に設定
+    -- BAD_PARAMETER：RTC::ExecutionKindに定義のない値
 	function obj:setKind(kind)
 		if kind < self._ExecutionKind.PERIODIC or kind > self._ExecutionKind.OTHER then
 			self._rtcout:RTC_ERROR("Invalid kind is given. "..kind)
@@ -100,7 +104,7 @@ ExecutionContextProfile.new = function(kind)
 	-- @param kind 種別
 	-- @return 文字列に変換した種別
 	function obj:getKindString(kind)
-		kinds_ = {"PERIODIC", "EVENT_DRIVEN", "OTHER"}
+		local kinds_ = {"PERIODIC", "EVENT_DRIVEN", "OTHER"}
 		if kind == nil then
 			kind_ = self._profile.kind
 		else

@@ -39,7 +39,7 @@ local InPortPullConnector = require "openrtm.InPortPullConnector"
 
 -- InPort基底オブジェクト初期化
 -- @param name ポート名
--- @param data_type データ型
+-- @param data_type データ型(例：::RTC::TimedLong)
 -- @return InPort
 InPortBase.new = function(name, data_type)
 	local obj = {}
@@ -108,6 +108,9 @@ InPortBase.new = function(name, data_type)
 		self:setConnectionLimit(num)
     end
     -- 利用可能なサービスコンシューマ一覧初期化
+    -- OutPortConsumerFactoryからサービスコンシューマ一覧を取得する
+    -- 「consumer_types」のプロパティが「all」の場合は、
+    -- 利用可能なサービスコンシューマを全て利用可能にする
 	function obj:initConsumers()
 		self._rtcout:RTC_TRACE("initConsumers()")
 
@@ -147,6 +150,9 @@ InPortBase.new = function(name, data_type)
 		self._consumerTypes = consumer_types
 	end
 	-- 利用可能なサービスプロバイダ一覧初期化
+	-- InPortProviderFactoryからサービスプロバイダ一覧を取得する
+    -- 「provider_types」のプロパティが「all」の場合は、
+    -- 利用可能なサービスプロバイダを全て利用可能にする
 	function obj:initProviders()
 		self._rtcout:RTC_TRACE("initProviders()")
 
@@ -186,8 +192,15 @@ InPortBase.new = function(name, data_type)
 	end
 	
 	-- プロバイダの初期化してインターフェースをコネクタプロファイルに登録
+	-- push型の場合はプロバイダを生成して、コネクタを生成する
 	-- @param cprof コネクタプロファイル
+	-- コネクタプロファイルの以下のノードからプロパティを取得
+	-- dataport
+	-- dataport.inport
 	-- @return リターンコード
+	-- RTC_OK：正常終了
+	-- BAD_PARAMETER：プロバイダの初期化失敗、不正なデータフロー型
+	-- RTC_ERROR：コネクタ生成失敗
 	function obj:publishInterfaces(cprof)
 
 		self._rtcout:RTC_TRACE("publishInterfaces()")
@@ -248,8 +261,15 @@ InPortBase.new = function(name, data_type)
 
 
 	-- コネクタプロファイルからインターフェース取得
+	-- pull型の場合はコンシューマ生成して、コネクタを生成する
 	-- @param cprof コネクタプロファイル
+	-- コネクタプロファイルの以下のノードからプロパティを取得
+	-- dataport
+	-- dataport.inport
 	-- @return リターンコード
+	-- RTC_OK：正常終了
+	-- BAD_PARAMETER：コンシューマ生成失敗、不正なデータフロー型
+	-- RTC_ERROR：コネクタ生成失敗
 	function obj:subscribeInterfaces(cprof)
 		self._rtcout:RTC_TRACE("subscribeInterfaces()")
 
@@ -396,6 +416,8 @@ InPortBase.new = function(name, data_type)
 
 
 	-- サービスプロバイダ作成
+	-- 「interface_type」の要素にインターフェース型を指定
+	-- 「provider」のノードにプロバイダのプロパティを指定
 	-- @param cprof コネクタプロファイル
 	-- @param prop プロパティ
 	-- @return プロバイダ
@@ -435,6 +457,8 @@ InPortBase.new = function(name, data_type)
 
 	-- サービスコンシューマ作成
 	-- @param cprof コネクタプロファイル
+	-- 「interface_type」の要素にインターフェース型を指定
+	-- 「consumer」のノードにコンシューマのプロパティを指定
 	-- @param prop プロパティ
 	-- @return コンシューマ
 	function obj:createConsumer(cprof, prop)

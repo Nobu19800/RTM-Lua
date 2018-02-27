@@ -1,6 +1,8 @@
 ---------------------------------
 --! @file InPortDSProvider.lua
 --! @brief CorbaCdrインターフェースで通信するInPortProvider定義
+--! 「data_service」のインターフェース型で利用可能
+--! RTC.idlのPortServiceインターフェース
 ---------------------------------
 
 --[[
@@ -76,6 +78,10 @@ InPortDSProvider.new = function()
     -- データ書き込み
     -- @param data データ
     -- @return リターンコード
+    -- PORT_OK：正常終了
+    -- PORT_ERROR：バッファがない
+    -- UNKNOWN_ERROR：復号化失敗など、その他のエラー
+    -- その他、バッファフル、タイムアウト等の戻り値
 	function obj:push(data)
 		--print("put")
 		local status = self._PortStatus.PORT_OK

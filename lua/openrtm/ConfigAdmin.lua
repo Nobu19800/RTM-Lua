@@ -19,6 +19,8 @@ local StringUtil = require "openrtm.StringUtil"
 
 local Config = {}
 -- コンフィギュレーションパラメータ管理オブジェクト初期化
+-- 変換関数には以下の関数を使用する
+-- ret, value = trans(type, str)
 -- @param name 名前
 -- @param var 変数
 -- @param def_val デフォルト値
@@ -50,6 +52,7 @@ Config.new = function(name, var, def_val, trans)
 	-- パラメータの更新
 	-- @param key 値
 	-- @return true：更新成功・更新済み、false：更新失敗
+	-- 変換関数がfalseを返した場合は更新失敗
 	function obj:update(val)
 		if self.string_value == val then
 			return true
@@ -91,7 +94,7 @@ ConfigAdmin.new = function(configsets)
 	-- @param param_name パラメータ名
 	-- @param var 変数
 	-- @param def_val デフォルト値 
-	-- @param trans 変換関数
+	-- @param trans 変換関数(デフォルトはstringTo関数)
 	-- @return true：バインド成功、false：バインド失敗
 	function obj:bindParameter(param_name, var, def_val, trans)
 		if trans == nil then
@@ -166,6 +169,7 @@ ConfigAdmin.new = function(configsets)
 		end
 	end
 	-- コンフィギュレーションセットのアクティブ化
+	-- "_"から始まるIDは指定できない
 	-- @param config_id コンフィギュレーションセットID
 	-- @return true：アクティブ化成功、false：アクティブ化失敗
 	function obj:activateConfigurationSet(config_id)
@@ -190,6 +194,9 @@ ConfigAdmin.new = function(configsets)
 		--self._listeners.configsetname_[OpenRTM_aist.ConfigurationSetNameListenerType.ON_ACTIVATE_CONFIG_SET]:notify(config_id)
 	end
 	-- コンフィギュレーションパラメータ更新
+	-- ID指定の場合は、指定IDのコンフィギュレーションセットの更新
+	-- パラメータ、ID指定の場合は、指定パラメータの更新
+	-- パラメータ、ID未指定の場合は、現在アクティブなコンフィギュレーションセット更新
 	-- @param config_set コンフィギュレーションセットID
 	-- @param config_param パラメータ名
 	function obj:update(config_set, config_param)
@@ -258,6 +265,7 @@ ConfigAdmin.new = function(configsets)
 	end
 
 	-- 変更のあったコンフィギュレーションパラメータを取得
+	-- 更新したコンフィギュレーションパラメータは
 	-- @return 変更のあったコンフィギュレーションパラメータ一覧
 	function obj:changedParameters()
 		return self._changedParam

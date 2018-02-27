@@ -1,6 +1,8 @@
 ---------------------------------
 --! @file InPortCorbaCdrConsumer.lua
 --! @brief CorbaCdrインターフェースで通信するInPortConsumer定義
+--! 「corba_cdr」のインターフェース型で利用可能
+--! OpenRTM.idlのPortServiceインターフェース
 ---------------------------------
 
 --[[
@@ -44,6 +46,8 @@ InPortCorbaCdrConsumer.new = function()
 	-- データ送信
 	-- @param data 送信データ
 	-- @return リターンコード
+	-- RTC_OK：putオペレーションが正常終了
+	-- CONNECTION_LOST：通信失敗
 	function obj:put(data)
 		self._rtcout:RTC_PARANOID("put()")
 		local ret = DataPortStatus.PORT_OK
@@ -71,6 +75,9 @@ InPortCorbaCdrConsumer.new = function()
     end
     -- プロパティからインターフェース情報取得
     -- オブジェクトリファレンスの設定
+    -- IOR文字列、もしくはリファレンスを取得
+    -- dataport.corba_cdr.inport_ior
+    -- dataport.corba_cdr.inport_ref
     -- @param properties プロパティ
     -- @return true：設定成功、false：設定失敗
 	function obj:subscribeInterface(properties)
@@ -84,6 +91,9 @@ InPortCorbaCdrConsumer.new = function()
 		return false
     end
     -- プロパティからインターフェース設定解除
+    -- IOR文字列、もしくはリファレンスを取得
+    -- dataport.corba_cdr.inport_ior
+    -- dataport.corba_cdr.inport_ref
     -- @param properties プロパティ
 	function obj:unsubscribeInterface(properties)
 		self._rtcout:RTC_TRACE("unsubscribeInterface()")
@@ -97,6 +107,8 @@ InPortCorbaCdrConsumer.new = function()
 
 	-- IOR文字列からオブジェクトリファレンス設定
 	-- @param properties プロパティ
+	-- 以下からIOR文字列取得
+	-- dataport.corba_cdr.inport_ior
 	-- @return true：設定成功、false：設定失敗
 	function obj:subscribeFromIor(properties)
 		self._rtcout:RTC_TRACE("subscribeFromIor()")
@@ -142,6 +154,8 @@ InPortCorbaCdrConsumer.new = function()
 
 	-- オブジェクトからオブジェクトリファレンス設定
 	-- @param properties プロパティ
+	-- 以下からリファレンスを取得
+	-- dataport.corba_cdr.inport_ref
 	-- @return true：設定成功、false：設定失敗
 	function obj:subscribeFromRef(properties)
 		self._rtcout:RTC_TRACE("subscribeFromRef()")
@@ -177,6 +191,8 @@ InPortCorbaCdrConsumer.new = function()
 
 	-- IOR文字列からオブジェクトリファレンス設定解除
 	-- @param properties プロパティ
+	-- 以下からIOR文字列取得
+	-- dataport.corba_cdr.inport_ior
 	-- @return true：設定解除成功、false：設定解除失敗
 	function obj:unsubscribeFromIor(properties)
 		self._rtcout:RTC_TRACE("unsubscribeFromIor()")
@@ -209,8 +225,10 @@ InPortCorbaCdrConsumer.new = function()
 		return true
 	end
 
-	-- オブジェクトからオブジェクトリファレンス設定解除
+	-- リファレンスからオブジェクト設定解除
 	-- @param properties プロパティ
+	-- 以下からリファレンスを取得
+	-- dataport.corba_cdr.inport_ref
 	-- @return true：設定解除成功、false：設定解除失敗
 	function obj:unsubscribeFromRef(self, properties)
 		self._rtcout:RTC_TRACE("unsubscribeFromRef()")

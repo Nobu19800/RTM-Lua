@@ -46,9 +46,7 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
     obj._OnRead         = nil
     obj._OnReadConvert  = nil
 
-    obj._directNewData = false
-
-    obj._outPortConnectorList = {}
+    
 
 	-- ポート名取得
 	-- @return ポート名
@@ -98,6 +96,8 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 	end
 
 	-- データ読み込み
+	-- 変換関数を設定している場合は、変換後のデータを返す
+	-- コネクタ数が0、もしくはデータ読み込みに失敗した場合は、保持している変数をそのまま返す
 	-- @return データ
 	function obj:read()
 		self._rtcout:RTC_TRACE("DataType read()")
@@ -110,18 +110,7 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 
 
 
-		if #self._outPortConnectorList > 0 then
-			ret, data = self._outPortConnectorList[1]:read()
-
-			if ret then
-				self._value = data
-				if self._OnReadConvert ~= nil then
-					self._value = self._OnReadConvert(self._value)
-					self._rtcout:RTC_TRACE("OnReadConvert for direct data called")
-					return self._value
-				end
-			end
-		end
+		
 
 		if #self._connectors == 0 then
 			self._rtcout:RTC_DEBUG("no connectors")
@@ -168,6 +157,7 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 	end
 	-- データ変換関数設定
 	-- @param on_rconvert データ変換関数
+	-- out_value = on_rconvert(in_value)という関数を指定
 	function obj:setOnReadConvert(on_rconvert)
 		self._OnReadConvert = on_rconvert
 	end

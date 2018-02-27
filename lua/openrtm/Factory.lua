@@ -80,6 +80,8 @@ Factory.FactoryLua.new = function(profile, new_func, delete_func, policy)
 		self._Delete = delete_func
 	end
 	-- RTC生成
+	-- 生成するたびにカウントアップする
+	-- RTCを削除した場合は、削除済みの番号に割り当てる
 	-- @param mgr マネージャ
 	-- @return RTC
 	function obj:create(mgr)

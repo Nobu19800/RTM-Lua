@@ -1,6 +1,8 @@
 ---------------------------------
 --! @file OutPortConsumer.lua
 --! @brief OutPortコンシューマと生成ファクトリ定義
+--! Pull型通信の独自インターフェース型を実装する場合は、
+--! OutPortConsumerをメタテーブルに設定したコンシューマオブジェクトを生成する
 ---------------------------------
 
 --[[
@@ -10,8 +12,8 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 local OutPortConsumer= {}
 _G["openrtm.OutPortConsumer"] = OutPortConsumer
 
-GlobalFactory = require "openrtm.GlobalFactory"
-Factory = GlobalFactory.Factory
+local GlobalFactory = require "openrtm.GlobalFactory"
+local Factory = GlobalFactory.Factory
 
 -- OutPortコンシューマオブジェクト初期化
 -- @return OutPortコンシューマオブジェクト

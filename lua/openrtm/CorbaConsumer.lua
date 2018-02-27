@@ -102,6 +102,7 @@ CorbaConsumer.new = function(interfaceType, consumer)
 		return self._var
 	end
 	-- IOR文字列からオブジェクトリファレンスを設定
+	-- 設定したインターフェース型に変換する
 	-- @param ior IOR文字列
 	-- @return true：設定成功、false：設定失敗
 	function obj:setIOR(ior)

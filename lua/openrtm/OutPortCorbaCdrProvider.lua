@@ -1,6 +1,8 @@
 ---------------------------------
 --! @file OutPortCorbaCdrProvider.lua
 --! @brief CorbaCdrインターフェースで通信するOutPortProvider定義
+--! 「corba_cdr」のインターフェース型で利用可能
+--! OpenRTM.idlのPortServiceインターフェース
 ---------------------------------
 
 --[[
@@ -75,6 +77,10 @@ OutPortCorbaCdrProvider.new = function()
 
     -- データ読み込み
     -- @return リターンコード、データ
+    -- PORT_OK：正常終了
+    -- PORT_ERROR：バッファがない
+    -- BUFFER_EMPTY：バッファが空
+    -- その他、バッファフル、タイムアウト等の戻り値
 	function obj:get()
 		self._rtcout:RTC_PARANOID("OutPortCorbaCdrProvider.get()")
 		if self._buffer == nil then

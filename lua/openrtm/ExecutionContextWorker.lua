@@ -40,6 +40,7 @@ ExecutionContextWorker.new = function()
 	end
 	-- 実行周期変更後に実行する関数
 	-- @return リターンコード
+	-- RTC_OK：全てのRTCのonRateChangedコールバックがRTC_OKを返す
 	function obj:rateChanged()
 		self._rtcout:RTC_TRACE("rateChanged()")
 		ret = self._ReturnCode_t.RTC_OK
@@ -59,6 +60,9 @@ ExecutionContextWorker.new = function()
     -- RTCを関連付ける
     -- @param rtc RTC
     -- @return リターンコード
+    -- RTC_OK：正常にバインド
+	-- BAD_PARAMETER：RTCが不正
+	-- RTC_ERROR：実行コンテキストが不正
 	function obj:bindComponent(rtc)
 		self._rtcout:RTC_TRACE("bindComponent()")
 		if rtc == nil then
@@ -88,6 +92,8 @@ ExecutionContextWorker.new = function()
 	end
 	-- 実行コンテキスト開始
 	-- @return リターンコード
+	-- RTC_OK：正常終了
+	-- PRECONDITION_NOT_MET：既に実行状態
 	function obj:start()
 		self._rtcout:RTC_TRACE("start()")
 		if self._running then
@@ -106,6 +112,8 @@ ExecutionContextWorker.new = function()
 	end
 	-- 実行コンテキスト開始
 	-- @return リターンコード
+	-- RTC_OK：正常終了
+	-- PRECONDITION_NOT_MET：既に停止状態
 	function obj:stop()
 		self._rtcout:RTC_TRACE("stop()")
 
@@ -124,6 +132,7 @@ ExecutionContextWorker.new = function()
 		return self._ReturnCode_t.RTC_OK
 	end
 	-- RTC実行前に実行する処理
+	-- onActivated、onAborting、onDeactivated、onResetが実行される
 	function obj:invokeWorkerPreDo()
 		self._rtcout:RTC_PARANOID("invokeWorkerPreDo()")
 		for i, comp in ipairs(self._comps) do
@@ -131,6 +140,7 @@ ExecutionContextWorker.new = function()
 		end
     end
     -- RTC実行
+    -- onExecute、onErrorが実行される
 	function obj:invokeWorkerDo()
 		self._rtcout:RTC_PARANOID("invokeWorkerDo()")
 		for i, comp in ipairs(self._comps) do
@@ -138,6 +148,7 @@ ExecutionContextWorker.new = function()
 		end
     end
     -- RTC実行後に実行する処理
+    -- onStateUpdateが実行される
 	function obj:invokeWorkerPostDo()
 		self._rtcout:RTC_PARANOID("invokeWorkerPostDo()")
 		for i, comp in ipairs(self._comps) do
@@ -149,6 +160,9 @@ ExecutionContextWorker.new = function()
     -- @param comp RTCのオブジェクトリファレンス
     -- @param rtobj 状態遷移マシンを格納する変数
     -- @return リターンコード
+    -- RTC_OK：正常終了
+	-- BAD_PARAMETER：指定RTCがバインドされていない
+	-- PRECONDITION_NOT_MET：非アクティブ状態以外の状態
 	function obj:activateComponent(comp, rtobj)
 		self._rtcout:RTC_TRACE("activateComponent()")
 		obj_ = self:findComponent(comp)
@@ -177,6 +191,9 @@ ExecutionContextWorker.new = function()
     -- @param comp 状態遷移マシン
     -- @param rtobj オブジェクトリファレンスを格納する変数
     -- @return リターンコード
+    -- RTC_OK：正常終了
+	-- BAD_PARAMETER：指定RTCがバインドされていない
+	-- PRECONDITION_NOT_MET：アクティブ状態以外の状態
 	function obj:deactivateComponent(comp, rtobj)
 		self._rtcout:RTC_TRACE("deactivateComponent()")
 		obj_ = self:findComponent(comp)
@@ -204,6 +221,9 @@ ExecutionContextWorker.new = function()
     -- @param comp 状態遷移マシン
     -- @param rtobj オブジェクトリファレンスを格納する変数
     -- @return リターンコード
+    -- RTC_OK：正常終了
+	-- BAD_PARAMETER：指定RTCがバインドされていない
+	-- PRECONDITION_NOT_MET：エラー状態以外の状態
 	function obj:resetComponent(comp, rtobj)
 		self._rtcout:RTC_TRACE("resetComponent()")
 		local obj_ = self:findComponent(comp)

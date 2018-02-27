@@ -1,6 +1,20 @@
 ---------------------------------
 --! @file DataPortStatus.lua
 --! @brief データポートステータス定義
+--! PORT_OK：正常
+--! PORT_ERROR：エラー
+--! BUFFER_ERROR：バッファエラー
+--! BUFFER_FULL：バッファフル
+--! BUFFER_EMPTY：バッファエンプティ
+--! BUFFER_TIMEOUT：バッファ書き込み読み込みのタイムアウト
+--! SEND_FULL：送信データフル
+--! SEND_TIMEOUT：送信タイムアウト
+--! RECV_EMPTY：受信データエンプティ
+--! RECV_TIMEOUT：受信タイムアウト
+--! INVALID_ARGS：無効な引数
+--! PRECONDITION_NOT_MET：前提条件に違反
+--! CONNECTION_LOST：接続消滅
+--! UNKNOWN_ERROR：それ以外のエラー
 ---------------------------------
 
 --[[

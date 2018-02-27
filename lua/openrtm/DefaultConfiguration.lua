@@ -9,7 +9,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 
 local version = require "openrtm.version"
 
-cpp_suffixes = "dll"
+local cpp_suffixes = "dll"
 
 local default_config= {
 			["config.version"]=version.openrtm_version,

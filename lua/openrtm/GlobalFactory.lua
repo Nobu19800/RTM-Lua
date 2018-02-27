@@ -1,6 +1,12 @@
 ---------------------------------
 --! @file GlobalFactory.lua
 --! @brief オブジェクト生成ファクトリ定義
+--! FACTORY_OK：正常
+--! FACTORY_ERROR：エラー
+--! ALREADY_EXISTS：既に指定ファクトリが存在
+--! NOT_FOUND：指定ファクトリがない
+--! INVALID_ARG：不正な引数
+--! UNKNOWN_ERROR：それ以外のエラー
 ---------------------------------
 
 --[[
@@ -66,6 +72,9 @@ GlobalFactory.Factory.new = function()
 	-- @param creator 生成関数
 	-- @param destructor 削除関数
 	-- @return リターンコード
+	-- FACTORY_OK：正常に追加
+	-- ALREADY_EXISTS：既に指定IDで追加済み
+	-- INVALID_ARG：不正な引数
 	function obj:addFactory(id, creator, destructor)
 		--print("test",creator,destructor)
 		if creator == nil or destructor == nil then
@@ -84,6 +93,8 @@ GlobalFactory.Factory.new = function()
 	-- ファクトリ削除
 	-- @param id 識別子
 	-- @return リターンコード
+	-- FACTORY_OK：正常に削除
+	-- NOT_FOUND：ファクトリがない
 	function obj:removeFactory(id)
 
 		if self._creators[id] == nil then
@@ -115,6 +126,9 @@ GlobalFactory.Factory.new = function()
 	-- 指定オブジェクトを削除
 	-- @param obj オブジェクト
 	-- @param id 識別子
+	-- @return リターンコード
+	-- FACTORY_OK：正常に削除
+	-- NOT_FOUND：オブジェクトがない
 	function obj:deleteObject(obj, id)
 
 		if id ~= nil then

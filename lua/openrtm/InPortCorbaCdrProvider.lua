@@ -1,6 +1,8 @@
 ---------------------------------
 --! @file InPortCorbaCdrProvider.lua
 --! @brief CorbaCdrインターフェースで通信するInPortProvider定義
+--! 「corba_cdr」のインターフェース型で利用可能
+--! OpenRTM.idlのPortServiceインターフェース
 ---------------------------------
 
 --[[
@@ -77,6 +79,10 @@ InPortCorbaCdrProvider.new = function()
     -- データ書き込み
     -- @param data データ
     -- @return リターンコード
+    -- PORT_OK：正常終了
+    -- PORT_ERROR：バッファがない
+    -- UNKNOWN_ERROR：復号化失敗など、その他のエラー
+    -- その他、バッファフル、タイムアウト等の戻り値
 	function obj:put(data)
 		--print("put")
 		local status = self._PortStatus.PORT_OK
@@ -110,7 +116,7 @@ InPortCorbaCdrProvider.new = function()
 		return status
 	end
 	-- バッファステータスをOpenRTM::PortStatusに変換
-	--コールバック呼び出し
+	-- コールバック呼び出し
 	-- @param status バッファステータス
 	-- @param data データ
 	-- @param ポートステータス

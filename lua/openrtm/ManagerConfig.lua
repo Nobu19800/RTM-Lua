@@ -74,6 +74,13 @@ ManagerConfig.new = function(argv)
 				if pos ~= nil then
 					local idx = string.sub(opt.optarg,1,pos-1)
 					local value = string.sub(opt.optarg,pos+1)
+					idx = StringUtil.unescape(idx)
+					idx = StringUtil.eraseHeadBlank(idx)
+					idx = StringUtil.eraseTailBlank(idx)
+					
+					value = StringUtil.unescape(value)
+					value = StringUtil.eraseHeadBlank(value)
+					value = StringUtil.eraseTailBlank(value)
 					--print(idx, value)
 					self._argprop:setProperty(idx, value)
 				end

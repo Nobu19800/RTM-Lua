@@ -1,6 +1,8 @@
 ---------------------------------
 --! @file OutPortDSProvider.lua
 --! @brief CorbaCdrインターフェースで通信するOutPortProvider定義
+--! 「data_service」のインターフェース型で利用可能
+--! RTC.idlのPortServiceインターフェース
 ---------------------------------
 
 --[[
@@ -76,6 +78,10 @@ OutPortDSProvider.new = function()
 
     -- データ読み込み
     -- @return リターンコード、データ
+    -- PORT_OK：正常終了
+    -- PORT_ERROR：バッファがない
+    -- BUFFER_EMPTY：バッファが空
+    -- その他、バッファフル、タイムアウト等の戻り値
 	function obj:pull()
 		self._rtcout:RTC_PARANOID("OutPortDSProvider.get()")
 		if self._buffer == nil then

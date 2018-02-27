@@ -11,6 +11,7 @@ local CORBA_SeqUtil= {}
 _G["openrtm.CORBA_SeqUtil"] = CORBA_SeqUtil
 
 -- 指定関数がtrueになる要素を配列から検索
+-- 指定関数をすべての要素に実行して判定する
 -- @param seq 配列
 -- @param f 関数
 -- @return 配列の要素インデックス
@@ -50,7 +51,7 @@ CORBA_SeqUtil.erase_if = function(seq, f)
 end
 
 -- 配列を連結する
--- @param seq1 連結元の配列
+-- @param seq1 連結先の配列
 -- @param seq2 後ろに連結する配列
 CORBA_SeqUtil.push_back_list = function(seq1, seq2)
 	for i, elem in ipairs(seq2) do

@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local RingBuffer= {}
-_G["openrtm.RingBuffer"] = RingBuffer
+--_G["openrtm.RingBuffer"] = RingBuffer
 
 
 local BufferBase = require "openrtm.BufferBase"

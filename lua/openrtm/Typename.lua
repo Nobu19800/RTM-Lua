@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local Typename= {}
-_G["openrtm.Typename"] = Typename
+--_G["openrtm.Typename"] = Typename
 
 Typename.new = function()
 	local obj = {}

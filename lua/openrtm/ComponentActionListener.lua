@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local ComponentActionListener= {}
-_G["openrtm.ComponentActionListener"] = ComponentActionListener
+--_G["openrtm.ComponentActionListener"] = ComponentActionListener
 
 
 ComponentActionListener.ComponentActionListeners = {}

@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local PortConnectListener= {}
-_G["openrtm.PortConnectListener"] = PortConnectListener
+--_G["openrtm.PortConnectListener"] = PortConnectListener
 
 PortConnectListener.PortConnectListenerType = {
 												ON_NOTIFY_CONNECT = 1,

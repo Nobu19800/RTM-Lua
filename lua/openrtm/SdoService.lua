@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local SdoService= {}
-_G["openrtm.SdoService"] = SdoService
+--_G["openrtm.SdoService"] = SdoService
 
 SdoService.new = function()
 	local obj = {}

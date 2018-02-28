@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local SdoOrganization= {}
-_G["openrtm.SdoOrganization"] = SdoOrganization
+--_G["openrtm.SdoOrganization"] = SdoOrganization
 
 SdoOrganization.new = function()
 	local obj = {}

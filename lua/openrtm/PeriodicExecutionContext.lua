@@ -8,9 +8,9 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local PeriodicExecutionContext= {}
-_G["openrtm.PeriodicExecutionContext"] = PeriodicExecutionContext
+--_G["openrtm.PeriodicExecutionContext"] = PeriodicExecutionContext
 
-DEFAULT_PERIOD = 0.000001
+local DEFAULT_PERIOD = 0.000001
 
 
 local ExecutionContextBase = require "openrtm.ExecutionContextBase"

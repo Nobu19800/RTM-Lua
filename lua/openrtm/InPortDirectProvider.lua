@@ -8,6 +8,6 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local InPortDirectProvider = {}
-_G["openrtm.InPortDirectProvider"] = InPortDirectProvider
+--_G["openrtm.InPortDirectProvider"] = InPortDirectProvider
 
 return InPortDirectProvider

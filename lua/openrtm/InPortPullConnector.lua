@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local InPortPullConnector= {}
-_G["openrtm.InPortPullConnector"] = InPortPullConnector
+--_G["openrtm.InPortPullConnector"] = InPortPullConnector
 
 local InPortConnector = require "openrtm.InPortConnector"
 local DataPortStatus = require "openrtm.DataPortStatus"
@@ -20,9 +20,11 @@ local OutPortConsumerFactory = OutPortConsumer.OutPortConsumerFactory
 
 -- Pull型通信InPortConnectorの初期化
 -- @param info プロファイル
+-- 「buffer」という要素名にバッファの設定を格納
 -- @param consumer コンシューマ
 -- @param listeners コールバック
 -- @param buffer バッファ
+-- 指定しない場合はリングバッファを生成する
 -- @return Pull型通信InPortConnector
 InPortPullConnector.new = function(info, consumer, listeners, buffer)
 	local obj = {}
@@ -31,6 +33,8 @@ InPortPullConnector.new = function(info, consumer, listeners, buffer)
 	-- データ読み込み
 	-- @param data data._dataにデータを格納
 	-- @return リターンコード
+	-- PORT_OK：get関数がPORT_OKを返す
+	-- PORT_ERROR：コンシューマがnil、データ型が不明
 	function obj:read(data)
 		self._rtcout:RTC_TRACE("InPortPullConnector.read()")
 		if self._consumer == nil then
@@ -78,6 +82,7 @@ InPortPullConnector.new = function(info, consumer, listeners, buffer)
 	end
 
 	-- バッファ作成
+	-- リングバッファを生成する
 	-- @param profile コネクタプロファイル
 	-- @return バッファ
 	function obj:createBuffer(profile)

@@ -8,6 +8,6 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local OutPortDirectConsumer = {}
-_G["openrtm.OutPortDirectConsumer"] = OutPortDirectConsumer
+--_G["openrtm.OutPortDirectConsumer"] = OutPortDirectConsumer
 
 return OutPortDirectConsumer

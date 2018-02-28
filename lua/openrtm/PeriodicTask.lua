@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local PeriodicTask= {}
-_G["openrtm.PeriodicTask"] = PeriodicTask
+--_G["openrtm.PeriodicTask"] = PeriodicTask
 
 PeriodicTask.new = function()
 	local obj = {}

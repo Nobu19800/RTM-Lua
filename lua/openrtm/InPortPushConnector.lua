@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local InPortPushConnector= {}
-_G["openrtm.InPortPushConnector"] = InPortPushConnector
+--_G["openrtm.InPortPushConnector"] = InPortPushConnector
 
 local InPortConnector = require "openrtm.InPortConnector"
 local DataPortStatus = require "openrtm.DataPortStatus"
@@ -20,9 +20,11 @@ local CdrBufferFactory = CdrBufferBase.CdrBufferFactory
 
 -- Push型通信InPortConnectorの初期化
 -- @param info プロファイル
+-- 「buffer」という要素名にバッファの設定を格納
 -- @param provider プロバイダ
 -- @param listeners コールバック
 -- @param buffer バッファ
+-- 指定しない場合はリングバッファを生成する
 -- @return Push型通信InPortConnector
 InPortPushConnector.new = function(info, provider, listeners, buffer)
 	local obj = {}
@@ -33,6 +35,8 @@ InPortPushConnector.new = function(info, provider, listeners, buffer)
 	-- データ読み込み
 	-- @param data data._dataにデータを格納
 	-- @return リターンコード
+	-- バッファの読み込み結果によって、PORT_OK、BUFFER_EMPTY、BUFFER_TIMEOUT
+	-- PRECONDITION_NOT_MET、PORT_ERRORを返す
 	function obj:read(data)
 		self._rtcout:RTC_TRACE("read()")
 
@@ -74,7 +78,7 @@ InPortPushConnector.new = function(info, provider, listeners, buffer)
 		self:onDisconnect()
 
 		if self._provider ~= nil then
-			cfactory = InPortProviderFactory:instance()
+			local cfactory = InPortProviderFactory:instance()
 			cfactory:deleteObject(self._provider)
 
 			self._provider:exit()
@@ -84,7 +88,7 @@ InPortPushConnector.new = function(info, provider, listeners, buffer)
 
 
 		if self._buffer ~= nil and self._deleteBuffer == true then
-			bfactory = CdrBufferFactory:instance()
+			local bfactory = CdrBufferFactory:instance()
 			bfactory:deleteObject(self._buffer)
 		end
 
@@ -99,6 +103,7 @@ InPortPushConnector.new = function(info, provider, listeners, buffer)
 	function obj:deactivate()
     end
 	-- バッファ作成
+	-- リングバッファを生成する
 	-- @param profile コネクタプロファイル
 	-- @return バッファ
 	function obj:createBuffer(profile)
@@ -107,7 +112,7 @@ InPortPushConnector.new = function(info, provider, listeners, buffer)
     end
 	-- データ書き込み
 	-- @param data データ(CDR)
-	-- @return リターンコード
+	-- @return リターンコード(バッファの書き込み結果による)
 	function obj:write(data)
 		--print(self._dataType)
 		--print("write")

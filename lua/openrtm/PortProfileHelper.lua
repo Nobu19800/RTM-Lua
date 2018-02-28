@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local PortProfileHelper= {}
-_G["openrtm.PortProfileHelper"] = PortProfileHelper
+--_G["openrtm.PortProfileHelper"] = PortProfileHelper
 
 PortProfileHelper.new = function()
 	local obj = {}

@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local Task= {}
-_G["openrtm.Task"] = Task
+--_G["openrtm.Task"] = Task
 
 local oil = require "oil"
 

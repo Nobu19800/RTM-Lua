@@ -10,7 +10,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local InPortCorbaCdrConsumer= {}
-_G["openrtm.InPortCorbaCdrConsumer"] = InPortCorbaCdrConsumer
+--_G["openrtm.InPortCorbaCdrConsumer"] = InPortCorbaCdrConsumer
 
 
 local oil = require "oil"

@@ -41,7 +41,7 @@ local FactoryInit= function()
 	PublisherFlush.Init()
 end
 
-_G["openrtm.FactoryInit"] = FactoryInit
+--_G["openrtm.FactoryInit"] = FactoryInit
 
 
 

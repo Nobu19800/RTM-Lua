@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local ExecutionContextWorker= {}
-_G["openrtm.ExecutionContextWorker"] = ExecutionContextWorker
+--_G["openrtm.ExecutionContextWorker"] = ExecutionContextWorker
 
 
 
@@ -43,7 +43,7 @@ ExecutionContextWorker.new = function()
 	-- RTC_OK：全てのRTCのonRateChangedコールバックがRTC_OKを返す
 	function obj:rateChanged()
 		self._rtcout:RTC_TRACE("rateChanged()")
-		ret = self._ReturnCode_t.RTC_OK
+		local ret = self._ReturnCode_t.RTC_OK
 		for i,comp in ipairs(self._comps) do
 			tmp = comp:onRateChanged()
 			if tmp ~= self._ReturnCode_t.RTC_OK then
@@ -165,7 +165,7 @@ ExecutionContextWorker.new = function()
 	-- PRECONDITION_NOT_MET：非アクティブ状態以外の状態
 	function obj:activateComponent(comp, rtobj)
 		self._rtcout:RTC_TRACE("activateComponent()")
-		obj_ = self:findComponent(comp)
+		local obj_ = self:findComponent(comp)
 		if obj_ == nil then
 			self._rtcout:RTC_ERROR("Given RTC is not participant of this EC.")
 			return self._ReturnCode_t.BAD_PARAMETER
@@ -196,7 +196,7 @@ ExecutionContextWorker.new = function()
 	-- PRECONDITION_NOT_MET：アクティブ状態以外の状態
 	function obj:deactivateComponent(comp, rtobj)
 		self._rtcout:RTC_TRACE("deactivateComponent()")
-		obj_ = self:findComponent(comp)
+		local obj_ = self:findComponent(comp)
 		if obj_ == nil then
 			self._rtcout:RTC_ERROR("Given RTC is not participant of this EC.")
 			return self._ReturnCode_t.BAD_PARAMETER

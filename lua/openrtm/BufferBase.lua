@@ -9,7 +9,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local BufferBase = {}
-_G["openrtm.BufferBase"] = BufferBase
+--_G["openrtm.BufferBase"] = BufferBase
 
 local BufferStatus = require "openrtm.BufferStatus"
 

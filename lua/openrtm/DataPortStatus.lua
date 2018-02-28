@@ -22,7 +22,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local DataPortStatus= {}
-_G["openrtm.DataPortStatus"] = DataPortStatus
+--_G["openrtm.DataPortStatus"] = DataPortStatus
 
 DataPortStatus = {PORT_OK            = 0,
 				PORT_ERROR           = 1,

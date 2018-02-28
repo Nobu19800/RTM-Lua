@@ -9,7 +9,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local PublisherFlush= {}
-_G["openrtm.PublisherFlush"] = PublisherFlush
+--_G["openrtm.PublisherFlush"] = PublisherFlush
 
 local DataPortStatus = require "openrtm.DataPortStatus"
 local PublisherBase = require "openrtm.PublisherBase"

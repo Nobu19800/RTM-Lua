@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local CorbaConsumer= {}
-_G["openrtm.CorbaConsumer"] = CorbaConsumer
+--_G["openrtm.CorbaConsumer"] = CorbaConsumer
 
 
 local oil = require "oil"

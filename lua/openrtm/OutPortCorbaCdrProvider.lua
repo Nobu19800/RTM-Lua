@@ -10,7 +10,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local OutPortCorbaCdrProvider= {}
-_G["openrtm.OutPortCorbaCdrProvider"] = OutPortCorbaCdrProvider
+--_G["openrtm.OutPortCorbaCdrProvider"] = OutPortCorbaCdrProvider
 
 local OutPortProvider = require "openrtm.OutPortProvider"
 local BufferStatus = require "openrtm.BufferStatus"

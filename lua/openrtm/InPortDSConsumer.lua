@@ -10,7 +10,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local InPortDSConsumer= {}
-_G["openrtm.InPortDSConsumer"] = InPortDSConsumer
+--_G["openrtm.InPortDSConsumer"] = InPortDSConsumer
 
 
 local oil = require "oil"

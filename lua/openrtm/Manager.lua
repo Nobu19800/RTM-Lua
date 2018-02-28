@@ -1,6 +1,7 @@
 ---------------------------------
 --! @file Manager.lua
 --! @brief RTC管理マネージャ定義
+--! ORB初期化、RTCの生成、モジュールのロード、ロガー初期化、ファクトリ初期化等を実行
 ---------------------------------
 
 --[[
@@ -10,7 +11,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 
 
 local Manager= {}
-_G["openrtm.Manager"] = Manager
+--_G["openrtm.Manager"] = Manager
 
 local oil = require "oil"
 local ObjectManager = require "openrtm.ObjectManager"
@@ -34,7 +35,8 @@ local OpenHRPExecutionContext = require "openrtm.OpenHRPExecutionContext"
 
 
 
-
+-- ORB_Dummy_ENABLEをtrueに設定した場合、
+-- oil関連の処理はすべてダミー関数に置き換えられる
 if ORB_Dummy_ENABLE == nil then
 	ORB_Dummy_ENABLE = false
 end
@@ -62,7 +64,7 @@ if ORB_Dummy_ENABLE then
 
 
 	function ORB_Dummy.types:lookup(name)
-		ret = {}
+		local ret = {}
 		ret.labelvalue = {}
 		if name == "::RTC::ReturnCode_t" then
 			ret.labelvalue.RTC_OK = 0
@@ -216,7 +218,7 @@ end
 -- インスタンス名一致判定関数オブジェクト初期化
 -- @param argv argv.prop：プロパティ、argv._name：インスタンス名
 -- @return インスタンス名一致判定関数オブジェクト
-function InstanceName(argv)
+local InstanceName = function(argv)
 	local obj = {}
 	if argv.prop then
 		obj._name = argv.prop:getProperty("instance_name")
@@ -237,7 +239,7 @@ end
 
 -- RTC生成ファクトリ一致判定関数オブジェクトの初期化
 -- @param argv argv.name：型名、argv.prop：プロパティ、factory：ファクトリ
-function FactoryPredicate(argv)
+local FactoryPredicate = function(argv)
 	local obj = {}
 	if argv.name then
 		obj._vendor = ""
@@ -265,7 +267,7 @@ function FactoryPredicate(argv)
 		if self._impleid == "" then
 			return false
 		end
-		_prop = Properties.new({prop=factory:profile()})
+		local _prop = Properties.new({prop=factory:profile()})
 		--print(factory:profile())
 		--print(_prop:)
 		--print(self._impleid,_prop:getProperty("implementation_id"))
@@ -293,7 +295,7 @@ end
 -- EC生成ファクトリ一致判定関数オブジェクトの初期化
 -- @param argv argv.name：型名、argv.factory：ファクトリ
 -- @return EC生成ファクトリ一致判定関数オブジェクト
-function ECFactoryPredicate(argv)
+local ECFactoryPredicate = function(argv)
 	local obj = {}
 	if argv.name then
 		obj._name  = argv.name
@@ -315,7 +317,7 @@ end
 -- モジュール一致判定関数オブジェクト初期化
 -- @param prop プロパティ
 -- @return モジュール一致判定関数オブジェクト
-function ModulePredicate(prop)
+local ModulePredicate = function(prop)
 	local obj = {}
 	obj._prop  = prop
 	-- モジュール一致判定関数
@@ -341,7 +343,7 @@ function ModulePredicate(prop)
 	return obj
 end
 
-Finalized = {}
+local Finalized = {}
 
 -- 終了したRTCを登録するオブジェクト初期化
 -- @return 終了したRTCを登録するオブジェクト
@@ -352,7 +354,20 @@ Finalized.new = function()
 end
 
 -- マネージャ初期化
+-- 以下の処理を実行
+-- オブジェクトマネージャ(RTC、EC)初期化
+-- ファクトリ初期化
+-- ロガー初期化
+-- 実行コンテキスト生成ファクトリ初期化
+-- 複合コンポーネント生成ファクトリ初期化
+-- マネージャアクションコールバック関数オブジェクト初期化
 -- @param argv コマンドライン引数
+-- "-a"：マネージャサーバント無効
+-- "-f"：設定ファイル指定
+-- "-l"：ロードするモジュール指定
+-- "-o"：追加のオプション指定
+-- "-a"：アドレス、ポート番号指定
+-- "-d"：マスターマネージャに設定
 function Manager:init(argv)
 	if argv == nil then
 		argv = {}
@@ -383,6 +398,10 @@ function Manager:terminate()
 end
 
 -- マネージャ終了
+-- RTC全削除
+-- ネーミングマネージャ終了
+-- ORB終了
+-- ロガー終了
 function Manager:shutdown()
 	self._listeners.manager_:preShutdown()
 	self:shutdownComponents()
@@ -405,7 +424,9 @@ function Manager:join()
 end
 
 -- 初期化時実行関数の設定
+-- 指定関数はrunManager関数で実行される
 -- @param proc 関数
+-- proc(manager)：マネージャを引数とする関数を定義
 function Manager:setModuleInitProc(proc)
 	self._initProc = proc
 end
@@ -416,7 +437,14 @@ function Manager:activateManager()
 end
 
 -- マネージャ実行
+-- 以下の処理を実行する
+-- ORBの初期化
+-- setModuleInitProc関数で指定した関数実行
+-- マネージャサーバント初期化
+-- ネーミングマネージャ初期化
 -- @param no_block true：ノンブロッキングモードで実行、false：この関数でブロックする
+-- ブロックモードで実行する場合は、step関数を適宜実行する必要がある
+-- また、周期実行コンテキストなどコルーチンで実行する実行コンテキストは使用できない
 function Manager:runManager(no_block)
 	if no_block == nil then
 		no_block = false
@@ -446,6 +474,7 @@ function Manager:runManager(no_block)
 end
 
 -- CORBAの処理を1ステップ進める
+-- ブロックモードの場合のみ有効
 function Manager:step()
 	oil.main(function()
 		oil.newthread(self._orb.step, self._orb)
@@ -495,15 +524,16 @@ end
 
 -- RTC生成ファクトリ登録
 -- @param profile プロファイル
+-- 「manager.components.naming_policy」の要素で名前付けポリシーを指定
 -- @param new_func 初期化関数
 -- @param delete_func 削除関数
 -- @return ファクトリ
 function Manager:registerFactory(profile, new_func, delete_func)
 	--print(profile:getProperty("type_name"))
 	self._rtcout:RTC_TRACE("Manager.registerFactory("..profile:getProperty("type_name")..")")
-	policy_name = self._config:getProperty("manager.components.naming_policy","process_unique")
-	policy = NumberingPolicyFactory:instance():createObject(policy_name)
-	factory = FactoryLua.new(profile, new_func, delete_func, policy)
+	local policy_name = self._config:getProperty("manager.components.naming_policy","process_unique")
+	local policy = NumberingPolicyFactory:instance():createObject(policy_name)
+	local factory = FactoryLua.new(profile, new_func, delete_func, policy)
 	--print(self._factory.registerObject)
 	return self._factory:registerObject(factory)
 end
@@ -532,11 +562,18 @@ end
 
 -- RTC生成
 -- @param comp_args RTC名とオプション(RTC?param1=xxx&param2=yyy)
+-- RTC名は「RTC:ベンダ名:カテゴリ名:実装ID:言語名:バージョン」で指定
+-- オプションで「instance_name」を指定した場合は、指定インスタンス名のRTCを返す
 -- @return RTC
+-- 以下の場合はnilを返す
+-- comp_argsが不正
+-- 指定IDのファクトリがない
+-- RTCの生成失敗
+-- initialize関数がRTC_OK以外を返す
 function Manager:createComponent(comp_args)
 	self._rtcout:RTC_TRACE("Manager.createComponent("..comp_args..")")
-	comp_prop = Properties.new()
-    comp_id   = Properties.new()
+	local comp_prop = Properties.new()
+    local comp_id   = Properties.new()
 	if not self:procComponentArgs(comp_args, comp_id, comp_prop) then
 		return nil
 	end
@@ -550,13 +587,14 @@ function Manager:createComponent(comp_args)
 	if comp_prop:findNode("exported_ports") then
 	end
 	--print(comp_id)
-	factory = self._factory:find(comp_id)
+	local factory = self._factory:find(comp_id)
 	--print(factory)
 	if factory == nil then
 		self._rtcout:RTC_ERROR("createComponent: Factory not found: "..
 			comp_id:getProperty("implementation_id"))
+		return nil
 	end
-	prop = factory:profile()
+	local prop = factory:profile()
 	local inherit_prop = {"config.version",
 					"openrtm.name",
                     "openrtm.version",
@@ -591,9 +629,9 @@ function Manager:createComponent(comp_args)
                     "sdo.service.provider.enabled_services",
                     "sdo.service.consumer.enabled_services",
                     "manager.instance_name"}
-	prop_ = prop:getNode("port")
+	local prop_ = prop:getNode("port")
 	prop_:mergeProperties(self._config:getNode("port"))
-	comp = factory:create(self)
+	local comp = factory:create(self)
 	--print(comp:getTypeName())
 	--print(comp)
 	if self._config:getProperty("corba.endpoints_ipv4") == "" then
@@ -634,6 +672,8 @@ function Manager:createComponent(comp_args)
 end
 
 -- RTCの登録
+-- オブジェクトマネージャへの登録
+-- ネーミングマネージャへの登録
 -- @param comp RTC
 -- @return true：登録成功、false：登録失敗
 function Manager:registerComponent(comp)
@@ -641,7 +681,7 @@ function Manager:registerComponent(comp)
 
 	--print(comp:getInstanceName())
     self._compManager:registerObject(comp)
-    names = comp:getNamingNames()
+    local names = comp:getNamingNames()
 
     --self._listeners.naming_:preBind(comp, names)
 
@@ -659,11 +699,13 @@ function Manager:registerComponent(comp)
 end
 
 -- RTCの登録解除
+-- オブジェクトマネージャから登録解除
+-- ネーミングマネージャから登録解除
 -- @param comp RTC
 function Manager:unregisterComponent(comp)
     self._rtcout:RTC_TRACE("Manager.unregisterComponent("..comp:getInstanceName()..")")
     self._compManager:unregisterObject(comp:getInstanceName())
-    names = comp:getNamingNames()
+    local names = comp:getNamingNames()
 
     --self._listeners.naming_:preUnbind(comp, names)
     for i,name in ipairs(names) do
@@ -682,6 +724,7 @@ end
 
 -- RTCの削除
 -- @param argv argv.instance_name：インスタンス名、argv.comp：RTC
+-- インスタンス名指定の場合はRTCを検索する
 function Manager:deleteComponent(argv)
 	if argv.instance_name ~= nil then
 		self._rtcout.RTC_TRACE("Manager.deleteComponent("..instance_name..")")
@@ -798,7 +841,7 @@ end
 -- マネージャ初期化
 -- @param argv コマンドライン引数
 function Manager:initManager(argv)
-	config = ManagerConfig.new(argv)
+	local config = ManagerConfig.new(argv)
 	self._config = Properties.new()
 	config:configure(self._config)
 end
@@ -857,6 +900,7 @@ end
 
 -- IDLファイルパス取得
 -- @param name IDLファイル名
+-- IDLファイルは、Manager.luaの存在するディレクトリの2階層上のディレクトリを検索する
 -- @return IDLファイルパス
 function Manager:findIdLFile(name)
 	local fpath = StringUtil.dirname(debug.getinfo(1)["short_src"])
@@ -891,6 +935,9 @@ function Manager:shutdownORB()
 end
 
 -- ネームサーバー接続初期化
+-- 「naming.enable」のプロパティがYESの時に有効
+-- 「naming.type」のプロパティでメソッドを指定
+-- 「メソッド名.nameservers」で利用するアドレスを指定
 -- @return true：初期化成功、false：初期化失敗
 function Manager:initNaming()
 	self._rtcout:RTC_TRACE("Manager.initNaming()")
@@ -899,11 +946,11 @@ function Manager:initNaming()
 	if not StringUtil.toBool(self._config:getProperty("naming.enable"), "YES", "NO", true) then
 		return true
 	end
-	meths = StringUtil.split(self._config:getProperty("naming.type"),",")
+	local meths = StringUtil.split(self._config:getProperty("naming.type"),",")
 
 	for i, meth in ipairs(meths) do
 		--print(meth)
-		names = StringUtil.split(self._config:getProperty(meth..".nameservers"), ",")
+		local names = StringUtil.split(self._config:getProperty(meth..".nameservers"), ",")
 		for j, name in ipairs(names) do
 			--print(name)
 			self._rtcout:RTC_TRACE("Register Naming Server: "..meth.."/"..name)
@@ -959,6 +1006,8 @@ function Manager:setEndpointProperty()
 end
 
 -- マネージャサーバント初期化
+-- 「manager.corba_servant」のプロパティがYESの時に有効
+-- 「manager.is_master」のプロパティがYESの時にはマスターマネージャで起動
 -- @return true：初期化成功、false：初期化失敗
 function Manager:initManagerServant()
 	self._rtcout:RTC_TRACE("Manager.initManagerServant()")
@@ -972,8 +1021,8 @@ function Manager:initManagerServant()
 	if self._config:getProperty("corba.endpoints_ipv4") == "" then
 		self:setEndpointProperty(self._mgrservant:getObjRef())
 	end
-    prop = self._config:getNode("manager")
-    names = StringUtil.split(prop:getProperty("naming_formats"),",")
+    local prop = self._config:getNode("manager")
+    local names = StringUtil.split(prop:getProperty("naming_formats"),",")
 
     if StringUtil.toBool(prop:getProperty("is_master"),
                            "YES","NO",true) then
@@ -1017,6 +1066,7 @@ function Manager:cleanupComponent(comp)
 end
 
 -- 全RTC登録解除
+-- 一旦、削除リストに格納したRTCを削除する
 function Manager:cleanupComponents()
     self._rtcout:RTC_VERBOSE("Manager.cleanupComponents()")
 
@@ -1038,13 +1088,20 @@ function Manager:notifyFinalized(_comp)
 end
 
 -- RTC名、オプションを文字列から取得
--- @param comp_arg RTC名、オプション
+-- @param comp_arg RTC名、オプション(RTC?param1=xxx&param2=yyy)
+-- RTC名は「RTC:ベンダ名:カテゴリ名:実装ID:言語名:バージョン」で指定
 -- @param comp_id RTC型名
+-- 以下の要素を格納する
+-- vendor：ベンダ名
+-- category：カテゴリ名
+-- implementation_id：実装ID
+-- language：言語名
+-- version：バージョン
 -- @param comp_conf オプション
 -- @return true：取得成功、false：取得失敗
 function Manager:procComponentArgs(comp_arg, comp_id, comp_conf)
-	id_and_conf_str = StringUtil.split(comp_arg, "?")
-	id_and_conf = {}
+	local id_and_conf_str = StringUtil.split(comp_arg, "?")
+	local id_and_conf = {}
 	for k, v in pairs(id_and_conf_str) do
 		v = StringUtil.eraseHeadBlank(v)
 		v = StringUtil.eraseTailBlank(v)
@@ -1055,16 +1112,16 @@ function Manager:procComponentArgs(comp_arg, comp_id, comp_conf)
 		self._rtcout:RTC_ERROR("Invalid arguments. Two or more '?'")
 		return false
 	end
-	prof = CompParam.prof_list
-	param_num = #prof
+	local prof = CompParam.prof_list
+	local param_num = #prof
 	--print(prof[1],id_and_conf[1])
 	if id_and_conf[1]:find(":") == nil then
 		id_and_conf[1] = prof[1]..":::"..id_and_conf[1].."::"
 	end
 
 
-	id_str = StringUtil.split(id_and_conf[1], ":")
-	id = {}
+	local id_str = StringUtil.split(id_and_conf[1], ":")
+	local id = {}
 	--print(id_and_conf[1],#id_str)
 	for k, v in pairs(id_str) do
 		v = StringUtil.eraseHeadBlank(v)
@@ -1089,16 +1146,16 @@ function Manager:procComponentArgs(comp_arg, comp_id, comp_conf)
 	end
 
 	if #id_and_conf == 2 then
-		conf_str = StringUtil.split(id_and_conf[2], "&")
-		conf = {}
+		local conf_str = StringUtil.split(id_and_conf[2], "&")
+		local conf = {}
 		for k, v in pairs(conf_str) do
 			v = StringUtil.eraseHeadBlank(v)
 			v = StringUtil.eraseTailBlank(v)
 			table.insert(conf, v)
 		end
 		for i = 1,#conf do
-			keyval_str = StringUtil.split(conf[i], "=")
-			keyval = {}
+			local keyval_str = StringUtil.split(conf[i], "=")
+			local keyval = {}
 			for k, v in pairs(keyval_str) do
 				v = StringUtil.eraseHeadBlank(v)
 				v = StringUtil.eraseTailBlank(v)
@@ -1125,17 +1182,20 @@ function Manager:procContextArgs(ec_args, ec_id, ec_conf)
 end
 
 -- RTCのコンフィギュレーション設定
+-- 以下の名前でコンフィグレーションファイルを指定
+-- カテゴリ名.型名.config_file
+-- カテゴリ名.インスタンス名.config_file
 -- @param comp RTC
 -- @param prop プロパティ
 function Manager:configureComponent(comp, prop)
-	category  = comp:getCategory()
-    type_name = comp:getTypeName()
-    inst_name = comp:getInstanceName()
-	type_conf = category.."."..type_name..".config_file"
-	name_conf = category.."."..inst_name..".config_file"
-	type_prop = Properties.new()
-	name_prop = Properties.new()
-	config_fname = {}
+	local category  = comp:getCategory()
+    local type_name = comp:getTypeName()
+    local inst_name = comp:getInstanceName()
+	local type_conf = category.."."..type_name..".config_file"
+	local name_conf = category.."."..inst_name..".config_file"
+	local type_prop = Properties.new()
+	local name_prop = Properties.new()
+	local config_fname = {}
 	if self._config:getProperty(name_conf) ~= "" then
 	end
 	if self._config:findNode(category.."."..inst_name) then
@@ -1148,14 +1208,14 @@ function Manager:configureComponent(comp, prop)
 	type_prop:mergeProperties(name_prop)
 	type_prop:setProperty("config_file",StringUtil.flatten(StringUtil.unique_sv(config_fname)))
 	comp:setProperties(type_prop)
-	comp_prop = Properties.new({prop=comp:getProperties()})
-	naming_formats = self._config:getProperty("naming.formats")
+	local comp_prop = Properties.new({prop=comp:getProperties()})
+	local naming_formats = self._config:getProperty("naming.formats")
 	if comp_prop:findNode("naming.formats") then
 		naming_formats = comp_prop:getProperty("naming.formats")
 	end
 	naming_formats = StringUtil.flatten(StringUtil.unique_sv(StringUtil.split(naming_formats, ",")))
 	--print(naming_formats)
-	naming_names = self:formatString(naming_formats, comp:getProperties())
+	local naming_names = self:formatString(naming_formats, comp:getProperties())
 	--print(naming_names)
 	comp:getProperties():setProperty("naming.formats",naming_formats)
 	comp:getProperties():setProperty("naming.names",naming_names)
@@ -1171,6 +1231,16 @@ function Manager:mergeProperty(prop, file_name)
 end
 
 -- フォーマットに従ってRTC名変換
+-- 以下の置き換えを行う
+-- %n：インスタンス名
+-- %t：型名
+-- %m：型名
+-- %v：バージョン
+-- %V：ベンダ名
+-- %c：カテゴリ名
+-- %h：ホスト名
+-- %M：マネージャ名
+-- %p：プロセスID
 -- @param naming_format フォーマット
 -- @param prop プロパティ
 -- @return 変換後文字列
@@ -1185,7 +1255,7 @@ function Manager:formatString(naming_format, prop)
 	local flag = true
 	while(flag) do
 		num = num + 1
-		n = string.sub(name_,num,num)
+		local n = string.sub(name_,num,num)
 		--print(n)
 		if n == "" then
 			break
@@ -1206,7 +1276,7 @@ function Manager:formatString(naming_format, prop)
 			if n == '{' or n == '(' then
 				num = num + 1
 				n = string.sub(name_,num,num)
-				env = ""
+				local env = ""
 				local start = num+1
 				while(true) do
 					if n == '}' or n == ')' then

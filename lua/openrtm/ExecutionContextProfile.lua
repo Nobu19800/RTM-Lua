@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local ExecutionContextProfile= {}
-_G["openrtm.ExecutionContextProfile"] = ExecutionContextProfile
+--_G["openrtm.ExecutionContextProfile"] = ExecutionContextProfile
 
 local oil = require "oil"
 
@@ -105,7 +105,8 @@ ExecutionContextProfile.new = function(kind)
 	-- @return 文字列に変換した種別
 	function obj:getKindString(kind)
 		local kinds_ = {"PERIODIC", "EVENT_DRIVEN", "OTHER"}
-		if kind == nil then
+		local kind_ = kind
+		if kind_ == nil then
 			kind_ = self._profile.kind
 		else
 			kind_ = kind

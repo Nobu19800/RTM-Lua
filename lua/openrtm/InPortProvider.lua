@@ -10,7 +10,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local InPortProvider= {}
-_G["openrtm.InPortProvider"] = InPortProvider
+--_G["openrtm.InPortProvider"] = InPortProvider
 
 
 

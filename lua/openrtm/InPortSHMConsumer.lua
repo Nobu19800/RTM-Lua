@@ -8,6 +8,6 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local InPortSHMConsumer = {}
-_G["openrtm.InPortSHMConsumer"] = InPortSHMConsumer
+--_G["openrtm.InPortSHMConsumer"] = InPortSHMConsumer
 
 return InPortSHMConsumer

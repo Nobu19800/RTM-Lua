@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local CorbaPort= {}
-_G["openrtm.CorbaPort"] = CorbaPort
+--_G["openrtm.CorbaPort"] = CorbaPort
 
 local PortBase = require "openrtm.PortBase"
 local Properties = require "openrtm.Properties"
@@ -17,7 +17,7 @@ local NVUtil = require "openrtm.NVUtil"
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 
 
-CorbaProviderHolder = {}
+local CorbaProviderHolder = {}
 
 -- プロバイダ保持オブジェクト初期化関数
 -- @param type_name 型名
@@ -78,7 +78,7 @@ CorbaProviderHolder.new = function(type_name, instance_name, servant)
 end
 
 
-CorbaConsumerHolder = {}
+local CorbaConsumerHolder = {}
 
 -- コンシューマ保持オブジェクト初期化
 -- @param type_name 種別名

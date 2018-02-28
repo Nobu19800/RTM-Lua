@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local TimeMeasure= {}
-_G["openrtm.TimeMeasure"] = TimeMeasure
+--_G["openrtm.TimeMeasure"] = TimeMeasure
 
 TimeMeasure.new = function()
 	local obj = {}

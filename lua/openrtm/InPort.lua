@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local InPort= {}
-_G["openrtm.InPort"] = InPort
+--_G["openrtm.InPort"] = InPort
 
 
 local InPortBase = require "openrtm.InPortBase"
@@ -66,7 +66,7 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 			return false
 		end
 
-		r = self._connectors[1]:getBuffer():readable()
+		local r = self._connectors[1]:getBuffer():readable()
 		if r > 0 then
 			self._rtcout:RTC_DEBUG("isNew() = True, readable data: "..r)
 			return true
@@ -85,7 +85,7 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 			return true
 		end
 
-		r = self._connectors[1]:getBuffer():readable()
+		local r = self._connectors[1]:getBuffer():readable()
 		if r == 0 then
 			self._rtcout:RTC_DEBUG("isEmpty() = true, buffer is empty")
 			return true
@@ -118,8 +118,8 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 		end
 
 
-		cdr = {_data=self._value}
-		ret = self._connectors[1]:read(cdr)
+		local cdr = {_data=self._value}
+		local ret = self._connectors[1]:read(cdr)
 
 
 		if ret == DataPortStatus.PORT_OK then

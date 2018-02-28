@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local ExtTrigExecutionContext= {}
-_G["openrtm.ExtTrigExecutionContext"] = ExtTrigExecutionContext
+--_G["openrtm.ExtTrigExecutionContext"] = ExtTrigExecutionContext
 
 ExtTrigExecutionContext.new = function()
 	local obj = {}

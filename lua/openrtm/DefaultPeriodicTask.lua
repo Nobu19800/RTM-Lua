@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local DefaultPeriodicTask= {}
-_G["openrtm.DefaultPeriodicTask"] = DefaultPeriodicTask
+--_G["openrtm.DefaultPeriodicTask"] = DefaultPeriodicTask
 
 DefaultPeriodicTask.new = function()
 	local obj = {}

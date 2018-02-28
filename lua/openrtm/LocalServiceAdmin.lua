@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local LocalServiceAdmin= {}
-_G["openrtm.LocalServiceAdmin"] = LocalServiceAdmin
+--_G["openrtm.LocalServiceAdmin"] = LocalServiceAdmin
 
 LocalServiceAdmin.new = function()
 	local obj = {}

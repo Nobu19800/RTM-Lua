@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local StateMachine= {}
-_G["openrtm.StateMachine"] = StateMachine
+--_G["openrtm.StateMachine"] = StateMachine
 
 
 local StringUtil = require "openrtm.StringUtil"

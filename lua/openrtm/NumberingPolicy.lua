@@ -9,7 +9,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local NumberingPolicy= {}
-_G["openrtm.NumberingPolicy"] = NumberingPolicy
+--_G["openrtm.NumberingPolicy"] = NumberingPolicy
 
 local Factory = require "openrtm.Factory"
 local NumberingPolicyBase = require "openrtm.NumberingPolicyBase"
@@ -44,7 +44,7 @@ NumberingPolicy.ProcessUniquePolicy.new = function()
 	-- @return 名前
 	function obj:onCreate(obj)
 		self._num = self._num + 1
-		pos = self:find(nil)
+		local pos = self:find(nil)
 		if pos < 0 then
 			pos = 1
 		end
@@ -54,7 +54,7 @@ NumberingPolicy.ProcessUniquePolicy.new = function()
 	-- RTCの登録解除
 	-- @param obj RTC
 	function obj:onDelete(obj)
-		pos = self:find(obj)
+		local pos = self:find(obj)
 		if pos >= 0 then
 			self._objects[pos] = nil
 			self._num = self._num - 1

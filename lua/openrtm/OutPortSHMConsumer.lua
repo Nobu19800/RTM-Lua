@@ -8,6 +8,6 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local OutPortSHMConsumer = {}
-_G["OutPortSHMConsumer"] = OutPortSHMConsumer
+--_G["OutPortSHMConsumer"] = OutPortSHMConsumer
 
 return OutPortSHMConsumer

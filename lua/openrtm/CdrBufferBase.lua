@@ -9,7 +9,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local CdrBufferBase= {}
-_G["openrtm.CdrBufferBase"] = CdrBufferBase
+--_G["openrtm.CdrBufferBase"] = CdrBufferBase
 
 local GlobalFactory = require "openrtm.GlobalFactory"
 local Factory = GlobalFactory.Factory

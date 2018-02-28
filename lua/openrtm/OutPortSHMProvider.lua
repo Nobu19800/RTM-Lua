@@ -8,6 +8,6 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local OutPortSHMProvider = {}
-_G["openrtm.OutPortSHMProvider"] = OutPortSHMProvider
+--_G["openrtm.OutPortSHMProvider"] = OutPortSHMProvider
 
 return OutPortSHMProvider

@@ -9,7 +9,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local NodeNumberingPolicy= {}
-_G["openrtm.NodeNumberingPolicy"] = NodeNumberingPolicy
+--_G["openrtm.NodeNumberingPolicy"] = NodeNumberingPolicy
 
 NodeNumberingPolicy.new = function()
 	local obj = {}

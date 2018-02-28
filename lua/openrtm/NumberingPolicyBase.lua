@@ -9,10 +9,10 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local NumberingPolicyBase= {}
-_G["openrtm.NumberingPolicyBase"] = NumberingPolicyBase
+--_G["openrtm.NumberingPolicyBase"] = NumberingPolicyBase
 
-GlobalFactory = require "openrtm.GlobalFactory"
-Factory = GlobalFactory.Factory
+local GlobalFactory = require "openrtm.GlobalFactory"
+local Factory = GlobalFactory.Factory
 
 NumberingPolicyBase.new = function()
 	local obj = {}

@@ -14,7 +14,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local GlobalFactory= {}
-_G["openrtm.GlobalFactory"] = GlobalFactory
+--_G["openrtm.GlobalFactory"] = GlobalFactory
 
 GlobalFactory.Factory = {}
 
@@ -25,7 +25,7 @@ GlobalFactory.Factory.NOT_FOUND = 3
 GlobalFactory.Factory.INVALID_ARG = 4
 GlobalFactory.Factory.UNKNOWN_ERROR = 5
 
-FactoryEntry = {}
+local FactoryEntry = {}
 
 -- オブジェクト生成ファクトリ関数初期化
 -- @param id 識別子
@@ -60,7 +60,7 @@ GlobalFactory.Factory.new = function()
 	-- 登録ファクトリのID一覧を取得
 	-- @return ID一覧
 	function obj:getIdentifiers()
-		idlist = {}
+		local idlist = {}
 		for i, ver in pairs(self._creators) do
 			table.insert(idlist, i)
 		end
@@ -115,7 +115,7 @@ GlobalFactory.Factory.new = function()
 			return nil
 		end
 
-		obj_ = self._creators[id].creator_()
+		local obj_ = self._creators[id].creator_()
 		self._objects[obj_] = self._creators[id]
 		--for k,v in pairs(self._objects) do
 		--	print(k,v)

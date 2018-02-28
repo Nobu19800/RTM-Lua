@@ -8,6 +8,6 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local PeriodicECSharedComposite = {}
-_G["openrtm.PeriodicECSharedComposite"] = PeriodicECSharedComposite
+--_G["openrtm.PeriodicECSharedComposite"] = PeriodicECSharedComposite
 
 return PeriodicECSharedComposite

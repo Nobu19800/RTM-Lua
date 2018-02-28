@@ -8,11 +8,11 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local RTObjectStateMachine= {}
-_G["openrtm.RTObjectStateMachine"] = RTObjectStateMachine
+--_G["openrtm.RTObjectStateMachine"] = RTObjectStateMachine
 
 
 local StateMachine = require "openrtm.StateMachine"
-StateHolder = StateMachine.StateHolder
+local StateHolder = StateMachine.StateHolder
 local NVUtil = require "openrtm.NVUtil"
 
 local NUM_OF_LIFECYCLESTATE = 4
@@ -302,7 +302,7 @@ RTObjectStateMachine.new = function(id, comp)
 							ActionPredicate.new(obj, obj.onError))
     obj._sm:setExitAction(obj._LifeCycleState.ERROR_STATE+1,
 							ActionPredicate.new(obj, obj.onReset))
-    st = StateHolder.new()
+    local st = StateHolder.new()
     st.prev = obj._LifeCycleState.INACTIVE_STATE+1
     st.curr = obj._LifeCycleState.INACTIVE_STATE+1
     st.next = obj._LifeCycleState.INACTIVE_STATE+1

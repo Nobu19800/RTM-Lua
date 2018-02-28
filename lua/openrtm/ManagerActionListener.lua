@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local ManagerActionListener= {}
-_G["openrtm.ManagerActionListener"] = ManagerActionListener
+--_G["openrtm.ManagerActionListener"] = ManagerActionListener
 
 ManagerActionListener.ManagerActionListeners = {}
 

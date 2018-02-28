@@ -9,7 +9,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local OpenHRPExecutionContext= {}
-_G["openrtm.OpenHRPExecutionContext"] = OpenHRPExecutionContext
+--_G["openrtm.OpenHRPExecutionContext"] = OpenHRPExecutionContext
 
 local ExecutionContextBase = require "openrtm.ExecutionContextBase"
 
@@ -20,7 +20,7 @@ local oil = require "oil"
 
 local RTCUtil = require "openrtm.RTCUtil"
 
-DEFAULT_PERIOD = 0.000001
+local DEFAULT_PERIOD = 0.000001
 
 
 -- トリガ駆動実行コンテキスト初期化

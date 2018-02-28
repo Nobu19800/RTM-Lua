@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local ECFactory= {}
-_G["openrtm.ECFactory"] = ECFactory
+--_G["openrtm.ECFactory"] = ECFactory
 
 -- 実行コンテキスト削除関数
 -- @param ec 実行コンテキスト

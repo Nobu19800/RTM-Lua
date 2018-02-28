@@ -89,7 +89,7 @@ local default_config= {
 
 
 
-_G["openrtm.default_config"] = default_config
+--_G["openrtm.default_config"] = default_config
 
 
 

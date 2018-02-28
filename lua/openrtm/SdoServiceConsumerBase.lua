@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local SdoServiceConsumerBase= {}
-_G["openrtm.SdoServiceConsumerBase"] = SdoServiceConsumerBase
+--_G["openrtm.SdoServiceConsumerBase"] = SdoServiceConsumerBase
 
 SdoServiceConsumerBase.new = function()
 	local obj = {}

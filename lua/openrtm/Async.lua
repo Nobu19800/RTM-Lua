@@ -8,6 +8,6 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local Async = {}
-_G["openrtm.Async"] = Async
+--_G["openrtm.Async"] = Async
 
 return Async

@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local LocalServiceBase= {}
-_G["openrtm.LocalServiceBase"] = LocalServiceBase
+--_G["openrtm.LocalServiceBase"] = LocalServiceBase
 
 LocalServiceBase.new = function()
 	local obj = {}

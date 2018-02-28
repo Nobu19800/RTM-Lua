@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local ConfigAdmin= {}
-_G["openrtm.ConfigAdmin"] = ConfigAdmin
+--_G["openrtm.ConfigAdmin"] = ConfigAdmin
 
 local Properties = require "openrtm.Properties"
 local ConfigurationListener = require "openrtm.ConfigurationListener"

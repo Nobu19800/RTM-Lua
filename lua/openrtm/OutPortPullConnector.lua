@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local OutPortPullConnector= {}
-_G["openrtm.OutPortPullConnector"] = OutPortPullConnector
+--_G["openrtm.OutPortPullConnector"] = OutPortPullConnector
 
 local OutPortConnector = require "openrtm.OutPortConnector"
 local DataPortStatus = require "openrtm.DataPortStatus"
@@ -20,9 +20,11 @@ local OutPortProviderFactory = OutPortProvider.OutPortProviderFactory
 
 -- Pull型通信OutPortConnectorの初期化
 -- @param info プロファイル
+-- 「buffer」という要素名にバッファの設定を格納
 -- @param provider プロバイダ
 -- @param listeners コールバック
 -- @param buffer バッファ
+-- 指定しない場合はリングバッファを生成する
 -- @return Pull型通信OutPortConnector
 OutPortPullConnector.new = function(info, provider, listeners, buffer)
 	local obj = {}
@@ -30,7 +32,7 @@ OutPortPullConnector.new = function(info, provider, listeners, buffer)
 	
 	-- データ書き込み
 	-- @param data data._dataを書き込み
-	-- @return リターンコード
+	-- @return リターンコード(バッファの書き込み結果による)
 	function obj:write(data)
 		local Manager = require "openrtm.Manager"
 
@@ -81,6 +83,7 @@ OutPortPullConnector.new = function(info, provider, listeners, buffer)
 	function obj:deactivate()
 	end
 	-- バッファ作成
+	-- リングバッファを生成する
 	-- @param profile コネクタプロファイル
 	-- @return バッファ
 	function obj:createBuffer(info)

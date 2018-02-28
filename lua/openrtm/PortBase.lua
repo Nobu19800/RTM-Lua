@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local PortBase= {}
-_G["openrtm.PortBase"] = PortBase
+--_G["openrtm.PortBase"] = PortBase
 
 local oil = require "oil"
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
@@ -59,7 +59,7 @@ find_port_ref.new = function(port_ref)
 	local call_func = function(self, port_ref)
 		--print(self._port_ref, port_ref, self._port_ref._is_equivalent, port_ref._is_equivalent)
 		return NVUtil._is_equivalent(self._port_ref, port_ref, self._port_ref.getPortRef, port_ref.getPortRef)
-		--[[ret = false
+		--[[local ret = false
 		local success, exception = oil.pcall(
 			function()
 			ret = (self._port_ref:get_port_profile().name == port_ref:get_port_profile().name)
@@ -188,10 +188,10 @@ PortBase.new = function(name)
 
 		self:updateConnectors()
 
-		index = CORBA_SeqUtil.find(self._profile.connector_profiles,
+		local index = CORBA_SeqUtil.find(self._profile.connector_profiles,
 												find_conn_id.new(connector_id))
 		if index < 0 then
-		  conn_prof = {name="", connector_id="", ports={}, properties={}}
+		  local conn_prof = {name="", connector_id="", ports={}, properties={}}
 		  return conn_prof
 		end
 
@@ -248,7 +248,7 @@ PortBase.new = function(name)
 	function obj:disconnect(connector_id)
 		self._rtcout:RTC_TRACE("disconnect("..connector_id..")")
 
-		index = self:findConnProfileIndex(connector_id)
+		local index = self:findConnProfileIndex(connector_id)
 
 		if index < 0 then
 			self._rtcout:RTC_ERROR("Invalid connector id: "..connector_id)
@@ -263,7 +263,7 @@ PortBase.new = function(name)
 			self._rtcout:RTC_FATAL("ConnectorProfile has empty port list.")
 			return self._ReturnCode_t.PRECONDITION_NOT_MET
 		end
-		ret = self._ReturnCode_t.RTC_ERROR
+		local ret = self._ReturnCode_t.RTC_ERROR
 		local success, exception = oil.pcall(
 			function()
 				ret = prof.ports[1]:notify_disconnect(connector_id)
@@ -287,21 +287,21 @@ PortBase.new = function(name)
 	function obj:notify_disconnect(connector_id)
 		self._rtcout:RTC_TRACE("notify_disconnect("..connector_id..")")
 
-		index = self:findConnProfileIndex(connector_id)
+		local index = self:findConnProfileIndex(connector_id)
 
 		if index < 0 then
 			self._rtcout:RTC_ERROR("Invalid connector id: "..connector_id)
 			return self._rtcout.BAD_PARAMETER
 		end
 
-		prof = {name = self._profile.connector_profiles[index].name,
+		local prof = {name = self._profile.connector_profiles[index].name,
 				connector_id = self._profile.connector_profiles[index].connector_id,
 				ports = self._profile.connector_profiles[index].ports,
 				properties = self._profile.connector_profiles[index].properties}
 
 		self:onNotifyDisconnect(self:getName(), prof)
 
-		retval = self:disconnectNext(prof)
+		local retval = self:disconnectNext(prof)
 		self:onDisconnectNextport(self:getName(), prof, retval)
 
 		if self._onUnsubscribeInterfaces ~= nil then
@@ -631,7 +631,7 @@ PortBase.new = function(name)
 
 		index = index + 1
 		--print(index)
-		p = connector_profile.ports[index]
+		local p = connector_profile.ports[index]
 		--print(p)
 		if p ~= nil then
 			--[[for i,v in ipairs(connector_profile.properties) do
@@ -666,9 +666,9 @@ PortBase.new = function(name)
 
 
 
-		p = connector_profile.ports[index]
+		local p = connector_profile.ports[index]
 		--print(p,index)
-		ret = self._ReturnCode_t.RTC_ERROR
+		local ret = self._ReturnCode_t.RTC_ERROR
 		while p ~= nil do
 			local success, exception = oil.pcall(
 				function()
@@ -742,7 +742,7 @@ PortBase.new = function(name)
 	-- @param pol 方向
 	-- @return true：追加成功、false：追加失敗
 	function obj:appendInterface(_instance_name, _type_name, pol)
-		index = CORBA_SeqUtil.find(self._profile.interfaces,
+		local index = CORBA_SeqUtil.find(self._profile.interfaces,
 									find_interface.new(_instance_name, pol))
 
 		if index >= 0 then
@@ -750,7 +750,7 @@ PortBase.new = function(name)
 		end
 
 
-		prof = {instance_name=_instance_name, type_name=_type_name, polarity=pol}
+		local prof = {instance_name=_instance_name, type_name=_type_name, polarity=pol}
 		table.insert(self._profile.interfaces, prof)
 
 		return true

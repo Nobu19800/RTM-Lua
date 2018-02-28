@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local ConnectorBase= {}
-_G["openrtm.ConnectorBase"] = ConnectorBase
+--_G["openrtm.ConnectorBase"] = ConnectorBase
 
 
 ConnectorBase.ConnectorInfo = {}

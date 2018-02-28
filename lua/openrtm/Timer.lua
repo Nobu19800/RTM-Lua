@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local Timer= {}
-_G["openrtm.Timer"] = Timer
+--_G["openrtm.Timer"] = Timer
 
 local oil = require "oil"
 

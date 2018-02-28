@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local Listener= {}
-_G["openrtm.Listener"] = Listener
+--_G["openrtm.Listener"] = Listener
 
 Listener.new = function()
 	local obj = {}

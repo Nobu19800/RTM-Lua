@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local PortAdmin= {}
-_G["openrtm.PortAdmin"] = PortAdmin
+--_G["openrtm.PortAdmin"] = PortAdmin
 
 
 local oil = require "oil"
@@ -19,7 +19,7 @@ local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 -- RTCの名前が一致しているか判定する関数オブジェクト初期化
 -- @param argv argv.name：型名、argv.factory：ファクトリ
 -- @return 関数オブジェクト
-function comp_op(argv)
+local comp_op = function(argv)
 	local obj = {}
 	if argv.name ~= nil then
 		obj._name = argv.name
@@ -39,7 +39,7 @@ function comp_op(argv)
 end
 
 
-find_port_name = {}
+local find_port_name = {}
 -- ポート名が一致しているか判定する関数オブジェクト初期化
 -- @param name ポート名
 -- @return 関数オブジェクト
@@ -74,7 +74,7 @@ PortAdmin.new = function(orb)
 	-- ポートのインターフェースのアクティブ化
 	function obj:activatePorts()
 		--print("activatePorts1")
-		ports = self._portServants:getObjects()
+		local ports = self._portServants:getObjects()
 		for i, port in pairs(ports) do
 			port:activateInterfaces()
 		end

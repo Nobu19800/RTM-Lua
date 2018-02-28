@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local Factory= {}
-_G["openrtm.Factory"] = Factory
+--_G["openrtm.Factory"] = Factory
 
 local oil = require "oil"
 

@@ -8,6 +8,6 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local InPortSHMProvider = {}
-_G["openrtm.InPortSHMProvider"] = InPortSHMProvider
+--_G["openrtm.InPortSHMProvider"] = InPortSHMProvider
 
 return InPortSHMProvider

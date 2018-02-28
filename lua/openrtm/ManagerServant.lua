@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local ManagerServant= {}
-_G["openrtm.ManagerServant"] = ManagerServant
+--_G["openrtm.ManagerServant"] = ManagerServant
 
 local StringUtil = require "openrtm.StringUtil"
 local NVUtil = require "openrtm.NVUtil"
@@ -32,9 +32,9 @@ ManagerServant.CompParam.prof_list = {
 -- @param module_name RTC名、オプション
 -- @return RTCのパラメータ格納オブジェクト
 ManagerServant.CompParam.new = function(module_name)
-	obj = {}
+	local obj = {}
 	module_name = StringUtil.split(module_name, "?")[1]
-	param_list = StringUtil.split(module_name, ":")
+	local param_list = StringUtil.split(module_name, ":")
 	if #param_list < #ManagerServant.CompParam.prof_list then
 		obj._type = "RTC"
 		obj._vendor = ""

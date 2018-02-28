@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local OutPortPushConnector= {}
-_G["openrtm.OutPortPushConnector"] = OutPortPushConnector
+--_G["openrtm.OutPortPushConnector"] = OutPortPushConnector
 
 --local oil = require "oil"
 local OutPortConnector = require "openrtm.OutPortConnector"
@@ -27,9 +27,11 @@ local StringUtil = require "openrtm.StringUtil"
 
 -- Push型通信OutPortConnectorの初期化
 -- @param info プロファイル
+-- 「buffer」という要素名にバッファの設定を格納
 -- @param consumer コンシューマ
 -- @param listeners コールバック
 -- @param buffer バッファ
+-- 指定しない場合はリングバッファを生成する
 -- @return Push型通信OutPortConnector
 OutPortPushConnector.new = function(info, consumer, listeners, buffer)
 	--print(consumer, listeners, buffer)
@@ -38,7 +40,7 @@ OutPortPushConnector.new = function(info, consumer, listeners, buffer)
 
 	-- データ書き込み
 	-- @param data data._dataを書き込み
-	-- @return リターンコード
+	-- @return リターンコード(パブリッシャのデータ書き込み結果による)
 	function obj:write(data)
 		self._rtcout:RTC_TRACE("write()")
 
@@ -58,7 +60,7 @@ OutPortPushConnector.new = function(info, consumer, listeners, buffer)
 
 		if self._publisher ~= nil then
 			self._rtcout:RTC_DEBUG("delete publisher")
-			pfactory = PublisherFactory:instance()
+			local pfactory = PublisherFactory:instance()
 			pfactory:deleteObject(self._publisher)
 		end
 
@@ -67,7 +69,7 @@ OutPortPushConnector.new = function(info, consumer, listeners, buffer)
 
 		if self._consumer ~= nil then
 			self._rtcout:RTC_DEBUG("delete consumer")
-			cfactory = InPortConsumerFactory:instance()
+			local cfactory = InPortConsumerFactory:instance()
 			cfactory:deleteObject(self._consumer)
 		end
 
@@ -76,7 +78,7 @@ OutPortPushConnector.new = function(info, consumer, listeners, buffer)
 
 		if self._buffer ~= nil then
 			self._rtcout:RTC_DEBUG("delete buffer")
-			bfactory = CdrBufferFactory:instance()
+			local bfactory = CdrBufferFactory:instance()
 			bfactory:deleteObject(self._buffer)
 		end
 

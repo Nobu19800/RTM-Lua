@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local PublisherNew= {}
-_G["openrtm.PublisherNew"] = PublisherNew
+--_G["openrtm.PublisherNew"] = PublisherNew
 
 PublisherNew.new = function()
 	local obj = {}

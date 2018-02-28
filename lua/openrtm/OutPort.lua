@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local OutPort= {}
-_G["openrtm.OutPort"] = OutPort
+--_G["openrtm.OutPort"] = OutPort
 
 
 local TimeValue = require "openrtm.TimeValue"
@@ -65,7 +65,7 @@ OutPort.new = function(name, value, data_type, buffer)
 		local result = true
 
 		for i, con in ipairs(self._connectors) do
-			ret = con:write({_data=value, _type=self._data_type})
+			local ret = con:write({_data=value, _type=self._data_type})
 			if ret ~= DataPortStatus.PORT_OK then
 				result = false
 				if ret == DataPortStatus.CONNECTION_LOST then

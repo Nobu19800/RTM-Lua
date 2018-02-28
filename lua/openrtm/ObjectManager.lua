@@ -9,7 +9,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local ObjectManager= {}
-_G["openrtm.ObjectManager"] = ObjectManager
+--_G["openrtm.ObjectManager"] = ObjectManager
 
 
 -- オブジェクトマネージャ初期化
@@ -23,7 +23,7 @@ ObjectManager.new = function(predicate)
 	-- @param object オブジェクト
 	-- @return true：登録成功、false：登録失敗
 	function obj:registerObject(object)
-		predi = self._predicate({factory=object})
+		local predi = self._predicate({factory=object})
 		for i, _obj in ipairs(self._objects) do
 			if predi(_obj) == true then
 				return false
@@ -38,10 +38,10 @@ ObjectManager.new = function(predicate)
 	-- @param id ID
 	-- @return 登録解除したオブジェクト
 	function obj:unregisterObject(id)
-		predi = self._predicate({name=id})
+		local predi = self._predicate({name=id})
 		for i, _obj in ipairs(self._objects) do
 			if predi(_obj) == true then
-				ret = _obj
+				local ret = _obj
 				table.remove(self._objects, i)
 				return ret
 			end
@@ -52,7 +52,7 @@ ObjectManager.new = function(predicate)
 	-- @param p 関数オブジェクト初期化関数
 	-- @return 関数オブジェクト
 	function obj:for_each(p)
-		predi = p()
+		local predi = p()
 		for i, _obj in ipairs(self._objects) do
 			predi(_obj)
 		end
@@ -63,6 +63,7 @@ ObjectManager.new = function(predicate)
 	-- @return オブジェクト
 	function obj:find(id)
 		--print(id)
+		local predi = nil
 		if type(id) == "string" then
 			predi = self._predicate({name=id})
 		else

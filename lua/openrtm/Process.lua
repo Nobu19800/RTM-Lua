@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local Process= {}
-_G["openrtm.Process"] = Process
+--_G["openrtm.Process"] = Process
 
 Process.new = function()
 	local obj = {}

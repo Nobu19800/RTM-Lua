@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local StringUtil= {}
-_G["openrtm.StringUtil"] = StringUtil
+--_G["openrtm.StringUtil"] = StringUtil
 
 
 -- 文字列先頭の空白削除
@@ -37,7 +37,7 @@ end
 -- @param _str 文字列
 -- @return 正規化後の文字列
 StringUtil.normalize = function(_str)
-	ret = string.gsub(_str, "^%s*(.-)%s*$", "%1")
+	local ret = string.gsub(_str, "^%s*(.-)%s*$", "%1")
 	return string.lower(ret)
 end
 
@@ -156,7 +156,7 @@ StringUtil.split = function(input, delimiter)
 	end
 	local result = {}
 	local pat = "(.-)" .. delimiter .. "()"
-    local lastPos
+    local lastPos = 0
     for part, pos in string.gmatch(input, pat) do
 		table.insert(result, part)
         lastPos = pos
@@ -239,7 +239,7 @@ end
 -- @param sv テーブル
 -- @return 値削除後のテーブル
 StringUtil.unique_sv = function(sv)
-	unique_strvec = StringUtil.unique_strvec.new()
+	local unique_strvec = StringUtil.unique_strvec.new()
 	for i,v in ipairs(sv) do
 		unique_strvec(v)
 	end
@@ -288,7 +288,7 @@ end
 -- @param value 値
 -- @return 含まれていた数
 StringUtil.table_count = function(tbl, value)
-	count = 0
+	local count = 0
 	for i, v in ipairs(tbl) do
 		if value == v then
 			count = 1
@@ -317,7 +317,7 @@ StringUtil.includes = function(_list, value, ignore_case)
 	end
 
 
-	tmp_list = _list
+	local tmp_list = _list
 	if ignore_case then
 		value = string.lower(value)
 		tmp_list = {}

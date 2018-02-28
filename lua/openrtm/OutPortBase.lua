@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local OutPortBase= {}
-_G["openrtm.OutPortBase"] = OutPortBase
+--_G["openrtm.OutPortBase"] = OutPortBase
 
 
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
@@ -63,8 +63,8 @@ OutPortBase.new = function(name, data_type)
     obj:addProperty("dataport.data_type", _data_type)
 
 
-    factory = PublisherFactory:instance()
-    pubs = StringUtil.flatten(factory:getIdentifiers())
+    local factory = PublisherFactory:instance()
+    local pubs = StringUtil.flatten(factory:getIdentifiers())
 	pubs = StringUtil.eraseHeadBlank(pubs)
 
 
@@ -100,7 +100,7 @@ OutPortBase.new = function(name, data_type)
 		self:initProviders()
 
 
-		num = tonumber(self._properties:getProperty("connection_limit","-1"))
+		local num = tonumber(self._properties:getProperty("connection_limit","-1"))
 		if num == nil then
 			self._rtcout:RTC_ERROR("invalid connection_limit value: "..self._properties:getProperty("connection_limit"))
 		end
@@ -118,19 +118,19 @@ OutPortBase.new = function(name, data_type)
 		self._rtcout:RTC_TRACE("initConsumers()")
 
 
-		factory = InPortConsumerFactory:instance()
-		consumer_types = factory:getIdentifiers()
+		local factory = InPortConsumerFactory:instance()
+		local consumer_types = factory:getIdentifiers()
 		--print(StringUtil.flatten(consumer_types))
 		self._rtcout:RTC_PARANOID("available InPortConsumer: "..StringUtil.flatten(consumer_types))
-		tmp_str = StringUtil.normalize(self._properties:getProperty("consumer_types"))
+		local tmp_str = StringUtil.normalize(self._properties:getProperty("consumer_types"))
 		--print(self._properties:getProperty("consumer_types"))
 
 		if self._properties:hasKey("consumer_types") and tmp_str  ~= "all" then
 			self._rtcout:RTC_DEBUG("allowed consumers: "..self._properties:getProperty("consumer_types"))
 
-			temp_types = consumer_types
+			local temp_types = consumer_types
 			consumer_types = {}
-			active_types = StringUtil.split(self._properties:getProperty("consumer_types"), ",")
+			local active_types = StringUtil.split(self._properties:getProperty("consumer_types"), ",")
 
 			table.sort(temp_types)
 			table.sort(active_types)
@@ -166,16 +166,16 @@ OutPortBase.new = function(name, data_type)
 		self._rtcout:RTC_TRACE("initProviders()")
 
 
-		factory = OutPortProviderFactory:instance()
-		provider_types  = factory:getIdentifiers()
+		local factory = OutPortProviderFactory:instance()
+		local provider_types  = factory:getIdentifiers()
 		self._rtcout:RTC_PARANOID("available OutPortProviders: "..StringUtil.flatten(provider_types))
-		tmp_str = StringUtil.normalize(self._properties:getProperty("provider_types"))
+		local tmp_str = StringUtil.normalize(self._properties:getProperty("provider_types"))
 		if self._properties:hasKey("provider_types") and tmp_str  ~= "all" then
 			self._rtcout:RTC_DEBUG("allowed providers: "..self._properties:getProperty("allowed"))
 
-			temp_types = provider_types
+			local temp_types = provider_types
 			provider_types = {}
-			active_types = StringUtil.split(self._properties:getProperty("provider_types"), ",")
+			local active_types = StringUtil.split(self._properties:getProperty("provider_types"), ",")
 
 			table.sort(temp_types)
 			table.sort(active_types)
@@ -258,7 +258,7 @@ OutPortBase.new = function(name, data_type)
 			end
 
 
-			connector = self:createConnector(cprof, prop, {consumer_ = consumer})
+			local connector = self:createConnector(cprof, prop, {consumer_ = consumer})
 			--print(connector)
 
 
@@ -275,13 +275,13 @@ OutPortBase.new = function(name, data_type)
 
 			return self._ReturnCode_t.RTC_OK
 		elseif dflow_type == "pull" then
-			conn = self:getConnectorById(cprof.connector_id)
+			local conn = self:getConnectorById(cprof.connector_id)
 			if conn == nil then
 				self._rtcout:RTC_ERROR("specified connector not found: "..cprof.connector_id)
 				return self._ReturnCode_t.RTC_ERROR
 			end
 
-			ret = conn:setConnectorInfo(profile)
+			local ret = conn:setConnectorInfo(profile)
 
 			if ret == self._ReturnCode_t.RTC_OK then
 				self._rtcout:RTC_DEBUG("subscribeInterfaces() successfully finished.")
@@ -309,15 +309,15 @@ OutPortBase.new = function(name, data_type)
 		self._rtcout:RTC_TRACE("publishInterfaces()")
 
 
-		retval = self:_publishInterfaces()
+		local retval = self:_publishInterfaces()
 		if retval ~= self._ReturnCode_t.RTC_OK then
 			return retval
 		end
 
 
-		prop = Properties.new(self._properties)
+		local prop = Properties.new(self._properties)
 
-		conn_prop = Properties.new()
+		local conn_prop = Properties.new()
 
 		NVUtil.copyToProperties(conn_prop, cprof.properties)
 		prop:mergeProperties(conn_prop:getNode("dataport"))
@@ -326,7 +326,7 @@ OutPortBase.new = function(name, data_type)
 
 
 
-		dflow_type = StringUtil.normalize(prop:getProperty("dataflow_type"))
+		local dflow_type = StringUtil.normalize(prop:getProperty("dataflow_type"))
 
 		if dflow_type == "push" then
 			self._rtcout:RTC_PARANOID("dataflow_type = push .... do nothing")
@@ -341,7 +341,7 @@ OutPortBase.new = function(name, data_type)
 			end
 
 
-			connector = self:createConnector(cprof, prop, {provider_ = provider})
+			local connector = self:createConnector(cprof, prop, {provider_ = provider})
 			if connector == nil then
 				return self._ReturnCode_t.RTC_ERROR
 			end

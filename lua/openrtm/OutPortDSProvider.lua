@@ -10,7 +10,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local OutPortDSProvider= {}
-_G["openrtm.OutPortDSProvider"] = OutPortDSProvider
+--_G["openrtm.OutPortDSProvider"] = OutPortDSProvider
 
 local OutPortProvider = require "openrtm.OutPortProvider"
 local BufferStatus = require "openrtm.BufferStatus"

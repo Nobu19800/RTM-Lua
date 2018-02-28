@@ -9,6 +9,6 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local InPortDirectConsumer = {}
-_G["openrtm.InPortDirectConsumer"] = InPortDirectConsumer
+--_G["openrtm.InPortDirectConsumer"] = InPortDirectConsumer
 
 return InPortDirectConsumer

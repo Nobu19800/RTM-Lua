@@ -9,7 +9,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local ExecutionContextBase= {}
-_G["openrtm.ExecutionContextBase"] = ExecutionContextBase
+--_G["openrtm.ExecutionContextBase"] = ExecutionContextBase
 
 
 local TimeValue = require "openrtm.TimeValue"
@@ -67,7 +67,7 @@ ExecutionContextBase.new = function(name)
 	-- 実行周期を数値に変換できなかった場合はfalse
 	function obj:setExecutionRate(props)
 		if props:findNode("rate") then
-			rate_ = tonumber(props:getProperty("rate"))
+			local rate_ = tonumber(props:getProperty("rate"))
 			if rate_ ~= nil then
 				self:setRate(rate_)
 				return true
@@ -83,7 +83,7 @@ ExecutionContextBase.new = function(name)
 	-- BAD_PARAMETER：不正な周期を指定
 	function obj:setRate(rate)
 		self._rtcout:RTC_TRACE("setRate("..rate..")")
-		ret_ = self._profile:setRate(self:onSettingRate(rate))
+		local ret_ = self._profile:setRate(self:onSettingRate(rate))
 		if ret_ ~= self._ReturnCode_t.RTC_OK then
 			self._rtcout:RTC_ERROR("Setting execution rate failed. "..rate)
 			return ret_
@@ -151,7 +151,7 @@ ExecutionContextBase.new = function(name)
 	-- PRECONDITION_NOT_MET：既に実行状態
 	function obj:start()
 		self._rtcout:RTC_TRACE("start()")
-		ret_ = self:onStarting()
+		local ret_ = self:onStarting()
 		if ret_ ~= self._ReturnCode_t.RTC_OK then
 			self._rtcout:RTC_ERROR("onStarting() failed. Starting EC aborted.")
 			return ret_
@@ -356,13 +356,13 @@ ExecutionContextBase.new = function(name)
 	-- PRECONDITION_NOT_MET：非アクティブ状態以外の状態
 	function obj:activateComponent(comp)
 		self._rtcout:RTC_TRACE("activateComponent()")
-		ret_ = self:onActivating(comp)
+		local ret_ = self:onActivating(comp)
 		if ret_ ~= self._ReturnCode_t.RTC_OK then
 			self._rtcout:RTC_ERROR("onActivating() failed.")
 			return ret_
 		end
 
-		rtobj_ = {object=nil}
+		local rtobj_ = {object=nil}
 		ret_ = self._worker:activateComponent(comp, rtobj_)
 		if ret_ ~= self._ReturnCode_t.RTC_OK then
 			return ret_
@@ -397,13 +397,13 @@ ExecutionContextBase.new = function(name)
 	-- PRECONDITION_NOT_MET：アクティブ状態以外の状態
 	function obj:deactivateComponent(comp)
 		self._rtcout:RTC_TRACE("deactivateComponent()")
-		ret_ = self:onDeactivating(comp)
+		local ret_ = self:onDeactivating(comp)
 		if ret_ ~= self._ReturnCode_t.RTC_OK then
 			self._rtcout:RTC_ERROR("onDeactivating() failed.")
 			return ret_
 		end
 
-		rtobj_ = {object=nil}
+		local rtobj_ = {object=nil}
 		ret_ = self._worker:deactivateComponent(comp, rtobj_)
 		if ret_ ~= self._ReturnCode_t.RTC_OK then
 			return ret_
@@ -436,13 +436,13 @@ ExecutionContextBase.new = function(name)
 	-- PRECONDITION_NOT_MET：エラー状態以外の状態
 	function obj:resetComponent(comp)
 		self._rtcout:RTC_TRACE("resetComponent()")
-		ret_ = self:onResetting(comp)
+		local ret_ = self:onResetting(comp)
 		if ret_ ~= self._ReturnCode_t.RTC_OK then
 			self._rtcout:RTC_ERROR("onResetting() failed.")
 			return ret_
 		end
 
-		rtobj_ = {object=nil}
+		local rtobj_ = {object=nil}
 		ret_ = self._worker:resetComponent(comp, rtobj_)
 		if ret_ ~= self._ReturnCode_t.RTC_OK then
 			return ret_

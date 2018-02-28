@@ -10,7 +10,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local OutPortDSConsumer= {}
-_G["openrtm.OutPortDSConsumer"] = OutPortDSConsumer
+--_G["openrtm.OutPortDSConsumer"] = OutPortDSConsumer
 
 local oil = require "oil"
 local OutPortConsumer = require "openrtm.OutPortConsumer"

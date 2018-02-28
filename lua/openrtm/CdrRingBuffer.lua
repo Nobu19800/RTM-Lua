@@ -10,7 +10,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local CdrRingBuffer= {}
-_G["openrtm.CdrRingBuffer"] = CdrRingBuffer
+--_G["openrtm.CdrRingBuffer"] = CdrRingBuffer
 
 
 local RingBuffer = require "openrtm.RingBuffer"

@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local SdoConfiguration= {}
-_G["openrtm.SdoConfiguration"] = SdoConfiguration
+--_G["openrtm.SdoConfiguration"] = SdoConfiguration
 
 local oil = require "oil"
 local NVUtil = require "openrtm.NVUtil"
@@ -114,7 +114,7 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 
 
 
-		config = {id="",description="",configuration_data={}}
+		local config = {id="",description="",configuration_data={}}
 		toConfigurationSet(config, self._configsets:getActiveConfigurationSet())
 		return config
 	end
@@ -150,7 +150,7 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 			})
 		end
 
-		ret = nil
+		local ret = nil
 		local success, exception = oil.pcall(
 			function()
 				conf = Properties.new({key=configuration_set.id})

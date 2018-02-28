@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local CORBA_SeqUtil= {}
-_G["openrtm.CORBA_SeqUtil"] = CORBA_SeqUtil
+--_G["openrtm.CORBA_SeqUtil"] = CORBA_SeqUtil
 
 -- 指定関数がtrueになる要素を配列から検索
 -- 指定関数をすべての要素に実行して判定する

@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local LogstreamBase= {}
-_G["openrtm.LogstreamBase"] = LogstreamBase
+--_G["openrtm.LogstreamBase"] = LogstreamBase
 
 LogstreamBase.new = function()
 	local obj = {}

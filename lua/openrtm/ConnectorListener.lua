@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local ConnectorListener= {}
-_G["openrtm.ConnectorListener"] = ConnectorListener
+--_G["openrtm.ConnectorListener"] = ConnectorListener
 
 
 ConnectorListener.ConnectorListeners = {}

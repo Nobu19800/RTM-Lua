@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local RTObject= {}
-_G["openrtm.RTObject"] = RTObject
+--_G["openrtm.RTObject"] = RTObject
 
 local oil = require "oil"
 local PortAdmin = require "openrtm.PortAdmin"
@@ -33,7 +33,7 @@ local RTCUtil = require "openrtm.RTCUtil"
 RTObject.ECOTHER_OFFSET = 1000
 
 
-default_conf = {
+local default_conf = {
   ["implementation_id"]="",
   ["type_name"]="",
   ["description"]="",
@@ -253,7 +253,7 @@ RTObject.new = function(manager)
 	function obj:initialize()
 		self._rtcout:RTC_TRACE("initialize()")
 		self:createRef()
-		ec_args_ = {}
+		local ec_args_ = {}
 		if self:getContextOptions(ec_args_) ~= self._ReturnCode_t.RTC_OK then
 			self._rtcout:RTC_ERROR("Valid EC options are not available. Aborting")
 			return self._ReturnCode_t.BAD_PARAMETER
@@ -263,7 +263,7 @@ RTObject.new = function(manager)
 			return self._ReturnCode_t.BAD_PARAMETER
 		end
 		--self._rtcout:RTC_INFO(#self._ecMine.." execution context"..toSTR_(self._ecMine).." created.")
-		ret_ = self:on_initialize()
+		local ret_ = self:on_initialize()
 		self._created = false
 		if ret_ ~= self._ReturnCode_t.RTC_OK then
 			self._rtcout:RTC_ERROR("on_initialize() failed.")
@@ -348,7 +348,7 @@ RTObject.new = function(manager)
 	function obj:getGlobalContextOptions(global_ec_props)
 		self._rtcout:RTC_TRACE("getGlobalContextOptions()")
 
-		prop_ = self._properties:findNode("exec_cxt.periodic")
+		local prop_ = self._properties:findNode("exec_cxt.periodic")
 		if prop_ == nil then
 		  self._rtcout:RTC_WARN("No global EC options found.")
 		  return self._ReturnCode_t.RTC_ERROR
@@ -403,8 +403,8 @@ RTObject.new = function(manager)
 	function obj:createContexts(ec_args)
 
 
-		ret_  = self._ReturnCode_t.RTC_OK
-		avail_ec_ = ExecutionContextFactory:instance():getIdentifiers()
+		local ret_ = self._ReturnCode_t.RTC_OK
+		local avail_ec_ = ExecutionContextFactory:instance():getIdentifiers()
 
 		--print(#ec_args)
 		for i,ec_arg_ in ipairs(ec_args) do
@@ -425,7 +425,7 @@ RTObject.new = function(manager)
 				self._rtcout:RTC_DEBUG("Available ECs: "..
 									StringUtil.flatten(avail_ec_))
 			else
-				ec_ = ExecutionContextFactory:instance():createObject(ec_type_)
+				local ec_ = ExecutionContextFactory:instance():createObject(ec_type_)
 				ec_:init(ec_arg_)
 				table.insert(self._eclist, ec_)
 				ec_:bindComponent(self)
@@ -475,7 +475,7 @@ RTObject.new = function(manager)
 			self._configsets:update("default")
 			self._rtcout:RTC_INFO("Initial active configuration set is default-set.")
 		end
-		return ret_
+		return ret
 	end
 
 	-- 実行コンテキストの関連付け
@@ -833,12 +833,10 @@ RTObject.new = function(manager)
 	function obj:bindParameter(param_name, var, def_val, trans)
 		self._rtcout:RTC_TRACE("bindParameter()")
 		if trans == nil then
-			trans_ = StringUtil.stringTo
-		else
-			trans_ = trans
+			trans = StringUtil.stringTo
 		end
-		--print(param_name, var, def_val, trans_)
-		self._configsets:bindParameter(param_name, var, def_val, trans_)
+		--print(param_name, var, def_val, trans)
+		self._configsets:bindParameter(param_name, var, def_val, trans)
 		return true
 	end
 
@@ -879,7 +877,7 @@ RTObject.new = function(manager)
 		end
 
 
-		index = ec_id - ECOTHER_OFFSET
+		local index = ec_id - ECOTHER_OFFSET
 
 		if self._ecOther[index] ~= nil then
 			return self._ecOther[index]
@@ -916,7 +914,7 @@ RTObject.new = function(manager)
 		--for i,v in ipairs(self._ecMine) do
 		--	print(v)
 		--end
-		num = CORBA_SeqUtil.find(self._ecMine, ec_find.new(cxt))
+		local num = CORBA_SeqUtil.find(self._ecMine, ec_find.new(cxt))
 		--print(num)
 		if num ~= -1 then
 			return num
@@ -935,7 +933,7 @@ RTObject.new = function(manager)
 	function obj:getNamingNames()
 		self._rtcout:RTC_TRACE("getNamingNames()")
 		--print(self._properties)
-		ret_str = StringUtil.split(self._properties:getProperty("naming.names"), ",")
+		local ret_str = StringUtil.split(self._properties:getProperty("naming.names"), ",")
 		local ret = {}
 		for k, v in pairs(ret_str) do
 			v = StringUtil.eraseHeadBlank(v)
@@ -1092,7 +1090,7 @@ RTObject.new = function(manager)
 	function obj:get_component_profile()
 		self._rtcout:RTC_TRACE("get_component_profile()")
 
-		prop_ = {instance_name = self._properties:getProperty("instance_name"),
+		local prop_ = {instance_name = self._properties:getProperty("instance_name"),
 				 type_name = self._properties:getProperty("type_name"),
 				 description = self._properties:getProperty("description"),
 				 version = self._properties:getProperty("version"),

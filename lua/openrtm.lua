@@ -9,7 +9,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local openrtm = {}
-_G["openrtm"] = openrtm
+--_G["openrtm"] = openrtm
 
 --openrtm.Async = require "openrtm.Async"
 openrtm.BufferBase = require "openrtm.BufferBase"

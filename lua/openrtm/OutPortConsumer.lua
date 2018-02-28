@@ -10,7 +10,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local OutPortConsumer= {}
-_G["openrtm.OutPortConsumer"] = OutPortConsumer
+--_G["openrtm.OutPortConsumer"] = OutPortConsumer
 
 local GlobalFactory = require "openrtm.GlobalFactory"
 local Factory = GlobalFactory.Factory

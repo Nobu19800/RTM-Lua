@@ -27,7 +27,7 @@ local BufferStatus = {
 				PRECONDITION_NOT_MET = 6
 				}
 				
-_G["openrtm.BufferStatus"] = BufferStatus
+--_G["openrtm.BufferStatus"] = BufferStatus
 
 -- バッファステータスを文字に変換
 -- @param status バッファステータス

@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local ManagerConfig= {}
-_G["openrtm.ManagerConfig"] = ManagerConfig
+--_G["openrtm.ManagerConfig"] = ManagerConfig
 
 local Properties = require "openrtm.Properties"
 local default_config = require "openrtm.DefaultConfiguration"
@@ -19,6 +19,12 @@ local config_file_path = {"./rtc.conf"}
 
 -- マネージャのコンフィギュレーション管理オブジェクト初期化
 -- @param argv コマンドライン引数
+-- "-a"：マネージャサーバント無効
+-- "-f"：設定ファイル指定
+-- "-l"：ロードするモジュール指定
+-- "-o"：追加のオプション指定
+-- "-a"：アドレス、ポート番号指定
+-- "-d"：マスターマネージャに設定
 -- @return マネージャのコンフィギュレーション管理オブジェクト
 ManagerConfig.new = function(argv)
 	local obj = {}

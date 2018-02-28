@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local TimeValue= {}
-_G["openrtm.TimeValue"] = TimeValue
+--_G["openrtm.TimeValue"] = TimeValue
 
 local TIMEVALUE_ONE_SECOND_IN_USECS = 1000000
 
@@ -21,7 +21,7 @@ TimeValue.new = function(sec, usec)
 	-- @param tm 引く時間関数オブジェクト
 	-- @return 引き算後の時間
 	local sub_func = function(self, tm)
-		res = TimeValue.new()
+		local res = TimeValue.new()
 		if self.tv_sec >= tm.tv_sec then
 			if self.tv_usec >= tm.tv_usec then
 				res.tv_sec  = self.tv_sec  - tm.tv_sec
@@ -48,7 +48,7 @@ TimeValue.new = function(sec, usec)
 	-- @param tm 足す時間関数オブジェクト
 	-- @return 足し算後の時間
 	local add_func = function(self, tm)
-		res = TimeValue.new()
+		local res = TimeValue.new()
 		res.tv_sec  = self.tv_sec  + tm.tv_sec
 		res.tv_usec = self.tv_usec + tm.tv_usec
 		if res.tv_usec > TIMEVALUE_ONE_SECOND_IN_USECS then
@@ -62,7 +62,7 @@ TimeValue.new = function(sec, usec)
 	-- @param self 自身のオブジェクト
 	-- @return 文字列
 	local str_func = function(self)
-		ret = ""..self.tv_sec..(self.tv_usec / TIMEVALUE_ONE_SECOND_IN_USECS)
+		local ret = ""..self.tv_sec..(self.tv_usec / TIMEVALUE_ONE_SECOND_IN_USECS)
 		return ret
 	end
 
@@ -150,6 +150,7 @@ TimeValue.new = function(sec, usec)
 		usec = tonumber(usec)
 	end
 	if sec ~= nil and usec == nil then
+		local dbHalfAdj_ = 0.0
 		if sec >= 0.0 then
 			dbHalfAdj_ = 0.5
 		else

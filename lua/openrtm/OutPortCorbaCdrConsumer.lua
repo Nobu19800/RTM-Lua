@@ -10,7 +10,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local OutPortCorbaCdrConsumer= {}
-_G["openrtm.OutPortCorbaCdrConsumer"] = OutPortCorbaCdrConsumer
+--_G["openrtm.OutPortCorbaCdrConsumer"] = OutPortCorbaCdrConsumer
 
 local oil = require "oil"
 local OutPortConsumer = require "openrtm.OutPortConsumer"

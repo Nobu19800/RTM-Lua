@@ -9,7 +9,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local NamingManager= {}
-_G["openrtm.NamingManager"] = NamingManager
+--_G["openrtm.NamingManager"] = NamingManager
 
 local oil = require "oil"
 local CorbaNaming = require "openrtm.CorbaNaming"
@@ -168,7 +168,7 @@ NamingManager.new = function(manager)
 	function obj:registerNameServer(method, name_server)
 		--print(self._rtcout)
 		self._rtcout:RTC_TRACE("NamingManager::registerNameServer("..method..", "..name_server..")")
-		name = self:createNamingObj(method, name_server)
+		local name = self:createNamingObj(method, name_server)
 		--print(name)
 		table.insert(self._names, NamingManager.NameServer.new(method, name_server, name))
 	end
@@ -179,13 +179,13 @@ NamingManager.new = function(manager)
 	function obj:createNamingObj(method, name_server)
 		self._rtcout:RTC_TRACE("createNamingObj(method = "..method..", nameserver = "..name_server..")")
 
-		mth = method
+		local mth = method
 
 		if mth == "corba" then
-			ret = nil
+			local ret = nil
 			local success, exception = oil.pcall(
 				function()
-					name = NamingManager.NamingOnCorba.new(self._manager:getORB(),name_server)
+					local name = NamingManager.NamingOnCorba.new(self._manager:getORB(),name_server)
 
 					self._rtcout:RTC_INFO("NameServer connection succeeded: "..method.."/"..name_server)
 					ret = name
@@ -196,7 +196,7 @@ NamingManager.new = function(manager)
 			end
 			return ret
 		elseif mth == "manager" then
-			name = NamingManager.NamingOnManager(self._manager:getORB(), self._manager)
+			local name = NamingManager.NamingOnManager(self._manager:getORB(), self._manager)
 			return name
 		end
 		return nil

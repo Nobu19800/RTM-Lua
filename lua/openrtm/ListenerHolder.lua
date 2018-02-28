@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local ListenerHolder= {}
-_G["openrtm.ListenerHolder"] = ListenerHolder
+--_G["openrtm.ListenerHolder"] = ListenerHolder
 
 ListenerHolder.init = function()
 	local obj = {}

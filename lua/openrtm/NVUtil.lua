@@ -9,7 +9,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local NVUtil= {}
-_G["openrtm.NVUtil"] = NVUtil
+--_G["openrtm.NVUtil"] = NVUtil
 
 local oil = require "oil"
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
@@ -27,9 +27,9 @@ end
 -- @param nv NameValue
 -- @param prop プロパティ
 NVUtil.copyFromProperties = function(nv, prop)
-	keys = prop:propertyNames()
-	keys_len = #keys
-	nv_len = #nv
+	local keys = prop:propertyNames()
+	local keys_len = #keys
+	local nv_len = #nv
 	if nv_len > 0 then
 		for i = 1,nv_len do
 			nv[i] = nil
@@ -165,12 +165,12 @@ end
 -- @param _name 要素名
 -- @param _value 値
 NVUtil.appendStringValue = function(nv, _name, _value)
-	index = NVUtil.find_index(nv, _name)
-	tmp_nv = nv[index]
+	local index = NVUtil.find_index(nv, _name)
+	local tmp_nv = nv[index]
 	if tmp_nv ~= nil then
-		tmp_str = NVUtil.any_from_any(tmp_nv.value)
-		values = StringUtil.split(tmp_str,",")
-		find_flag = false
+		local tmp_str = NVUtil.any_from_any(tmp_nv.value)
+		local values = StringUtil.split(tmp_str,",")
+		local find_flag = false
 		for i, val in ipairs(values) do
 			if val == _value then
 				find_flag = true
@@ -216,7 +216,7 @@ end
 -- @param name 要素名
 -- @return 指定要素
 NVUtil.find = function(nv, name)
-	index = CORBA_SeqUtil.find(nv, nv_find.new(name))
+	local index = CORBA_SeqUtil.find(nv, nv_find.new(name))
 	if nv[index] ~= nil then
 		return nv[index].value
 	else

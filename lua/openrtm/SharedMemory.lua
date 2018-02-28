@@ -9,6 +9,6 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local SharedMemory = {}
-_G["openrtm.SharedMemory"] = SharedMemory
+--_G["openrtm.SharedMemory"] = SharedMemory
 
 return SharedMemory

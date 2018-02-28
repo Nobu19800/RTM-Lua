@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local version= {}
-_G["openrtm.version"] = version
+--_G["openrtm.version"] = version
 
 
 version.openrtm_name = "OpenRTM-aist-1.2.0"

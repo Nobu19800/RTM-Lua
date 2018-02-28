@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local InPortConnector= {}
-_G["openrtm.InPortConnectorBase"] = InPortConnector
+--_G["openrtm.InPortConnectorBase"] = InPortConnector
 
 local ConnectorBase = require "openrtm.ConnectorBase"
 

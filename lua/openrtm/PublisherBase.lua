@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local PublisherBase= {}
-_G["openrtm.PublisherBase"] = PublisherBase
+--_G["openrtm.PublisherBase"] = PublisherBase
 
 
 local GlobalFactory = require "openrtm.GlobalFactory"

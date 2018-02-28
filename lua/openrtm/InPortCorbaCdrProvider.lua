@@ -10,7 +10,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local InPortCorbaCdrProvider= {}
-_G["openrtm.InPortCorbaCdrProvider"] = InPortCorbaCdrProvider
+--_G["openrtm.InPortCorbaCdrProvider"] = InPortCorbaCdrProvider
 
 
 

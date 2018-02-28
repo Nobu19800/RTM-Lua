@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local Properties= {}
-_G["openrtm.Properties"] = Properties
+--_G["openrtm.Properties"] = Properties
 
 local StringUtil = require "openrtm.StringUtil"
 --string = require string
@@ -114,7 +114,7 @@ Properties.new = function(argv)
 		--print(key)
 		if default == nil then
 			local keys = StringUtil.split(key, "%.")
-			node = self:_getNode(keys, 1, self)
+			local node = self:_getNode(keys, 1, self)
 			if node then
 				if node.value ~= "" then
 					return node.value
@@ -124,7 +124,7 @@ Properties.new = function(argv)
 			end
 			return self.empty
 		else
-			value = self:getProperty(key)
+			local value = self:getProperty(key)
 			if value ~= "" then
 				return value
 			else
@@ -155,7 +155,7 @@ Properties.new = function(argv)
 			local curr = self
 			for _i, _key in ipairs(keys) do
 				--print(curr)
-				_next = curr:hasKey(_key)
+				local _next = curr:hasKey(_key)
 				if _next == nil then
 					_next = Properties.new({key=_key})
 					_next.root = curr
@@ -169,7 +169,7 @@ Properties.new = function(argv)
 		else
 			--print(self:getProperty(key))
 			self:setProperty(key, self:getProperty(key))
-			prop = self:getNode(key)
+			local prop = self:getNode(key)
 			return prop.value
 		end
 		return self.root
@@ -184,7 +184,7 @@ Properties.new = function(argv)
 		--print(self.leaf)
 		--StringUtil.print_table(keys)
 		for _i, _key in ipairs(keys) do
-			_next = curr:hasKey(_key)
+			local _next = curr:hasKey(_key)
 			if _next == nil then
 				_next = Properties.new({key=_key})
 				_next.root = curr
@@ -250,7 +250,7 @@ Properties.new = function(argv)
 			if readStr ~= "" then
 				local _str = readStr
 				_str = StringUtil.eraseHeadBlank(_str)
-				s = string.sub(_str,0,1)
+				local s = string.sub(_str,0,1)
 				if s == "#" or s == "!" or s == "\n" then
 				else
 					--_str = _str.rstrip('\r\n')
@@ -348,7 +348,7 @@ Properties.new = function(argv)
 	function obj:removeNode(leaf_name)
 		for i, leaf in ipairs(self.leaf) do
 			if leaf.name == leaf_name then
-				prop = leaf
+				local prop = leaf
 				table.remove(prop, i)
 				return prop
 			end
@@ -391,7 +391,7 @@ Properties.new = function(argv)
 
 		local length = #_str
 		for i = 1, length do
-			s = string.sub(_str,i,i)
+			local s = string.sub(_str,i,i)
 			if (s == ":" or s == "=") and not StringUtil.isEscaped(_str, i) then
 				table.insert(key,string.sub(_str,1,i-1))
 				table.insert(value,string.sub(_str,i+1))
@@ -571,7 +571,7 @@ Properties.new = function(argv)
 	-- 文字列変換関数
 	-- @param self 自身のオブジェクト
 	-- @return 変換後の文字列
-	str_func = function(self)
+	local str_func = function(self)
 		local str = {}
 		table.insert(str,"")
 		--print(self._dump)

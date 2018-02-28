@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local CorbaNaming= {}
-_G["openrtm.CorbaNaming"] = CorbaNaming
+--_G["openrtm.CorbaNaming"] = CorbaNaming
 
 local oil = require "oil"
 local StringUtil = require "openrtm.StringUtil"

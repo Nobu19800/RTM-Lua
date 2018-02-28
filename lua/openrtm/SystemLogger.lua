@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local SystemLogger= {}
-_G["openrtm.SystemLogger"] = SystemLogger
+--_G["openrtm.SystemLogger"] = SystemLogger
 
 SystemLogger.LogStream = {}
 local NO_LOGGER = true

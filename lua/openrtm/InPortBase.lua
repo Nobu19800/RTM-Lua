@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local InPortBase= {}
-_G["openrtm.InPortBase"] = InPortBase
+--_G["openrtm.InPortBase"] = InPortBase
 
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 local Properties = require "openrtm.Properties"
@@ -101,7 +101,7 @@ InPortBase.new = function(name, data_type)
 		self:initProviders()
 		self:initConsumers()
 
-		num = tonumber(self._properties:getProperty("connection_limit","-1"))
+		local num = tonumber(self._properties:getProperty("connection_limit","-1"))
 		if num == nil then
 			self._rtcout:RTC_ERROR("invalid connection_limit value: "..self._properties:getProperty("connection_limit"))
 		end
@@ -115,17 +115,17 @@ InPortBase.new = function(name, data_type)
 		self._rtcout:RTC_TRACE("initConsumers()")
 
 
-		factory = OutPortConsumerFactory:instance()
-		consumer_types = factory:getIdentifiers()
+		local factory = OutPortConsumerFactory:instance()
+		local consumer_types = factory:getIdentifiers()
 
 		self._rtcout:RTC_PARANOID("available InPortConsumer: "..StringUtil.flatten(consumer_types))
-		tmp_str = StringUtil.normalize(self._properties:getProperty("consumer_types"))
+		local tmp_str = StringUtil.normalize(self._properties:getProperty("consumer_types"))
 		if self._properties:hasKey("consumer_types") and tmp_str  ~= "all" then
 			self._rtcout:RTC_DEBUG("allowed consumers: "..self._properties:getProperty("consumer_types"))
 
-			temp_types = consumer_types
+			local temp_types = consumer_types
 			consumer_types = {}
-			active_types = StringUtil.split(self._properties:getProperty("consumer_types"), ",")
+			local active_types = StringUtil.split(self._properties:getProperty("consumer_types"), ",")
 
 			table.sort(temp_types)
 			table.sort(active_types)
@@ -157,16 +157,16 @@ InPortBase.new = function(name, data_type)
 		self._rtcout:RTC_TRACE("initProviders()")
 
 
-		factory = InPortProviderFactory:instance()
-		provider_types  = factory:getIdentifiers()
+		local factory = InPortProviderFactory:instance()
+		local provider_types  = factory:getIdentifiers()
 		self._rtcout:RTC_PARANOID("available InPortProviders: "..StringUtil.flatten(provider_types))
-		tmp_str = StringUtil.normalize(self._properties:getProperty("provider_types"))
+		local tmp_str = StringUtil.normalize(self._properties:getProperty("provider_types"))
 		if self._properties:hasKey("provider_types") and tmp_str  ~= "all" then
 			self._rtcout:RTC_DEBUG("allowed providers: "..self._properties:getProperty("allowed"))
 
-			temp_types = provider_types
+			local temp_types = provider_types
 			provider_types = {}
-			active_types = StringUtil.split(self._properties:getProperty("provider_types"), ",")
+			local active_types = StringUtil.split(self._properties:getProperty("provider_types"), ",")
 
 			table.sort(temp_types)
 			table.sort(active_types)
@@ -229,7 +229,7 @@ InPortBase.new = function(name, data_type)
 			self._rtcout:RTC_DEBUG("dataflow_type = push .... create PushConnector")
 
 
-			provider = self:createProvider(cprof, prop)
+			local provider = self:createProvider(cprof, prop)
 
 			if provider == nil then
 				self._rtcout:RTC_ERROR("InPort provider creation failed.")
@@ -237,7 +237,7 @@ InPortBase.new = function(name, data_type)
 			end
 
 
-			connector = self:createConnector(cprof, prop, {provider_ = provider})
+			local connector = self:createConnector(cprof, prop, {provider_ = provider})
 
 			if connector == nil then
 				self._rtcout:RTC_ERROR("PushConnector creation failed.")
@@ -298,13 +298,13 @@ InPortBase.new = function(name, data_type)
 		--print(dflow_type)
 		if dflow_type == "push" then
 
-			conn = self:getConnectorById(cprof.connector_id)
+			local conn = self:getConnectorById(cprof.connector_id)
 			if conn == nil then
 				self._rtcout:RTC_ERROR("specified connector not found: "..cprof.connector_id)
 				return self._ReturnCode_t.RTC_ERROR
 			end
 
-			ret = conn:setConnectorInfo(profile)
+			local ret = conn:setConnectorInfo(profile)
 
 			if ret == self._ReturnCode_t.RTC_OK then
 				self._rtcout:RTC_DEBUG("subscribeInterfaces() successfully finished.")
@@ -322,7 +322,7 @@ InPortBase.new = function(name, data_type)
 			end
 
 
-			connector = self:createConnector(cprof, prop, {consumer_ = consumer})
+			local connector = self:createConnector(cprof, prop, {consumer_ = consumer})
 			--print(connector)
 
 

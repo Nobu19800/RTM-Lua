@@ -8,7 +8,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local Singleton= {}
-_G["openrtm.Singleton"] = Singleton
+--_G["openrtm.Singleton"] = Singleton
 
 Singleton.new = function()
 	local obj = {}

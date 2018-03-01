@@ -1,0 +1,580 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# -*- Python -*-
+
+"""
+ @file ${rtcParam.name}.py
+ @brief ${rtcParam.description}
+#set( $Date$ = "dummy" )
+ @date \$Date$
+
+#if( ${rtcParam.docCreator.length()} > 0 )
+ @author ${tmpltHelperPy.convertAuthorDocPy(${rtcParam.docCreator})}
+#end
+#if( ${rtcParam.docLicense.length()} > 0 )
+
+ ${tmpltHelperPy.convertDocPy(${rtcParam.docLicense})}
+#end
+
+"""
+import sys
+import time
+sys.path.append(".")
+
+# Import RTM module
+import RTC
+import OpenRTM_aist
+
+#foreach($IdlFile in ${allIdlFileParam})#if(!${IdlFile.dataPort})import ${tmpltHelper.getFilenameNoExt(${IdlFile.IdlFile})}_idl
+#end
+#end
+#if( ${tmpltHelperPy.hasDataPortType(${allIdlFileParam})})
+#foreach($idlTarget in ${tmpltHelperPy.getDataPortTypes(${allIdlFileParam})})import ${idlTarget}
+#end
+#end
+
+# Import Service implementation class
+# <rtc-template block="service_impl">
+#foreach($providerIdlFile in ${rtcParam.providerIdlPathes})
+from ${tmpltHelper.getFilenameNoExt(${providerIdlFile.idlFile})}_idl_example import *
+#end
+
+# </rtc-template>
+
+# Import Service stub modules
+# <rtc-template block="consumer_import">
+#if(${rtcParam.originalConsumerIdls.size()}>0)
+${pyConv.convModuleNameAll(${allIdlFileParam})}
+
+#end
+# </rtc-template>
+
+
+# This module's spesification
+# <rtc-template block="module_spec">
+${pyConv.convToLower(${rtcParam.name})}_spec = ["implementation_id", "${rtcParam.name}", 
+		 "type_name",         "${rtcParam.name}", 
+		 "description",       "${rtcParam.description}", 
+		 "version",           "${rtcParam.version}", 
+		 "vendor",            "${rtcParam.vender}", 
+		 "category",          "${rtcParam.category}", 
+		 "activity_type",     "${rtcParam.componentType}", 
+		 "max_instance",      "${rtcParam.maxInstance}", 
+		 "language",          "Python", 
+		 "lang_type",         "SCRIPT",
+#foreach($configParam in ${rtcParam.configParams})
+		 "conf.default.${configParam.name}", "${configParam.defaultVal}",
+#end
+#if( ${rtcParam.configParams.size()} > 0 )
+
+#foreach($configParam in ${rtcParam.configParams})
+#if( ${configParam.widget.length()} > 0 )
+		 "conf.__widget__.${configParam.name}", "${configParam.widget}#if( ${configParam.step.length()} > 0 ).${configParam.step}#end",
+#end
+#end
+#foreach($configParam in ${rtcParam.configParams})
+#if( ${configParam.constraint.length()} > 0 )
+		 "conf.__constraints__.${configParam.name}", "${configParam.constraint}",
+#end
+#end
+
+#foreach($configParam in ${rtcParam.configParams})
+         "conf.__type__.${configParam.name}", "${configParam.type}",
+#end
+
+#end
+#if( ${rtcParam.configParameterParams.size()} > 0 )
+#foreach($parameterParam in ${rtcParam.configParameterParams})  
+#if( ${parameterParam.isNonPeriodic()} )
+		 "${parameterParam.configName}", "${parameterParam.defaultVal}",
+#end
+#end
+#end
+		 ""]
+# </rtc-template>
+
+${sharp}${sharp}
+${sharp} @class ${rtcParam.name}
+${sharp} @brief ${rtcParam.description}
+#if( ${rtcParam.docDescription.length()} > 0 )
+${sharp} 
+${sharp} ${tmpltHelperPy.convertModuleDocPy(${rtcParam.docDescription})}
+#end
+#if( ${rtcParam.docInOut.length()} > 0 )
+${sharp} 
+${sharp} ${tmpltHelperPy.convertModuleDocPy(${rtcParam.docInOut})}
+#end
+#if( ${rtcParam.docAlgorithm.length()} > 0 )
+${sharp} 
+${sharp} ${tmpltHelperPy.convertModuleDocPy(${rtcParam.docAlgorithm})}
+#end
+#if( ${rtcParam.docReference.length()} > 0 )
+${sharp} 
+${sharp} ${tmpltHelperPy.convertModuleDocPy(${rtcParam.docReference})}
+#end
+${sharp} 
+${sharp} 
+class ${rtcParam.name}(OpenRTM_aist.DataFlowComponentBase):
+	
+	${sharp}${sharp}
+	${sharp} @brief constructor
+	${sharp} @param manager Maneger Object
+	${sharp} 
+	def __init__(self, manager):
+		OpenRTM_aist.DataFlowComponentBase.__init__(self, manager)
+
+#foreach($port in ${rtcParam.inports})
+		self._d_${port.tmplVarName} = OpenRTM_aist.instantiateDataType(${pyConv.getDataportInitMethodName(${port.type})})
+		"""
+#if(${port.docDescription.length()}>0)		${tmpltHelperPy.convertDescDocPy(${port.docDescription})}
+#end
+#if(${port.docType.length()}>0)		 - Type: ${tmpltHelperPy.convertTypeDocPy(${port.docType})}
+#end
+#if(${port.docNum.length()}>0)		 - Number: ${tmpltHelperPy.convertNumberDocPy(${port.docNum})}
+#end
+#if(${port.docSemantics.length()}>0)		 - Semantics: ${tmpltHelperPy.convertSemanticsDocPy(${port.docSemantics})}
+#end
+#if(${port.docUnit.length()}>0)		 - Unit: ${tmpltHelperPy.convertTypeDocPy(${port.docUnit})}
+#end
+#if(${port.docOccurrence.length()}>0)		 - Frequency: ${tmpltHelperPy.convertFrequencyDocPy(${port.docOccurrence})}
+#end
+#if(${port.docOperation.length()}>0)		 - Operation Cycle: ${tmpltHelperPy.convertCycleDocPy(${port.docOperation})}
+#end
+		"""
+		self._${port.name}In = OpenRTM_aist.InPort("${port.name}", self._d_${port.tmplVarName})
+#end
+#foreach($port in ${rtcParam.outports})
+		self._d_${port.tmplVarName} = OpenRTM_aist.instantiateDataType(${pyConv.getDataportInitMethodName(${port.type})})
+		"""
+#if(${port.docDescription.length()}>0)		${tmpltHelperPy.convertDescDocPy(${port.docDescription})}
+#end
+#if(${port.docType.length()}>0)		 - Type: ${tmpltHelperPy.convertTypeDocPy(${port.docType})}
+#end
+#if(${port.docNum.length()}>0)		 - Number: ${tmpltHelperPy.convertNumberDocPy(${port.docNum})}
+#end
+#if(${port.docSemantics.length()}>0)		 - Semantics: ${tmpltHelperPy.convertSemanticsDocPy(${port.docSemantics})}
+#end
+#if(${port.docUnit.length()}>0)		 - Unit: ${tmpltHelperPy.convertTypeDocPy(${port.docUnit})}
+#end
+#if(${port.docOccurrence.length()}>0)		 - Frequency: ${tmpltHelperPy.convertFrequencyDocPy(${port.docOccurrence})}
+#end
+#if(${port.docOperation.length()}>0)		 - Operation Cycle: ${tmpltHelperPy.convertCycleDocPy(${port.docOperation})}
+#end
+		"""
+		self._${port.name}Out = OpenRTM_aist.OutPort("${port.name}", self._d_${port.tmplVarName})
+#end
+
+#if(${rtcParam.servicePorts.size()}>0)
+#foreach($servicePort in ${rtcParam.servicePorts})
+#if(${servicePort.servicePortInterfaces.size()}>0)
+		"""
+#if(${servicePort.docDescription.length()}>0)		${tmpltHelperPy.convertDescDocPy(${servicePort.docDescription})}
+#end
+#if(${servicePort.docIfDescription.length()}>0)		Interface: ${tmpltHelperPy.convertInterfacePy(${servicePort.docIfDescription})}
+#end
+		"""
+		self._${servicePort.name}Port = OpenRTM_aist.CorbaPort("${servicePort.name}")
+#end#end#end
+
+#if(${rtcParam.servicePorts.size()}>0)
+#foreach($servicePort in ${rtcParam.servicePorts})
+#if(${servicePort.servicePortInterfaces.size()}>0)
+#foreach($serviceInterface in ${servicePort.servicePortInterfaces})
+#if(${serviceInterface.index}==0)
+		"""
+#if(${serviceInterface.docDescription.length()}>0)		${tmpltHelperPy.convertDescDocPy(${serviceInterface.docDescription})}
+#end
+#if(${serviceInterface.docArgument.length()}>0)		 - Argument:      ${tmpltHelperPy.convertDetailPy(${serviceInterface.docArgument})}
+#end
+#if(${serviceInterface.docReturn.length()}>0)		 - Return Value:  ${tmpltHelperPy.convertDetailPy(${serviceInterface.docReturn})}
+#end
+#if(${serviceInterface.docException.length()}>0)		 - Exception:     ${tmpltHelperPy.convertDetailPy(${serviceInterface.docException})}
+#end
+#if(${serviceInterface.docPreCondition.length()}>0)		 - PreCondition:  ${tmpltHelperPy.convertDetailPy(${serviceInterface.docPreCondition})}
+#end
+#if(${serviceInterface.docPostCondition.length()}>0)		 - PostCondition: ${tmpltHelperPy.convertDetailPy(${serviceInterface.docPostCondition})}
+#end
+		"""
+		self._${serviceInterface.tmplVarName} = ${tmpltHelper.getBasename(${serviceInterface.interfaceType})}_i()
+#end#end#end#end#end
+		
+
+#if(${rtcParam.servicePorts.size()}>0)
+#foreach($servicePort in ${rtcParam.servicePorts})
+#if(${servicePort.servicePortInterfaces.size()}>0)
+#foreach($serviceInterface in ${servicePort.servicePortInterfaces})
+#if(${serviceInterface.index}==1)
+		"""
+#if(${serviceInterface.docDescription.length()}>0)		${tmpltHelperPy.convertDescDocPy(${serviceInterface.docDescription})}
+#end
+#if(${serviceInterface.docArgument.length()}>0)		 - Argument:      ${tmpltHelperPy.convertDetailPy(${serviceInterface.docArgument})}
+#end
+#if(${serviceInterface.docReturn.length()}>0)		 - Return Value:  ${tmpltHelperPy.convertDetailPy(${serviceInterface.docReturn})}
+#end
+#if(${serviceInterface.docException.length()}>0)		 - Exception:     ${tmpltHelperPy.convertDetailPy(${serviceInterface.docException})}
+#end
+#if(${serviceInterface.docPreCondition.length()}>0)		 - PreCondition:  ${tmpltHelperPy.convertDetailPy(${serviceInterface.docPreCondition})}
+#end
+#if(${serviceInterface.docPostCondition.length()}>0)		 - PostCondition: ${tmpltHelperPy.convertDetailPy(${serviceInterface.docPostCondition})}
+#end
+		"""
+		self._${serviceInterface.tmplVarName} = OpenRTM_aist.CorbaConsumer(interfaceType=${pyConv.convFullName(${serviceInterface.interfaceType})})
+#end#end#end#end#end
+
+		# initialize of configuration-data.
+		# <rtc-template block="init_conf_param">
+#foreach($configParam in ${rtcParam.configParams})
+		"""
+		${tmpltHelperPy.convertDescDocPy(${configParam.docDescription})}
+		 - Name: ${configParam.docDataName} ${configParam.tmplVarName}
+		 - DefaultValue: ${configParam.defaultVal}
+#if(${configParam.docUnit.length()}>0)		 - Unit: ${tmpltHelperPy.convertUnitDocPy(${configParam.docUnit})}
+#end
+#if(${configParam.docRange.length()}>0)		 - Range: ${tmpltHelperPy.convertRangeDocPy(${configParam.docRange})}
+#end
+#if(${configParam.docConstraint.length()}>0)		 - Constraint: ${tmpltHelperPy.convertConstraintDocPy(${configParam.docConstraint})}
+#end
+		"""
+		self._${configParam.tmplVarName} = [${pyConv.convDefaultVal(${configParam})}]
+#end
+		
+		# </rtc-template>
+
+
+		 
+	${sharp}${sharp}
+#if(${rtcParam.getDocActionOverView(0).length()}>0)	${sharp} ${tmpltHelperPy.convertDescDocPy(${rtcParam.getDocActionOverView(0)})}
+#end
+	${sharp}
+	${sharp} The initialize action (on CREATED->ALIVE transition)
+	${sharp} formaer rtc_init_entry() 
+	${sharp} 
+	${sharp} @return RTC::ReturnCode_t
+	${sharp} 
+#if(${rtcParam.getDocActionPreCondition(0).length()}>0)	${sharp} @pre ${tmpltHelperPy.convertPreDocPy(${rtcParam.getDocActionPreCondition(0)})}
+#end
+#if(${rtcParam.getDocActionPostCondition(0).length()}>0)	${sharp} @post ${tmpltHelperPy.convertPostDocPy(${rtcParam.getDocActionPostCondition(0)})}
+#end
+	${sharp}
+	def onInitialize(self):
+		# Bind variables and configuration variable
+#foreach($configParam in ${rtcParam.configParams})
+		self.bindParameter("${configParam.name}", self._${configParam.tmplVarName}, "${configParam.defaultVal}")
+#end
+		
+		# Set InPort buffers
+#foreach($port in ${rtcParam.inports})
+		self.addInPort("${port.name}",self._${port.name}In)
+#end
+		
+		# Set OutPort buffers
+#foreach($port in ${rtcParam.outports})
+		self.addOutPort("${port.name}",self._${port.name}Out)
+#end
+		
+		# Set service provider to Ports
+#if(${rtcParam.servicePorts.size()}>0)
+#foreach($servicePort in ${rtcParam.servicePorts})
+#if(${servicePort.servicePortInterfaces.size()}>0)
+#foreach($serviceInterface in ${servicePort.servicePortInterfaces})
+#if(${serviceInterface.index}==0)
+		self._${servicePort.name}Port.registerProvider("${serviceInterface.name}", "${serviceInterface.interfaceType}", self._${serviceInterface.tmplVarName})
+#end#end#end#end#end
+		
+		# Set service consumers to Ports
+#if(${rtcParam.servicePorts.size()}>0)
+#foreach($servicePort in ${rtcParam.servicePorts})
+#if(${servicePort.servicePortInterfaces.size()}>0)
+#foreach($serviceInterface in ${servicePort.servicePortInterfaces})
+#if(${serviceInterface.index}==1)
+		self._${servicePort.name}Port.registerConsumer("${serviceInterface.name}", "${serviceInterface.interfaceType}", self._${serviceInterface.tmplVarName})
+#end#end#end#end#end
+		
+		# Set CORBA Service Ports
+#if(${rtcParam.servicePorts.size()}>0)
+#foreach($servicePort in ${rtcParam.servicePorts})
+#if(${servicePort.servicePortInterfaces.size()}>0)
+		self.addPort(self._${servicePort.name}Port)
+#end#end#end
+#if(${tmpltHelper.checkDetailContent(0,${rtcParam})})		${rtcParam.getDetailContent(0)}
+#end
+		
+		return RTC.RTC_OK
+	
+	#if(${rtcParam.IsNotImplemented(1)})${sharp}#end	${sharp}${sharp}
+#if(${rtcParam.getDocActionOverView(1).length()}>0)	#if(${rtcParam.IsNotImplemented(1)})${sharp}#end	${sharp} ${tmpltHelperPy.convertActivityDocPy(${rtcParam.getDocActionOverView(1)})}
+#end
+	#if(${rtcParam.IsNotImplemented(1)})${sharp}#end	${sharp} 
+	#if(${rtcParam.IsNotImplemented(1)})${sharp}#end	${sharp} The finalize action (on ALIVE->END transition)
+	#if(${rtcParam.IsNotImplemented(1)})${sharp}#end	${sharp} formaer rtc_exiting_entry()
+	#if(${rtcParam.IsNotImplemented(1)})${sharp}#end	${sharp} 
+	#if(${rtcParam.IsNotImplemented(1)})${sharp}#end	${sharp} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(1)})${sharp}#end
+
+#if(${rtcParam.getDocActionPreCondition(1).length()}>0)	#if(${rtcParam.IsNotImplemented(1)})${sharp}#end	${sharp} @pre ${tmpltHelperPy.convertPreShDocPy(${rtcParam.getDocActionPreCondition(1)})}
+#end
+#if(${rtcParam.getDocActionPostCondition(1).length()}>0)	#if(${rtcParam.IsNotImplemented(1)})${sharp}#end	${sharp} @post ${tmpltHelperPy.convertPostShDocPy(${rtcParam.getDocActionPostCondition(1)})}
+#end
+	#if(${rtcParam.IsNotImplemented(1)})${sharp}#end	${sharp} 
+	#if(${rtcParam.IsNotImplemented(1)})${sharp}#end${def} onFinalize(self):
+	#if(${rtcParam.IsNotImplemented(1)})${sharp}#end
+#if(${tmpltHelper.checkDetailContent(1,${rtcParam})})		${rtcParam.getDetailContent(1)}
+#end
+
+	#if(${rtcParam.IsNotImplemented(1)})${sharp}#end	return RTC.RTC_OK
+	
+	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end	${sharp}${sharp}
+#if(${rtcParam.getDocActionOverView(2).length()}>0)	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end	${sharp} ${tmpltHelperPy.convertActivityDocPy(${rtcParam.getDocActionOverView(2)})}
+#end
+	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end	${sharp} The startup action when ExecutionContext startup
+	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end	${sharp} former rtc_starting_entry()
+	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end	${sharp} 
+	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end	${sharp} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end	${sharp} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end	${sharp}
+#if(${rtcParam.getDocActionPreCondition(2).length()}>0)	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end	${sharp} @pre ${tmpltHelperPy.convertPreShDocPy(${rtcParam.getDocActionPreCondition(2)})}
+#end
+#if(${rtcParam.getDocActionPostCondition(2).length()}>0)	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end	${sharp} @post ${tmpltHelperPy.convertPostShDocPy(${rtcParam.getDocActionPostCondition(2)})}
+#end
+	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end${def} onStartup(self, ec_id):
+	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end
+#if(${tmpltHelper.checkDetailContent(2,${rtcParam})})		${rtcParam.getDetailContent(2)}
+#end
+
+	#if(${rtcParam.IsNotImplemented(2)})${sharp}#end	return RTC.RTC_OK
+	
+	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end	${sharp}${sharp}
+#if(${rtcParam.getDocActionOverView(3).length()}>0)	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end	${sharp} ${tmpltHelperPy.convertActivityDocPy(${rtcParam.getDocActionOverView(3)})}
+#end
+	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end	${sharp} The shutdown action when ExecutionContext stop
+	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end	${sharp} former rtc_stopping_entry()
+	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end	${sharp} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end	${sharp} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end	${sharp}
+#if(${rtcParam.getDocActionPreCondition(3).length()}>0)	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end	${sharp} @pre ${tmpltHelperPy.convertPreShDocPy(${rtcParam.getDocActionPreCondition(3)})}
+#end
+#if(${rtcParam.getDocActionPostCondition(3).length()}>0)	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end	${sharp} @post ${tmpltHelperPy.convertPostShDocPy(${rtcParam.getDocActionPostCondition(3)})}
+#end
+	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end${def} onShutdown(self, ec_id):
+	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end
+#if(${tmpltHelper.checkDetailContent(3,${rtcParam})})		${rtcParam.getDetailContent(3)}
+#end
+
+	#if(${rtcParam.IsNotImplemented(3)})${sharp}#end	return RTC.RTC_OK
+	
+	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end	${sharp}${sharp}
+#if(${rtcParam.getDocActionOverView(4).length()}>0)	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end	${sharp} ${tmpltHelperPy.convertActivityDocPy(${rtcParam.getDocActionOverView(4)})}
+#end
+	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end	${sharp} The activated action (Active state entry action)
+	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end	${sharp} former rtc_active_entry()
+	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end	${sharp} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end	${sharp} 
+	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end	${sharp} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end	${sharp}
+#if(${rtcParam.getDocActionPreCondition(4).length()}>0)	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end	${sharp} @pre ${tmpltHelperPy.convertPreShDocPy(${rtcParam.getDocActionPreCondition(4)})}
+#end
+#if(${rtcParam.getDocActionPostCondition(4).length()}>0)	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end	${sharp} @post ${tmpltHelperPy.convertPostShDocPy(${rtcParam.getDocActionPostCondition(4)})}
+#end
+	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end${def} onActivated(self, ec_id):
+	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end
+#if(${tmpltHelper.checkDetailContent(4,${rtcParam})})		${rtcParam.getDetailContent(4)}
+#end
+
+	#if(${rtcParam.IsNotImplemented(4)})${sharp}#end	return RTC.RTC_OK
+	
+	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end	${sharp}${sharp}
+#if(${rtcParam.getDocActionOverView(5).length()}>0)	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end	${sharp} ${tmpltHelperPy.convertActivityDocPy(${rtcParam.getDocActionOverView(5)})}
+#end
+	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end	${sharp} The deactivated action (Active state exit action)
+	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end	${sharp} former rtc_active_exit()
+	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end	${sharp} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end	${sharp} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end	${sharp}
+#if(${rtcParam.getDocActionPreCondition(5).length()}>0)	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end	${sharp} @pre ${tmpltHelperPy.convertPreShDocPy(${rtcParam.getDocActionPreCondition(5)})}
+#end
+#if(${rtcParam.getDocActionPostCondition(5).length()}>0)	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end	${sharp} @post ${tmpltHelperPy.convertPostShDocPy(${rtcParam.getDocActionPostCondition(5)})}
+#end
+	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end${def} onDeactivated(self, ec_id):
+	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end
+#if(${tmpltHelper.checkDetailContent(5,${rtcParam})})		${rtcParam.getDetailContent(5)}
+#end
+
+	#if(${rtcParam.IsNotImplemented(5)})${sharp}#end	return RTC.RTC_OK
+	
+	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end	${sharp}${sharp}
+#if(${rtcParam.getDocActionOverView(9).length()}>0)	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end	${sharp} ${tmpltHelperPy.convertActivityDocPy(${rtcParam.getDocActionOverView(9)})}
+#end
+	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end	${sharp} The execution action that is invoked periodically
+	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end	${sharp} former rtc_active_do()
+	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end	${sharp} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end	${sharp} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end	${sharp}
+#if(${rtcParam.getDocActionPreCondition(9).length()}>0)	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end	${sharp} @pre ${tmpltHelperPy.convertPreShDocPy(${rtcParam.getDocActionPreCondition(9)})}
+#end
+#if(${rtcParam.getDocActionPostCondition(9).length()}>0)	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end	${sharp} @post ${tmpltHelperPy.convertPostShDocPy(${rtcParam.getDocActionPostCondition(9)})}
+#end
+	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end${def} onExecute(self, ec_id):
+	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end
+#if(${tmpltHelper.checkDetailContent(9,${rtcParam})})		${rtcParam.getDetailContent(9)}
+#end
+
+	#if(${rtcParam.IsNotImplemented(9)})${sharp}#end	return RTC.RTC_OK
+	
+	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end	${sharp}${sharp}
+#if(${rtcParam.getDocActionOverView(6).length()}>0)	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end	${sharp} ${tmpltHelperPy.convertActivityDocPy(${rtcParam.getDocActionOverView(6)})}
+#end
+	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end	${sharp} The aborting action when main logic error occurred.
+	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end	${sharp} former rtc_aborting_entry()
+	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end	${sharp} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end	${sharp} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end	${sharp}
+#if(${rtcParam.getDocActionPreCondition(6).length()}>0)	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end	${sharp} @pre ${tmpltHelperPy.convertPreShDocPy(${rtcParam.getDocActionPreCondition(6)})}
+#end
+#if(${rtcParam.getDocActionPostCondition(6).length()}>0)	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end	${sharp} @post ${tmpltHelperPy.convertPostShDocPy(${rtcParam.getDocActionPostCondition(6)})}
+#end
+	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end${def} onAborting(self, ec_id):
+	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end
+#if(${tmpltHelper.checkDetailContent(6,${rtcParam})})		${rtcParam.getDetailContent(6)}
+#end
+
+	#if(${rtcParam.IsNotImplemented(6)})${sharp}#end	return RTC.RTC_OK
+	
+	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end	${sharp}${sharp}
+#if(${rtcParam.getDocActionOverView(7).length()}>0)	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end	${sharp} ${tmpltHelperPy.convertActivityDocPy(${rtcParam.getDocActionOverView(7)})}
+#end
+	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end	${sharp} The error action in ERROR state
+	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end	${sharp} former rtc_error_do()
+	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end	${sharp} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end	${sharp} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end	${sharp}
+#if(${rtcParam.getDocActionPreCondition(7).length()}>0)	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end	${sharp} @pre ${tmpltHelperPy.convertPreShDocPy(${rtcParam.getDocActionPreCondition(7)})}
+#end
+#if(${rtcParam.getDocActionPostCondition(7).length()}>0)	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end	${sharp} @post ${tmpltHelperPy.convertPostShDocPy(${rtcParam.getDocActionPostCondition(7)})}
+#end
+	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end${def} onError(self, ec_id):
+	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end
+#if(${tmpltHelper.checkDetailContent(7,${rtcParam})})		${rtcParam.getDetailContent(7)}
+#end
+
+	#if(${rtcParam.IsNotImplemented(7)})${sharp}#end	return RTC.RTC_OK
+	
+	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end	${sharp}${sharp}
+#if(${rtcParam.getDocActionOverView(8).length()}>0)	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end	${sharp} ${tmpltHelperPy.convertActivityDocPy(${rtcParam.getDocActionOverView(8)})}
+#end
+	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end	${sharp} The reset action that is invoked resetting
+	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end	${sharp} This is same but different the former rtc_init_entry()
+	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end	${sharp} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end	${sharp} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end	${sharp}
+#if(${rtcParam.getDocActionPreCondition(8).length()}>0)	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end	${sharp} @pre ${tmpltHelperPy.convertPreShDocPy(${rtcParam.getDocActionPreCondition(8)})}
+#end
+#if(${rtcParam.getDocActionPostCondition(8).length()}>0)	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end	${sharp} @post ${tmpltHelperPy.convertPostShDocPy(${rtcParam.getDocActionPostCondition(8)})}
+#end
+	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end${def} onReset(self, ec_id):
+	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end
+#if(${tmpltHelper.checkDetailContent(8,${rtcParam})})		${rtcParam.getDetailContent(8)}
+#end
+
+	#if(${rtcParam.IsNotImplemented(8)})${sharp}#end	return RTC.RTC_OK
+	
+	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end	${sharp}${sharp}
+#if(${rtcParam.getDocActionOverView(10).length()}>0)	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end	${sharp} ${tmpltHelperPy.convertActivityDocPy(${rtcParam.getDocActionOverView(10)})}
+#end
+	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end	${sharp} The state update action that is invoked after onExecute() action
+	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end	${sharp} no corresponding operation exists in OpenRTm-aist-0.2.0
+	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end	${sharp} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end	${sharp} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end	${sharp}
+
+#if(${rtcParam.getDocActionPreCondition(10).length()}>0)	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end	${sharp} @pre ${tmpltHelperPy.convertPreShDocPy(${rtcParam.getDocActionPreCondition(10)})}
+#end
+#if(${rtcParam.getDocActionPostCondition(10).length()}>0)	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end	${sharp} @post ${tmpltHelperPy.convertPostShDocPy(${rtcParam.getDocActionPostCondition(10)})}
+#end
+	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end${def} onStateUpdate(self, ec_id):
+	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end
+#if(${tmpltHelper.checkDetailContent(10,${rtcParam})})		${rtcParam.getDetailContent(10)}
+#end
+
+	#if(${rtcParam.IsNotImplemented(10)})${sharp}#end	return RTC.RTC_OK
+	
+	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end	${sharp}${sharp}
+#if(${rtcParam.getDocActionOverView(11).length()}>0)	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end	${sharp} ${tmpltHelperPy.convertActivityDocPy(${rtcParam.getDocActionOverView(11)})}
+#end
+	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end	${sharp} The action that is invoked when execution context's rate is changed
+	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end	${sharp} no corresponding operation exists in OpenRTm-aist-0.2.0
+	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end	${sharp} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end	${sharp} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end	${sharp}
+#if(${rtcParam.getDocActionPreCondition(11).length()}>0)	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end	${sharp} @pre ${tmpltHelperPy.convertPreShDocPy(${rtcParam.getDocActionPreCondition(11)})}
+#end
+#if(${rtcParam.getDocActionPostCondition(11).length()}>0)	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end	${sharp} @post ${tmpltHelperPy.convertPostShDocPy(${rtcParam.getDocActionPostCondition(11)})}
+#end
+	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end	${sharp}
+	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end${def} onRateChanged(self, ec_id):
+	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end
+#if(${tmpltHelper.checkDetailContent(11,${rtcParam})})		${rtcParam.getDetailContent(11)}
+#end
+
+	#if(${rtcParam.IsNotImplemented(11)})${sharp}#end	return RTC.RTC_OK
+	
+
+
+
+def ${rtcParam.name}Init(manager):
+    profile = OpenRTM_aist.Properties(defaults_str=${pyConv.convToLower(${rtcParam.name})}_spec)
+    manager.registerFactory(profile,
+                            ${rtcParam.name},
+                            OpenRTM_aist.Delete)
+
+def MyModuleInit(manager):
+    ${rtcParam.name}Init(manager)
+
+    # Create a component
+    comp = manager.createComponent("${rtcParam.name}")
+
+def main():
+	mgr = OpenRTM_aist.Manager.init(sys.argv)
+	mgr.setModuleInitProc(MyModuleInit)
+	mgr.activateManager()
+	mgr.runManager()
+
+if __name__ == "__main__":
+	main()
+

@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: jp.go.aist.rtm.rtcbuilder.lua
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: jp.go.aist.rtm.rtcbuilder.lua.RtcBuilderLuaPlugin
+Bundle-Vendor: %providerName
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ jp.go.aist.rtm.rtcbuilder;bundle-version="1.2.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy

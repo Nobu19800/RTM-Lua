@@ -1,0 +1,9 @@
+
+#if( ${rtcParam.docCreator.length()} > 0 )
+ \author ${tmpltHelper.convertAuthorDocPy(${rtcParam.docCreator})}
+#end
+#if( ${rtcParam.docLicense.length()} > 0 )
+
+ ${tmpltHelper.convertDocPy(${rtcParam.docLicense})}
+#end
+

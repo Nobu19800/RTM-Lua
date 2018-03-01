@@ -11,9 +11,8 @@ local version= {}
 --_G["openrtm.version"] = version
 
 
-version.openrtm_name = "OpenRTM-aist-1.2.0"
-version.openrtm_version = "1.2.0"
-version.corba_name = "omniORB"
+version.openrtm_name = "OpenRTM-Lua-0.2"
+version.corba_name = "OiL"
 
 
 return version

@@ -727,6 +727,7 @@ end
 -- インスタンス名指定の場合はRTCを検索する
 function Manager:deleteComponent(argv)
 	if argv.instance_name ~= nil then
+		local instance_name = argv.instance_name
 		self._rtcout.RTC_TRACE("Manager.deleteComponent("..instance_name..")")
 		local _comp = self._compManager:find(instance_name)
 		if _comp ~= nil then
@@ -735,6 +736,7 @@ function Manager:deleteComponent(argv)
 		end
 		self:deleteComponent({comp=_comp})
 	elseif argv.comp ~= nil then
+		local comp = argv.comp
 		self._rtcout:RTC_TRACE("Manager.deleteComponent(RTObject_impl)")
 
 		self:unregisterComponent(comp)

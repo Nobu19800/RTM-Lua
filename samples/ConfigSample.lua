@@ -50,17 +50,17 @@ ConfigSample.new = function(manager)
 	local obj = {}
 	-- RTObjectをメタオブジェクトに設定する
 	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
+	-- コンフィギュレーションパラメータをバインドする変数
+	obj._int_param0 = {_value=0}
+	obj._int_param1 = {_value=1}
+	obj._double_param0 = {_value=0.11}
+	obj._double_param1 = {_value=9.9}
+	obj._str_param0 = {_value="hoge"}
+	obj._str_param1 = {_value="dara"}
+	obj._vector_param0 = {_value={0.0, 1.0, 2.0, 3.0, 4.0}}
 	-- 初期化時のコールバック関数
 	-- @return リターンコード
 	function obj:onInitialize()
-		-- コンフィギュレーションパラメータをバインドする変数
-		self._int_param0 = {_value=0}
-		self._int_param1 = {_value=1}
-		self._double_param0 = {_value=0.11}
-		self._double_param1 = {_value=9.9}
-		self._str_param0 = {_value="hoge"}
-		self._str_param1 = {_value="dara"}
-		self._vector_param0 = {_value={0.0, 1.0, 2.0, 3.0, 4.0}}
 
 		-- コンフィギュレーションパラメータを変数にバインドする
 		self:bindParameter("int_param0", self._int_param0, "0")

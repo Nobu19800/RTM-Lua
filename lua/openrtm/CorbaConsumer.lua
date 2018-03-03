@@ -132,7 +132,7 @@ CorbaConsumer.new = function(interfaceType, consumer)
 	-- オブジェクトリファレンスにnullを設定する
 	function obj:releaseObject()
 		self:_releaseObject(self)
-		self._var = CORBA.Object._nil
+		self._var = oil.corba.idl.null
 		self._sev = nil
 	end
 	return obj

@@ -898,6 +898,11 @@ function Manager:initORB()
 	self._ReturnCode_t = self._orb.types:lookup("::RTC::ReturnCode_t").labelvalue
 end
 
+
+function Manager:loadIdLFile(name)
+	self._orb:loadidlfile(name)
+end
+
 -- IDLファイルパス取得
 -- @param name IDLファイル名
 -- IDLファイルは、Manager.luaの存在するディレクトリの2階層上のディレクトリを検索する

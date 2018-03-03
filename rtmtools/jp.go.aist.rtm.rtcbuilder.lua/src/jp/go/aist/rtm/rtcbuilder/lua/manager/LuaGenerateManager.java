@@ -1,5 +1,9 @@
 package jp.go.aist.rtm.rtcbuilder.lua.manager;
 
+import static jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants.*;
+import static jp.go.aist.rtm.rtcbuilder.lua.IRtcBuilderConstantsLua.*;
+import static jp.go.aist.rtm.rtcbuilder.util.RTCUtil.*;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,20 +14,14 @@ import jp.go.aist.rtm.rtcbuilder.generator.GeneratedResult;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlFileParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.idl.ServiceClassParam;
-import jp.go.aist.rtm.rtcbuilder.manager.GenerateManager;
 import jp.go.aist.rtm.rtcbuilder.lua.ui.Perspective.LuaProperty;
+import jp.go.aist.rtm.rtcbuilder.manager.GenerateManager;
 import jp.go.aist.rtm.rtcbuilder.template.TemplateHelper;
 import jp.go.aist.rtm.rtcbuilder.template.TemplateUtil;
 import jp.go.aist.rtm.rtcbuilder.ui.Perspective.LanguageProperty;
 
-import static jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants.*;
-import static jp.go.aist.rtm.rtcbuilder.util.RTCUtil.form;
-
-import static jp.go.aist.rtm.rtcbuilder.lua.IRtcBuilderConstantsLua.LANG_LUA;
-import static jp.go.aist.rtm.rtcbuilder.lua.IRtcBuilderConstantsLua.LANG_LUA_ARG;
-
 /**
- * Pythonファイルの出力を制御するマネージャ
+ * Luaファイルの出力を制御するマネージャ
  */
 public class LuaGenerateManager extends GenerateManager {
 
@@ -57,7 +55,7 @@ public class LuaGenerateManager extends GenerateManager {
 
 	/**
 	 * ファイルを出力する
-	 * 
+	 *
 	 * @param generatorParam
 	 * @return 出力結果のリスト
 	 */
@@ -112,6 +110,7 @@ public class LuaGenerateManager extends GenerateManager {
 		gr = generateLuaSource(contextMap);
 		result.add(gr);
 
+		/*
 		if ( 0<allIdlFileParams.size() ) {
 			gr = generateIDLCompileBat(contextMap);
 			result.add(gr);
@@ -120,6 +119,7 @@ public class LuaGenerateManager extends GenerateManager {
 			gr = generateDeleteBat(contextMap);
 			result.add(gr);
 		}
+		*/
 
 		for (IdlFileParam idlFileParam : rtcParam.getProviderIdlPathes()) {
 			contextMap.put("idlFileParam", idlFileParam);
@@ -142,34 +142,41 @@ public class LuaGenerateManager extends GenerateManager {
 
 	public GeneratedResult generateLuaSource(Map<String, Object> contextMap) {
 		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
-		String outfile = rtcParam.getName() + ".py";
-		String infile = "lua/Lua_RTC.py.vsl";
-		return generate(infile, outfile, contextMap);
+		String outfile = rtcParam.getName() + ".lua";
+		String infile = "lua/Lua_RTC.lua.vsl";
+		GeneratedResult result = generate(infile, outfile, contextMap);
+		result.setNotBom(true);
+		//result.setEncode("UTF-8");
+		return result;
 	}
 
 	public GeneratedResult generateSVCIDLExampleSource(
 			Map<String, Object> contextMap) {
 		IdlFileParam idlParam = (IdlFileParam) contextMap.get("idlFileParam");
-		String outfile = idlParam.getIdlFileNoExt() + "_idl_example.py";
-		String infile = "lua/Lua_SVC_idl_example.py.vsl";
-		return generate(infile, outfile, contextMap);
+		String outfile = idlParam.getIdlFileNoExt() + "_idl_example.lua";
+		String infile = "lua/Lua_SVC_idl_example.lua.vsl";
+		GeneratedResult result = generate(infile, outfile, contextMap);
+		result.setNotBom(true);
+		return result;
 	}
 
 	// 1.0系 (ビルド環境)
+
 
 	public GeneratedResult generateIDLCompileBat(Map<String, Object> contextMap) {
 		String outfile = "idlcompile.bat";
 		String infile = "lua/idlcompile.bat.vsl";
 		GeneratedResult result = generate(infile, outfile, contextMap);
-		result.setEncode("Shift_JIS");
+		//result.setEncode("Shift_JIS");
 		return result;
 	}
+
 
 	public GeneratedResult generateIDLCompileSh(Map<String, Object> contextMap) {
 		String outfile = "idlcompile.sh";
 		String infile = "lua/idlcompile.sh.vsl";
 		GeneratedResult result = generate(infile, outfile, contextMap);
-		result.setNotBom(true);
+		//result.setNotBom(true);
 		return result;
 	}
 
@@ -177,22 +184,23 @@ public class LuaGenerateManager extends GenerateManager {
 		String outfile = "delete.bat";
 		String infile = "lua/delete.bat.vsl";
 		GeneratedResult result = generate(infile, outfile, contextMap);
-		result.setEncode("Shift_JIS");
+		//result.setEncode("Shift_JIS");
 		return result;
 	}
+
 	//////////
 	public GeneratedResult generateLuaTestSource(Map<String, Object> contextMap) {
 		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
-		String outfile = "test/" + rtcParam.getName() + "Test.py";
-		String infile = "lua/test/Lua_Test_RTC.py.vsl";
+		String outfile = "test/" + rtcParam.getName() + "Test.lua";
+		String infile = "lua/test/Lua_Test_RTC.lua.vsl";
 		return generate(infile, outfile, contextMap);
 	}
-	
+
 	public GeneratedResult generateTestSVCIDLExampleSource(
 			Map<String, Object> contextMap) {
 		IdlFileParam idlParam = (IdlFileParam) contextMap.get("idlFileParam");
-		String outfile = "test/" + idlParam.getIdlFileNoExt() + "_idl_example.py";
-		String infile = "lua/Lua_SVC_idl_example.py.vsl";
+		String outfile = "test/" + idlParam.getIdlFileNoExt() + "_idl_example.lua";
+		String infile = "lua/Lua_SVC_idl_example.lua.vsl";
 		return generate(infile, outfile, contextMap);
 	}
 	//////////

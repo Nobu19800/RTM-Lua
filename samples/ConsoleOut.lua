@@ -36,13 +36,16 @@ ConsoleOut.new = function(manager)
 	local obj = {}
 	-- RTObjectをメタオブジェクトに設定する
 	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
+	
+	-- データ格納変数
+	obj._d_in = {tm={sec=0,nsec=0},data=0}
+	-- インポート生成
+	obj._inIn = openrtm.InPort.new("in",obj._d_in,"::RTC::TimedLong")
+		
 	-- 初期化時のコールバック関数
 	-- @return リターンコード
 	function obj:onInitialize()
-		-- データ格納変数
-		self._d_in = {tm={sec=0,nsec=0},data=0}
-		-- インポート生成
-		self._inIn = openrtm.InPort.new("in",self._d_in,"::RTC::TimedLong")
+		
 		-- ポート追加
 		self:addInPort("in",self._inIn)
 

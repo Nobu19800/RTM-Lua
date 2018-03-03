@@ -61,7 +61,7 @@ public class LuaConverter {
 
 	/**
 	 * CORBA型からLua型へ型を変換する(TypeDef考慮)
-	 * 
+	 *
 	 * @param strCorba CORBA型
 	 * @return Lua型
 	 */
@@ -71,7 +71,7 @@ public class LuaConverter {
 		if(strType.endsWith("[]")) {
 			strType = strType.substring(0, strType.length()-2);
 		}
-		
+
 		if( strType.equals(luaString)) {
 			result = "(omniORB.tcInternal.tv_string,0)";
 		} else {
@@ -81,7 +81,7 @@ public class LuaConverter {
 	}
 	/**
 	 * CORBA型からLua型へ型を変換する
-	 * 
+	 *
 	 * @param strCorba CORBA型
 	 * @param scp サービスクラス
 	 * @return Lua型
@@ -94,7 +94,7 @@ public class LuaConverter {
 	}
 	/**
 	 * CORBA型からLua型へ型を変換する(コメント用)
-	 * 
+	 *
 	 * @param strCorba CORBA型
 	 * @param scp サービスクラス
 	 * @return Lua型
@@ -107,7 +107,7 @@ public class LuaConverter {
 	}
 	/**
 	 * CORBA型からLua型へ型を変換する
-	 * 
+	 *
 	 * @param strCorba CORBA型
 	 * @param scp サービスクラス
 	 * @return Lua型
@@ -133,7 +133,7 @@ public class LuaConverter {
 	}
 	/**
 	 * メソッド入力パラメータの型を取得する
-	 * 
+	 *
 	 * @param strCorba CORBA型
 	 * @param scp サービスクラス
 	 * @return 入力パラメータ
@@ -155,25 +155,33 @@ public class LuaConverter {
 
 	/**
 	 * メソッド入力パラメータの名称を取得する
-	 * 
+	 *
 	 * @param strCorba CORBA型
 	 * @param scp サービスクラス
 	 * @return 入力パラメータ
 	 */
 	public String selectInParamName(ServiceMethodParam smp, ServiceClassParam scp) {
 		String result = "";
-
+		int count = 0;
 		for(ServiceArgumentParam arg : smp.getArguments() ) {
 			if(arg.getDirection().equals(dirIn) || arg.getDirection().equals(dirInOut)) {
-				result =  result + ", " + arg.getName();
+				if(count == 0)
+				{
+					result =  arg.getName();
+				}
+				else
+				{
+					result =  result + ", " + arg.getName();
+				}
+				count++;
 			}
 		}
 		return result;
 	}
-	
+
 	/**
 	 * メソッド出力パラメータの型を取得する
-	 * 
+	 *
 	 * @param strCorba CORBA型
 	 * @param scp サービスクラス
 	 * @return 出力ラメータ
@@ -197,7 +205,7 @@ public class LuaConverter {
 	}
 	/**
 	 * メソッド出力パラメータの名称を取得する
-	 * 
+	 *
 	 * @param strCorba CORBA型
 	 * @param scp サービスクラス
 	 * @return 出力パラメータ
@@ -205,7 +213,7 @@ public class LuaConverter {
 	public String selectOutParamName(ServiceMethodParam smp, ServiceClassParam scp) {
 		String result = "";
 		boolean blnHit = false;
-		
+
 		if( !smp.getType().equals(idlVoid) ) {
 			result = " result";
 		}
@@ -223,7 +231,7 @@ public class LuaConverter {
 	}
 	/**
 	 * Sequence型か判断する
-	 * 
+	 *
 	 * @param type 検証対象型
 	 * @return 検証結果
 	 */
@@ -234,7 +242,7 @@ public class LuaConverter {
 	}
 	/**
 	 * Sequence型か判断する
-	 * 
+	 *
 	 * @param type 検証対象型
 	 * @return 検証結果
 	 */
@@ -245,7 +253,7 @@ public class LuaConverter {
 	}
 	/**
 	 * パラメータの初期値を取得する
-	 * 
+	 *
 	 * @param config 対象パラメータ
 	 * @return 初期値
 	 */
@@ -256,7 +264,7 @@ public class LuaConverter {
 	}
 	/**
 	 * パラメータの初期値を取得する
-	 * 
+	 *
 	 * @param config 対象パラメータ
 	 * @return 初期値
 	 */
@@ -277,19 +285,19 @@ public class LuaConverter {
 			return defVal;
 		}
 	}
-	
+
 	/**
 	 * データポート初期化用メソッド名を返す
-	 * 
+	 *
 	 * @param rtcType ポートの型
 	 * @return 初期化メソッド名
 	 */
 	public String getDataportInitMethodName(String rtcType) {
-		
+
 		//module名が付いていないデータ型（::が付いていない）は、
 		//文字列に()を付けてデフォルトコンストラクタ扱いにする
 		if(!rtcType.matches(".*::.*")) return rtcType + "()";
-		String methodName = rtcType.replace("::", ".");
+		String methodName = "::"+rtcType;
 
 		//module名が「RTC」のときは親データ型である「Time」のコンストラクタを引数に入れた
 		//コンストラクタを引数に入れコンストラクタ文字列にして返す
@@ -300,13 +308,13 @@ public class LuaConverter {
 //		else {
 //			methodName = methodName + "()";
 //		}
-		
+
 		return methodName;
 	}
-	
+
 	/**
 	 * データポート変数型定義変数を返す
-	 * 
+	 *
 	 * @param rtcType ポートの型
 	 * @return 変数型定義変数
 	 */
@@ -318,29 +326,29 @@ public class LuaConverter {
 	public String convFullName(String source) {
 		if(source.contains("::")) {
 			return source.replace("::", ".");
-			
+
 		}
 		return "_GlobalIDL." + source;
 	}
-	
+
 	public String getModuleName(String source) {
 		if(source.contains("::")) {
 			int index = source.lastIndexOf("::");
 			return source.substring(0, index);
-			
+
 		}
 		return "_GlobalIDL";
 	}
-	
+
 	public String convToLower(String source) {
 		return source.toLowerCase();
 	}
-	
+
 	public String convModuleName(IdlFileParam source) {
 		List<String> addedList = new ArrayList<String>();
 		StringBuilder strWork;
 		StringBuilder result = new StringBuilder();
-		
+
 		boolean existGlobal = false;
 		for(ServiceClassParam target : source.getServiceClassParams() ) {
 			strWork = new StringBuilder();
@@ -366,12 +374,12 @@ public class LuaConverter {
 		}
 		return result.toString();
 	}
-	
+
 	public String convModuleNameAll(List<IdlFileParam> sourceList) {
 		List<String> addedList = new ArrayList<String>();
 		StringBuilder strWork;
 		StringBuilder result = new StringBuilder();
-		
+
 		boolean existGlobal = false;
 		for(IdlFileParam source : sourceList) {
 			for(ServiceClassParam target : source.getServiceClassParams() ) {

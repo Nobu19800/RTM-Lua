@@ -112,13 +112,16 @@ MyServiceProvider.new = function(manager)
 	local obj = {}
 	-- RTObjectをメタオブジェクトに設定する
 	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
+	
+	-- サービスポート生成
+	obj._myServicePort = openrtm.CorbaPort.new("MyService")
+	-- プロバイダオブジェクト生成
+	obj._myservice0 = MyServiceSVC_impl.new()
+		
+		
 	-- 初期化時のコールバック関数
 	-- @return リターンコード
 	function obj:onInitialize()
-		-- サービスポート生成
-		self._myServicePort = openrtm.CorbaPort.new("MyService")
-		-- プロバイダオブジェクト生成
-		self._myservice0 = MyServiceSVC_impl.new()
 		-- サービスポートにプロバイダオブジェクトを登録
 		self._myServicePort:registerProvider("myservice0", "MyService", self._myservice0, "../idl/MyService.idl", "IDL:SimpleService/MyService:1.0")
 		-- ポート追加

@@ -36,33 +36,37 @@ SeqIn.new = function(manager)
 	local obj = {}
 	-- RTObjectをメタオブジェクトに設定する
 	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
+	
+	-- データ格納変数
+	obj._d_octet = {tm={sec=0,nsec=0},data=0}
+	obj._d_short = {tm={sec=0,nsec=0},data=0}
+	obj._d_long = {tm={sec=0,nsec=0},data=0}
+	obj._d_float = {tm={sec=0,nsec=0},data=0}
+	obj._d_double = {tm={sec=0,nsec=0},data=0}
+	obj._d_octetSeq = {tm={sec=0,nsec=0},data=""}
+	obj._d_shortSeq = {tm={sec=0,nsec=0},data={}}
+	obj._d_longSeq = {tm={sec=0,nsec=0},data={}}
+	obj._d_floatSeq = {tm={sec=0,nsec=0},data={}}
+	obj._d_doubleSeq = {tm={sec=0,nsec=0},data={}}
+
+	-- インポート生成
+	obj._octetIn = openrtm.InPort.new("Octet",obj._d_octet,"::RTC::TimedOctet")
+	obj._shortIn = openrtm.InPort.new("Short",obj._d_short,"::RTC::TimedShort")
+	obj._longIn = openrtm.InPort.new("Long",obj._d_long,"::RTC::TimedLong")
+	obj._floatIn = openrtm.InPort.new("Float",obj._d_float,"::RTC::TimedFloat")
+	obj._doubleIn = openrtm.InPort.new("Double",obj._d_double,"::RTC::TimedDouble")
+	obj._octetSeqIn = openrtm.InPort.new("OctetSeq",obj._d_octetSeq,"::RTC::TimedOctetSeq")
+	obj._shortSeqIn = openrtm.InPort.new("ShortSeq",obj._d_shortSeq,"::RTC::TimedShortSeq")
+	obj._longSeqIn = openrtm.InPort.new("LongSeq",obj._d_longSeq,"::RTC::TimedLongSeq")
+	obj._floatSeqIn = openrtm.InPort.new("FloatSeq",obj._d_floatSeq,"::RTC::TimedFloatSeq")
+	obj._doubleSeqIn = openrtm.InPort.new("DoubleSeq",obj._d_doubleSeq,"::RTC::TimedDoubleSeq")
+
+
+
 	-- 初期化時のコールバック関数
 	-- @return リターンコード
 	function obj:onInitialize()
-		-- データ格納変数
-		self._d_octet = {tm={sec=0,nsec=0},data=0}
-		self._d_short = {tm={sec=0,nsec=0},data=0}
-		self._d_long = {tm={sec=0,nsec=0},data=0}
-		self._d_float = {tm={sec=0,nsec=0},data=0}
-		self._d_double = {tm={sec=0,nsec=0},data=0}
-		self._d_octetSeq = {tm={sec=0,nsec=0},data=""}
-		self._d_shortSeq = {tm={sec=0,nsec=0},data={}}
-		self._d_longSeq = {tm={sec=0,nsec=0},data={}}
-		self._d_floatSeq = {tm={sec=0,nsec=0},data={}}
-		self._d_doubleSeq = {tm={sec=0,nsec=0},data={}}
-
-		-- インポート生成
-		self._octetIn = openrtm.InPort.new("Octet",self._d_octet,"::RTC::TimedOctet")
-		self._shortIn = openrtm.InPort.new("Short",self._d_short,"::RTC::TimedShort")
-		self._longIn = openrtm.InPort.new("Long",self._d_long,"::RTC::TimedLong")
-		self._floatIn = openrtm.InPort.new("Float",self._d_float,"::RTC::TimedFloat")
-		self._doubleIn = openrtm.InPort.new("Double",self._d_double,"::RTC::TimedDouble")
-		self._octetSeqIn = openrtm.InPort.new("OctetSeq",self._d_octetSeq,"::RTC::TimedOctetSeq")
-		self._shortSeqIn = openrtm.InPort.new("ShortSeq",self._d_shortSeq,"::RTC::TimedShortSeq")
-		self._longSeqIn = openrtm.InPort.new("LongSeq",self._d_longSeq,"::RTC::TimedLongSeq")
-		self._floatSeqIn = openrtm.InPort.new("FloatSeq",self._d_floatSeq,"::RTC::TimedFloatSeq")
-		self._doubleSeqIn = openrtm.InPort.new("DoubleSeq",self._d_doubleSeq,"::RTC::TimedDoubleSeq")
-
+		
 		-- ポート追加
 		self:addInPort("Octet",self._octetIn)
 		self:addInPort("Short",self._shortIn)

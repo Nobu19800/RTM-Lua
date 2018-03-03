@@ -42,6 +42,10 @@ RTCUtil.getReference = function(orb, servant, idl)
 	return nil
 end
 
+RTCUtil.instantiateDataType = function(data_type)
+	return {tm={sec=0,nsec=0},data={}}
+end
+
 
 
 return RTCUtil

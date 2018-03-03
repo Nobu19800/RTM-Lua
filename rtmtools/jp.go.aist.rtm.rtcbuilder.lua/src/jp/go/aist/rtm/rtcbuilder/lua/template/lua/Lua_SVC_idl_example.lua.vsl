@@ -1,0 +1,80 @@
+local openrtm  = require "openrtm"
+
+
+--[[
+ @file ${idlFileParam.idlFileNoExt}_idl_examplefile.py
+ @brief Lua example implementations generated from ${idlFileParam.idlFile}
+#set( $Date$ = "dummy" )
+ @date \$Date$
+
+#if( ${rtcParam.docCreator.length()} > 0 )
+ @author ${tmpltHelperLua.convertAuthorDocLua(${rtcParam.docCreator})}
+#end
+#if( ${rtcParam.docLicense.length()} > 0 )
+
+ ${tmpltHelperLua.convertDocLua(${rtcParam.docLicense})}
+#end
+
+--]]
+
+
+local ${idlFileParam.idlFileNoExt}_idl_example = {}
+
+
+#foreach($serviceClassParam in ${idlFileParam.serviceClassParams})
+
+${idlFileParam.idlFileNoExt}_idl_example.${tmpltHelper.getBasename(${serviceClassParam.name})}_i = {}
+${idlFileParam.idlFileNoExt}_idl_example.${tmpltHelper.getBasename(${serviceClassParam.name})}_i.new = function()
+    --[[
+    @class ${tmpltHelper.getBasename(${serviceClassParam.name})}_i
+    Example class implementing IDL interface ${tmpltHelper.convFormat(${serviceClassParam.name})}
+    --]]
+    local obj = {}
+
+    --[[
+    @brief standard constructor
+    Initialise member variables here
+    --]]
+
+#foreach($serviceMethodParam in ${serviceClassParam.methods})
+    -- ${luaConv.convCORBA2LuaArg(${serviceMethodParam.type})} ${serviceMethodParam.name}(#foreach($serviceArgumentParam in ${serviceMethodParam.arguments})#if($velocityCount > 1), #end${serviceArgumentParam.direction} ${luaConv.convCORBA2LuathonArg(${serviceArgumentParam.type})} ${serviceArgumentParam.name}#end)
+    function obj:${serviceMethodParam.name}(${luaConv.selectInParamName(${serviceMethodParam},${serviceClassParam})})
+        error(openrtm.Manager:getORB():newexcept{"CORBA::NO_IMPLEMENT",
+              minor=0,
+              completed=openrtm.Manager:getORB().types:lookup("::CORBA::CompletionStatus").labelvalue.COMPLETED_NO})
+        -- *** Implement me
+        -- Must return:${luaConv.selectOutParamName(${serviceMethodParam},${serviceClassParam})}
+    end
+
+#end
+    return obj
+end
+
+#end
+if openrtm.Manager.is_main() then
+    
+    local oil = require "oil"
+    oil.main(function()
+        -- Initialise the ORB
+        local orb = oil.init{ flavor = "cooperative;corba;intercepted;typed;base;" }
+
+        oil.newthread(self._orb.run, self._orb)
+
+        -- Create an instance of a servant class
+        local obj = ${idlFileParam.idlFileNoExt}_idl_example.${tmpltHelper.getBasename(${idlFileParam.serviceClassParams.get(0).name})}_i.new()
+        local servant = orb:newservant(obj, nil, "${tmpltHelperLua.convertServiceInterfaceName(${idlFileParam.serviceClassParams.get(0).name})}")
+
+
+
+        -- Get the object reference to the object
+        local objref = openrtm.RTCUtil.getReference()
+    
+        -- Print a stringified IOR for it
+        print(orb:tostring(servant))
+
+        -- Run the ORB, blocking this thread
+        orb:run()
+    end)
+end
+
+return ${idlFileParam.idlFileNoExt}_idl_example

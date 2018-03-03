@@ -53,13 +53,14 @@ MyServiceConsumer.new = function(manager)
 	local obj = {}
 	-- RTObjectをメタオブジェクトに設定する
 	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
+	
+	-- サービスポート生成
+	obj._myServicePort = openrtm.CorbaPort.new("MyService")
+	-- コンシューマオブジェクト生成
+	obj._myservice0 = openrtm.CorbaConsumer.new("IDL:SimpleService/MyService:1.0")
 	-- 初期化時のコールバック関数
 	-- @return リターンコード
 	function obj:onInitialize()
-		-- サービスポート生成
-		self._myServicePort = openrtm.CorbaPort.new("MyService")
-		-- コンシューマオブジェクト生成
-		self._myservice0 = openrtm.CorbaConsumer.new("IDL:SimpleService/MyService:1.0")
 		-- サービスポートにコンシューマオブジェクトを登録
 		self._myServicePort:registerConsumer("myservice0", "MyService", self._myservice0, "../idl/MyService.idl")
 		-- ポート追加

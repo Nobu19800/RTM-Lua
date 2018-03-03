@@ -69,7 +69,7 @@ public class LuaCMakeGenerateManager extends CMakeGenerateManager {
 		String outfile = "CMakeLists.txt";
 		String infile = "cmake/CMakeLists.txt.vsl";
 		GeneratedResult result = generateLua(infile, outfile, contextMap); 
-		result.setNotBom(true);
+		//result.setNotBom(true);
 		return result;
 	}
 
@@ -97,7 +97,7 @@ public class LuaCMakeGenerateManager extends CMakeGenerateManager {
 		String outfile = "cmake/cpack_options.cmake.in";
 		String infile = "cmake/cpack_options_cmake.in.vsl";
 		GeneratedResult result = generateLua(infile, outfile, contextMap); 
-		result.setNotBom(true);
+		//result.setNotBom(true);
 		return result;
 	}
 	
@@ -106,7 +106,7 @@ public class LuaCMakeGenerateManager extends CMakeGenerateManager {
 		String outfile = "src/CMakeLists.txt";
 		String infile = "cmake/SrcCMakeLists.txt.vsl";
 		GeneratedResult result = generateLua(infile, outfile, contextMap); 
-		result.setNotBom(true);
+		//result.setNotBom(true);
 		return result;
 	}
 	/////

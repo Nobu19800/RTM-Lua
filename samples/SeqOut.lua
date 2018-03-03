@@ -36,33 +36,37 @@ SeqOut.new = function(manager)
 	local obj = {}
 	-- RTObjectをメタオブジェクトに設定する
 	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
+	
+	-- データ格納変数
+	obj._d_octet = {tm={sec=0,nsec=0},data=0}
+	obj._d_short = {tm={sec=0,nsec=0},data=0}
+	obj._d_long = {tm={sec=0,nsec=0},data=0}
+	obj._d_float = {tm={sec=0,nsec=0},data=0}
+	obj._d_double = {tm={sec=0,nsec=0},data=0}
+	obj._d_octetSeq = {tm={sec=0,nsec=0},data=""}
+	obj._d_shortSeq = {tm={sec=0,nsec=0},data={}}
+	obj._d_longSeq = {tm={sec=0,nsec=0},data={}}
+	obj._d_floatSeq = {tm={sec=0,nsec=0},data={}}
+	obj._d_doubleSeq = {tm={sec=0,nsec=0},data={}}
+
+	-- アウトポート生成
+	obj._octetOut = openrtm.OutPort.new("Octet",obj._d_octet,"::RTC::TimedOctet")
+	obj._shortOut = openrtm.OutPort.new("Short",obj._d_short,"::RTC::TimedShort")
+	obj._longOut = openrtm.OutPort.new("Long",obj._d_long,"::RTC::TimedLong")
+	obj._floatOut = openrtm.OutPort.new("Float",obj._d_float,"::RTC::TimedFloat")
+	obj._doubleOut = openrtm.OutPort.new("Double",obj._d_double,"::RTC::TimedDouble")
+	obj._octetSeqOut = openrtm.OutPort.new("OctetSeq",obj._d_octetSeq,"::RTC::TimedOctetSeq")
+	obj._shortSeqOut = openrtm.OutPort.new("ShortSeq",obj._d_shortSeq,"::RTC::TimedShortSeq")
+	obj._longSeqOut = openrtm.OutPort.new("LongSeq",obj._d_longSeq,"::RTC::TimedLongSeq")
+	obj._floatSeqOut = openrtm.OutPort.new("FloatSeq",obj._d_floatSeq,"::RTC::TimedFloatSeq")
+	obj._doubleSeqOut = openrtm.OutPort.new("DoubleSeq",obj._d_doubleSeq,"::RTC::TimedDoubleSeq")
+
+
+
 	-- 初期化時のコールバック関数
 	-- @return リターンコード
 	function obj:onInitialize()
-		-- データ格納変数
-		self._d_octet = {tm={sec=0,nsec=0},data=0}
-		self._d_short = {tm={sec=0,nsec=0},data=0}
-		self._d_long = {tm={sec=0,nsec=0},data=0}
-		self._d_float = {tm={sec=0,nsec=0},data=0}
-		self._d_double = {tm={sec=0,nsec=0},data=0}
-		self._d_octetSeq = {tm={sec=0,nsec=0},data=""}
-		self._d_shortSeq = {tm={sec=0,nsec=0},data={}}
-		self._d_longSeq = {tm={sec=0,nsec=0},data={}}
-		self._d_floatSeq = {tm={sec=0,nsec=0},data={}}
-		self._d_doubleSeq = {tm={sec=0,nsec=0},data={}}
-
-		-- アウトポート生成
-		self._octetOut = openrtm.OutPort.new("Octet",self._d_octet,"::RTC::TimedOctet")
-		self._shortOut = openrtm.OutPort.new("Short",self._d_short,"::RTC::TimedShort")
-		self._longOut = openrtm.OutPort.new("Long",self._d_long,"::RTC::TimedLong")
-		self._floatOut = openrtm.OutPort.new("Float",self._d_float,"::RTC::TimedFloat")
-		self._doubleOut = openrtm.OutPort.new("Double",self._d_double,"::RTC::TimedDouble")
-		self._octetSeqOut = openrtm.OutPort.new("OctetSeq",self._d_octetSeq,"::RTC::TimedOctetSeq")
-		self._shortSeqOut = openrtm.OutPort.new("ShortSeq",self._d_shortSeq,"::RTC::TimedShortSeq")
-		self._longSeqOut = openrtm.OutPort.new("LongSeq",self._d_longSeq,"::RTC::TimedLongSeq")
-		self._floatSeqOut = openrtm.OutPort.new("FloatSeq",self._d_floatSeq,"::RTC::TimedFloatSeq")
-		self._doubleSeqOut = openrtm.OutPort.new("DoubleSeq",self._d_doubleSeq,"::RTC::TimedDoubleSeq")
-
+		
 		-- ポート追加
 		self:addOutPort("Octet",self._octetOut)
 		self:addOutPort("Short",self._shortOut)

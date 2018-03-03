@@ -19,8 +19,8 @@ local openrtm  = require "openrtm"
 
 -- Import Service implementation class
 -- <rtc-template block="service_impl">
-#foreach($providerIdlFile in ${rtcParam.consumerIdlPathes})
-local ${tmpltHelper.getFilenameNoExt(${providerIdlFile.idlFile})}_idl_example = require "${tmpltHelper.getFilenameNoExt(${providerIdlFile.idlFile})}_idl_example"
+#foreach($consumerIdlFile in ${rtcParam.consumerIdlPathes})
+local ${tmpltHelper.getFilenameNoExt(${consumerIdlFile.idlFile})}_idl_example = require "${tmpltHelper.getFilenameNoExt(${consumerIdlFile.idlFile})}_idl_example"
 #end
 
 

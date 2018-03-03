@@ -193,7 +193,9 @@ public class LuaGenerateManager extends GenerateManager {
 		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
 		String outfile = "test/" + rtcParam.getName() + "Test.lua";
 		String infile = "lua/test/Lua_Test_RTC.lua.vsl";
-		return generate(infile, outfile, contextMap);
+		GeneratedResult result = generate(infile, outfile, contextMap);
+		result.setNotBom(true);
+		return result;
 	}
 
 	public GeneratedResult generateTestSVCIDLExampleSource(

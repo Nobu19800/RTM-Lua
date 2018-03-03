@@ -51,7 +51,6 @@ local ${luaConv.convToLower(${rtcParam.name})}_spec = {["implementation_id"]="${
 		 ["conf.default.${configParam.name}"]="${configParam.defaultVal}",
 #end
 #if( ${rtcParam.configParams.size()} > 0 )
-
 #foreach($configParam in ${rtcParam.configParams})
 #if( ${configParam.widget.length()} > 0 )
 		 ["conf.__widget__.${configParam.name}"]="${configParam.widget}#if( ${configParam.step.length()} > 0 ).${configParam.step}#end",
@@ -62,11 +61,9 @@ local ${luaConv.convToLower(${rtcParam.name})}_spec = {["implementation_id"]="${
 		 ["conf.__constraints__.${configParam.name}"]="${configParam.constraint}",
 #end
 #end
-
 #foreach($configParam in ${rtcParam.configParams})
          ["conf.__type__.${configParam.name}"]="${configParam.type}",
 #end
-
 #end
 #if( ${rtcParam.configParameterParams.size()} > 0 )
 #foreach($parameterParam in ${rtcParam.configParameterParams})
@@ -283,7 +280,7 @@ ${rtcParam.name}.new = function(manager)
 		return self._ReturnCode_t.RTC_OK
 	end
 
-#if(${rtcParam.getDocActionOverView(1).length()}>0)	#if(${rtcParam.IsNotImplemented(1)})--#end	-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(1)})}
+#if(${rtcParam.getDocActionOverView(1).length()}>0)	#if(${rtcParam.IsNotImplemented(1)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(1)})}
 #end
 	#if(${rtcParam.IsNotImplemented(1)})--	#end--
 	#if(${rtcParam.IsNotImplemented(1)})--	#end-- The finalize action (on ALIVE->END transition)
@@ -305,7 +302,7 @@ ${rtcParam.name}.new = function(manager)
 	#if(${rtcParam.IsNotImplemented(1)})--#end	return self._ReturnCode_t.RTC_OK
 	#if(${rtcParam.IsNotImplemented(1)})--#end	end
 
-#if(${rtcParam.getDocActionOverView(2).length()}>0)	#if(${rtcParam.IsNotImplemented(2)})--#end	-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(2)})}
+#if(${rtcParam.getDocActionOverView(2).length()}>0)	#if(${rtcParam.IsNotImplemented(2)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(2)})}
 #end
 	#if(${rtcParam.IsNotImplemented(2)})--	#end--
 	#if(${rtcParam.IsNotImplemented(2)})--	#end-- The startup action when ExecutionContext startup
@@ -328,7 +325,7 @@ ${rtcParam.name}.new = function(manager)
 	#if(${rtcParam.IsNotImplemented(2)})--	#end	return self._ReturnCode_t.RTC_OK
 	#if(${rtcParam.IsNotImplemented(2)})--	#end end
 
-#if(${rtcParam.getDocActionOverView(3).length()}>0)	#if(${rtcParam.IsNotImplemented(3)})--#end	-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(3)})}
+#if(${rtcParam.getDocActionOverView(3).length()}>0)	#if(${rtcParam.IsNotImplemented(3)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(3)})}
 #end
 	#if(${rtcParam.IsNotImplemented(3)})--	#end--
 	#if(${rtcParam.IsNotImplemented(3)})--	#end-- The shutdown action when ExecutionContext stop
@@ -351,7 +348,7 @@ ${rtcParam.name}.new = function(manager)
 	#if(${rtcParam.IsNotImplemented(3)})--	#end	return self._ReturnCode_t.RTC_OK
 	#if(${rtcParam.IsNotImplemented(3)})--	#end end
 
-#if(${rtcParam.getDocActionOverView(4).length()}>0)	#if(${rtcParam.IsNotImplemented(4)})--#end	-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(4)})}
+#if(${rtcParam.getDocActionOverView(4).length()}>0)	#if(${rtcParam.IsNotImplemented(4)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(4)})}
 #end
 	#if(${rtcParam.IsNotImplemented(4)})--	#end--
 	#if(${rtcParam.IsNotImplemented(4)})--	#end-- The activated action (Active state entry action)
@@ -374,7 +371,7 @@ ${rtcParam.name}.new = function(manager)
 	#if(${rtcParam.IsNotImplemented(4)})--#end	return self._ReturnCode_t.RTC_OK
 	#if(${rtcParam.IsNotImplemented(4)})--#end end
 
-#if(${rtcParam.getDocActionOverView(5).length()}>0)	#if(${rtcParam.IsNotImplemented(5)})--#end	-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(5)})}
+#if(${rtcParam.getDocActionOverView(5).length()}>0)	#if(${rtcParam.IsNotImplemented(5)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(5)})}
 #end
 	#if(${rtcParam.IsNotImplemented(5)})--	#end--
 	#if(${rtcParam.IsNotImplemented(5)})--	#end-- The deactivated action (Active state exit action)
@@ -397,7 +394,7 @@ ${rtcParam.name}.new = function(manager)
 	#if(${rtcParam.IsNotImplemented(5)})--	#end	return self._ReturnCode_t.RTC_OK
 	#if(${rtcParam.IsNotImplemented(5)})--	#end end
 
-#if(${rtcParam.getDocActionOverView(9).length()}>0)	#if(${rtcParam.IsNotImplemented(9)})--#end	-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(9)})}
+#if(${rtcParam.getDocActionOverView(9).length()}>0)	#if(${rtcParam.IsNotImplemented(9)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(9)})}
 #end
 	#if(${rtcParam.IsNotImplemented(9)})--	#end--
 	#if(${rtcParam.IsNotImplemented(9)})--	#end-- The execution action that is invoked periodically
@@ -420,7 +417,7 @@ ${rtcParam.name}.new = function(manager)
 	#if(${rtcParam.IsNotImplemented(9)})--#end	return self._ReturnCode_t.RTC_OK
 	#if(${rtcParam.IsNotImplemented(9)})--#end end
 
-#if(${rtcParam.getDocActionOverView(6).length()}>0)	#if(${rtcParam.IsNotImplemented(6)})--#end	-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(6)})}
+#if(${rtcParam.getDocActionOverView(6).length()}>0)	#if(${rtcParam.IsNotImplemented(6)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(6)})}
 #end
 	#if(${rtcParam.IsNotImplemented(6)})--	#end--
 	#if(${rtcParam.IsNotImplemented(6)})--	#end-- The aborting action when main logic error occurred.
@@ -443,7 +440,7 @@ ${rtcParam.name}.new = function(manager)
 	#if(${rtcParam.IsNotImplemented(6)})--#end	return self._ReturnCode_t.RTC_OK
 	#if(${rtcParam.IsNotImplemented(6)})--#end end
 
-#if(${rtcParam.getDocActionOverView(7).length()}>0)	#if(${rtcParam.IsNotImplemented(7)})--#end	-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(7)})}
+#if(${rtcParam.getDocActionOverView(7).length()}>0)	#if(${rtcParam.IsNotImplemented(7)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(7)})}
 #end
 	#if(${rtcParam.IsNotImplemented(7)})--	#end--
 	#if(${rtcParam.IsNotImplemented(7)})--	#end-- The error action in ERROR state
@@ -466,7 +463,7 @@ ${rtcParam.name}.new = function(manager)
 	#if(${rtcParam.IsNotImplemented(7)})--	#end	return self._ReturnCode_t.RTC_OK
 	#if(${rtcParam.IsNotImplemented(7)})--	#end end
 
-#if(${rtcParam.getDocActionOverView(8).length()}>0)	#if(${rtcParam.IsNotImplemented(8)})--#end	-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(8)})}
+#if(${rtcParam.getDocActionOverView(8).length()}>0)	#if(${rtcParam.IsNotImplemented(8)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(8)})}
 #end
 	#if(${rtcParam.IsNotImplemented(8)})--	#end--
 	#if(${rtcParam.IsNotImplemented(8)})--	#end-- The reset action that is invoked resetting
@@ -489,7 +486,7 @@ ${rtcParam.name}.new = function(manager)
 	#if(${rtcParam.IsNotImplemented(8)})--	#end	return self._ReturnCode_t.RTC_OK
 	#if(${rtcParam.IsNotImplemented(8)})--	#end end
 
-#if(${rtcParam.getDocActionOverView(10).length()}>0)	#if(${rtcParam.IsNotImplemented(10)})--#end	-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(10)})}
+#if(${rtcParam.getDocActionOverView(10).length()}>0)	#if(${rtcParam.IsNotImplemented(10)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(10)})}
 #end
 	#if(${rtcParam.IsNotImplemented(10)})--	#end--
 	#if(${rtcParam.IsNotImplemented(10)})--	#end-- The state update action that is invoked after onExecute() action
@@ -513,7 +510,7 @@ ${rtcParam.name}.new = function(manager)
 	#if(${rtcParam.IsNotImplemented(10)})--	#end	return self._ReturnCode_t.RTC_OK
 	#if(${rtcParam.IsNotImplemented(10)})--	#end end
 
-#if(${rtcParam.getDocActionOverView(11).length()}>0)	#if(${rtcParam.IsNotImplemented(11)})--#end	-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(11)})}
+#if(${rtcParam.getDocActionOverView(11).length()}>0)	#if(${rtcParam.IsNotImplemented(11)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(11)})}
 #end
 	#if(${rtcParam.IsNotImplemented(11)})--	#end--
 	#if(${rtcParam.IsNotImplemented(11)})--	#end-- The action that is invoked when execution context's rate is changed

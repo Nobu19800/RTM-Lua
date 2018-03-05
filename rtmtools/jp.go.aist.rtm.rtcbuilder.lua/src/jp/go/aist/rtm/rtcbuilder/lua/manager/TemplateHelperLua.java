@@ -9,7 +9,7 @@ import jp.go.aist.rtm.rtcbuilder.lua.IRtcBuilderConstantsLua;
 import jp.go.aist.rtm.rtcbuilder.util.StringUtil;
 
 /**
- * ƒeƒ“ƒvƒŒ[ƒg‚ðo—Í‚·‚éÛ‚ÉŽg—p‚³‚ê‚éƒwƒ‹ƒp[ Lua—p
+ * ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚’å‡ºåŠ›ã™ã‚‹éš›ã«ä½¿ç”¨ã•ã‚Œã‚‹ãƒ˜ãƒ«ãƒ‘ãƒ¼ Luaç”¨
  */
 public class TemplateHelperLua {
 	//

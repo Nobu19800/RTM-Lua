@@ -12,7 +12,7 @@ import jp.go.aist.rtm.rtcbuilder.generator.param.idl.ServiceClassParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.idl.ServiceMethodParam;
 
 /**
- * Luaƒ\[ƒX‚ğo—Í‚·‚éÛ‚Ég—p‚³‚ê‚éƒ†[ƒeƒBƒŠƒeƒB
+ * Luaã‚½ãƒ¼ã‚¹ã‚’å‡ºåŠ›ã™ã‚‹éš›ã«ä½¿ç”¨ã•ã‚Œã‚‹ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£
  */
 public class LuaConverter {
 	protected Map<String, String> mapType;
@@ -60,10 +60,10 @@ public class LuaConverter {
 	}
 
 	/**
-	 * CORBAŒ^‚©‚çLuaŒ^‚ÖŒ^‚ğ•ÏŠ·‚·‚é(TypeDefl—¶)
+	 * CORBAå‹ã‹ã‚‰Luaå‹ã¸å‹ã‚’å¤‰æ›ã™ã‚‹(TypeDefè€ƒæ…®)
 	 *
-	 * @param strCorba CORBAŒ^
-	 * @return LuaŒ^
+	 * @param strCorba CORBAå‹
+	 * @return Luaå‹
 	 */
 	public String convCORBA2LuaTypeDef(String strCorba, ServiceClassParam scp) {
 		String strType = scp.getTypeDef().get(strCorba).getOriginalDef();
@@ -80,11 +80,11 @@ public class LuaConverter {
 		return result;
 	}
 	/**
-	 * CORBAŒ^‚©‚çLuaŒ^‚ÖŒ^‚ğ•ÏŠ·‚·‚é
+	 * CORBAå‹ã‹ã‚‰Luaå‹ã¸å‹ã‚’å¤‰æ›ã™ã‚‹
 	 *
-	 * @param strCorba CORBAŒ^
-	 * @param scp ƒT[ƒrƒXƒNƒ‰ƒX
-	 * @return LuaŒ^
+	 * @param strCorba CORBAå‹
+	 * @param scp ã‚µãƒ¼ãƒ“ã‚¹ã‚¯ãƒ©ã‚¹
+	 * @return Luaå‹
 	 */
 	public String convCORBA2Lua(String strCorba) {
 		String result = mapType.get(strCorba);
@@ -93,11 +93,11 @@ public class LuaConverter {
 		return result;
 	}
 	/**
-	 * CORBAŒ^‚©‚çLuaŒ^‚ÖŒ^‚ğ•ÏŠ·‚·‚é(ƒRƒƒ“ƒg—p)
+	 * CORBAå‹ã‹ã‚‰Luaå‹ã¸å‹ã‚’å¤‰æ›ã™ã‚‹(ã‚³ãƒ¡ãƒ³ãƒˆç”¨)
 	 *
-	 * @param strCorba CORBAŒ^
-	 * @param scp ƒT[ƒrƒXƒNƒ‰ƒX
-	 * @return LuaŒ^
+	 * @param strCorba CORBAå‹
+	 * @param scp ã‚µãƒ¼ãƒ“ã‚¹ã‚¯ãƒ©ã‚¹
+	 * @return Luaå‹
 	 */
 	public String convCORBA2LuaArg(String strCorba) {
 		String result = mapTypeArgs.get(strCorba);
@@ -106,11 +106,11 @@ public class LuaConverter {
 		return result;
 	}
 	/**
-	 * CORBAŒ^‚©‚çLuaŒ^‚ÖŒ^‚ğ•ÏŠ·‚·‚é
+	 * CORBAå‹ã‹ã‚‰Luaå‹ã¸å‹ã‚’å¤‰æ›ã™ã‚‹
 	 *
-	 * @param strCorba CORBAŒ^
-	 * @param scp ƒT[ƒrƒXƒNƒ‰ƒX
-	 * @return LuaŒ^
+	 * @param strCorba CORBAå‹
+	 * @param scp ã‚µãƒ¼ãƒ“ã‚¹ã‚¯ãƒ©ã‚¹
+	 * @return Luaå‹
 	 */
 	public String convCORBA2Lua4IDL(String strCorba, ServiceClassParam scp) {
 		String strType = (scp.getTypeDef().get(strCorba) == null) ? null : scp
@@ -132,11 +132,11 @@ public class LuaConverter {
 		return result;
 	}
 	/**
-	 * ƒƒ\ƒbƒh“ü—Íƒpƒ‰ƒ[ƒ^‚ÌŒ^‚ğæ“¾‚·‚é
+	 * ãƒ¡ã‚½ãƒƒãƒ‰å…¥åŠ›ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å‹ã‚’å–å¾—ã™ã‚‹
 	 *
-	 * @param strCorba CORBAŒ^
-	 * @param scp ƒT[ƒrƒXƒNƒ‰ƒX
-	 * @return “ü—Íƒpƒ‰ƒ[ƒ^
+	 * @param strCorba CORBAå‹
+	 * @param scp ã‚µãƒ¼ãƒ“ã‚¹ã‚¯ãƒ©ã‚¹
+	 * @return å…¥åŠ›ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	 */
 	public String selectInParamType(ServiceMethodParam smp, ServiceClassParam scp) {
 		String result = "";
@@ -154,11 +154,11 @@ public class LuaConverter {
 	}
 
 	/**
-	 * ƒƒ\ƒbƒh“ü—Íƒpƒ‰ƒ[ƒ^‚Ì–¼Ì‚ğæ“¾‚·‚é
+	 * ãƒ¡ã‚½ãƒƒãƒ‰å…¥åŠ›ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®åç§°ã‚’å–å¾—ã™ã‚‹
 	 *
-	 * @param strCorba CORBAŒ^
-	 * @param scp ƒT[ƒrƒXƒNƒ‰ƒX
-	 * @return “ü—Íƒpƒ‰ƒ[ƒ^
+	 * @param strCorba CORBAå‹
+	 * @param scp ã‚µãƒ¼ãƒ“ã‚¹ã‚¯ãƒ©ã‚¹
+	 * @return å…¥åŠ›ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	 */
 	public String selectInParamName(ServiceMethodParam smp, ServiceClassParam scp) {
 		String result = "";
@@ -180,11 +180,11 @@ public class LuaConverter {
 	}
 
 	/**
-	 * ƒƒ\ƒbƒho—Íƒpƒ‰ƒ[ƒ^‚ÌŒ^‚ğæ“¾‚·‚é
+	 * ãƒ¡ã‚½ãƒƒãƒ‰å‡ºåŠ›ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å‹ã‚’å–å¾—ã™ã‚‹
 	 *
-	 * @param strCorba CORBAŒ^
-	 * @param scp ƒT[ƒrƒXƒNƒ‰ƒX
-	 * @return o—Íƒ‰ƒ[ƒ^
+	 * @param strCorba CORBAå‹
+	 * @param scp ã‚µãƒ¼ãƒ“ã‚¹ã‚¯ãƒ©ã‚¹
+	 * @return å‡ºåŠ›ãƒ©ãƒ¡ãƒ¼ã‚¿
 	 */
 	public String selectOutParamType(ServiceMethodParam smp, ServiceClassParam scp) {
 		String result = "";
@@ -204,11 +204,11 @@ public class LuaConverter {
 		return result;
 	}
 	/**
-	 * ƒƒ\ƒbƒho—Íƒpƒ‰ƒ[ƒ^‚Ì–¼Ì‚ğæ“¾‚·‚é
+	 * ãƒ¡ã‚½ãƒƒãƒ‰å‡ºåŠ›ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®åç§°ã‚’å–å¾—ã™ã‚‹
 	 *
-	 * @param strCorba CORBAŒ^
-	 * @param scp ƒT[ƒrƒXƒNƒ‰ƒX
-	 * @return o—Íƒpƒ‰ƒ[ƒ^
+	 * @param strCorba CORBAå‹
+	 * @param scp ã‚µãƒ¼ãƒ“ã‚¹ã‚¯ãƒ©ã‚¹
+	 * @return å‡ºåŠ›ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	 */
 	public String selectOutParamName(ServiceMethodParam smp, ServiceClassParam scp) {
 		String result = "";
@@ -230,10 +230,10 @@ public class LuaConverter {
 		return result;
 	}
 	/**
-	 * SequenceŒ^‚©”»’f‚·‚é
+	 * Sequenceå‹ã‹åˆ¤æ–­ã™ã‚‹
 	 *
-	 * @param type ŒŸØ‘ÎÛŒ^
-	 * @return ŒŸØŒ‹‰Ê
+	 * @param type æ¤œè¨¼å¯¾è±¡å‹
+	 * @return æ¤œè¨¼çµæœ
 	 */
 	public String convPortInit(String type) {
 		if( this.isSequence(type) )
@@ -241,10 +241,10 @@ public class LuaConverter {
 		return "0";
 	}
 	/**
-	 * SequenceŒ^‚©”»’f‚·‚é
+	 * Sequenceå‹ã‹åˆ¤æ–­ã™ã‚‹
 	 *
-	 * @param type ŒŸØ‘ÎÛŒ^
-	 * @return ŒŸØŒ‹‰Ê
+	 * @param type æ¤œè¨¼å¯¾è±¡å‹
+	 * @return æ¤œè¨¼çµæœ
 	 */
 	private boolean isSequence(String type) {
 		if( type.toLowerCase().endsWith("seq") )
@@ -252,10 +252,10 @@ public class LuaConverter {
 		return false;
 	}
 	/**
-	 * ƒpƒ‰ƒ[ƒ^‚Ì‰Šú’l‚ğæ“¾‚·‚é
+	 * ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®åˆæœŸå€¤ã‚’å–å¾—ã™ã‚‹
 	 *
-	 * @param config ‘ÎÛƒpƒ‰ƒ[ƒ^
-	 * @return ‰Šú’l
+	 * @param config å¯¾è±¡ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+	 * @return åˆæœŸå€¤
 	 */
 	public boolean isString(String type) {
 		if( type.toLowerCase().equals(luaString) )
@@ -263,10 +263,10 @@ public class LuaConverter {
 		return false;
 	}
 	/**
-	 * ƒpƒ‰ƒ[ƒ^‚Ì‰Šú’l‚ğæ“¾‚·‚é
+	 * ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®åˆæœŸå€¤ã‚’å–å¾—ã™ã‚‹
 	 *
-	 * @param config ‘ÎÛƒpƒ‰ƒ[ƒ^
-	 * @return ‰Šú’l
+	 * @param config å¯¾è±¡ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+	 * @return åˆæœŸå€¤
 	 */
 	public String convDefaultVal(ConfigSetParam config) {
 		String defVal = config.getDefaultVal();
@@ -287,21 +287,21 @@ public class LuaConverter {
 	}
 
 	/**
-	 * ƒf[ƒ^ƒ|[ƒg‰Šú‰»—pƒƒ\ƒbƒh–¼‚ğ•Ô‚·
+	 * ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆåˆæœŸåŒ–ç”¨ãƒ¡ã‚½ãƒƒãƒ‰åã‚’è¿”ã™
 	 *
-	 * @param rtcType ƒ|[ƒg‚ÌŒ^
-	 * @return ‰Šú‰»ƒƒ\ƒbƒh–¼
+	 * @param rtcType ãƒãƒ¼ãƒˆã®å‹
+	 * @return åˆæœŸåŒ–ãƒ¡ã‚½ãƒƒãƒ‰å
 	 */
 	public String getDataportInitMethodName(String rtcType) {
 
-		//module–¼‚ª•t‚¢‚Ä‚¢‚È‚¢ƒf[ƒ^Œ^i::‚ª•t‚¢‚Ä‚¢‚È‚¢j‚ÍA
-		//•¶š—ñ‚É()‚ğ•t‚¯‚ÄƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^ˆµ‚¢‚É‚·‚é
+		//moduleåãŒä»˜ã„ã¦ã„ãªã„ãƒ‡ãƒ¼ã‚¿å‹ï¼ˆ::ãŒä»˜ã„ã¦ã„ãªã„ï¼‰ã¯ã€
+		//æ–‡å­—åˆ—ã«()ã‚’ä»˜ã‘ã¦ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æ‰±ã„ã«ã™ã‚‹
 		if(!rtcType.matches(".*::.*")) return rtcType + "()";
 		String methodName = "::"+rtcType;
 
-		//module–¼‚ªuRTCv‚Ì‚Æ‚«‚Íeƒf[ƒ^Œ^‚Å‚ ‚éuTimev‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğˆø”‚É“ü‚ê‚½
-		//ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğˆø”‚É“ü‚êƒRƒ“ƒXƒgƒ‰ƒNƒ^•¶š—ñ‚É‚µ‚Ä•Ô‚·
-		//‚»‚êˆÈŠO‚Ìmodule–¼‚Ìê‡A()‚ğ•t‚¯‚½‚¾‚¯‚ÌƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ•Ô‚·
+		//moduleåãŒã€ŒRTCã€ã®ã¨ãã¯è¦ªãƒ‡ãƒ¼ã‚¿å‹ã§ã‚ã‚‹ã€ŒTimeã€ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’å¼•æ•°ã«å…¥ã‚ŒãŸ
+		//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’å¼•æ•°ã«å…¥ã‚Œã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æ–‡å­—åˆ—ã«ã—ã¦è¿”ã™
+		//ãã‚Œä»¥å¤–ã®moduleåã®å ´åˆã€()ã‚’ä»˜ã‘ãŸã ã‘ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’è¿”ã™
 //		if(rtcType.startsWith("RTC::")) {
 //			methodName = methodName + "(RTC.Time(0,0)";
 //		}
@@ -313,10 +313,10 @@ public class LuaConverter {
 	}
 
 	/**
-	 * ƒf[ƒ^ƒ|[ƒg•Ï”Œ^’è‹`•Ï”‚ğ•Ô‚·
+	 * ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆå¤‰æ•°å‹å®šç¾©å¤‰æ•°ã‚’è¿”ã™
 	 *
-	 * @param rtcType ƒ|[ƒg‚ÌŒ^
-	 * @return •Ï”Œ^’è‹`•Ï”
+	 * @param rtcType ãƒãƒ¼ãƒˆã®å‹
+	 * @return å¤‰æ•°å‹å®šç¾©å¤‰æ•°
 	 */
 	public String getTypeDefinition(String rtcType) {
 		String methodName = rtcType.replace("::", "._d_");

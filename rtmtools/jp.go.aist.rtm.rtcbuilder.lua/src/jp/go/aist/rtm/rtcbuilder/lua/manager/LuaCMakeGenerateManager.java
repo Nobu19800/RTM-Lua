@@ -42,7 +42,7 @@ public class LuaCMakeGenerateManager extends CMakeGenerateManager {
 		return map;
 	}
 
-	// RTM 1.0Œn
+	// RTM 1.0ç³»
 	@Override
 	public List<GeneratedResult> generateTemplateCode10(
 			Map<String, Object> contextMap) {
@@ -62,7 +62,7 @@ public class LuaCMakeGenerateManager extends CMakeGenerateManager {
 		return result;
 	}
 
-	// 1.0Œn (CMake)
+	// 1.0ç³» (CMake)
 
 	@Override
 	public GeneratedResult generateCMakeLists(Map<String, Object> contextMap) {
@@ -73,7 +73,7 @@ public class LuaCMakeGenerateManager extends CMakeGenerateManager {
 		return result;
 	}
 
-	// 1.0Œn (CMake/cpack_resources)
+	// 1.0ç³» (CMake/cpack_resources)
 	public GeneratedResult generatePostinstIin(Map<String, Object> contextMap) {
 		String outfile = "postinst.in";
 		String infile = "cmake/postinst.in.vsl";

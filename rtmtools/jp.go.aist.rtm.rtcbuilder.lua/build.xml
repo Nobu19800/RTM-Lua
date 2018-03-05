@@ -1,0 +1,112 @@
+<project name="jp.go.aist.rtm.rtcbuilder.lua" default="jar"
+	xmlns:ant4eclipse="antlib:org.ant4eclipse"
+	xmlns:antcontrib="antlib:net.sf.antcontrib"	>
+
+	<property name="target.name" value="jp.go.aist.rtm.rtcbuilder.lua" />
+
+	<taskdef name="manifesttask" classname="aist.ManifestTask" />
+
+	<property name="source" value="src"/>
+
+	<property name="dist.dir" value="jar" />
+	<property name="build.dir" value="bin"/>
+	<property name="icons.dir" value="icons"/>
+	<property name="lib.dir" value="lib"/>
+
+	<property environment="env"/>
+	<property name="eclipse.home" value="${env.ECLIPSE_HOME}"/>
+	<!--
+	<taskdef resource="net/sf/ant4eclipse/antlib.xml" />
+	-->
+	<taskdef uri="antlib:net.sf.antcontrib"
+		resource="net/sf/antcontrib/antlib.xml" />
+	<taskdef uri="antlib:org.ant4eclipse"
+		resource="org/ant4eclipse/antlib.xml" />
+
+	<property name="targetPlatformLocation" value="${eclipse.home}" />
+	<property name="workspace" value="${basedir}/.." />
+	<property name="project.name" value="jp.go.aist.rtm.rtcbuilder.lua" />
+	<tstamp>
+		<format property="built.date" pattern="yyyy/MM/dd HH:mm:ss" />
+	</tstamp>
+
+	<target name="buildAll">
+		<antcall target="clean" />
+		<antcall target="compile" />
+		<antcall target="jar" />
+	</target>
+
+	<target name="clean" description="ビルドで生成されたファイルを削除します">
+		<delete includeEmptyDirs="true" quiet="true">
+			<fileset dir="${build.dir}" includes="**/*.class" />
+			<fileset dir="." includes="**/*.log" />
+		</delete>
+		<delete dir="${build.dir}/jp" quiet="true"/>
+		<delete dir="${dist.dir}" quiet="true"/>
+	</target>
+
+	<target name="compile" description="ソースをコンパイルします">
+<!--
+		<getEclipseClasspath pathid="build.classpath" targetplatformlocation="${targetPlatformLocation}"
+					workspace="${workspace}" projectname="${project.name}"/>
+-->
+		<ant4eclipse:targetPlatform id="eclipse-3.8">
+		  <location dir="${targetPlatformLocation}" />
+		</ant4eclipse:targetPlatform>
+		<ant4eclipse:jdtClassPathLibrary name="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">
+			<fileset dir="${eclipse.home}/plugins/org.junit_4.12.0.v201504281640" />
+		</ant4eclipse:jdtClassPathLibrary>
+
+		<ant4eclipse:getJdtClassPath
+			pathid="build.classpath"
+			workspacedirectory="${workspace}"
+			projectname="${project.name}" >
+			<jdtclasspathcontainerargument key="target.platform" value="eclipse-3.8" />
+		</ant4eclipse:getJdtClassPath>
+
+
+		<javac srcdir="${source}" destdir="${build.dir}"
+			classpathref="build.classpath"  encoding="UTF-8" />
+	</target>
+
+	<target name="jar" description="jarファイルを作成します">
+		<copy todir="${build.dir}/jp/go/aist/rtm/rtcbuilder/lua/template">
+			<fileset dir="${source}/jp/go/aist/rtm/rtcbuilder/lua/template">
+				<include name="cmake/**/**.vsl" />
+				<include name="lua/**/**.vsl" />
+			</fileset>
+		</copy>
+		<mkdir dir="${dist.dir}" />
+		<delete>
+			<fileset dir="${dist.dir}" includes="${target.name}_*.jar" />
+		</delete>
+		<!-- Version settings -->
+		<manifesttask file="META-INF/MANIFEST.MF" key="Bundle-Version" property="manifest.project.version" />
+		<condition property="project.version"
+                   value="${env.PROJECT_VERSION}"
+                   else="${manifest.project.version}">
+			<isset property="env.PROJECT_VERSION" />
+		</condition>
+		<property name="jar.version" value="_${project.version}"/>
+		<property name="jar.name" value="${target.name}${jar.version}"/>
+		<!-- Updating MANIFEST.MF -->
+		<manifest file="META-INF/MANIFEST.MF" mode="update">
+			<attribute name="Bundle-Version" value="${project.version}"/>
+			<attribute name="Built-By" value="${user.name}"/>
+			<attribute name="Built-Date" value="${built.date}"/>
+		</manifest>
+		<!-- Creating a jar file -->
+		<jar destfile="${dist.dir}/${jar.name}.jar" manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${build.dir}">
+				<exclude name="jp/go/aist/rtm/rtcbuilder/lua/_test/_100/**" />
+			</fileset>
+			<fileset dir=".">
+				<include name="icons/**.**" />
+				<include name="lib/**.**" />
+				<include name="plugin.xml" />
+				<include name="plugin.properties" />
+			</fileset>
+		</jar>
+	</target>
+
+</project>

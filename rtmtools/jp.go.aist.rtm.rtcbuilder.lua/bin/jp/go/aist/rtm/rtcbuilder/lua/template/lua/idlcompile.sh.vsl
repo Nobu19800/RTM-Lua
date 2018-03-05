@@ -1,2 +1,0 @@
-#!/bin/sh
-omniidl -bpython -I"%RTM_ROOT%rtm\idl" #foreach($IdlPath in ${idlPathes})-I"${IdlPath}" #end#foreach($IdlFile in ${allIdlFileParamBuild})idl/${IdlFile.IdlFile} #end

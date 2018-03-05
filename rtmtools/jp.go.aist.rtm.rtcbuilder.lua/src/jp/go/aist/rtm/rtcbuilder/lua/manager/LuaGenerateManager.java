@@ -21,7 +21,7 @@ import jp.go.aist.rtm.rtcbuilder.template.TemplateUtil;
 import jp.go.aist.rtm.rtcbuilder.ui.Perspective.LanguageProperty;
 
 /**
- * Luaƒtƒ@ƒCƒ‹‚Ìo—Í‚ğ§Œä‚·‚éƒ}ƒl[ƒWƒƒ
+ * Luaãƒ•ã‚¡ã‚¤ãƒ«ã®å‡ºåŠ›ã‚’åˆ¶å¾¡ã™ã‚‹ãƒãƒãƒ¼ã‚¸ãƒ£
  */
 public class LuaGenerateManager extends GenerateManager {
 
@@ -54,10 +54,10 @@ public class LuaGenerateManager extends GenerateManager {
 	}
 
 	/**
-	 * ƒtƒ@ƒCƒ‹‚ğo—Í‚·‚é
+	 * ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‡ºåŠ›ã™ã‚‹
 	 *
 	 * @param generatorParam
-	 * @return o—ÍŒ‹‰Ê‚ÌƒŠƒXƒg
+	 * @return å‡ºåŠ›çµæœã®ãƒªã‚¹ãƒˆ
 	 */
 	public List<GeneratedResult> generateTemplateCode(RtcParam rtcParam) {
 		List<GeneratedResult> result = new ArrayList<GeneratedResult>();
@@ -73,7 +73,7 @@ public class LuaGenerateManager extends GenerateManager {
 		allIdlFileParamsForBuild.addAll(allIdlFileParams);
 		allIdlFileParamsForBuild.addAll(rtcParam.getIncludedIdlPathes());
 
-		// IDLƒtƒ@ƒCƒ‹“à‚É‹Lq‚³‚ê‚Ä‚¢‚éServiceClassParam‚ğİ’è‚·‚é
+		// IDLãƒ•ã‚¡ã‚¤ãƒ«å†…ã«è¨˜è¿°ã•ã‚Œã¦ã„ã‚‹ServiceClassParamã‚’è¨­å®šã™ã‚‹
 		for (IdlFileParam idlFileParam : allIdlFileParams) {
 			for (ServiceClassParam serviceClassParam : rtcParam.getServiceClassParams()) {
 				if (idlFileParam.getIdlPath().equals(serviceClassParam.getIdlPath())){
@@ -97,7 +97,7 @@ public class LuaGenerateManager extends GenerateManager {
 		return generateTemplateCode10(contextMap);
 	}
 
-	// RTM 1.0Œn
+	// RTM 1.0ç³»
 	@SuppressWarnings("unchecked")
 	public List<GeneratedResult> generateTemplateCode10(
 			Map<String, Object> contextMap) {
@@ -138,7 +138,7 @@ public class LuaGenerateManager extends GenerateManager {
 		return result;
 	}
 
-	// 1.0Œn (Lua)
+	// 1.0ç³» (Lua)
 
 	public GeneratedResult generateLuaSource(Map<String, Object> contextMap) {
 		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
@@ -160,7 +160,7 @@ public class LuaGenerateManager extends GenerateManager {
 		return result;
 	}
 
-	// 1.0Œn (ƒrƒ‹ƒhŠÂ‹«)
+	// 1.0ç³» (ãƒ“ãƒ«ãƒ‰ç’°å¢ƒ)
 
 
 	public GeneratedResult generateIDLCompileBat(Map<String, Object> contextMap) {

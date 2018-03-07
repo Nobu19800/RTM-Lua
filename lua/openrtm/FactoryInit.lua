@@ -25,6 +25,8 @@ local FactoryInit= function()
 	local ProcessUniquePolicy = NumberingPolicy.ProcessUniquePolicy
 	local CdrRingBuffer = require "openrtm.CdrRingBuffer"
 	local PublisherFlush = require "openrtm.PublisherFlush"
+	local LogstreamFile = require "openrtm.LogstreamFile"
+	
 
 	CdrRingBuffer.Init()
 
@@ -39,6 +41,8 @@ local FactoryInit= function()
 	ProcessUniquePolicy.Init()
 
 	PublisherFlush.Init()
+	
+	LogstreamFile.Init()
 end
 
 --_G["openrtm.FactoryInit"] = FactoryInit

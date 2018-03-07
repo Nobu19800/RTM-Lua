@@ -15,21 +15,21 @@ local StringUtil= {}
 -- @param _str 文字列
 -- @return 空白削除後の文字列
 StringUtil.eraseHeadBlank = function(_str)
-	return string.gsub(_str, "(.-)%s*$", "%1")
+	return (string.gsub(_str, "^%s*(.-)$", "%1"))
 end
 
 -- 文字列末尾の空白削除
 -- @param _str 文字列
 -- @return 空白削除後の文字列
 StringUtil.eraseTailBlank = function(_str)
-	return string.gsub(_str, "^%s*(.-)", "%1")
+	return (string.gsub(_str, "^(.-)%s*$", "%1"))
 end
 
 -- 文字列先頭と末尾の空白削除
 -- @param _str 文字列
 -- @return 空白削除後の文字列
 StringUtil.eraseBothEndsBlank = function(_str)
-	return string.gsub(_str, "^%s*(.-)%s*$", "%1")
+	return (string.gsub(_str, "^%s*(.-)%s*$", "%1"))
 end
 
 
@@ -461,6 +461,18 @@ StringUtil.dirname = function(path)
 	local path_list = StringUtil.split(path, delimiter)
 	path_list[#path_list] = nil
 	return StringUtil.flatten(path_list, delimiter)..delimiter
+end
+
+
+-- テーブルの要素数取得
+-- @param tbl テーブル
+-- @return 要素数
+StringUtil.getKeyCount = function(tbl)
+	local ret = 0
+	for k,v in pairs(tbl) do
+		ret = ret + 1
+	end
+	return ret
 end
 
 return StringUtil

@@ -32,7 +32,8 @@ local PeriodicExecutionContext = require "openrtm.PeriodicExecutionContext"
 local Factory = require "openrtm.Factory"
 local FactoryLua = Factory.FactoryLua
 local OpenHRPExecutionContext = require "openrtm.OpenHRPExecutionContext"
-
+local LogstreamBase = require "openrtm.LogstreamBase"
+local LogstreamFactory = LogstreamBase.LogstreamFactory
 
 
 -- ORB_Dummy_ENABLEをtrueに設定した場合、
@@ -854,8 +855,19 @@ function Manager:shutdownManager()
 end
 
 -- ロガーストリーム初期化
+-- ファイル出力ロガーを初期化する
+-- 「logger」の要素にプロパティを設定
+-- logger.file_name：ファイル名
 function Manager:initLogstreamFile()
-
+	local logprop = self._config:getNode("logger")
+	local logstream = LogstreamFactory:instance():createObject("file")
+	if logstream == nil then
+		return
+	end
+	if not logstream:init(logprop) then
+		logstream = LogstreamFactory:instance():deleteObject(logstream)
+	end
+	self._rtcout:addLogger(logstream)
 end
 
 -- ロガープラグイン初期化
@@ -865,12 +877,53 @@ end
 
 -- 外部ロガーモジュール初期化
 function Manager:initLogstreamOthers()
+	local factory = LogstreamFactory:instance()
+    local pp = self._config:getNode("logger.logstream")
 
+    local leaf0 = pp:getLeaf()
+
+    for k,l in pairs(leaf0) do
+		local lstype = l:getName()
+		local logstream = factory:createObject(lstype)
+		if logstream == nil then
+			self._rtcout:RTC_WARN("Logstream "..lstype.." creation failed.")
+        else
+			self._rtcout:RTC_INFO("Logstream "..lstype.." created.")
+			if not logstream:init(l) then
+				self._rtcout:RTC_WARN("Logstream "..lstype.." init failed.")
+				factory:deleteObject(logstream)
+				self._rtcout:RTC_WARN("Logstream "..lstype.." deleted.")
+			else
+				self._rtcout:RTC_INFO("Logstream "..lstype.." added.")
+				self._rtcout:addLogger(logstream)
+			end	
+		end
+	end
 end
 
 -- ロガー初期化
+-- @param true：設定成功
 function Manager:initLogger()
 	self._rtcout = self:getLogbuf()
+	if not StringUtil.toBool(self._config:getProperty("logger.enable"), "YES", "NO", true) then
+		return true
+	end
+	
+	self:initLogstreamFile()
+	self:initLogstreamPlugins()
+	self:initLogstreamOthers()
+	
+	self._rtcout:setLogLevel(self._config:getProperty("logger.log_level"))
+	self._rtcout:setLogLock(StringUtil.toBool(self._config:getProperty("logger.stream_lock"),
+                                                "enable", "disable", false))
+    self._rtcout:RTC_INFO(self._config:getProperty("openrtm.version"))
+    self._rtcout:RTC_INFO("Copyright (C) 2018")
+    self._rtcout:RTC_INFO("  Nobuhiko Miyamoto")
+    self._rtcout:RTC_INFO("  Tokyo Metropolitan University")
+    self._rtcout:RTC_INFO("Manager starting.")
+    self._rtcout:RTC_INFO("Starting local logging.")
+    
+    return true
 end
 
 -- ロガー終了
@@ -1331,12 +1384,13 @@ function Manager:getLogbuf(name)
 	if name == nil then
 		name = "Manager"
 	end
-	if StringUtil.toBool(self._config:getProperty("logger.enable"), "YES", "NO", true) then
+	if not StringUtil.toBool(self._config:getProperty("logger.enable"), "YES", "NO", true) then
 		--print(LogStream.new())
-		return LogStream.new():getLogger(name)
+		return self._rtcout:getLogger(name)
 	end
 	if self._rtcout == nil then
 		self._rtcout = LogStream.new(name)
+		--print(self._config:getProperty("logger.log_level"))
 		self._rtcout:setLogLevel(self._config:getProperty("logger.log_level"))
 		return self._rtcout:getLogger(name)
 	else

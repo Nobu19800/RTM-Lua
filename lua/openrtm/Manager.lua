@@ -905,6 +905,7 @@ end
 -- @param true：設定成功
 function Manager:initLogger()
 	self._rtcout = self:getLogbuf()
+	--print(self._config:getProperty("logger.enable"), StringUtil.toBool(self._config:getProperty("logger.enable"), "YES", "NO", true))
 	if not StringUtil.toBool(self._config:getProperty("logger.enable"), "YES", "NO", true) then
 		return true
 	end
@@ -1386,7 +1387,7 @@ function Manager:getLogbuf(name)
 	end
 	if not StringUtil.toBool(self._config:getProperty("logger.enable"), "YES", "NO", true) then
 		--print(LogStream.new())
-		return self._rtcout:getLogger(name)
+		return LogStream.new():getLogger(name)
 	end
 	if self._rtcout == nil then
 		self._rtcout = LogStream.new(name)

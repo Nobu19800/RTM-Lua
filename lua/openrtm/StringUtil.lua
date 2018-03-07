@@ -195,7 +195,7 @@ StringUtil.toBool = function(_str, yes, no, default_value)
 	if _str:match(yes) ~= nil then
 		return true
 	elseif _str:match(no) ~= nil then
-		return true
+		return false
 	end
 	return default_value
 end

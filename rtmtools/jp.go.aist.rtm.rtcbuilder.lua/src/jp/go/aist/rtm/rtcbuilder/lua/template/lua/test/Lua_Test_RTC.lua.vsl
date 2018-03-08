@@ -273,13 +273,13 @@ ${rtcParam.name}Test.new = function(manager)
 		return self._ReturnCode_t.RTC_OK
 	end
 
-#if(${rtcParam.getDocActionOverView(1).length()}>0)	#if(${rtcParam.IsNotImplemented(1)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(1)})}
+#if(${rtcParam.getDocActionOverView(1).length()}>0)	#if(${rtcParam.IsNotImplemented(1)})--#end${minusminus} ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(1)})}
 #end
-	#if(${rtcParam.IsNotImplemented(1)})--	#end--
-	#if(${rtcParam.IsNotImplemented(1)})--	#end-- The finalize action (on ALIVE->END transition)
-	#if(${rtcParam.IsNotImplemented(1)})--	#end-- formaer rtc_exiting_entry()
-	#if(${rtcParam.IsNotImplemented(1)})--	#end--
-	#if(${rtcParam.IsNotImplemented(1)})--	#end-- @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(1)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(1)})--	#end${minusminus} The finalize action (on ALIVE->END transition)
+	#if(${rtcParam.IsNotImplemented(1)})--	#end${minusminus} formaer rtc_exiting_entry()
+	#if(${rtcParam.IsNotImplemented(1)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(1)})--	#end${minusminus} @return RTC::ReturnCode_t
 	#if(${rtcParam.IsNotImplemented(1)})--#end
 
 #if(${rtcParam.getDocActionPreCondition(1).length()}>0)	#if(${rtcParam.IsNotImplemented(1)})--#end	-- @pre ${tmpltHelperLua.convertPreShDocLua(${rtcParam.getDocActionPreCondition(1)})}
@@ -295,236 +295,236 @@ ${rtcParam.name}Test.new = function(manager)
 	#if(${rtcParam.IsNotImplemented(1)})--#end	return self._ReturnCode_t.RTC_OK
 	#if(${rtcParam.IsNotImplemented(1)})--#end	end
 
-#if(${rtcParam.getDocActionOverView(2).length()}>0)	#if(${rtcParam.IsNotImplemented(2)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(2)})}
+#if(${rtcParam.getDocActionOverView(2).length()}>0)	#if(${rtcParam.IsNotImplemented(2)})--#end${minusminus} ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(2)})}
 #end
-	#if(${rtcParam.IsNotImplemented(2)})--	#end--
-	#if(${rtcParam.IsNotImplemented(2)})--	#end-- The startup action when ExecutionContext startup
-	#if(${rtcParam.IsNotImplemented(2)})--	#end-- former rtc_starting_entry()
-	#if(${rtcParam.IsNotImplemented(2)})--	#end--
-	#if(${rtcParam.IsNotImplemented(2)})--	#end-- @param ec_id target ExecutionContext Id
-	#if(${rtcParam.IsNotImplemented(2)})--	#end--
-	#if(${rtcParam.IsNotImplemented(2)})--	#end-- @return RTC::ReturnCode_t
-	#if(${rtcParam.IsNotImplemented(2)})--	#end--
+	#if(${rtcParam.IsNotImplemented(2)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(2)})--	#end${minusminus} The startup action when ExecutionContext startup
+	#if(${rtcParam.IsNotImplemented(2)})--	#end${minusminus} former rtc_starting_entry()
+	#if(${rtcParam.IsNotImplemented(2)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(2)})--	#end${minusminus} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(2)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(2)})--	#end${minusminus} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(2)})--	#end${minusminus}
 #if(${rtcParam.getDocActionPreCondition(2).length()}>0)	#if(${rtcParam.IsNotImplemented(2)})--#end	-- @pre ${tmpltHelperLua.convertPreShDocLua(${rtcParam.getDocActionPreCondition(2)})}
 #end
 #if(${rtcParam.getDocActionPostCondition(2).length()}>0)	#if(${rtcParam.IsNotImplemented(2)})--#end	-- @post ${tmpltHelperLua.convertPostShDocLua(${rtcParam.getDocActionPostCondition(2)})}
 #end
-	#if(${rtcParam.IsNotImplemented(2)})--	#end--
-	#if(${rtcParam.IsNotImplemented(2)})--	#end function obj:onStartup(ec_id)
+	#if(${rtcParam.IsNotImplemented(2)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(2)})--	#end${function} obj:onStartup(ec_id)
 	#if(${rtcParam.IsNotImplemented(2)})--	#end
 #if(${tmpltHelper.checkDetailContent(2,${rtcParam})})		${rtcParam.getDetailContent(2)}
 #end
 
 	#if(${rtcParam.IsNotImplemented(2)})--	#end	return self._ReturnCode_t.RTC_OK
-	#if(${rtcParam.IsNotImplemented(2)})--	#end end
+	#if(${rtcParam.IsNotImplemented(2)})--	#end${end}
 
-#if(${rtcParam.getDocActionOverView(3).length()}>0)	#if(${rtcParam.IsNotImplemented(3)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(3)})}
+#if(${rtcParam.getDocActionOverView(3).length()}>0)	#if(${rtcParam.IsNotImplemented(3)})--#end${minusminus} ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(3)})}
 #end
-	#if(${rtcParam.IsNotImplemented(3)})--	#end--
-	#if(${rtcParam.IsNotImplemented(3)})--	#end-- The shutdown action when ExecutionContext stop
-	#if(${rtcParam.IsNotImplemented(3)})--	#end-- former rtc_stopping_entry()
-	#if(${rtcParam.IsNotImplemented(3)})--	#end--
-	#if(${rtcParam.IsNotImplemented(3)})--	#end-- @param ec_id target ExecutionContext Id
-	#if(${rtcParam.IsNotImplemented(3)})--	#end--
-	#if(${rtcParam.IsNotImplemented(3)})--	#end-- @return RTC::ReturnCode_t
-	#if(${rtcParam.IsNotImplemented(3)})--	#end--
+	#if(${rtcParam.IsNotImplemented(3)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(3)})--	#end${minusminus} The shutdown action when ExecutionContext stop
+	#if(${rtcParam.IsNotImplemented(3)})--	#end${minusminus} former rtc_stopping_entry()
+	#if(${rtcParam.IsNotImplemented(3)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(3)})--	#end${minusminus} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(3)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(3)})--	#end${minusminus} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(3)})--	#end${minusminus}
 #if(${rtcParam.getDocActionPreCondition(3).length()}>0)	#if(${rtcParam.IsNotImplemented(3)})--#end	-- @pre ${tmpltHelperLua.convertPreShDocLua(${rtcParam.getDocActionPreCondition(3)})}
 #end
 #if(${rtcParam.getDocActionPostCondition(3).length()}>0)	#if(${rtcParam.IsNotImplemented(3)})--#end	-- @post ${tmpltHelperLua.convertPostShDocLua(${rtcParam.getDocActionPostCondition(3)})}
 #end
-	#if(${rtcParam.IsNotImplemented(3)})--	#end--
-	#if(${rtcParam.IsNotImplemented(3)})--	#end function obj:onShutdown(ec_id)
+	#if(${rtcParam.IsNotImplemented(3)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(3)})--	#end${function} obj:onShutdown(ec_id)
 	#if(${rtcParam.IsNotImplemented(3)})--	#end
 #if(${tmpltHelper.checkDetailContent(3,${rtcParam})})		${rtcParam.getDetailContent(3)}
 #end
 
 	#if(${rtcParam.IsNotImplemented(3)})--	#end	return self._ReturnCode_t.RTC_OK
-	#if(${rtcParam.IsNotImplemented(3)})--	#end end
+	#if(${rtcParam.IsNotImplemented(3)})--	#end${end}
 
-#if(${rtcParam.getDocActionOverView(4).length()}>0)	#if(${rtcParam.IsNotImplemented(4)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(4)})}
+#if(${rtcParam.getDocActionOverView(4).length()}>0)	#if(${rtcParam.IsNotImplemented(4)})--#end${minusminus} ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(4)})}
 #end
-	#if(${rtcParam.IsNotImplemented(4)})--	#end--
-	#if(${rtcParam.IsNotImplemented(4)})--	#end-- The activated action (Active state entry action)
-	#if(${rtcParam.IsNotImplemented(4)})--	#end-- former rtc_active_entry()
-	#if(${rtcParam.IsNotImplemented(4)})--	#end--
-	#if(${rtcParam.IsNotImplemented(4)})--	#end-- @param ec_id target ExecutionContext Id
-	#if(${rtcParam.IsNotImplemented(4)})--	#end--
-	#if(${rtcParam.IsNotImplemented(4)})--	#end-- @return RTC::ReturnCode_t
-	#if(${rtcParam.IsNotImplemented(4)})--	#end--
+	#if(${rtcParam.IsNotImplemented(4)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(4)})--	#end${minusminus} The activated action (Active state entry action)
+	#if(${rtcParam.IsNotImplemented(4)})--	#end${minusminus} former rtc_active_entry()
+	#if(${rtcParam.IsNotImplemented(4)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(4)})--	#end${minusminus} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(4)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(4)})--	#end${minusminus} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(4)})--	#end${minusminus}
 #if(${rtcParam.getDocActionPreCondition(4).length()}>0)	#if(${rtcParam.IsNotImplemented(4)})--#end	-- @pre ${tmpltHelperLua.convertPreShDocLua(${rtcParam.getDocActionPreCondition(4)})}
 #end
 #if(${rtcParam.getDocActionPostCondition(4).length()}>0)	#if(${rtcParam.IsNotImplemented(4)})--#end	-- @post ${tmpltHelperLua.convertPostShDocLua(${rtcParam.getDocActionPostCondition(4)})}
 #end
-	#if(${rtcParam.IsNotImplemented(4)})--#end--
-	#if(${rtcParam.IsNotImplemented(4)})--#end function obj:onActivated(ec_id)
+	#if(${rtcParam.IsNotImplemented(4)})--#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(4)})--#end${function} obj:onActivated(ec_id)
 	#if(${rtcParam.IsNotImplemented(4)})--#end
 #if(${tmpltHelper.checkDetailContent(4,${rtcParam})})		${rtcParam.getDetailContent(4)}
 #end
 
 	#if(${rtcParam.IsNotImplemented(4)})--#end	return self._ReturnCode_t.RTC_OK
-	#if(${rtcParam.IsNotImplemented(4)})--#end end
+	#if(${rtcParam.IsNotImplemented(4)})--#end${end}
 
-#if(${rtcParam.getDocActionOverView(5).length()}>0)	#if(${rtcParam.IsNotImplemented(5)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(5)})}
+#if(${rtcParam.getDocActionOverView(5).length()}>0)	#if(${rtcParam.IsNotImplemented(5)})--#end${minusminus} ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(5)})}
 #end
-	#if(${rtcParam.IsNotImplemented(5)})--	#end--
-	#if(${rtcParam.IsNotImplemented(5)})--	#end-- The deactivated action (Active state exit action)
-	#if(${rtcParam.IsNotImplemented(5)})--	#end-- former rtc_active_exit()
-	#if(${rtcParam.IsNotImplemented(5)})--	#end--
-	#if(${rtcParam.IsNotImplemented(5)})--	#end-- @param ec_id target ExecutionContext Id
-	#if(${rtcParam.IsNotImplemented(5)})--	#end--
-	#if(${rtcParam.IsNotImplemented(5)})--	#end-- @return RTC::ReturnCode_t
-	#if(${rtcParam.IsNotImplemented(5)})--	#end--
+	#if(${rtcParam.IsNotImplemented(5)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(5)})--	#end${minusminus} The deactivated action (Active state exit action)
+	#if(${rtcParam.IsNotImplemented(5)})--	#end${minusminus} former rtc_active_exit()
+	#if(${rtcParam.IsNotImplemented(5)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(5)})--	#end${minusminus} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(5)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(5)})--	#end${minusminus} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(5)})--	#end${minusminus}
 #if(${rtcParam.getDocActionPreCondition(5).length()}>0)	#if(${rtcParam.IsNotImplemented(5)})--#end	-- @pre ${tmpltHelperLua.convertPreShDocLua(${rtcParam.getDocActionPreCondition(5)})}
 #end
 #if(${rtcParam.getDocActionPostCondition(5).length()}>0)	#if(${rtcParam.IsNotImplemented(5)})--#end	-- @post ${tmpltHelperLua.convertPostShDocLua(${rtcParam.getDocActionPostCondition(5)})}
 #end
-	#if(${rtcParam.IsNotImplemented(5)})--	#end--
-	#if(${rtcParam.IsNotImplemented(5)})--	#end function obj:onDeactivated(ec_id)
+	#if(${rtcParam.IsNotImplemented(5)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(5)})--	#end${function} obj:onDeactivated(ec_id)
 	#if(${rtcParam.IsNotImplemented(5)})--	#end
 #if(${tmpltHelper.checkDetailContent(5,${rtcParam})})		${rtcParam.getDetailContent(5)}
 #end
 
 	#if(${rtcParam.IsNotImplemented(5)})--	#end	return self._ReturnCode_t.RTC_OK
-	#if(${rtcParam.IsNotImplemented(5)})--	#end end
+	#if(${rtcParam.IsNotImplemented(5)})--	#end${end}
 
-#if(${rtcParam.getDocActionOverView(9).length()}>0)	#if(${rtcParam.IsNotImplemented(9)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(9)})}
+#if(${rtcParam.getDocActionOverView(9).length()}>0)	#if(${rtcParam.IsNotImplemented(9)})--#end${minusminus} ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(9)})}
 #end
-	#if(${rtcParam.IsNotImplemented(9)})--	#end--
-	#if(${rtcParam.IsNotImplemented(9)})--	#end-- The execution action that is invoked periodically
-	#if(${rtcParam.IsNotImplemented(9)})--	#end-- former rtc_active_do()
-	#if(${rtcParam.IsNotImplemented(9)})--	#end--
-	#if(${rtcParam.IsNotImplemented(9)})--	#end-- @param ec_id target ExecutionContext Id
-	#if(${rtcParam.IsNotImplemented(9)})--	#end--
-	#if(${rtcParam.IsNotImplemented(9)})--	#end-- @return RTC::ReturnCode_t
-	#if(${rtcParam.IsNotImplemented(9)})--	#end--
+	#if(${rtcParam.IsNotImplemented(9)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(9)})--	#end${minusminus} The execution action that is invoked periodically
+	#if(${rtcParam.IsNotImplemented(9)})--	#end${minusminus} former rtc_active_do()
+	#if(${rtcParam.IsNotImplemented(9)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(9)})--	#end${minusminus} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(9)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(9)})--	#end${minusminus} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(9)})--	#end${minusminus}
 #if(${rtcParam.getDocActionPreCondition(9).length()}>0)	#if(${rtcParam.IsNotImplemented(9)})--#end	-- @pre ${tmpltHelperLua.convertPreShDocLua(${rtcParam.getDocActionPreCondition(9)})}
 #end
 #if(${rtcParam.getDocActionPostCondition(9).length()}>0)	#if(${rtcParam.IsNotImplemented(9)})--#end	-- @post ${tmpltHelperLua.convertPostShDocLua(${rtcParam.getDocActionPostCondition(9)})}
 #end
-	#if(${rtcParam.IsNotImplemented(9)})--	#end--
-	#if(${rtcParam.IsNotImplemented(9)})--	#end function obj:onExecute(ec_id)
+	#if(${rtcParam.IsNotImplemented(9)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(9)})--	#end${function} obj:onExecute(ec_id)
 	#if(${rtcParam.IsNotImplemented(9)})--	#end
 #if(${tmpltHelper.checkDetailContent(9,${rtcParam})})		${rtcParam.getDetailContent(9)}
 #end
 
 	#if(${rtcParam.IsNotImplemented(9)})--#end	return self._ReturnCode_t.RTC_OK
-	#if(${rtcParam.IsNotImplemented(9)})--#end end
+	#if(${rtcParam.IsNotImplemented(9)})--#end${end}
 
-#if(${rtcParam.getDocActionOverView(6).length()}>0)	#if(${rtcParam.IsNotImplemented(6)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(6)})}
+#if(${rtcParam.getDocActionOverView(6).length()}>0)	#if(${rtcParam.IsNotImplemented(6)})--#end${minusminus} ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(6)})}
 #end
-	#if(${rtcParam.IsNotImplemented(6)})--	#end--
-	#if(${rtcParam.IsNotImplemented(6)})--	#end-- The aborting action when main logic error occurred.
-	#if(${rtcParam.IsNotImplemented(6)})--	#end-- former rtc_aborting_entry()
-	#if(${rtcParam.IsNotImplemented(6)})--	#end--
-	#if(${rtcParam.IsNotImplemented(6)})--	#end-- @param ec_id target ExecutionContext Id
-	#if(${rtcParam.IsNotImplemented(6)})--	#end--
-	#if(${rtcParam.IsNotImplemented(6)})--	#end-- @return RTC::ReturnCode_t
-	#if(${rtcParam.IsNotImplemented(6)})--	#end--
+	#if(${rtcParam.IsNotImplemented(6)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(6)})--	#end${minusminus} The aborting action when main logic error occurred.
+	#if(${rtcParam.IsNotImplemented(6)})--	#end${minusminus} former rtc_aborting_entry()
+	#if(${rtcParam.IsNotImplemented(6)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(6)})--	#end${minusminus} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(6)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(6)})--	#end${minusminus} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(6)})--	#end${minusminus}
 #if(${rtcParam.getDocActionPreCondition(6).length()}>0)	#if(${rtcParam.IsNotImplemented(6)})--#end	-- @pre ${tmpltHelperLua.convertPreShDocLua(${rtcParam.getDocActionPreCondition(6)})}
 #end
 #if(${rtcParam.getDocActionPostCondition(6).length()}>0)	#if(${rtcParam.IsNotImplemented(6)})--#end	-- @post ${tmpltHelperLua.convertPostShDocLua(${rtcParam.getDocActionPostCondition(6)})}
 #end
-	#if(${rtcParam.IsNotImplemented(6)})--	#end--
-	#if(${rtcParam.IsNotImplemented(6)})--	#end function obj:onAborting(ec_id)
+	#if(${rtcParam.IsNotImplemented(6)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(6)})--	#end${function} obj:onAborting(ec_id)
 	#if(${rtcParam.IsNotImplemented(6)})--	#end
 #if(${tmpltHelper.checkDetailContent(6,${rtcParam})})		${rtcParam.getDetailContent(6)}
 #end
 
 	#if(${rtcParam.IsNotImplemented(6)})--#end	return self._ReturnCode_t.RTC_OK
-	#if(${rtcParam.IsNotImplemented(6)})--#end end
+	#if(${rtcParam.IsNotImplemented(6)})--#end${end}
 
-#if(${rtcParam.getDocActionOverView(7).length()}>0)	#if(${rtcParam.IsNotImplemented(7)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(7)})}
+#if(${rtcParam.getDocActionOverView(7).length()}>0)	#if(${rtcParam.IsNotImplemented(7)})--#end${minusminus} ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(7)})}
 #end
-	#if(${rtcParam.IsNotImplemented(7)})--	#end--
-	#if(${rtcParam.IsNotImplemented(7)})--	#end-- The error action in ERROR state
-	#if(${rtcParam.IsNotImplemented(7)})--	#end-- former rtc_error_do()
-	#if(${rtcParam.IsNotImplemented(7)})--	#end--
-	#if(${rtcParam.IsNotImplemented(7)})--	#end-- @param ec_id target ExecutionContext Id
-	#if(${rtcParam.IsNotImplemented(7)})--	#end--
-	#if(${rtcParam.IsNotImplemented(7)})--	#end-- @return RTC::ReturnCode_t
-	#if(${rtcParam.IsNotImplemented(7)})--	#end--
+	#if(${rtcParam.IsNotImplemented(7)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(7)})--	#end${minusminus} The error action in ERROR state
+	#if(${rtcParam.IsNotImplemented(7)})--	#end${minusminus} former rtc_error_do()
+	#if(${rtcParam.IsNotImplemented(7)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(7)})--	#end${minusminus} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(7)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(7)})--	#end${minusminus} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(7)})--	#end${minusminus}
 #if(${rtcParam.getDocActionPreCondition(7).length()}>0)	#if(${rtcParam.IsNotImplemented(7)})--#end	-- @pre ${tmpltHelperLua.convertPreShDocLua(${rtcParam.getDocActionPreCondition(7)})}
 #end
 #if(${rtcParam.getDocActionPostCondition(7).length()}>0)	#if(${rtcParam.IsNotImplemented(7)})--#end	-- @post ${tmpltHelperLua.convertPostShDocLua(${rtcParam.getDocActionPostCondition(7)})}
 #end
-	#if(${rtcParam.IsNotImplemented(7)})--	#end--
-	#if(${rtcParam.IsNotImplemented(7)})--	#end function obj:onError(ec_id)
+	#if(${rtcParam.IsNotImplemented(7)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(7)})--	#end${function} obj:onError(ec_id)
 	#if(${rtcParam.IsNotImplemented(7)})--	#end
 #if(${tmpltHelper.checkDetailContent(7,${rtcParam})})		${rtcParam.getDetailContent(7)}
 #end
 
 	#if(${rtcParam.IsNotImplemented(7)})--	#end	return self._ReturnCode_t.RTC_OK
-	#if(${rtcParam.IsNotImplemented(7)})--	#end end
+	#if(${rtcParam.IsNotImplemented(7)})--	#end${end}
 
-#if(${rtcParam.getDocActionOverView(8).length()}>0)	#if(${rtcParam.IsNotImplemented(8)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(8)})}
+#if(${rtcParam.getDocActionOverView(8).length()}>0)	#if(${rtcParam.IsNotImplemented(8)})--#end${minusminus} ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(8)})}
 #end
-	#if(${rtcParam.IsNotImplemented(8)})--	#end--
-	#if(${rtcParam.IsNotImplemented(8)})--	#end-- The reset action that is invoked resetting
-	#if(${rtcParam.IsNotImplemented(8)})--	#end-- This is same but different the former rtc_init_entry()
-	#if(${rtcParam.IsNotImplemented(8)})--	#end--
-	#if(${rtcParam.IsNotImplemented(8)})--	#end-- @param ec_id target ExecutionContext Id
-	#if(${rtcParam.IsNotImplemented(8)})--	#end--
-	#if(${rtcParam.IsNotImplemented(8)})--	#end-- @return RTC::ReturnCode_t
-	#if(${rtcParam.IsNotImplemented(8)})--	#end--
+	#if(${rtcParam.IsNotImplemented(8)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(8)})--	#end${minusminus} The reset action that is invoked resetting
+	#if(${rtcParam.IsNotImplemented(8)})--	#end${minusminus} This is same but different the former rtc_init_entry()
+	#if(${rtcParam.IsNotImplemented(8)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(8)})--	#end${minusminus} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(8)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(8)})--	#end${minusminus} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(8)})--	#end${minusminus}
 #if(${rtcParam.getDocActionPreCondition(8).length()}>0)	#if(${rtcParam.IsNotImplemented(8)})--#end	-- @pre ${tmpltHelperLua.convertPreShDocLua(${rtcParam.getDocActionPreCondition(8)})}
 #end
 #if(${rtcParam.getDocActionPostCondition(8).length()}>0)	#if(${rtcParam.IsNotImplemented(8)})--#end	-- @post ${tmpltHelperLua.convertPostShDocLua(${rtcParam.getDocActionPostCondition(8)})}
 #end
-	#if(${rtcParam.IsNotImplemented(8)})--	#end--
-	#if(${rtcParam.IsNotImplemented(8)})--	#end function obj:onReset(ec_id)
+	#if(${rtcParam.IsNotImplemented(8)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(8)})--	#end${function} obj:onReset(ec_id)
 	#if(${rtcParam.IsNotImplemented(8)})--	#end
 #if(${tmpltHelper.checkDetailContent(8,${rtcParam})})		${rtcParam.getDetailContent(8)}
 #end
 
 	#if(${rtcParam.IsNotImplemented(8)})--	#end	return self._ReturnCode_t.RTC_OK
-	#if(${rtcParam.IsNotImplemented(8)})--	#end end
+	#if(${rtcParam.IsNotImplemented(8)})--	#end${end}
 
-#if(${rtcParam.getDocActionOverView(10).length()}>0)	#if(${rtcParam.IsNotImplemented(10)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(10)})}
+#if(${rtcParam.getDocActionOverView(10).length()}>0)	#if(${rtcParam.IsNotImplemented(10)})--#end${minusminus} ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(10)})}
 #end
-	#if(${rtcParam.IsNotImplemented(10)})--	#end--
-	#if(${rtcParam.IsNotImplemented(10)})--	#end-- The state update action that is invoked after onExecute() action
-	#if(${rtcParam.IsNotImplemented(10)})--	#end-- no corresponding operation exists in OpenRTm-aist-0.2.0
-	#if(${rtcParam.IsNotImplemented(10)})--	#end--
-	#if(${rtcParam.IsNotImplemented(10)})--	#end-- @param ec_id target ExecutionContext Id
-	#if(${rtcParam.IsNotImplemented(10)})--	#end--
-	#if(${rtcParam.IsNotImplemented(10)})--	#end-- @return RTC::ReturnCode_t
-	#if(${rtcParam.IsNotImplemented(10)})--	#end--
+	#if(${rtcParam.IsNotImplemented(10)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(10)})--	#end${minusminus} The state update action that is invoked after onExecute() action
+	#if(${rtcParam.IsNotImplemented(10)})--	#end${minusminus} no corresponding operation exists in OpenRTm-aist-0.2.0
+	#if(${rtcParam.IsNotImplemented(10)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(10)})--	#end${minusminus} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(10)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(10)})--	#end${minusminus} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(10)})--	#end${minusminus}
 
 #if(${rtcParam.getDocActionPreCondition(10).length()}>0)	#if(${rtcParam.IsNotImplemented(10)})--#end	-- @pre ${tmpltHelperLua.convertPreShDocLua(${rtcParam.getDocActionPreCondition(10)})}
 #end
 #if(${rtcParam.getDocActionPostCondition(10).length()}>0)	#if(${rtcParam.IsNotImplemented(10)})--#end	-- @post ${tmpltHelperLua.convertPostShDocLua(${rtcParam.getDocActionPostCondition(10)})}
 #end
-	#if(${rtcParam.IsNotImplemented(10)})--	#end--
-	#if(${rtcParam.IsNotImplemented(10)})--	#end function obj:onStateUpdate(ec_id)
+	#if(${rtcParam.IsNotImplemented(10)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(10)})--	#end${function} obj:onStateUpdate(ec_id)
 	#if(${rtcParam.IsNotImplemented(10)})--	#end
 #if(${tmpltHelper.checkDetailContent(10,${rtcParam})})		${rtcParam.getDetailContent(10)}
 #end
 
 	#if(${rtcParam.IsNotImplemented(10)})--	#end	return self._ReturnCode_t.RTC_OK
-	#if(${rtcParam.IsNotImplemented(10)})--	#end end
+	#if(${rtcParam.IsNotImplemented(10)})--	#end${end}
 
-#if(${rtcParam.getDocActionOverView(11).length()}>0)	#if(${rtcParam.IsNotImplemented(11)})--#end-- ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(11)})}
+#if(${rtcParam.getDocActionOverView(11).length()}>0)	#if(${rtcParam.IsNotImplemented(11)})--#end${minusminus} ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(11)})}
 #end
-	#if(${rtcParam.IsNotImplemented(11)})--	#end--
-	#if(${rtcParam.IsNotImplemented(11)})--	#end-- The action that is invoked when execution context's rate is changed
-	#if(${rtcParam.IsNotImplemented(11)})--	#end-- no corresponding operation exists in OpenRTm-aist-0.2.0
-	#if(${rtcParam.IsNotImplemented(11)})--	#end--
-	#if(${rtcParam.IsNotImplemented(11)})--	#end-- @param ec_id target ExecutionContext Id
-	#if(${rtcParam.IsNotImplemented(11)})--	#end--
-	#if(${rtcParam.IsNotImplemented(11)})--	#end-- @return RTC::ReturnCode_t
-	#if(${rtcParam.IsNotImplemented(11)})--	#end--
+	#if(${rtcParam.IsNotImplemented(11)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(11)})--	#end${minusminus} The action that is invoked when execution context's rate is changed
+	#if(${rtcParam.IsNotImplemented(11)})--	#end${minusminus} no corresponding operation exists in OpenRTm-aist-0.2.0
+	#if(${rtcParam.IsNotImplemented(11)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(11)})--	#end${minusminus} @param ec_id target ExecutionContext Id
+	#if(${rtcParam.IsNotImplemented(11)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(11)})--	#end${minusminus} @return RTC::ReturnCode_t
+	#if(${rtcParam.IsNotImplemented(11)})--	#end${minusminus}
 #if(${rtcParam.getDocActionPreCondition(11).length()}>0)	#if(${rtcParam.IsNotImplemented(11)})--#end	-- @pre ${tmpltHelperLua.convertPreShDocLua(${rtcParam.getDocActionPreCondition(11)})}
 #end
 #if(${rtcParam.getDocActionPostCondition(11).length()}>0)	#if(${rtcParam.IsNotImplemented(11)})--#end	-- @post ${tmpltHelperLua.convertPostShDocLua(${rtcParam.getDocActionPostCondition(11)})}
 #end
-	#if(${rtcParam.IsNotImplemented(11)})--	#end--
-	#if(${rtcParam.IsNotImplemented(11)})--	#end function obj:onRateChanged(ec_id)
+	#if(${rtcParam.IsNotImplemented(11)})--	#end${minusminus}
+	#if(${rtcParam.IsNotImplemented(11)})--	#end${function} obj:onRateChanged(ec_id)
 	#if(${rtcParam.IsNotImplemented(11)})--	#end
 #if(${tmpltHelper.checkDetailContent(11,${rtcParam})})		${rtcParam.getDetailContent(11)}
 #end
 
 	#if(${rtcParam.IsNotImplemented(11)})--	#end	return self._ReturnCode_t.RTC_OK
-	#if(${rtcParam.IsNotImplemented(11)})--	#end end
+	#if(${rtcParam.IsNotImplemented(11)})--	#end${end}
 	return obj
 end
 

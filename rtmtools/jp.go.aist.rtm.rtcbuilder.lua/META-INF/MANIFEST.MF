@@ -1,18 +1,23 @@
 Manifest-Version: 1.0
-Ant-Version: Apache Ant 1.10.1
-Created-By: 1.8.0_131-b11 (Oracle Corporation)
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: jp.go.aist.rtm.rtcbuilder.lua;singleton:=true
 Bundle-Version: 0.2.0.rc1v20180305
-Bundle-ClassPath: jp.go.aist.rtm.rtcbuilder.lua,.
+Bundle-ClassPath: jp.go.aist.rtm.rtcbuilder.lua,
+ jp.go.aist.rtm.rtcbuilder.lua,
+ .
 Bundle-Activator: jp.go.aist.rtm.rtcbuilder.lua.RtcBuilderLuaPlugin
 Bundle-Vendor: %providerName
-Require-Bundle: org.eclipse.ui, org.eclipse.core.runtime, jp.go.aist.r
- tm.rtcbuilder;bundle-version="1.1.0"
+Export-Package: jp.go.aist.rtm.rtcbuilder.lua,
+ jp.go.aist.rtm.rtcbuilder.lua.manager,
+ jp.go.aist.rtm.rtcbuilder.lua.ui.Perspective
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ jp.go.aist.rtm.rtcbuilder;bundle-version="1.1.0",
+ jp.go.aist.rtm.rtcbuilder.java;bundle-version="1.1.0",
+ jp.go.aist.rtm.rtcbuilder.python;bundle-version="1.1.0"
 Bundle-ActivationPolicy: lazy
-Export-Package: jp.go.aist.rtm.rtcbuilder.lua,jp.go.aist.rtm.rtcbuilde
- r.lua.manager,jp.go.aist.rtm.rtcbuilder.lua.ui.Perspective
-Built-By: Miyamoto
+Ant-Version: Apache Ant 1.10.1
 Built-Date: 2018/03/05 22:08:24
-
+Created-By: 1.8.0_131-b11 (Oracle Corporation)
+Built-By: Miyamoto

@@ -71,7 +71,8 @@ set(headers
 
 
 
-	
+
+add_definitions("-DLUA_BUILD_AS_DLL")
 
 
 add_library (${target} SHARED  ${srcs} ${headers}  src/luac.c)

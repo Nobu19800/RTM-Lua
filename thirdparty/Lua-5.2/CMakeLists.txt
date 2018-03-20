@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 2.6)
 
-set(target lua5.2)
+set(target lua53)
 project (${target})
 
 
@@ -35,6 +35,7 @@ set(srcs
 	src/ltablib.c
 	src/ltm.c
 	src/lundump.c
+	src/lutf8lib.c
 	src/lvm.c
 	src/lzio.c
 )
@@ -54,6 +55,7 @@ set(headers
 	src/lobject.h
 	src/lopcodes.h
 	src/lparser.h
+	src/lprefix.h
 	src/lstate.h
 	src/lstring.h
 	src/ltable.h
@@ -68,8 +70,9 @@ set(headers
 )
 
 
-ADD_DEFINITIONS(-DLUA_BUILD_AS_DLL)
 
+
+add_definitions("-DLUA_BUILD_AS_DLL")
 
 
 add_library (${target} SHARED  ${srcs} ${headers}  src/luac.c)

@@ -3,8 +3,6 @@
 --! @brief アウトポート出力のRTCサンプル
 ---------------------------------
 
-package.path = "..\\lua\\?.lua"
-package.cpath = "..\\clibs\\?.dll;"
 
 
 local openrtm  = require "openrtm"

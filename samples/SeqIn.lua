@@ -3,8 +3,7 @@
 --! @brief シーケンス型入力のRTCサンプル
 ---------------------------------
 
-package.path = "..\\lua\\?.lua"
-package.cpath = "..\\clibs\\?.dll;"
+
 
 
 

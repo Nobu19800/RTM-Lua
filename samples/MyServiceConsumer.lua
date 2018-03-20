@@ -3,8 +3,7 @@
 --! @brief サービスポート(コンシューマ側)のRTCサンプル
 ---------------------------------
 
-package.path = "..\\lua\\?.lua"
-package.cpath = "..\\clibs\\?.dll;"
+
 
 
 
@@ -62,7 +61,9 @@ MyServiceConsumer.new = function(manager)
 	-- @return リターンコード
 	function obj:onInitialize()
 		-- サービスポートにコンシューマオブジェクトを登録
-		self._myServicePort:registerConsumer("myservice0", "MyService", self._myservice0, "../idl/MyService.idl")
+		local fpath = openrtm.StringUtil.dirname(debug.getinfo(1)["short_src"])
+		local _str = string.gsub(fpath,"\\","/").."idl/MyService.idl"
+		self._myServicePort:registerConsumer("myservice0", "MyService", self._myservice0, _str)
 		-- ポート追加
 		self:addPort(self._myServicePort)
 

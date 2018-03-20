@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 2.6)
 
-set(target lua5.1)
+set(target lua51)
 project (${target})
 
 

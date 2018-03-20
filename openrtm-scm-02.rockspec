@@ -1,5 +1,5 @@
 package = "openrtm"
-version = "scm-0.2"
+version = "scm-02"
 source = {
    url = "https://github.com/Nobu19800/RTM-Lua/archive/master.zip",
    dir = "openrtm-master",

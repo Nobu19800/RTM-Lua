@@ -16,10 +16,10 @@ description = {
 
 
 dependencies = {
-   "lua >= 5.1",
-   "oil >= 0.4beta",
-   "lualogging >= 1.2.0",
-   "lua-rfc-4122-uuid-generator >= 0.0"
+   "lua >= 5.1"
+   --,"oil >= 0.4beta",
+   --"lualogging >= 1.2.0",
+   --"lua-rfc-4122-uuid-generator >= 0.0"
 }
 
 
@@ -145,7 +145,7 @@ build = {
         ["openrtm.version"] = "lua/openrtm/version.lua"
     },
    install = {
-      bin = {
+      lua = {
          ["idl.BasicDataType"] = "idl/BasicDataType.idl",
          ["idl.CosEvent"] = "idl/CosEvent.idl",
          ["idl.CosEventComm"] = "idl/CosEventComm.idl",

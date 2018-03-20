@@ -16,9 +16,10 @@ description = {
 
 
 dependencies = {
-   "lua >= 5.1"
-   --,"oil >= 4.0beta"
-   --,"LUA-RFC-4122-UUID-Generator >= 0.0"
+   "lua >= 5.1",
+   "oil >= 0.4beta",
+   "lualogging >= 1.2.0",
+   "lua-rfc-4122-uuid-generator >= 0.0"
 }
 
 

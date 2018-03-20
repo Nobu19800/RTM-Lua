@@ -1,6 +1,6 @@
 cd %~dp0
 
-cmd /c luarocks --local make
+cmd /c luarocks make
 
 
 cd thirdparty\LUA-RFC-4122-UUID-Generator

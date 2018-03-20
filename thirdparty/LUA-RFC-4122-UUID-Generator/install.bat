@@ -7,4 +7,4 @@ bitsadmin.exe /TRANSFER main_get https://raw.githubusercontent.com/tcjennings/LU
 bitsadmin.exe /TRANSFER uuid4get https://raw.githubusercontent.com/tcjennings/LUA-RFC-4122-UUID-Generator/master/uuid4.lua %~dp0\LUA-RFC-4122-UUID-Generator\uuid4.lua
 bitsadmin.exe /TRANSFER uuid5get https://raw.githubusercontent.com/tcjennings/LUA-RFC-4122-UUID-Generator/master/uuid5.lua %~dp0\LUA-RFC-4122-UUID-Generator\uuid5.lua
 
-cmd /c luarocks --local make
+cmd /c luarocks make

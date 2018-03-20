@@ -1,4 +1,4 @@
-luarocks --local make
+luarocks make
 
 cd thirdparty/LUA-RFC-4122-UUID-Generator
 

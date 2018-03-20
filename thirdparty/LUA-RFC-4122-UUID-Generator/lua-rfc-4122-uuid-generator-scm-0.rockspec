@@ -1,5 +1,5 @@
 package = "lua-rfc-4122-uuid-generator"
-version = "scm-0.0"
+version = "scm-0"
 source = {
    url = "https://github.com/tcjennings/LUA-RFC-4122-UUID-Generator/archive/master.zip",
    dir = "LUA-RFC-4122-UUID-Generator-master",

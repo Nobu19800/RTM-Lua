@@ -896,7 +896,7 @@ function Manager:initLogstreamOthers()
 			else
 				self._rtcout:RTC_INFO("Logstream "..lstype.." added.")
 				self._rtcout:addLogger(logstream)
-			end	
+			end
 		end
 	end
 end
@@ -909,11 +909,11 @@ function Manager:initLogger()
 	if not StringUtil.toBool(self._config:getProperty("logger.enable"), "YES", "NO", true) then
 		return true
 	end
-	
+
 	self:initLogstreamFile()
 	self:initLogstreamPlugins()
 	self:initLogstreamOthers()
-	
+
 	self._rtcout:setLogLevel(self._config:getProperty("logger.log_level"))
 	self._rtcout:setLogLock(StringUtil.toBool(self._config:getProperty("logger.stream_lock"),
                                                 "enable", "disable", false))
@@ -923,7 +923,7 @@ function Manager:initLogger()
     self._rtcout:RTC_INFO("  Tokyo Metropolitan University")
     self._rtcout:RTC_INFO("Manager starting.")
     self._rtcout:RTC_INFO("Starting local logging.")
-    
+
     return true
 end
 
@@ -1262,10 +1262,31 @@ function Manager:configureComponent(comp, prop)
 	if self._config:getProperty(name_conf) ~= "" then
 	end
 	if self._config:findNode(category.."."..inst_name) then
+		local temp_ = Properties.new({prop=self._config:getNode(category.."."..inst_name)})
+		local keys_ = temp_:propertyNames()
+		if not (#keys_ == 1 and keys_[#keys_] == "config_file") then
+			name_prop:mergeProperties(self._config:getNode(category.."."..inst_name))
+			self._rtcout:RTC_INFO("Component name conf exists in rtc.conf. Merged.")
+			self._rtcout:RTC_INFO(name_prop)
+			if self._config:findNode("config_file") then
+				table.insert(config_fname, self._config:getProperty("config_file"))
+			end
+		end
+
 	end
 	if self._config:getProperty(type_conf) ~= "" then
 	end
 	if self._config:findNode(category.."."..type_name) then
+		local temp_ = Properties.new({prop=self._config:getNode(category.."."..type_name)})
+		local keys_ = temp_:propertyNames()
+		if not (#keys_ == 1 and keys_[#keys_] == "config_file") then
+			type_prop:mergeProperties(self._config:getNode(category.."."..type_name))
+			self._rtcout:RTC_INFO("Component name conf exists in rtc.conf. Merged.")
+			self._rtcout:RTC_INFO(type_prop)
+			if self._config:findNode("config_file") then
+				table.insert(config_fname, self._config:getProperty("config_file"))
+			end
+		end
 	end
 	comp:setProperties(prop)
 	type_prop:mergeProperties(name_prop)

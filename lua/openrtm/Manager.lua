@@ -952,6 +952,7 @@ function Manager:initORB()
 		self._orb:loadidlfile(Manager:findIdLFile("InterfaceDataTypes.idl"))
 	end
 	self._ReturnCode_t = self._orb.types:lookup("::RTC::ReturnCode_t").labelvalue
+
 end
 
 
@@ -964,9 +965,10 @@ end
 -- IDLファイルは、Manager.luaの存在するディレクトリの2階層上のディレクトリを検索する
 -- @return IDLファイルパス
 function Manager:findIdLFile(name)
-	local fpath = StringUtil.dirname(debug.getinfo(1)["short_src"])
+	local fpath = StringUtil.dirname(string.sub(debug.getinfo(1)["source"],2))
+	--local fpath = StringUtil.dirname(string.gsub(debug.getinfo(1)["source"],"@",""))
 	--print(fpath)
-	local _str = string.gsub(fpath,"\\","/").."../../idl/"..name
+	local _str = string.gsub(fpath,"\\","/").."../idl/"..name
 	--print(_str)
 	return _str
 end

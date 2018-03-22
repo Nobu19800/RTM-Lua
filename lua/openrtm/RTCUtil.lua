@@ -42,10 +42,77 @@ RTCUtil.getReference = function(orb, servant, idl)
 	return nil
 end
 
+-- データのインスタンスをデータ型から取得
+-- @param data_type データ型(文字列)
+-- @return データのインスタンス
 RTCUtil.instantiateDataType = function(data_type)
-	return {tm={sec=0,nsec=0},data={}}
+	local Manager = require "openrtm.Manager"
+	local orb = Manager:getORB()
+	local data = orb.types:lookup(data_type)
+	local ret = {}
+	for k,v in pairs(data.fields) do
+		RTCUtil.getDataType(v, ret)
+	end
+	return ret
+	--return {tm={sec=0,nsec=0},data={}}
 end
 
+-- データの要素を抽出する
+-- @param data データ
+-- @param ret データのインスタンス
+RTCUtil.getDataType = function(data, ret)
+	if data.type_def ~= nil then
+		--print(data.type_def._type)
+		if data.type_def._type == "struct" then
+			ret[data.name] = {}
+		elseif data.type_def._type == "ulong" then
+			ret[data.name] = 0
+			return
+		elseif data.type_def._type == "long" then
+			ret[data.name] = 0
+			return
+		elseif data.type_def._type == "short" then
+			ret[data.name] = 0
+			return
+		elseif data.type_def._type == "ushort" then
+			ret[data.name] = 0
+			return
+		elseif data.type_def._type == "octet" then
+			ret[data.name] = 0x00
+			return
+		elseif data.type_def._type == "string" then
+			ret[data.name] = ""
+			return
+		elseif data.type_def._type == "float" then
+			ret[data.name] = 0
+			return
+		elseif data.type_def._type == "double" then
+			ret[data.name] = 0
+			return
+		elseif data.type_def._type == "ufloat" then
+			ret[data.name] = 0
+			return
+		elseif data.type_def._type == "udouble" then
+			ret[data.name] = 0
+			return
+		elseif data.type_def._type == "char" then
+			ret[data.name] = ""
+			return
+		elseif data.type_def._type == "boolean" then
+			ret[data.name] = true
+			return
+		elseif data.type_def._type == "sequence" then
+			ret[data.name] = {}
+			return
+		else
+			ret[data.name] = 0
+			return
+		end
+		for k,v in pairs(data.type_def.fields) do
+			RTCUtil.getDataType(v, ret[data.name])
+		end
+	end
+end
 
 
 return RTCUtil

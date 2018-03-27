@@ -70,8 +70,8 @@ ManagerServant.new = function()
 			function()
 				--print(self._mgr:getConfig())
 				local id = self._mgr:getConfig():getProperty("manager.name")
-				local svr = self._mgr:getORB():newservant(self, id, "IDL:RTM/Manager:1.0")
-				self._objref = RTCUtil.getReference(self._mgr:getORB(), svr, "IDL:RTM/Manager:1.0")
+				self._svr = self._mgr:getORB():newservant(self, id, "IDL:RTM/Manager:1.0")
+				self._objref = RTCUtil.getReference(self._mgr:getORB(), self._svr, "IDL:RTM/Manager:1.0")
 				--print(str)
 				--print(self._objref:_non_existent())
 			end)
@@ -80,6 +80,20 @@ ManagerServant.new = function()
 			return false
 		end
 		return true
+	end
+
+	function obj:exit()
+		for k,master in ipairs(self._masters) do
+			master:remove_slave_manager(self._objref)
+		end
+		self._masters = {}
+		for k,slave in ipairs(self._slaves) do
+			slave:remove_master_manager(self._objref)
+		end
+		self._slaves = {}
+
+		self._mgr:getORB():deactivate(self._svr)
+
 	end
 
 	-- アドレスからマネージャを検索
@@ -259,7 +273,7 @@ ManagerServant.new = function()
 		return self._masters
 	end
 
-	
+
 	-- マスターマネージャ削除
 	-- @param mgr マネージャ
 	-- @return リターンコード
@@ -302,8 +316,8 @@ ManagerServant.new = function()
 
 	-- RTCのオブジェクトリファレンス取得
 	-- 未実装
-	-- @param name 
-	-- @return 
+	-- @param name
+	-- @return
 	function obj:get_service(name)
 		return oil.corba.idl.null
 	end

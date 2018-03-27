@@ -341,7 +341,7 @@ RTObject.new = function(manager)
 		self._rtcout:RTC_TRACE("getObjRef()")
 		return self._objref
 	end
-	
+
 	-- Manager全体で設定したグローバルな実行コンテキストの設定取得
 	-- @param global_ec_props 実行コンテキストの設定
 	-- @return リターンコード
@@ -700,7 +700,7 @@ RTObject.new = function(manager)
 	function obj:writeAll()
 		self._rtcout:RTC_TRACE("writeAll()")
     end
-    
+
 
 	-- 初期化前のコールバック関数
 	-- @param ec_id 実行コンテキストのID
@@ -860,7 +860,7 @@ RTObject.new = function(manager)
 	function obj:getExecutionContext(ec_id)
 		return self:get_context(ec_id)
 	end
-	
+
 	-- 実行コンテキスト取得
 	-- @param ec_id 実行コンテキストのID
 	-- @return 実行コンテキスト
@@ -1271,7 +1271,7 @@ RTObject.new = function(manager)
 			ec:stop()
 			local success, exception = oil.pcall(
 				function()
-					--self._orb:deactivate(ec)
+					self._orb:deactivate(ec._svr)
 				end)
 			if not success then
 			end

@@ -40,8 +40,8 @@ PeriodicExecutionContext.new = function()
     obj._nowait = false
 
 	--ref = Manager:instance():getORB():tostring(obj)
-	local svr = Manager:instance():getORB():newservant(obj, nil, "IDL:omg.org/RTC/ExecutionContextService:1.0")
-	local ref = RTCUtil.getReference(Manager:instance():getORB(), svr, "IDL:omg.org/RTC/ExecutionContextService:1.0")
+	obj._svr = Manager:instance():getORB():newservant(obj, nil, "IDL:omg.org/RTC/ExecutionContextService:1.0")
+	local ref = RTCUtil.getReference(Manager:instance():getORB(), obj._svr, "IDL:omg.org/RTC/ExecutionContextService:1.0")
 	--print(ref:_non_existent())
 	--print(ref:start())
 	--print(svr)

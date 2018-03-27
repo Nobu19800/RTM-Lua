@@ -404,12 +404,13 @@ end
 -- ORB終了
 -- ロガー終了
 function Manager:shutdown()
-	self._listeners.manager_:preShutdown()
+	--self._listeners.manager_:preShutdown()
 	self:shutdownComponents()
+	self:shutdownManagerServant()
 	self:shutdownNaming()
 	self:shutdownORB()
 	self:shutdownManager()
-	self._listeners.manager_:postShutdown()
+	--self._listeners.manager_:postShutdown()
 	self:shutdownLogger()
 end
 
@@ -755,6 +756,13 @@ function Manager:deleteComponent(argv)
                                comp_id:getProperty("implementation_id"))
 			factory:destroy(comp)
 		end
+		if StringUtil.toBool(self._config:getProperty("manager.shutdown_on_nortcs"), "YES", "NO", true) then
+			local comps = self:getComponents()
+			print(#comps)
+			if #comps == 0 then
+				self:shutdown()
+			end
+		end
 	end
 end
 
@@ -847,6 +855,13 @@ function Manager:initManager(argv)
 	local config = ManagerConfig.new(argv)
 	self._config = Properties.new()
 	config:configure(self._config)
+end
+
+function Manager:shutdownManagerServant()
+	if self._mgrservant ~= nil then
+		self._mgrservant:exit()
+		self._mgrservant = nil
+	end
 end
 
 -- マネージャ終了

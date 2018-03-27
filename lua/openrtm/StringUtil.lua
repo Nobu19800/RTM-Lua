@@ -463,6 +463,26 @@ StringUtil.dirname = function(path)
 	return StringUtil.flatten(path_list, delimiter)..delimiter
 end
 
+StringUtil.dirname = function(path)
+	local delimiter = "\\"
+	if string.find(path, "/", 1, true) ~= nil then
+		delimiter = "/"
+	end
+	local path_list = StringUtil.split(path, delimiter)
+	path_list[#path_list] = nil
+	return StringUtil.flatten(path_list, delimiter)..delimiter
+end
+
+StringUtil.basename = function(path)
+	local delimiter = "\\"
+	if string.find(path, "/", 1, true) ~= nil then
+		delimiter = "/"
+	end
+	local path_list = StringUtil.split(path, delimiter)
+
+	return path_list[#path_list]
+end
+
 
 -- テーブルの要素数取得
 -- @param tbl テーブル
@@ -473,6 +493,39 @@ StringUtil.getKeyCount = function(tbl)
 		ret = ret + 1
 	end
 	return ret
+end
+
+
+StringUtil.isURL = function(str)
+	if str == "" then
+		return false
+	end
+
+	local pos,c = string.find(str, "://")
+	if pos ~= 1 and pos ~= nil then
+		return true
+	end
+	return false
+end
+
+
+
+
+
+StringUtil.isAbsolutePath = function(str)
+	if string.sub(str,1,1) == "/" then
+		return true
+	end
+	if string.match(string.sub(str,1,1), '[a-zA-Z]') then
+		if string.sub(str,2,2) == ":" and (string.sub(str,3,3) == "\\" or string.sub(str,3,3) == "/") then
+			return true
+		end
+	end
+	if string.sub(str,1,1) == "\\" and string.sub(str,2,2) == "\\" then
+		return true
+	end
+
+  return false
 end
 
 return StringUtil

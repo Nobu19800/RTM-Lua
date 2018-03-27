@@ -243,6 +243,8 @@ ManagerServant.new = function()
 			local load_path_language = config:getProperty("manager.modules."..comp_param:language()..".load_path")
 			load_path = load_path..","..load_path_language
 			local cmd = rtcd_cmd
+			load_path = string.gsub(load_path, "\\","\\\\")
+
 			cmd = cmd.." -o ".."manager.is_master:NO"
 			cmd = cmd.." -o ".."manager.corba_servant:YES"
 			cmd = cmd.." -o ".."corba.master_manager:"..config:getProperty("corba.master_manager")
@@ -365,6 +367,7 @@ ManagerServant.new = function()
 			local load_path_language = config:getProperty("manager.modules."..comp_param:language()..".load_path")
 			load_path = load_path..","..load_path_language
 			local cmd = rtcd_cmd
+			load_path = string.gsub(load_path, "\\","\\\\")
 			cmd = cmd.." -o corba.master_manager:"
 			cmd = cmd..mgrstr
 			cmd = cmd.." -o \"manager.modules.load_path:"

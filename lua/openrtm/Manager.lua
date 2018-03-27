@@ -34,6 +34,8 @@ local FactoryLua = Factory.FactoryLua
 local OpenHRPExecutionContext = require "openrtm.OpenHRPExecutionContext"
 local LogstreamBase = require "openrtm.LogstreamBase"
 local LogstreamFactory = LogstreamBase.LogstreamFactory
+local ModuleManager = require "openrtm.ModuleManager"
+
 
 
 -- ORB_Dummy_ENABLEをtrueに設定した場合、
@@ -600,7 +602,34 @@ function Manager:createComponent(comp_args)
 	if factory == nil then
 		self._rtcout:RTC_ERROR("createComponent: Factory not found: "..
 			comp_id:getProperty("implementation_id"))
-		return nil
+		if not StringUtil.toBool(self._config:getProperty("manager.modules.search_auto"), "YES", "NO", true) then
+			return nil
+		end
+		local mp = self._module:getLoadableModules()
+		self._rtcout:RTC_INFO(#mp.." loadable modules found")
+		local found_obj = nil
+		local predicate = ModulePredicate(comp_id)
+		for k, _obj in pairs(mp) do
+			if predicate(_obj) then
+				found_obj = _obj
+				break
+			end
+		end
+		if found_obj == nil then
+			self._rtcout:RTC_ERROR("No module for "..comp_id:getProperty("implementation_id").." in loadable modules list")
+			return nil
+		end
+		if found_obj:findNode("module_file_name") == nil then
+			self._rtcout:RTC_ERROR("Hmm...module_file_name key not found.")
+			return nil
+		end
+		self._rtcout:RTC_INFO("Loading module: "..found_obj:getProperty("module_file_name"))
+		self:load(found_obj:getProperty("module_file_name"), "")
+		factory = self._factory:find(comp_id)
+		if factory == nil then
+			self._rtcout:RTC_ERROR("Factory not found for loaded module: "..comp_id:getProperty("implementation_id"))
+			return nil
+		end
 	end
 	local prop = factory:profile()
 	local inherit_prop = {"config.version",
@@ -862,6 +891,9 @@ function Manager:initManager(argv)
 	local config = ManagerConfig.new(argv)
 	self._config = Properties.new()
 	config:configure(self._config)
+	self._config:setProperty("logger.file_name",self:formatString(self._config:getProperty("logger.file_name"),
+													self._config))
+	self._module = ModuleManager.new(self._config)
 end
 
 function Manager:shutdownManagerServant()

@@ -758,7 +758,7 @@ function Manager:deleteComponent(argv)
 		end
 		if StringUtil.toBool(self._config:getProperty("manager.shutdown_on_nortcs"), "YES", "NO", true) then
 			local comps = self:getComponents()
-			print(#comps)
+			--print(#comps)
 			if #comps == 0 then
 				self:shutdown()
 			end

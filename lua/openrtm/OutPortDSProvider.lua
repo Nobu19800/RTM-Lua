@@ -34,9 +34,9 @@ OutPortDSProvider.new = function()
 	obj._buffer = nil
 
 	local orb = Manager:instance():getORB()
-	local svr = orb:newservant(obj, nil, "IDL:omg.org/RTC/DataPullService:1.0")
-	local str = orb:tostring(svr)
-	obj._objref = RTCUtil.getReference(orb, svr, "IDL:omg.org/RTC/DataPullService:1.0")
+	obj._svr = orb:newservant(obj, nil, "IDL:omg.org/RTC/DataPullService:1.0")
+	local str = orb:tostring(obj._svr)
+	obj._objref = RTCUtil.getReference(orb, obj._svr, "IDL:omg.org/RTC/DataPullService:1.0")
 
 	table.insert(obj._properties, NVUtil.newNV("dataport.data_service.outport_ior",
 													str))
@@ -49,6 +49,7 @@ OutPortDSProvider.new = function()
 
 	-- 終了処理
 	function obj:exit()
+		Manager:instance():getORB():deactivate(self._svr)
 	end
 
 	-- 初期化時にプロパティ設定

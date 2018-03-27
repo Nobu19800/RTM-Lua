@@ -33,9 +33,9 @@ OutPortCorbaCdrProvider.new = function()
 	obj._buffer = nil
 
 	local orb = Manager:instance():getORB()
-	local svr = orb:newservant(obj, nil, "IDL:openrtm.aist.go.jp/OpenRTM/OutPortCdr:1.0")
-	local str = orb:tostring(svr)
-	obj._objref = RTCUtil.getReference(orb, svr,"IDL:openrtm.aist.go.jp/OpenRTM/OutPortCdr:1.0")
+	obj._svr = orb:newservant(obj, nil, "IDL:openrtm.aist.go.jp/OpenRTM/OutPortCdr:1.0")
+	local str = orb:tostring(obj._svr)
+	obj._objref = RTCUtil.getReference(orb, obj._svr,"IDL:openrtm.aist.go.jp/OpenRTM/OutPortCdr:1.0")
 
 	table.insert(obj._properties, NVUtil.newNV("dataport.corba_cdr.outport_ior",
 													str))
@@ -48,6 +48,7 @@ OutPortCorbaCdrProvider.new = function()
 
 	-- 終了処理
 	function obj:exit()
+		Manager:instance():getORB():deactivate(self._svr)
 	end
 
 	-- 初期化時にプロパティ設定

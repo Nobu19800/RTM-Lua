@@ -14,7 +14,7 @@ local StringUtil = require "openrtm.StringUtil"
 local NVUtil = require "openrtm.NVUtil"
 local oil = require "oil"
 local RTCUtil = require "openrtm.RTCUtil"
-
+local Properties = require "openrtm.Properties"
 
 
 
@@ -159,15 +159,313 @@ ManagerServant.new = function()
 		return {}
 	end
 
+	function obj:findManagerByName(manager_name)
+		return oil.corba.idl.null
+	end
+
+	function obj:findManager(host_port)
+		return oil.corba.idl.null
+	end
+
+
+	function obj:getParameterByModulename(param_name, module_name)
+		local arg = module_name[1]
+		local pos0, c = string.find(arg, "&"..param_name.."=")
+		local pos1, c = string.find(arg, "?"..param_name.."=")
+
+		if pos0 == nil and pos1 == nil then
+			return ""
+		end
+		local pos = 0
+		if pos0 == nil then
+			pos = pos1
+		else
+			pos = pos0
+		end
+
+
+		local paramstr = ""
+		local endpos, c = string.find(string.sub(arg,pos+1), '&')
+		if endpos == nil then
+			endpos = string.find(string.sub(arg,pos+1), '?')
+			if endpos == nil then
+				paramstr = string.sub(arg, pos + 1)
+			else
+				paramstr = string.sub(arg, pos + 1, endpos)
+			end
+		else
+			paramstr = string.sub(arg, pos + 1, endpos)
+		end
+		self._rtcout:RTC_VERBOSE(param_name.." arg: "..paramstr)
+
+		local eqpos, c = string.find(paramstr, "=")
+		if eqpos == nil then
+			eqpos = 0
+		end
+
+		paramstr = string.sub(paramstr, eqpos + 1)
+
+		self._rtcout:RTC_DEBUG(param_name.." is "..paramstr)
+		if endpos == nil then
+			arg = string.sub(arg, 1, pos-1)
+		else
+			arg = string.sub(arg,1,pos-1)..string.sub(arg, endpos)
+		end
+
+		module_name[1] = arg
+
+		return paramstr
+	end
+
+	function obj:createComponentByManagerName(module_name)
+		local arg = module_name
+		local tmp = {arg}
+		local mgrstr = self:getParameterByModulename("manager_name",tmp)
+		local arg = tmp[1]
+		if mgrstr == "" then
+			return oil.corba.idl.null
+		end
+
+		local mgrobj = oil.corba.idl.null
+		if mgrstr ~= "manager_%p" then
+			mgrobj = self:findManagerByName(mgrstr)
+		end
+
+
+		local comp_param = ManagerServant.CompParam.new(arg)
+		if mgrobj == oil.corba.idl.null then
+			local config = self._mgr:getConfig()
+			local rtcd_cmd = config:getProperty("manager.modules."..comp_param:language()..".manager_cmd")
+			if rtcd_cmd == "" then
+				rtcd_cmd = "rtcd_lua"
+			end
+			local load_path = config:getProperty("manager.modules.load_path")
+			local load_path_language = config:getProperty("manager.modules."..comp_param:language()..".load_path")
+			load_path = load_path..","..load_path_language
+			local cmd = rtcd_cmd
+			cmd = cmd.." -o ".."manager.is_master:NO"
+			cmd = cmd.." -o ".."manager.corba_servant:YES"
+			cmd = cmd.." -o ".."corba.master_manager:"..config:getProperty("corba.master_manager")
+			cmd = cmd.." -o ".."manager.name:"..config:getProperty("manager.name")
+			cmd = cmd.." -o ".."manager.instance_name:"..mgrstr
+			cmd = cmd.." -o ".."\"manager.modules.load_path:"..load_path.."\""
+			cmd = cmd.." -o ".."manager.supported_languages:"..comp_param:language()
+			cmd = cmd.." -o ".."manager.shutdown_auto:NO"
+
+			self._rtcout:RTC_DEBUG("Invoking command: "..cmd..".")
+
+			local slaves_names = {}
+			local regex = 'manager_%d.*'
+			if mgrstr == "manager_%p" then
+				for k, slave in pairs(self._slaves) do
+					local success, exception = oil.pcall(
+						function()
+							local prof = slave:get_configuration()
+							local prop = Properties.new()
+							NVUtil.copyToProperties(prop, prof)
+							local name = prop:getProperty("manager.instance_name")
+							if string.match(name, regex) ~= nil then
+								table.insert(slaves_names, name)
+							end
+					end)
+					if not success then
+						self._rtcout:RTC_ERROR("Unknown exception cought.")
+						self._rtcout:RTC_DEBUG(exception)
+						self._slaves:remove(slave)
+					end
+				end
+			end
+
+			local ret = os.execute(cmd)
+
+			oil.tasks:suspend(0.01)
+			local count = 0
+			local t0_ = os.clock()
+			while mgrobj == oil.corba.idl.null do
+				if mgrstr == "manager_%p" then
+					mgrobj = self:findManager(mgrstr)
+					for k, slave in pairs(self._slaves) do
+						local success, exception = oil.pcall(
+							function()
+								local prof = slave.get_configuration()
+								local prop = OpenRTM_aist.Properties()
+								NVUtil.copyToProperties(prop, prof)
+								local name = prop.getProperty("manager.instance_name")
+
+								if string.match(name, regex) ~= nil and not StringUtil.includes(slaves_names, name) then
+									mgrobj = slave
+								end
+						end)
+						if not success then
+							self._rtcout:RTC_ERROR("Unknown exception cought.")
+							self._rtcout:RTC_DEBUG(exception)
+							self._slaves:remove(slave)
+						end
+					end
+				else
+					mgrobj = self:findManagerByName(mgrstr)
+				end
+
+				count = count+1
+				if count > 1000 then
+					break
+				end
+				local t1_ = os.clock()
+				if (t1_ - t0_) > 10.0 and count > 10 then
+					break
+				end
+				oil.tasks:suspend(0.01)
+
+			end
+
+		end
+		if mgrobj == oil.corba.idl.null then
+			self._rtcout:RTC_WARN("Manager cannot be found.")
+			return oil.corba.idl.null
+		end
+		self._rtcout:RTC_DEBUG("Creating component on "..mgrstr)
+		self._rtcout:RTC_DEBUG("arg: "..arg)
+		local rtobj = oil.corba.idl.null
+		local success, exception = oil.pcall(
+			function()
+				rtobj = mgrobj.create_component(arg)
+				self._rtcout.RTC_DEBUG("Component created "..arg)
+			end)
+		if not success then
+			self._rtcout.RTC_DEBUG("Exception was caught while creating component.")
+			self._rtcout.RTC_ERROR(exception)
+			return oil.corba.idl.null
+		end
+		return rtobj
+	end
+
+	function obj:createComponentByAddress(module_name)
+		local arg = module_name
+		local tmp = {arg}
+		local mgrstr = self:getParameterByModulename("manager_address",tmp)
+		local arg = tmp[1]
+		if mgrstr == "" then
+			return oil.corba.idl.null
+		end
+
+		local mgrvstr = StringUtil.split(mgrstr, ":")
+		if #mgrvstr ~= 2 then
+			self._rtcout:RTC_WARN("Invalid manager address: "..mgrstr)
+			return oil.corba.idl.null
+		end
+		local mgrobj = self:findManager(mgrstr)
+		local comp_param = ManagerServant.CompParam.new(arg)
+		if mgrobj == oil.corba.idl.null then
+			local config = self._mgr:getConfig()
+			local rtcd_cmd = config:getProperty("manager.modules."..comp_param:language()..".manager_cmd")
+			if rtcd_cmd == "" then
+				rtcd_cmd = "rtcd_lua"
+			end
+			local load_path = config:getProperty("manager.modules.load_path")
+			local load_path_language = config:getProperty("manager.modules."..comp_param:language()..".load_path")
+			load_path = load_path..","..load_path_language
+			local cmd = rtcd_cmd
+			cmd = cmd.." -o corba.master_manager:"
+			cmd = cmd..mgrstr
+			cmd = cmd.." -o \"manager.modules.load_path:"
+			cmd = cmd..load_path + "\""
+			cmd = cmd.." -d "
+
+			self._rtcout:RTC_DEBUG("Invoking command: "..cmd..".")
+			local ret = os.execute(cmd)
+			oil.tasks:suspend(0.01)
+			local count = 0
+			local t0_ = os.clock()
+			while mgrobj == oil.corba.idl.null do
+				mgrobj = self:findManager(mgrstr)
+				count = count+1
+				if count > 1000 then
+					break
+				end
+				local t1_ = os.clock()
+				if (t1_ - t0_) > 10.0 and count > 10 then
+					break
+				end
+				oil.tasks:suspend(0.01)
+
+			end
+
+		end
+		if mgrobj == oil.corba.idl.null then
+			self._rtcout:RTC_WARN("Manager cannot be found.")
+			return oil.corba.idl.null
+		end
+		self._rtcout:RTC_DEBUG("Creating component on "..mgrstr)
+		self._rtcout:RTC_DEBUG("arg: "..arg)
+		local rtobj = oil.corba.idl.null
+		local success, exception = oil.pcall(
+			function()
+				rtobj = mgrobj.create_component(arg)
+				self._rtcout.RTC_DEBUG("Component created "..arg)
+			end)
+		if not success then
+			self._rtcout.RTC_DEBUG("Exception was caught while creating component.")
+			self._rtcout.RTC_ERROR(exception)
+			return oil.corba.idl.null
+		end
+		return rtobj
+	end
+
 	-- RTC生成
 	-- @param module_name RTC名、オプション(RTC?param1=xxx&param2=yyy)
 	-- @return RTC
 	function obj:create_component(module_name)
 		self._rtcout:RTC_TRACE("create_component("..module_name..")")
-		local rtc = self._mgr:createComponent(module_name)
-		if rtc  ~= nil then
-			return rtc:getObjRef()
+		local rtc = self:createComponentByAddress(module_name)
+		if rtc ~= oil.corba.idl.null then
+			return rtc
 		end
+		rtc = self:createComponentByManagerName(module_name)
+		if rtc ~= oil.corba.idl.null then
+			return rtc
+		end
+		local tmp = {module_name}
+		self:getParameterByModulename("manager_address",tmp)
+		module_name = tmp[1]
+
+		local comp_param = ManagerServant.CompParam.new(module_name)
+
+		if self._isMaster then
+
+			for k, slave in ipairs(self._slaves) do
+				local success, exception = oil.pcall(
+					function()
+						local prof = slave:get_configuration()
+						local prop = Properties.new()
+						NVUtil.copyToProperties(prop, prof)
+						local slave_lang = prop.getProperty("manager.language")
+						if slave_lang == comp_param:language() then
+							rtc = slave:create_component(module_name)
+						end
+				end)
+				if not success then
+					self._rtcout:RTC_ERROR("Unknown exception cought.")
+					self._rtcout:RTC_DEBUG(exception)
+					self._slaves:remove(slave)
+				end
+				if rtc ~= oil.corba.idl.null then
+					return rtc
+				end
+			end
+
+			if manager_name == "" then
+				module_name = module_name + "&manager_name=manager_%p"
+				rtc = self:createComponentByManagerName(module_name)
+				return rtc
+			end
+		else
+			--print(module_name)
+			rtc = self._mgr:createComponent(module_name)
+			if rtc ~= nil then
+				return rtc:getObjRef()
+			end
+		end
+
 		return oil.corba.idl.null
 	end
 

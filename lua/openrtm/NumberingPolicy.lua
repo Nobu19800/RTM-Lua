@@ -64,7 +64,8 @@ NumberingPolicy.ProcessUniquePolicy.new = function()
 	-- @param obj RTC
 	-- @return 番号
 	function obj:find(obj)
-		for i, obj_ in pairs(self._objects) do
+		for i = 1, #self._objects + 1 do
+			local obj_ = self._objects[i]
 			if obj_ == obj then
 				return i
 			end

@@ -471,6 +471,11 @@ function Manager:runManager(no_block)
 		if self._initThread ~= nil then
 			oil.newthread(self._initThread, self)
 		end
+		--local mgrs = self:getManagerServant()
+		--mgrs:create_component("mesure_lua")
+		--local module_name = {"rtc?manager=test"}
+		--local ret = mgrs:getParameterByModulename("manager",module_name)
+		--print(ret, module_name[1])
 		--self._orb:run()
 	end)
 end
@@ -590,6 +595,7 @@ function Manager:createComponent(comp_args)
 	end
 	--print(comp_id)
 	local factory = self._factory:find(comp_id)
+	--print(comp_id, factory)
 	--print(factory)
 	if factory == nil then
 		self._rtcout:RTC_ERROR("createComponent: Factory not found: "..
@@ -634,6 +640,7 @@ function Manager:createComponent(comp_args)
 	local prop_ = prop:getNode("port")
 	prop_:mergeProperties(self._config:getNode("port"))
 	local comp = factory:create(self)
+	--print(comp)
 	--print(comp:getTypeName())
 	--print(comp)
 	if self._config:getProperty("corba.endpoints_ipv4") == "" then

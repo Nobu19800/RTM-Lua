@@ -81,10 +81,10 @@ local default_config= {
 			["manager.modules.Python.suffixes"]="py",
 			["manager.modules.Java.suffixes"]="class",
 			["manager.modules.Lua.suffixes"]="lua",
-			["manager.modules.C++.load_paths"]="./",
-			["manager.modules.Python.load_paths"]="./",
-			["manager.modules.Java.load_paths"]="./",
-			["manager.modules.Lua.load_paths"]="./"
+			["manager.modules.C++.load_paths"]="",
+			["manager.modules.Python.load_paths"]="",
+			["manager.modules.Java.load_paths"]="",
+			["manager.modules.Lua.load_paths"]=""
 }
 
 

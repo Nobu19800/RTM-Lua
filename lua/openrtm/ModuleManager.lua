@@ -47,15 +47,16 @@ DLLEntity.new = function(dll,prop)
 end
 
 
-local DLLPred = function(name, factory)
+local DLLPred = function(argv)
 	local obj = {}
-	if name ~= nil then
-		obj._filepath = name
+	if argv.name ~= nil then
+		obj._filepath = argv.name
 	end
-	if factory ~= nil then
-		obj._filepath = factory
+	if argv.factory ~= nil then
+		obj._filepath = argv.factory
 	end
 	local call_func = function(self, dll)
+		--print(self._filepath, dll.properties:getProperty("file_path"))
 		return (self._filepath == dll.properties:getProperty("file_path"))
 	end
 	setmetatable(obj, {__call=call_func})
@@ -63,7 +64,7 @@ local DLLPred = function(name, factory)
 end
 
 
-local ModuleManager.Error = {}
+ModuleManager.Error = {}
 ModuleManager.Error.new = function(reason_)
 	local obj = {}
 	obj.reason = reason_
@@ -71,56 +72,63 @@ ModuleManager.Error.new = function(reason_)
 end
 
 
-local ModuleManager.NotFound = {}
+ModuleManager.NotFound = {}
 ModuleManager.NotFound.new = function(name_)
 	local obj = {}
 	obj.name = name_
+	obj.type = "NotFound"
 	return obj
 end
 
 
-local ModuleManager.FileNotFound = {}
+ModuleManager.FileNotFound = {}
 ModuleManager.FileNotFound.new = function(name_)
 	local obj = {}
-	setmetatable(obj, {__index=NotFound.new(name_)})
+	setmetatable(obj, {__index=ModuleManager.NotFound.new(name_)})
+	obj.type = "FileNotFound"
 	return obj
 end
 
-local ModuleManager.ModuleNotFound = {}
+ModuleManager.ModuleNotFound = {}
 ModuleManager.ModuleNotFound.new = function(name_)
 	local obj = {}
-	setmetatable(obj, {__index=NotFound.new(name_)})
+	setmetatable(obj, {__index=ModuleManager.NotFound.new(name_)})
+	obj.type = "ModuleNotFound"
 	return obj
 end
 
-local ModuleManager.SymbolNotFound = {}
+ModuleManager.SymbolNotFound = {}
 ModuleManager.SymbolNotFound.new = function(name_)
 	local obj = {}
-	setmetatable(obj, {__index=NotFound.new(name_)})
+	setmetatable(obj, {__index=ModuleManager.NotFound.new(name_)})
+	obj.type = "SymbolNotFound"
 	return obj
 end
 
 
-local ModuleManager.NotAllowedOperation = {}
+ModuleManager.NotAllowedOperation = {}
 ModuleManager.NotAllowedOperation.new = function(reason_)
 	local obj = {}
-	setmetatable(obj, {__index=Error.new(reason_)})
+	setmetatable(obj, {__index=ModuleManager.Error.new(reason_)})
+	obj.type = "NotAllowedOperation"
 	return obj
 end
 
 
-local ModuleManager.InvalidArguments = {}
+ModuleManager.InvalidArguments = {}
 ModuleManager.InvalidArguments.new = function(reason_)
 	local obj = {}
-	setmetatable(obj, {__index=Error.new(reason_)})
+	setmetatable(obj, {__index=ModuleManager.Error.new(reason_)})
+	obj.type = "InvalidArguments"
 	return obj
 end
 
 
-local ModuleManager.InvalidOperation = {}
+ModuleManager.InvalidOperation = {}
 ModuleManager.InvalidOperation.new = function(reason_)
 	local obj = {}
-	setmetatable(obj, {__index=Error.new(reason_)})
+	setmetatable(obj, {__index=ModuleManager.Error.new(reason_)})
+	obj.type = "InvalidOperation"
 	return obj
 end
 
@@ -138,27 +146,30 @@ ModuleManager.new = function(prop)
 	end
 
 	function obj:load(file_name, init_func)
-		string.gsub(file_name, "\\", "/")
+		file_name = string.gsub(file_name, "\\", "/")
 		self._rtcout:RTC_TRACE("load(fname = "..file_name..")")
 		if file_name == "" then
 			error(ModuleManager.InvalidArguments.new("Invalid file name."))
 		end
 		if StringUtil.isURL(file_name) then
 			if not self._downloadAllowed then
-				error(ModuleManager.NotAllowedOperation.new("Downloading module is not allowed.")
+				error(ModuleManager.NotAllowedOperation.new("Downloading module is not allowed."))
 			else
 				error(ModuleManager.NotFound.new("Not implemented."))
 			end
 		end
-		local import_name = os.path.split(file_name)[-1]
+		local import_name = StringUtil.basename(file_name)
 		local pathChanged=false
 		local file_path = nil
-
+		local save_path = ""
+		
+		
 		if StringUtil.isAbsolutePath(file_name) then
 			if not self._absoluteAllowed then
 				error(ModuleManager.NotAllowedOperation.new("Absolute path is not allowed"))
 			else
-				package.path = package.path..";"..StringUtil.dirname(file_name)
+				save_path = package.path
+				package.path = package.path..";"..StringUtil.dirname(file_name).."?.lua"
 
 				pathChanged = true
 				import_name = StringUtil.basename(file_name)
@@ -171,54 +182,132 @@ ModuleManager.new = function(prop)
 				error(ModuleManager.FileNotFound.new(file_name))
 			end
 		end
-
+		
+		
+		
 		if not self:fileExist(file_path) then
+			
 			error(ModuleManager.FileNotFound.new(file_name))
 		end
+		
+		
 
-		with open(str(file_path)) as f
-			if init_func ~= nil then
-				if f.read().find(init_func) == -1
-					error(ModuleManager.FileNotFound.new(file_name))
-				end
+		local f = io.open(file_path, "r")
+		if init_func ~= nil then
+			if string.find(f:read("*a"), init_func) == nil then
+				
+				error(ModuleManager.FileNotFound.new(file_name))
 			end
 		end
-
+		f:close()
+		
+		
+		
 		if not pathChanged then
-			local splitted_name = os.path.split(file_path)
-			sys.path.append(splitted_name[0])
+			package.path = package.path..";"..StringUtil.dirname(file_path).."?.lua"
 		end
 
-		local ext_pos = import_name.find(".lua")
-		if ext_pos > 0 then
-			import_name = import_name[:ext_pos]
+		local ext_pos = string.find(import_name, ".lua")
+		if ext_pos ~= nil then
+			import_name = string.sub(import_name,1,ext_pos-1)
 		end
 
-		local mo = __import__(str(import_name))
+		--print(import_name)
+		--print("testModule", tostring(import_name))
+		local mo = require(tostring(import_name))
+		--local mo = require "testModule"
+		--print(mo)
+		--print(package.path)
 
 		if pathChanged then
-			sys.path = save_path
+			package.path = save_path
 		end
 
-		file_path = file_path.replace("\\","/")
-		file_path = file_path.replace("//","/")
-
-		dll = DLLEntity.new(mo,Properties.new())
+		
+		file_path = string.gsub(file_path, "\\", "/")
+		file_path = string.gsub(file_path, "//", "/")
+		
+		--print(mo,type(mo))
+		local dll = DLLEntity.new(mo,Properties.new())
+		
 		dll.properties:setProperty("file_path",file_path)
 		self._modules:registerObject(dll)
 
-
+		
 		if init_func == nil then
 			return file_name
 		end
-
-		self.symbol(file_path,init_func)(self._mgr)
+		
+		self:symbol(file_path,init_func)(self._mgr)
 
 		return file_name
 	end
 
 
+	function obj:findFile(fname, load_path)
+		file_name = fname
+		
+		for k, path in ipairs(load_path) do
+			local f = nil
+			local suffix = self._properties:getProperty("manager.modules.Lua.suffixes")
+			if string.find(fname, "."..suffix) == nil then
+				f = tostring(path).."/"..tostring(file_name).."."..suffix
+			else
+				f = tostring(path).."/"..tostring(file_name)
+			end
+			--print(self:fileExist(f))
+			if self:fileExist(f) then
+				f = string.gsub(f,"\\","/")
+				f = string.gsub(f,"//","/")
+				return f
+			end
+			--local filelist = {}
+			--StringUtil.findFile(path,file_name,filelist)
+			
+			--if len(filelist) > 0 then
+			--	return filelist[1]
+			--end
+		end
+		return ""
+	end
 
+	function obj:fileExist(filename)
+		local fname = filename
+		local suffix = self._properties:getProperty("manager.modules.Lua.suffixes")
+		if string.find(fname, "."..suffix) == nil then
+			fname = tostring(filename).."."..suffix
+		end
+		--print(fname)
+		
+		--if os.path.isfile(fname)
+		--	return True
+		--end
+		--print(fname)
+		
+		local f = io.open(fname, "r")
+		if f ~= nil then
+			return true
+		end
+		return false
+			
+		--return false
+	end
+
+	function obj:symbol(file_name, func_name)
+		local dll = self._modules:find(file_name)
+		--print(dll, file_name)
+		if dll == nil then
+			error(ModuleManager.ModuleNotFound.new(file_name))
+		end
+		
+		local func = dll.dll[func_name]
+		
+		if func == nil then
+			error(ModuleManager.SymbolNotFound.new(func_name))
+		end
+		
+		return func
+	end
 
 	obj._properties = prop
 	obj._configPath = StringUtil.split(prop:getProperty(CONFIG_PATH), ",")

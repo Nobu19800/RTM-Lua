@@ -463,15 +463,7 @@ StringUtil.dirname = function(path)
 	return StringUtil.flatten(path_list, delimiter)..delimiter
 end
 
-StringUtil.dirname = function(path)
-	local delimiter = "\\"
-	if string.find(path, "/", 1, true) ~= nil then
-		delimiter = "/"
-	end
-	local path_list = StringUtil.split(path, delimiter)
-	path_list[#path_list] = nil
-	return StringUtil.flatten(path_list, delimiter)..delimiter
-end
+
 
 StringUtil.basename = function(path)
 	local delimiter = "\\"

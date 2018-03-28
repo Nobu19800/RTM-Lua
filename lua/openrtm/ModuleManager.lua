@@ -31,13 +31,18 @@ local MOD_PRELOAD   = "manager.modules.preload"
 
 
 local DLL = {}
+
 DLL.new = function(dll)
 	local obj = {}
 	obj.dll = dll
 	return obj
 end
 
-
+-- モジュール保持オブジェクト初期化
+-- @param dll モジュール
+-- @param prop 設定情報
+-- 「file_path」の要素にはファイルパスを格納する
+-- @return モジュール保持オブジェクト
 local DLLEntity = {}
 DLLEntity.new = function(dll,prop)
 	local obj = {}
@@ -46,7 +51,9 @@ DLLEntity.new = function(dll,prop)
 	return obj
 end
 
-
+-- モジュール比較関数オブジェクトの初期化
+-- @param argv argv.name：ファイルパス
+-- @return モジュール比較関数オブジェクト
 local DLLPred = function(argv)
 	local obj = {}
 	if argv.name ~= nil then
@@ -55,6 +62,11 @@ local DLLPred = function(argv)
 	if argv.factory ~= nil then
 		obj._filepath = argv.factory
 	end
+	-- モジュールの比較
+	-- @param self 自身のオブジェクト
+	-- @param dll 比較対象のモジュール
+	-- ファイルパスの一致で確認
+	-- @return true：一致
 	local call_func = function(self, dll)
 		--print(self._filepath, dll.properties:getProperty("file_path"))
 		return (self._filepath == dll.properties:getProperty("file_path"))
@@ -65,6 +77,9 @@ end
 
 
 ModuleManager.Error = {}
+-- エラー例外オブジェクトの初期化
+-- @param reason_ エラー内容
+-- @return エラー例外オブジェクト
 ModuleManager.Error.new = function(reason_)
 	local obj = {}
 	obj.reason = reason_
@@ -73,6 +88,9 @@ end
 
 
 ModuleManager.NotFound = {}
+-- オブジェクトが存在しない例外オブジェクトの初期化
+-- @param name_ エラー内容
+-- @return 例外オブジェクト
 ModuleManager.NotFound.new = function(name_)
 	local obj = {}
 	obj.name = name_
@@ -82,6 +100,9 @@ end
 
 
 ModuleManager.FileNotFound = {}
+-- ファイルが存在しない例外オブジェクトの初期化
+-- @param name_ エラー内容
+-- @return 例外オブジェクト
 ModuleManager.FileNotFound.new = function(name_)
 	local obj = {}
 	setmetatable(obj, {__index=ModuleManager.NotFound.new(name_)})
@@ -90,6 +111,9 @@ ModuleManager.FileNotFound.new = function(name_)
 end
 
 ModuleManager.ModuleNotFound = {}
+-- モジュールが存在しない例外オブジェクトの初期化
+-- @param name_ エラー内容
+-- @return 例外オブジェクト
 ModuleManager.ModuleNotFound.new = function(name_)
 	local obj = {}
 	setmetatable(obj, {__index=ModuleManager.NotFound.new(name_)})
@@ -98,6 +122,9 @@ ModuleManager.ModuleNotFound.new = function(name_)
 end
 
 ModuleManager.SymbolNotFound = {}
+-- シンボルが存在しない例外オブジェクトの初期化
+-- @param name_ エラー内容
+-- @return 例外オブジェクト
 ModuleManager.SymbolNotFound.new = function(name_)
 	local obj = {}
 	setmetatable(obj, {__index=ModuleManager.NotFound.new(name_)})
@@ -107,6 +134,9 @@ end
 
 
 ModuleManager.NotAllowedOperation = {}
+-- 指定した操作ができない場合の例外オブジェクトの初期化
+-- @param reason_ エラー内容
+-- @return 例外オブジェクト
 ModuleManager.NotAllowedOperation.new = function(reason_)
 	local obj = {}
 	setmetatable(obj, {__index=ModuleManager.Error.new(reason_)})
@@ -116,6 +146,9 @@ end
 
 
 ModuleManager.InvalidArguments = {}
+-- 不正な引数指定の例外オブジェクトの初期化
+-- @param reason_ エラー内容
+-- @return 例外オブジェクト
 ModuleManager.InvalidArguments.new = function(reason_)
 	local obj = {}
 	setmetatable(obj, {__index=ModuleManager.Error.new(reason_)})
@@ -125,6 +158,9 @@ end
 
 
 ModuleManager.InvalidOperation = {}
+-- 不正な操作の例外オブジェクトの初期化
+-- @param reason_ エラー内容
+-- @return 例外オブジェクト
 ModuleManager.InvalidOperation.new = function(reason_)
 	local obj = {}
 	setmetatable(obj, {__index=ModuleManager.Error.new(reason_)})
@@ -137,14 +173,24 @@ end
 
 
 
-
+-- モジュール管理オブジェクトの初期化
+-- @param prop プロパティ
+-- 「manager.modules.abs_path_allowed」がYESの時、絶対パスでファイルを指定できる
+-- 「manager.modules.download_allowed」がYESの時、URLでファイルを指定できる
+-- @return モジュール管理オブジェクト
 ModuleManager.new = function(prop)
 	local obj = {}
 
+	-- 終了関数
 	function obj:exit()
 		self:unloadAll()
 	end
 
+	-- モジュールのロード
+	-- @param file_name ファイルパス
+	-- ファイル名のみの指定の場合は「manager.modules.load_path」で設定したパスを探査する
+	-- @param init_func 初期化関数
+	-- @return ファイルパス
 	function obj:load(file_name, init_func)
 		file_name = string.gsub(file_name, "\\", "/")
 		self._rtcout:RTC_TRACE("load(fname = "..file_name..")")
@@ -243,7 +289,11 @@ ModuleManager.new = function(prop)
 		return file_name
 	end
 
-
+	-- 指定パス一覧にファイルが存在するかを確認
+	-- @param fname ファイル名
+	-- @param load_path ディレクトリパスのリスト
+	-- @return ファイルが存在した場合はファイルのパスを返す
+	-- 存在しない場合は空文字列を返す
 	function obj:findFile(fname, load_path)
 		file_name = fname
 		
@@ -271,6 +321,9 @@ ModuleManager.new = function(prop)
 		return ""
 	end
 
+	-- ファイルの存在確認
+	-- @param filename ファイル名
+	-- @return true：存在する
 	function obj:fileExist(filename)
 		local fname = filename
 		local suffix = self._properties:getProperty("manager.modules.Lua.suffixes")
@@ -293,6 +346,11 @@ ModuleManager.new = function(prop)
 		--return false
 	end
 
+	-- モジュールから指定関数を取得
+	-- @param file_name ファイル名
+	-- 既に指定ファイル名のモジュールが登録済みである必要がある
+	-- @param func_name 関数名
+	-- @return 関数オブジェクト
 	function obj:symbol(file_name, func_name)
 		local dll = self._modules:find(file_name)
 		--print(dll, file_name)

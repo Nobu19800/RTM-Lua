@@ -252,7 +252,7 @@ NVUtil._is_equivalent = function(obj1, obj2, obj1_ref, obj2_ref)
 			obj1 = obj1_ref(obj1)
 		end
 		if obj2._is_equivalent == nil then
-			obj2 = obj1_ref(obj2)
+			obj2 = obj2_ref(obj2)
 		end
 		--print(obj1,obj2,(obj1 == obj2))
 		if obj1._is_equivalent == nil or obj2._is_equivalent == nil then

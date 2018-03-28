@@ -36,6 +36,7 @@ local LogstreamBase = require "openrtm.LogstreamBase"
 local LogstreamFactory = LogstreamBase.LogstreamFactory
 local ModuleManager = require "openrtm.ModuleManager"
 local Task = require "openrtm.Task"
+local CORBA_RTCUtil = require "openrtm.CORBA_RTCUtil"
 
 
 
@@ -474,6 +475,10 @@ function Manager:runManager(no_block)
 		if self._initThread ~= nil then
 			oil.newthread(self._initThread, self)
 		end
+		
+		self:initPreCreation()
+		self:initPreConnection()
+		self:initPreActivation()
 		--self:createComponent("ConfigSample")
 		--local mgrs = self:getManagerServant()
 		--mgrs:create_component("mesure_lua")
@@ -1532,18 +1537,195 @@ function Manager:connectServicePorts(port, target_ports)
 end
 
 -- 起動時にポートを自動接続する関数
+-- rtc.confに以下のように記述
+-- manager.components.preconnect: ConsoleIn0.out?port=ConsoleOut0.in&dataflow_type=pull
 function Manager:initPreConnection()
+	self._rtcout:RTC_TRACE("Connection pre-creation: "..tostring(self._config:getProperty("manager.components.preconnect")))
+	local connectors = StringUtil.split(tostring(self._config:getProperty("manager.components.preconnect")), ",")
+    
+	for k,c in ipairs(connectors) do
+		c = StringUtil.eraseBothEndsBlank(c)
+		
+		if c == "" then
+		else
+			local port0_str = StringUtil.split(c,"?")[1]
+			local param = StringUtil.urlparam2map(c)
+			--print(port0_str)
+			--for k,v in pairs(param) do
+			--	print(k,v)
+			--end
+			
+			local ports = {}
+			local configs = {}
+			for k,p in pairs(param) do
+				if k == "port" then
+					table.insert(ports,p)
+				else
+					local tmp = string.gsub(k,"port","")
+					
+					local ret, v = StringUtil.stringTo(0, tmp)
+					if ret then
+						ports.append(v)
+					else
+						configs[k] = p
+					end
+				end
+			end
+					
+			if #ports == 0 then
+				self._rtcout:RTC_ERROR("Invalid format for pre-connection.")
+				self._rtcout:RTC_ERROR("Format must be Comp0.port0?port=Comp1.port1")
+			else
+				
+				if configs["dataflow_type"] == nil then
+					configs["dataflow_type"] = "push"
+				end
+				if configs["interface_type"] == nil then
+					configs["interface_type"] = "data_service"
+				end
+				local tmp = StringUtil.split(port0_str,"%.")
+				tmp[#tmp] = nil
+				
+				local comp0_name = StringUtil.flatten(tmp,"%.")
+				
+				local port0_name = port0_str
+				local comp0_ref = nil
+					
+				if string.find(comp0_name, "://") == nil then
+					--print(comp0_name)
+					local comp0 = self:getComponent(comp0_name)
+					--print(comp0)
+					if comp0 == nil then
+						self._rtcout:RTC_ERROR(comp0_name.." not found.")
+					else
+						comp0_ref = comp0:getObjRef()
+					end
+				else
+					local rtcs = self._namingManager:string_to_component(comp0_name)
+        
+					if #rtcs == 0 then
+						self._rtcout:RTC_ERROR(comp0_name.." not found.")
+					else
+						comp0_ref = rtcs[1]
+						port0_name = StringUtil.split(port0_str, "/")
+						port0_name = port0_name[#port0_name]
+					end
+				end
+						
+				local port0_var = CORBA_RTCUtil.get_port_by_name(comp0_ref, port0_name)
+      
+      
+				if port0_var == oil.corba.idl.null then
+					self._rtcout:RTC_DEBUG("port "..port0_str.." found: ")
+				else
+					for k,port_str in ipairs(ports) do
+      
+						local tmp = StringUtil.split(port_str, "%.")
+						tmp[#tmp] = nil
+						local comp_name = StringUtil.flatten(tmp,"%.")
+						local port_name = port_str
+						
+						local comp_ref = nil
+						 
+						if string.find(comp_name, "://") == nil then
+							--print(comp_name)
+							local comp = self:getComponent(comp_name)
+							if comp == nil then
+								self._rtcout:RTC_ERROR(comp_name.." not found.")
+							else
+								comp_ref = comp:getObjRef()
+							end
+						else
+							local rtcs = self._namingManager:string_to_component(comp_name)
+							
+							if #rtcs == 0 then
+								self._rtcout:RTC_ERROR(comp_name.." not found.")
+							else
+								comp_ref = rtcs[1]
+								port_name = port_str.split("/")[-1]
+							end
+						end
+						
+						if comp_ref ~= nil then
+							port_var = CORBA_RTCUtil.get_port_by_name(comp_ref, port_name)
 
+							
+							if port_var == oil.corba.idl.null then
+								self._rtcout:RTC_DEBUG("port "..port_str.." found: ")
+							else
+								local prop = Properties.new()
+										
+								for k,v in pairs(configs) do
+									k = StringUtil.eraseBothEndsBlank(k)
+									v = StringUtil.eraseBothEndsBlank(v)
+									prop:setProperty("dataport."..k,v)
+								end
+								--print(c)
+								--print(prop)
+								--print(port0_var)
+								--print(port_var)
+											
+								if self._ReturnCode_t.RTC_OK ~= CORBA_RTCUtil.connect(c, prop, port0_var, port_var) then
+									self._rtcout.RTC_ERROR("Connection error: "..c)
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
 end
 
 -- 起動時にRTCを自動アクティブ化する関数
+-- rtc.confに以下のように記述
+-- manager.components.preactivation: ConsoleIn0, ConsoleOut0
 function Manager:initPreActivation()
-
+	self._rtcout:RTC_TRACE("Components pre-activation: "..tostring(self._config:getProperty("manager.components.preactivation")))
+	local comps = StringUtil.split(tostring(self._config:getProperty("manager.components.preactivation")), ",")
+	for k,c in pairs(comps) do
+		local c = StringUtil.eraseBothEndsBlank(c)
+		
+		if c ~= "" then
+			local comp_ref = nil
+			if string.find(c, "://") == nil then
+				local comp = self:getComponent(c)
+				if comp == nil then
+					self._rtcout:RTC_ERROR(c.." not found.")
+				else
+					comp_ref = comp:getObjRef()
+				end
+			else
+				local rtcs = self._namingManager:string_to_component(c)
+				if #rtcs == 0 then
+					self._rtcout:RTC_ERROR(c.." not found.")
+				else
+					comp_ref = rtcs[1]
+				end
+			end
+			if comp_ref ~= nil then
+				local ret = CORBA_RTCUtil.activate(comp_ref)
+				if ret ~= self._ReturnCode_t.RTC_OK then
+					self._rtcout:RTC_ERROR(c.." activation filed.")
+				else
+					self._rtcout:RTC_INFO(c.." activated.")
+				end
+			end
+		end
+	end
 end
 
 -- 起動時にRTCを自動生成する関数
+-- rtc.confに以下のように記述
+-- manager.components.precreate: ConsoleIn, ConsoleOut
 function Manager:initPreCreation()
-
+	local comps = StringUtil.strip(StringUtil.split(self._config:getProperty("manager.components.precreate"), ","))
+	for k,comp in ipairs(comps) do
+		if comp == nil or comp == "" then
+		else
+			self:createComponent(comp)
+		end
+	end
 end
 
 -- マネージャサーバント取得
@@ -1646,7 +1828,7 @@ function Manager:cdrMarshal(data, dataType)
 	return cdr
 end
 
--- CDR複合化
+-- CDR復号化
 -- @param cdr CDRバイナリデータ
 -- @param dataType データ型
 -- @return 変換後のデータ
@@ -1673,6 +1855,10 @@ end
 
 
 local terminate_Task = {}
+-- マネージャ終了コルーチンの初期化
+-- @param mgr マネージャ
+-- @param sleep_time 終了までの待機時間
+-- マネージャ終了コルーチン
 terminate_Task.new = function(mgr, sleep_time)
 	local obj = {}
 	obj._mgr = mgr
@@ -1685,7 +1871,7 @@ terminate_Task.new = function(mgr, sleep_time)
 	return obj
 end
 
-
+-- マネージャ終了コルーチンの生成
 function Manager:createShutdownThread()
 	Task.start(terminate_Task.new(self, 3))
 end

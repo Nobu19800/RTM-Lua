@@ -20,6 +20,8 @@ local OutPortProviderFactory = OutPortProvider.OutPortProviderFactory
 
 local RTCUtil = require "openrtm.RTCUtil"
 
+local NVUtil = require "openrtm.NVUtil"
+
 -- CorbaCdrインターフェースのOutPortProviderオブジェクト初期化
 -- @return CorbaCdrインターフェースのOutPortProviderオブジェクト
 OutPortCorbaCdrProvider.new = function()

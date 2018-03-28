@@ -41,6 +41,17 @@ StringUtil.normalize = function(_str)
 	return string.lower(ret)
 end
 
+-- リストの要素全ての文字列の前後の空白を削除
+-- @param str_list 文字列のリスト
+-- @return 前後の空白削除後の文字列のリスト
+StringUtil.strip = function(str_list)
+	local ret = {}
+	for k,v in ipairs(str_list) do
+		table.insert(ret, StringUtil.eraseBothEndsBlank(v))
+	end
+	return ret
+end
+
 -- 文字列にエスケープ文字が含まれるかを判定
 -- @param _str 文字列
 -- @param pos 位置
@@ -464,7 +475,9 @@ StringUtil.dirname = function(path)
 end
 
 
-
+-- パスからファイル名を取得
+-- @param path パス
+-- @return ファイル名
 StringUtil.basename = function(path)
 	local delimiter = "\\"
 	if string.find(path, "/", 1, true) ~= nil then
@@ -487,7 +500,9 @@ StringUtil.getKeyCount = function(tbl)
 	return ret
 end
 
-
+-- 文字列がURLかを判定
+-- @param str 文字列
+-- @return true：URL
 StringUtil.isURL = function(str)
 	if str == "" then
 		return false
@@ -503,7 +518,9 @@ end
 
 
 
-
+-- 文字列が絶対パスかを判定
+-- @param 文字列
+-- @return true：絶対パス
 StringUtil.isAbsolutePath = function(str)
 	if string.sub(str,1,1) == "/" then
 		return true
@@ -519,5 +536,30 @@ StringUtil.isAbsolutePath = function(str)
 
   return false
 end
+
+-- URL形式の文字列からパラメータを取得
+-- @param _str URL形式の文字列
+-- param?key1=value1&key2=value2
+-- @return パラメータを格納したテーブル
+StringUtil.urlparam2map = function(_str)
+	local qpos = string.find(_str, "?")
+	if qpos == nil then
+		qpos = 0
+	else
+		qpos = qpos+1
+	end
+	local tmp = StringUtil.split(string.sub(_str, qpos), "&")
+	local retmap = {}
+	for k, v in ipairs(tmp) do
+		pos = string.find(v, "=")
+		if pos ~= nil then
+			retmap[string.sub(v,1,pos-1)] = string.sub(v, pos+1)
+		else
+			retmap[v] = ""
+		end
+	end
+    return retmap
+end
+
 
 return StringUtil

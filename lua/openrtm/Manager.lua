@@ -35,6 +35,7 @@ local OpenHRPExecutionContext = require "openrtm.OpenHRPExecutionContext"
 local LogstreamBase = require "openrtm.LogstreamBase"
 local LogstreamFactory = LogstreamBase.LogstreamFactory
 local ModuleManager = require "openrtm.ModuleManager"
+local Task = require "openrtm.Task"
 
 
 
@@ -473,6 +474,7 @@ function Manager:runManager(no_block)
 		if self._initThread ~= nil then
 			oil.newthread(self._initThread, self)
 		end
+		--self:createComponent("ConfigSample")
 		--local mgrs = self:getManagerServant()
 		--mgrs:create_component("mesure_lua")
 		--local module_name = {"rtc?manager=test"}
@@ -605,6 +607,7 @@ function Manager:createComponent(comp_args)
 		if not StringUtil.toBool(self._config:getProperty("manager.modules.search_auto"), "YES", "NO", true) then
 			return nil
 		end
+		--[[
 		local mp = self._module:getLoadableModules()
 		self._rtcout:RTC_INFO(#mp.." loadable modules found")
 		local found_obj = nil
@@ -625,6 +628,9 @@ function Manager:createComponent(comp_args)
 		end
 		self._rtcout:RTC_INFO("Loading module: "..found_obj:getProperty("module_file_name"))
 		self:load(found_obj:getProperty("module_file_name"), "")
+		--]]
+		self:load(comp_id:getProperty("implementation_id"), "")
+		
 		factory = self._factory:find(comp_id)
 		if factory == nil then
 			self._rtcout:RTC_ERROR("Factory not found for loaded module: "..comp_id:getProperty("implementation_id"))
@@ -796,7 +802,7 @@ function Manager:deleteComponent(argv)
 			local comps = self:getComponents()
 			--print(#comps)
 			if #comps == 0 then
-				self:shutdown()
+				self:createShutdownThread()
 			end
 		end
 	end
@@ -894,6 +900,8 @@ function Manager:initManager(argv)
 	self._config:setProperty("logger.file_name",self:formatString(self._config:getProperty("logger.file_name"),
 													self._config))
 	self._module = ModuleManager.new(self._config)
+	
+	--self._module:load("testModule.lua","init")
 end
 
 function Manager:shutdownManagerServant()
@@ -1563,7 +1571,41 @@ end
 -- @param initfunc ファクトリ登録関数名
 -- @return リターンコード
 function Manager:load(fname, initfunc)
-	return self._ReturnCode_t.PRECONDITION_NOT_MET
+	self._rtcout:RTC_TRACE("Manager.load(fname = "..fname..", initfunc = "..initfunc..")")
+    fname = string.gsub(fname, "\\", "./")
+    --self._listeners.module_:preLoad(fname, initfunc)
+    local success, exception = oil.pcall(
+		function()
+			if initfunc == "" then
+				initfunc = "Init"
+			end
+			--print(fname, initfunc)
+			local path = self._module:load(fname, initfunc)
+			self._rtcout:RTC_DEBUG("module path: "..path)
+			--self._listeners.module_:postLoad(path, initfunc)
+	end)
+	if not success then
+		--print(exception.type)
+		--print(exception.name)
+		if exception.type == "NotAllowedOperation" then
+			self._rtcout:RTC_ERROR("Operation not allowed: "..exception.reason)
+			return self._ReturnCode_t.PRECONDITION_NOT_MET
+		elseif exception.type == "NotFound" then
+			self._rtcout:RTC_ERROR("Not found: "..fname)
+			return self._ReturnCode_t.RTC_ERROR
+		elseif exception.type == "FileNotFound" then
+			self._rtcout:RTC_ERROR("Not found: "..fname)
+			return self._ReturnCode_t.RTC_ERROR
+		elseif exception.type == "InvalidArguments" then
+			self._rtcout:RTC_ERROR("Invalid argument: "..exception.reason)
+			return self._ReturnCode_t.BAD_PARAMETER
+		else
+			self._rtcout:RTC_ERROR("Unknown error.")
+			return self._ReturnCode_t.RTC_ERROR
+		end
+	end
+	return self._ReturnCode_t.RTC_OK
+	--return self._ReturnCode_t.PRECONDITION_NOT_MET
 end
 
 -- モジュールのアンロード
@@ -1628,6 +1670,26 @@ end
 Manager.is_main = function()
 	return (debug.getinfo(4 + (offset or 0)) == nil)
 end
+
+
+local terminate_Task = {}
+terminate_Task.new = function(mgr, sleep_time)
+	local obj = {}
+	obj._mgr = mgr
+	obj._sleep_time = sleep_time
+	
+	function obj:svc()
+		oil.tasks:suspend(self._sleep_time)
+		self._mgr:shutdown()
+	end
+	return obj
+end
+
+
+function Manager:createShutdownThread()
+	Task.start(terminate_Task.new(self, 3))
+end
+
 
 
 return Manager

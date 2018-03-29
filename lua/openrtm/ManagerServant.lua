@@ -106,6 +106,7 @@ ManagerServant.new = function()
 	end
 
 	function obj:exit()
+		--print(#self._masters)
 		for k,master in ipairs(self._masters) do
 			master:remove_slave_manager(self._objref)
 		end
@@ -136,9 +137,16 @@ ManagerServant.new = function()
 
 
 				mgr = RTCUtil.newproxy(self._mgr:getORB(), mgrloc,"IDL:RTM/Manager:1.0")
+				oil.pcall(
+					function()
+						if NVUtil._non_existent(mgr) then
+							mgr = oil.corba.idl.null
+						end
+				end)
+				
 		end)
 		if not success then
-
+			mgr = oil.corba.idl.null
 			self._rtcout:RTC_DEBUG(exception)
 		end
 

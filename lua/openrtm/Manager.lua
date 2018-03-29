@@ -455,6 +455,7 @@ function Manager:runManager(no_block)
 	if no_block == nil then
 		no_block = false
 	end
+	self.no_block = no_block
 	oil.main(function()
 
 		self:initORB()
@@ -479,6 +480,8 @@ function Manager:runManager(no_block)
 		self:initPreCreation()
 		self:initPreConnection()
 		self:initPreActivation()
+		
+		--self:unload("ConsoleIn")
 
 
 
@@ -1872,7 +1875,10 @@ end
 -- モジュールのアンロード
 -- @param fname ファイルパス
 function Manager:unload(fname)
-
+	self._rtcout:RTC_TRACE("Manager.unload()")
+	--self._listeners.module_:preUnload(fname)
+	self._module:unload(fname)
+	--self._listeners.module_:postUnload(fname)
 end
 
 
@@ -1952,7 +1958,14 @@ end
 
 -- マネージャ終了コルーチンの生成
 function Manager:createShutdownThread()
-	Task.start(terminate_Task.new(self, 3))
+	if not self.no_block then
+		Task.start(terminate_Task.new(self, 3))
+	else
+		oil.main(function()
+			oil.newthread(self._orb.run, self._orb)
+			Task.start(terminate_Task.new(self, 3))
+		end)
+	end
 end
 
 

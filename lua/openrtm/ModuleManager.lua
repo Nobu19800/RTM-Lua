@@ -42,6 +42,7 @@ end
 -- @param dll モジュール
 -- @param prop 設定情報
 -- 「file_path」の要素にはファイルパスを格納する
+-- 「import_name」の要素にはモジュール名を格納する
 -- @return モジュール保持オブジェクト
 local DLLEntity = {}
 DLLEntity.new = function(dll,prop)
@@ -57,10 +58,10 @@ end
 local DLLPred = function(argv)
 	local obj = {}
 	if argv.name ~= nil then
-		obj._filepath = argv.name
+		obj._import_name = argv.name
 	end
 	if argv.factory ~= nil then
-		obj._filepath = argv.factory
+		obj._import_name = argv.factory
 	end
 	-- モジュールの比較
 	-- @param self 自身のオブジェクト
@@ -69,7 +70,7 @@ local DLLPred = function(argv)
 	-- @return true：一致
 	local call_func = function(self, dll)
 		--print(self._filepath, dll.properties:getProperty("file_path"))
-		return (self._filepath == dll.properties:getProperty("file_path"))
+		return (self._import_name == dll.properties:getProperty("import_name"))
 	end
 	setmetatable(obj, {__call=call_func})
 	return obj
@@ -274,9 +275,11 @@ ModuleManager.new = function(prop)
 		file_path = string.gsub(file_path, "//", "/")
 		
 		--print(mo,type(mo))
+		--print(file_path)
 		local dll = DLLEntity.new(mo,Properties.new())
 		
 		dll.properties:setProperty("file_path",file_path)
+		dll.properties:setProperty("import_name",import_name)
 		self._modules:registerObject(dll)
 
 		
@@ -284,7 +287,7 @@ ModuleManager.new = function(prop)
 			return file_name
 		end
 		
-		self:symbol(file_path,init_func)(self._mgr)
+		self:symbol(import_name,init_func)(self._mgr)
 
 		return file_name
 	end
@@ -347,24 +350,39 @@ ModuleManager.new = function(prop)
 	end
 
 	-- モジュールから指定関数を取得
-	-- @param file_name ファイル名
-	-- 既に指定ファイル名のモジュールが登録済みである必要がある
+	-- @param import_name モジュール名
+	-- 既にモジュール名のモジュールが登録済みである必要がある
 	-- @param func_name 関数名
 	-- @return 関数オブジェクト
-	function obj:symbol(file_name, func_name)
-		local dll = self._modules:find(file_name)
+	function obj:symbol(import_name, func_name)
+		local dll = self._modules:find(import_name)
 		--print(dll, file_name)
 		if dll == nil then
-			error(ModuleManager.ModuleNotFound.new(file_name))
+			error(ModuleManager.ModuleNotFound.new(import_name))
 		end
 		
 		local func = dll.dll[func_name]
 		
 		if func == nil then
-			error(ModuleManager.SymbolNotFound.new(func_name))
+			error(ModuleManager.SymbolNotFound.new(import_name))
 		end
 		
 		return func
+	end
+	
+	-- モジュールのアンロード
+	-- @param file_name ファイルパス
+	function obj:unload(file_name)
+		file_name = string.gsub(file_name, "\\", "/")
+		file_name = string.gsub(file_name, "//", "/")
+		local dll = self._modules:find(file_name)
+		if dll == nil then
+			error(ModuleManager.NotFound.new(file_name))
+		end
+		local dll_name = dll.properties:getProperty("import_name")
+		package.loaded[dll_name] = nil
+		self._modules:unregisterObject(file_name)
+		
 	end
 
 	obj._properties = prop

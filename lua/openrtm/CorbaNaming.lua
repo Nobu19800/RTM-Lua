@@ -28,6 +28,7 @@ CorbaNaming.new = function(orb, name_server)
 
 	if name_server ~= nil then
 		obj._nameServer = "corbaloc:iiop:"..name_server.."/NameService"
+		--print(obj._nameServer)
 		local success, exception = oil.pcall(
 			function()
 				obj._rootContext = RTCUtil.newproxy(obj._orb, obj._nameServer,"IDL:omg.org/CosNaming/NamingContext:1.0")
@@ -190,6 +191,46 @@ CorbaNaming.new = function(orb, name_server)
 			print(exception)
 		end
     end
+
+	-- 名前からオブジェクトを取得
+	-- @param name 名前リスト
+	-- {{id="id1",kind="kind1"},...}
+	-- @return オブジェクト
+	function obj:resolve(name)
+		local name_ = ""
+		if type(name) == "string" then
+			name_ = self:toName(name)
+		else
+			name_ = name
+		end
+		local _obj = oil.corba.idl.null
+		local success, exception = oil.pcall(
+			function()
+			_obj = self._rootContext:resolve(name_)
+		end)
+
+		if not success then
+			print(exception)
+			return oil.corba.idl.null
+		end
+		if _obj ~= nil then
+			return _obj
+		end
+	end
+
+	-- 名前からオブジェクトを取得
+	-- @param string_name 名前
+	-- test1.host_cxt/test2.rtc
+	-- @return オブジェクト
+	function obj:resolveStr(string_name)
+		return self:resolve(self:toName(string_name))
+	end
+
+	-- ルートコンテキスト取得
+	-- @return ルートコンテキスト
+	function obj:getRootContext()
+		return self._rootContext
+	end
 
 	return obj
 end

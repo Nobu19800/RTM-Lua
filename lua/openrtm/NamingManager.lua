@@ -13,7 +13,10 @@ local NamingManager= {}
 
 local oil = require "oil"
 local CorbaNaming = require "openrtm.CorbaNaming"
-
+local StringUtil = require "openrtm.StringUtil"
+local RTCUtil = require "openrtm.RTCUtil"
+local NVUtil = require "openrtm.NVUtil"
+local CorbaConsumer = require "openrtm.CorbaConsumer"
 
 
 NamingManager.NamingBase = {}
@@ -101,6 +104,137 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 
 	end
 
+
+	-- ネームサーバーから指定名のRTCを検索
+	-- @param context ネーミングコンテキスト
+	-- @param name RTCの登録名
+	-- @param rtcs 一致したRTC一覧
+	function obj:getComponentByName(context, name, rtcs)
+
+		local orb = Manager:instance():getORB()
+		local BindingType = orb.types:lookup("::CosNaming::BindingType").labelvalue
+
+		local length = 500
+
+		local bl,bi = context:list(length)
+
+
+
+		for k,i in ipairs(bl) do
+			--print(i.binding_type, BindingType.ncontext)
+			--print(NVUtil.getBindingType(i.binding_type), BindingType.ncontext)
+			--print(i.binding_name)
+			if NVUtil.getBindingType(i.binding_type) == BindingType.ncontext then
+				local next_context = RTCUtil.newproxy(orb, context:resolve(i.binding_name),"IDL:omg.org/CosNaming/NamingContext:1.0")
+				--print(next_context)
+				self:getComponentByName(next_context, name, rtcs)
+			elseif NVUtil.getBindingType(i.binding_type) == BindingType.nobject then
+				if i.binding_name[1].id == name and i.binding_name[1].kind == "rtc" then
+					--print(i.binding_name[1].id, i.binding_name[1].kind)
+					local success, exception = oil.pcall(
+						function()
+							local cc = CorbaConsumer.new()
+							cc:setObject(context:resolve(i.binding_name))
+							local _obj = RTCUtil.newproxy(orb, cc:getObject(),"IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
+
+							local ret = false
+							oil.pcall(
+								function()
+									if not NVUtil._non_existent(_obj) then
+										ret = true
+									end
+							end)
+							if ret then
+								table.insert(rtcs, _obj)
+							end
+					end)
+					if not success then
+						self._rtcout:RTC_ERROR(exception)
+					end
+				end
+			end
+		end
+	end
+
+
+	-- rtcname形式の文字列からRTCを取得
+	-- @param name RTC名(rtcname形式)
+	-- rtcname://localhost/test.host_cxt/ConsoleIn0.out
+	-- @return 一致したRTC一覧
+	function obj:string_to_component(name)
+
+		local rtc_list = {}
+		local tmp = StringUtil.split(name, "://")
+		if #tmp > 1 then
+			--print(tmp[1])
+			if tmp[1] == "rtcname" then
+				local url = tmp[2]
+				local r = StringUtil.split(url, "/")
+
+				if #r > 1 then
+					local host = r[1]
+					local rtc_name = string.sub(url, #host+2)
+					--print(rtc_name)
+
+
+					local success, exception = oil.pcall(
+						function()
+
+							local cns = nil
+							if host == "*" then
+								cns = self._cosnaming
+							else
+								local orb = Manager:instance():getORB()
+								cns = CorbaNaming.new(orb,host)
+
+							end
+
+							local names = StringUtil.split(rtc_name, "/")
+
+
+							if #names == 2 and names[1] == "*" then
+
+								local root_cxt = cns:getRootContext()
+
+								self:getComponentByName(root_cxt, names[2], rtc_list)
+								return rtc_list
+							else
+								rtc_name = rtc_name..".rtc"
+
+								local _obj = cns:resolveStr(rtc_name)
+
+								if _obj == oil.corba.idl.null then
+									return {}
+								end
+								local ret = false
+								oil.pcall(
+									function()
+									if NVUtil._non_existent(_obj) then
+										ret = true
+									end
+									if ret then
+										_obj = RTCUtil.newproxy(orb, _obj,"IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
+									end
+								end)
+								if ret then
+									return {}
+								end
+
+								table.insert(rtc_list, _obj)
+								return rtc_list
+							end
+					end)
+					if not success then
+						return {}
+					end
+				end
+			end
+		end
+
+		return rtc_list
+	end
+
+
 	return obj
 end
 
@@ -119,7 +253,107 @@ NamingManager.NamingOnManager.new = function(orb, mgr)
 	obj._rtcout = Manager:instance():getLogbuf("manager.namingonmanager")
 	obj._cosnaming = nil
 	obj._orb = orb
-    obj._mgr = mgr
+	obj._mgr = mgr
+
+
+	-- 指定ホスト名のマネージャを取得
+	-- @param name ホスト名(例：localhost:2810)
+	-- @return マネージャ
+	function obj:getManager(name)
+		if name == "*" then
+			local mgr_sev = self._mgr:getManagerServant()
+			local mgr = nil
+			if mgr_sev:is_master() then
+				mgr = mgr_sev:getObjRef()
+			else
+				local masters = mgr_sev:get_master_managers()
+				if #masters > 0 then
+					mgr = masters[1]
+				else
+					mgr = mgr_sev:getObjRef()
+				end
+			end
+			return mgr
+		end
+		local success, exception = oil.pcall(
+			function()
+				local mgrloc = "corbaloc:iiop:"
+				local prop = self._mgr:getConfig()
+				local manager_name = prop:getProperty("manager.name")
+				mgrloc = mgrloc..name
+				mgrloc = mgrloc.."/"..manager_name
+
+
+
+
+				mgr = RTCUtil.newproxy(self._orb, mgrloc,"IDL:RTM/Manager:1.0")
+				--mgr = RTCUtil.newproxy(self._orb, mgrloc,"IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
+
+				--print(mgrloc)
+
+
+				self._rtcout:RTC_DEBUG("corbaloc: "..mgrloc)
+				--print(mgr)
+
+		end)
+		if not success then
+			self._rtcout:RTC_DEBUG(exception)
+		else
+			return mgr
+		end
+		return oil.corba.idl.null
+	end
+
+
+
+	-- rtcloc形式の文字列からRTCを取得
+	-- @param name RTC名(rtcloc形式)
+	-- rtcloc://localhost:2010/Category/ConsoleIn0.out
+	-- @return 一致したRTC一覧
+	function obj:string_to_component(name)
+		--print(name)
+		local rtc_list = {}
+		local tmp = StringUtil.split(name, "://")
+		--print(#tmp)
+
+		if #tmp > 1 then
+
+			if tmp[1] == "rtcloc" then
+
+				local url = tmp[2]
+				local r = StringUtil.split(url, "/")
+				if #r > 1 then
+					local host = r[1]
+					local rtc_name = string.sub(url, #host+2)
+
+
+					local mgr = self:getManager(host)
+
+					if mgr ~= oil.corba.idl.null then
+						--print("test1")
+						--print(mgr:get_master_managers())
+						rtc_list = mgr:get_components_by_name(rtc_name)
+						--print("test2")
+
+						local slaves = mgr:get_slave_managers()
+
+						for k,slave in ipairs(slaves) do
+							local success, exception = oil.pcall(
+								function()
+									rtc_list.extend(slave:get_components_by_name(rtc_name))
+							end)
+							if not success then
+								self._rtcout:RTC_DEBUG(exception)
+								mgr:remove_slave_manager(slave)
+							end
+						end
+					end
+				end
+				return rtc_list
+			end
+		end
+		return rtc_list
+	end
 
 	return obj
 end
@@ -177,9 +411,11 @@ NamingManager.new = function(manager)
     -- @param name_server アドレス
     -- @return 名前管理オブジェクト
 	function obj:createNamingObj(method, name_server)
+		--print(method)
 		self._rtcout:RTC_TRACE("createNamingObj(method = "..method..", nameserver = "..name_server..")")
 
 		local mth = method
+
 
 		if mth == "corba" then
 			local ret = nil
@@ -196,7 +432,9 @@ NamingManager.new = function(manager)
 			end
 			return ret
 		elseif mth == "manager" then
-			local name = NamingManager.NamingOnManager(self._manager:getORB(), self._manager)
+
+			local name = NamingManager.NamingOnManager.new(self._manager:getORB(), self._manager)
+			--print(name)
 			return name
 		end
 		return nil
@@ -259,6 +497,22 @@ NamingManager.new = function(manager)
 	-- @param name 登録名
 	function obj:unregisterPortName(name)
 	end
+
+	-- rtcloc、rtcname形式の文字列からRTCを取得
+	-- @param name RTC名
+	-- @return 一致したRTC一覧
+	function obj:string_to_component(name)
+		for k,n in ipairs(self._names) do
+			if n.ns ~= nil then
+				local comps = n.ns:string_to_component(name)
+				if #comps > 0 then
+					return comps
+				end
+			end
+		end
+		return {}
+	end
+
 	return obj
 end
 

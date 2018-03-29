@@ -15,6 +15,7 @@ local NVUtil = require "openrtm.NVUtil"
 local oil = require "oil"
 local RTCUtil = require "openrtm.RTCUtil"
 local Properties = require "openrtm.Properties"
+local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 
 
 
@@ -27,6 +28,28 @@ ManagerServant.CompParam.prof_list = {
 				"language",
 				"version"
 				}
+
+
+
+-- マネージャのCORBAオブジェクトの一致を判定する関数オブジェクト初期化
+-- @param mgr マネージャ
+-- @return 関数オブジェクト
+local is_equiv = function(mgr)
+	local obj = {}
+	obj._mgr = mgr
+	-- マネージャのCORBAオブジェクトの一致を判定する関数
+	-- @param self 自身のオブジェクト
+	-- @param mgr 比較対象のマネージャ
+	-- @return true：一致
+	local call_func = function(self, mgr)
+		return NVUtil._is_equivalent(self._mgr, mgr, self._mgr.getObjRef, mgr.getObjRef)
+	end
+	setmetatable(obj, {__call=call_func})
+	return obj
+end
+
+
+
 
 -- RTCのパラメータ格納オブジェクト初期化
 -- @param module_name RTC名、オプション
@@ -100,19 +123,95 @@ ManagerServant.new = function()
 	-- @param host_port アドレス、ポート番号
 	-- @return マネージャ
 	function obj:findManager(host_port)
-		return oil.corba.idl.null
+		self._rtcout:RTC_TRACE("findManager(host_port = "..host_port..")")
+		local mgr = oil.corba.idl.null
+		local success, exception = oil.pcall(
+			function()
+				local config = self._mgr:getConfig()
+				local mgrloc = "corbaloc:iiop:"
+				mgrloc = mgrloc..host_port
+				mgrloc = mgrloc.."/"..config:getProperty("manager.name")
+
+				self._rtcout:RTC_DEBUG("corbaloc: "..mgrloc)
+
+
+				mgr = RTCUtil.newproxy(self._mgr:getORB(), mgrloc,"IDL:RTM/Manager:1.0")
+		end)
+		if not success then
+
+			self._rtcout:RTC_DEBUG(exception)
+		end
+
+		return mgr
+	end
+
+	-- 指定名のRTCを取得
+	-- @param name RTC名
+	-- カテゴリ名とRTCインスタンス名を指定
+	-- Category/ConsoleIn0
+	-- カテゴリ名は省略可能
+	-- @return 一致したRTC一覧
+	function obj:get_components_by_name(name)
+		self._rtcout:RTC_TRACE("get_components_by_name()")
+		local rtcs = self._mgr:getComponents()
+		local crtcs = {}
+		local name = StringUtil.eraseHeadBlank(name)
+
+		local rtc_name = StringUtil.split(name, "/")
+		for k,rtc in ipairs(rtcs) do
+			if #rtc_name == 1 then
+				--print(rtc:getInstanceName(), rtc_name[1])
+				if rtc:getInstanceName() == rtc_name[1] then
+					table.insert(crtcs, rtc:getObjRef())
+				end
+
+			else
+				if rtc_name[1] == "*" then
+					if rtc:getInstanceName() == rtc_name[2] then
+						crtcs.append(rtc:getObjRef())
+					else
+						if rtc:getCategory() == rtc_name[1] then
+							if rtc:getInstanceName() == rtc_name[2] then
+								table.insert(crtcs, rtc:getObjRef())
+							end
+						end
+					end
+				end
+			end
+		end
+		return crtcs
 	end
 
 	-- マスターマネージャを追加する
 	-- @param mgr マネージャ
 	-- @return リターンコード
 	function obj:add_master_manager(mgr)
+		self._rtcout:RTC_TRACE("add_master_manager(), "..#self._masters.." masters")
+		local index = CORBA_SeqUtil.find(self._masters, is_equiv(mgr))
+		--print(index)
+		if not (index < 1) then
+			self._rtcout:RTC_ERROR("Already exists.")
+			return self._ReturnCode_t.BAD_PARAMETER
+		end
+
+		table.insert(self._masters, mgr)
+		self._rtcout.RTC_TRACE("add_master_manager() done, "..#self._masters.." masters")
 		return self._ReturnCode_t.RTC_OK
 	end
 	-- スレーブマネージャを追加する
 	-- @param mgr マネージャ
 	-- @return リターンコード
 	function obj:add_slave_manager(mgr)
+		self._rtcout:RTC_TRACE("add_slave_manager(), "..#self._slaves.." slaves")
+		local index = CORBA_SeqUtil.find(self._masters, is_equiv(mgr))
+
+		if not (index < 1) then
+			self._rtcout:RTC_ERROR("Already exists.")
+			return self._ReturnCode_t.BAD_PARAMETER
+		end
+
+		table.insert(self._slaves, mgr)
+		self._rtcout.RTC_TRACE("add_slave_manager() done, "..#self._slaves.." slaves")
 		return self._ReturnCode_t.RTC_OK
 	end
 
@@ -163,9 +262,7 @@ ManagerServant.new = function()
 		return oil.corba.idl.null
 	end
 
-	function obj:findManager(host_port)
-		return oil.corba.idl.null
-	end
+
 
 
 	function obj:getParameterByModulename(param_name, module_name)
@@ -579,7 +676,18 @@ ManagerServant.new = function()
 	-- @param mgr マネージャ
 	-- @return リターンコード
 	function obj:remove_master_manager(mgr)
-		return self._ReturnCode_t.PRECONDITION_NOT_MET
+		self._rtcout:RTC_TRACE("remove_master_manager(), "..#self._masters.." masters")
+		local index = CORBA_SeqUtil.find(self._masters, is_equiv(mgr))
+
+		if index < 1 then
+			self._rtcout:RTC_ERROR("Not found.")
+			return self._ReturnCode_t.BAD_PARAMETER
+		end
+
+
+		self._masters[index] = nil
+		self._rtcout.RTC_TRACE("remove_master_manager() done, "..#self._masters.." masters")
+		return self._ReturnCode_t.RTC_OK
 	end
 
 	-- スレーブマネージャ一覧取得
@@ -594,7 +702,18 @@ ManagerServant.new = function()
 	-- @param mgr マネージャ
 	-- @return リターンコード
 	function obj:remove_slave_manager(mgr)
-		return self._ReturnCode_t.PRECONDITION_NOT_MET
+		self._rtcout:RTC_TRACE("remove_slave_manager(), "..#self._slaves.." slaves")
+		local index = CORBA_SeqUtil.find(self._slaves, is_equiv(mgr))
+
+		if index < 1 then
+			self._rtcout:RTC_ERROR("Not found.")
+			return self._ReturnCode_t.BAD_PARAMETER
+		end
+
+
+		self._slaves[index] = nil
+		self._rtcout.RTC_TRACE("remove_slave_manager() done, "..#self._slaves.." slaves")
+		return self._ReturnCode_t.RTC_OK
 	end
 
 	-- マネージャのコピー作成
@@ -656,10 +775,12 @@ ManagerServant.new = function()
 		local success, exception = oil.pcall(
 			function()
 				local owner = obj:findManager(config:getProperty("corba.master_manager"))
+				--print(owner)
 				if owner == oil.corba.idl.null then
 					obj._rtcout:RTC_INFO("Master manager not found")
 					return
 				end
+
 				obj:add_master_manager(owner)
 				owner:add_slave_manager(obj._objref)
 		end)

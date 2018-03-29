@@ -42,7 +42,7 @@ ExecutionContextProfile.new = function(kind)
 					rate=1.0/obj._period:toDouble(),
 					owner=oil.corba.idl.null, participants={},
 					properties={}}
-					
+
 	-- 実行コンテキスト終了
 	function obj:exit()
 		self._rtcout:RTC_TRACE("exit")
@@ -119,7 +119,12 @@ ExecutionContextProfile.new = function(kind)
 		return kinds_[kind_+1]
 	end
 	-- 実行周期取得
-	-- @return 実行周期
+	-- @return 実行周期(Hz)
+	function obj:getRate()
+		return self._profile.rate
+	end
+	-- 実行周期取得
+	-- @return 実行周期(秒)
 	function obj:getPeriod()
 		return self._period
 	end

@@ -326,4 +326,55 @@ NVUtil.isString = function(nv, name)
 end
 
 
+-- 文字列をCosNamingのBindingTypeに変換
+-- @param binding_type バインディング型(文字列)
+-- @return バインディング型
+NVUtil.getBindingType = function(binding_type)
+	if type(binding_type) == "string" then
+		local Manager = require "openrtm.Manager"
+		local _BindingType = Manager:instance():getORB().types:lookup("::CosNaming::BindingType").labelvalue
+
+		if binding_type == "ncontext" then
+			return _BindingType.ncontext
+		elseif binding_type == "nobject" then
+			return _BindingType.nobject
+		end
+	end
+	return binding_type
+end
+
+
+-- 文字列をRTCの状態に変換
+-- @param state RTCの状態(文字列)
+-- @return RTCの状態
+NVUtil.getLifeCycleState = function(state)
+	--print(state)
+	if type(state) == "string" then
+		local Manager = require "openrtm.Manager"
+		local _LifeCycleState = Manager:instance():getORB().types:lookup("::RTC::LifeCycleState").labelvalue
+		if state == "CREATED_STATE" then
+			return _LifeCycleState.CREATED_STATE
+		elseif state == "INACTIVE_STATE" then
+			return _LifeCycleState.INACTIVE_STATE
+		elseif state == "ACTIVE_STATE" then
+			return _LifeCycleState.ACTIVE_STATE
+		elseif state == "ERROR_STATE" then
+			return _LifeCycleState.ERROR_STATE
+		end
+	end
+	return state
+end
+
+-- CORBAオブジェクトの生存確認
+-- @param _obj CORBAオブジェクト
+-- @return false：生存
+NVUtil._non_existent = function(_obj)
+	if _obj._non_existent == nil then
+		return false
+	else
+		return _obj:_non_existent()
+	end
+end
+
+
 return NVUtil

@@ -40,7 +40,7 @@ ExecutionContextBase.new = function(name)
     obj._syncReset        = true
     obj._worker  = ExecutionContextWorker.new()
     obj._profile = ExecutionContextProfile.new()
-    
+
     -- 初期化時に実行コンテキストにプロパティを設定する
     -- @param props プロパティ
 	function obj:init(props)
@@ -173,7 +173,7 @@ ExecutionContextBase.new = function(name)
 
 		return ret_
 	end
-	
+
 	-- 実行状態が変化時のコールバック
 	-- @param running 実行状態
 	-- @return 実行状態
@@ -213,7 +213,7 @@ ExecutionContextBase.new = function(name)
 		--print(rate)
 		return rate
 	end
-	
+
 	-- 実行周期設定後のコールバック
 	-- @param rate 実行周期
 	-- @return リターンコード
@@ -343,10 +343,16 @@ ExecutionContextBase.new = function(name)
 	function obj:invokeWorkerPostDo()
 		self._worker:invokeWorkerPostDo()
     end
-    -- 実行周期取得
-    -- @return 実行周期
+	-- 実行周期取得
+	-- @return 実行周期(秒)
 	function obj:getPeriod()
 		return self._profile:getPeriod()
+	end
+	-- 実行周期取得
+	-- @return 実行周期(Hz)
+	function obj:getRate()
+		local rate_ = self._profile:getRate()
+		return self:onGetRate(rate_)
 	end
 	-- RTCのアクティブ化
 	-- @param comp RTC
@@ -483,7 +489,7 @@ ExecutionContextBase.new = function(name)
 		self._rtcout:RTC_TRACE("is_running()")
 		return self:isRunning()
 	end
-	
+
 	-- 実行周期を取得
 	-- @return 実行周期
 	function obj:get_rate()

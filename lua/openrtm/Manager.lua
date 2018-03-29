@@ -475,10 +475,86 @@ function Manager:runManager(no_block)
 		if self._initThread ~= nil then
 			oil.newthread(self._initThread, self)
 		end
-		
+
 		self:initPreCreation()
 		self:initPreConnection()
 		self:initPreActivation()
+
+
+
+		--cout = self:getComponent("ConsoleOut0")
+		--cin = self:getComponent("ConsoleIn0")
+		--config = self:getComponent("ConfigSample0")
+
+		--print(CORBA_RTCUtil.get_component_profile(cin))
+		--print(CORBA_RTCUtil.is_existing(cin))
+		--print(CORBA_RTCUtil.is_alive_in_default_ec(cin))
+		--ec_cin = CORBA_RTCUtil.get_actual_ec(cin)
+		--print(CORBA_RTCUtil.get_ec_id(cin,ec_cin))
+
+		--CORBA_RTCUtil.activate(cout)
+		--CORBA_RTCUtil.activate(cin)
+		--oil.tasks:suspend(10)
+		--CORBA_RTCUtil.deactivate(cout)
+		--CORBA_RTCUtil.reset(cin)
+
+		--print(CORBA_RTCUtil.get_state(cin))
+
+		--rtc = self._namingManager:string_to_component("rtcname://localhost/*/TkJoyStick0")
+		--rtc = self._namingManager:string_to_component("rtcloc://localhost:2810/TkJoyStick0")
+
+
+		--print(CORBA_RTCUtil.get_state(rtc[1]))
+		--print(CORBA_RTCUtil.is_in_inactive(cin))
+		--print(CORBA_RTCUtil.is_in_inactive(rtc[1]))
+		--print(CORBA_RTCUtil.is_in_active(cin))
+		--print(CORBA_RTCUtil.is_in_active(rtc[1]))
+		--print(CORBA_RTCUtil.is_in_error(cin))
+		--print(CORBA_RTCUtil.is_in_error(rtc[1]))
+		--CORBA_RTCUtil.set_default_rate(cin, 100)
+		--CORBA_RTCUtil.set_default_rate(rtc[1], 800)
+		--print(CORBA_RTCUtil.get_default_rate(cin))
+		--print(CORBA_RTCUtil.get_default_rate(rtc[1]))
+		--CORBA_RTCUtil.set_current_rate(cin, 0, 200)
+		--CORBA_RTCUtil.set_current_rate(rtc[1], 0, 600)
+		--print(CORBA_RTCUtil.get_current_rate(cin, 0))
+		--print(CORBA_RTCUtil.get_current_rate(rtc[1], 0))
+		--print(#CORBA_RTCUtil.get_participants_rtc(cin))
+		--StringUtil.print_table(CORBA_RTCUtil.get_port_names(cin))
+		--StringUtil.print_table(CORBA_RTCUtil.get_inport_names(cout))
+		--StringUtil.print_table(CORBA_RTCUtil.get_outport_names(cin))
+		--StringUtil.print_table(CORBA_RTCUtil.get_svcport_names(cin))
+		--pin = CORBA_RTCUtil.get_port_by_name(cout,"ConsoleOut0.in")
+		--pout = CORBA_RTCUtil.get_port_by_name(cin,"ConsoleIn0.out")
+		--print(pin)
+		--print(#CORBA_RTCUtil.get_connector_names_by_portref(pin))
+		--local prop = Properties.new()
+		--CORBA_RTCUtil.connect("test_connector",prop,pin,pout)
+		--CORBA_RTCUtil.connect_multi("test_connector",prop,pin,{pout})
+		--print(#CORBA_RTCUtil.get_connector_names_by_portref(pin))
+		--StringUtil.print_table(CORBA_RTCUtil.get_connector_names(cout, "ConsoleOut0.in"))
+		--StringUtil.print_table(CORBA_RTCUtil.get_connector_ids_by_portref(pin))
+		--StringUtil.print_table(CORBA_RTCUtil.get_connector_ids(cout, "ConsoleOut0.in"))
+		--print(CORBA_RTCUtil.already_connected(pout,pin))
+		--CORBA_RTCUtil.connect_by_name("test_connector",prop,cout,"ConsoleOut0.in",cin,"ConsoleIn0.out")
+		--CORBA_RTCUtil.disconnect_by_portref_connector_name(pin, "test_connector")
+		--print(CORBA_RTCUtil.get_port_by_url("rtcname://localhost/ConsoleIn0.out"))
+		--CORBA_RTCUtil.disconnect_by_portname_connector_name("rtcname://localhost/ConsoleIn0.out", "test_connector")]
+		--ids = CORBA_RTCUtil.get_connector_ids_by_portref(pin)
+		--print(CORBA_RTCUtil.get_configuration(config, "default"))
+		--print(CORBA_RTCUtil.get_parameter_by_key(config, "default", "double_param0"))
+		--print(CORBA_RTCUtil.get_active_configuration_name(config))
+		--print(CORBA_RTCUtil.get_active_configuration(config))
+		--CORBA_RTCUtil.set_configuration(config, "default", "double_param0", "1.5")
+		--CORBA_RTCUtil.set_active_configuration(config, "double_param0", "10.5")
+		--CORBA_RTCUtil.disconnect_by_port_name(pout, "ConsoleOut0.in")
+		--CORBA_RTCUtil.disconnect_all_by_ref(pout)
+		--CORBA_RTCUtil.disconnect_all_by_name("rtcname://localhost/ConsoleIn0.out")
+		--CORBA_RTCUtil.disconnect_by_portname_connector_id("rtcname://localhost/ConsoleIn0.out", ids[1])
+		--CORBA_RTCUtil.disconnect_by_portref_connector_id(pout, ids[1])
+		--print(#rtc)
+		--print(self:getManagerServant():get_components_by_name("mesure_lua0"))
+		--CORBA_RTCUtil.activate(rtc[1])
 		--self:createComponent("ConfigSample")
 		--local mgrs = self:getManagerServant()
 		--mgrs:create_component("mesure_lua")
@@ -635,7 +711,7 @@ function Manager:createComponent(comp_args)
 		self:load(found_obj:getProperty("module_file_name"), "")
 		--]]
 		self:load(comp_id:getProperty("implementation_id"), "")
-		
+
 		factory = self._factory:find(comp_id)
 		if factory == nil then
 			self._rtcout:RTC_ERROR("Factory not found for loaded module: "..comp_id:getProperty("implementation_id"))
@@ -905,7 +981,7 @@ function Manager:initManager(argv)
 	self._config:setProperty("logger.file_name",self:formatString(self._config:getProperty("logger.file_name"),
 													self._config))
 	self._module = ModuleManager.new(self._config)
-	
+
 	--self._module:load("testModule.lua","init")
 end
 
@@ -1077,6 +1153,8 @@ function Manager:initNaming()
 		return true
 	end
 	local meths = StringUtil.split(self._config:getProperty("naming.type"),",")
+	meths = StringUtil.strip(meths)
+	--print(self._config:getProperty("naming.type"))
 
 	for i, meth in ipairs(meths) do
 		--print(meth)
@@ -1542,10 +1620,10 @@ end
 function Manager:initPreConnection()
 	self._rtcout:RTC_TRACE("Connection pre-creation: "..tostring(self._config:getProperty("manager.components.preconnect")))
 	local connectors = StringUtil.split(tostring(self._config:getProperty("manager.components.preconnect")), ",")
-    
+
 	for k,c in ipairs(connectors) do
 		c = StringUtil.eraseBothEndsBlank(c)
-		
+
 		if c == "" then
 		else
 			local port0_str = StringUtil.split(c,"?")[1]
@@ -1554,7 +1632,7 @@ function Manager:initPreConnection()
 			--for k,v in pairs(param) do
 			--	print(k,v)
 			--end
-			
+
 			local ports = {}
 			local configs = {}
 			for k,p in pairs(param) do
@@ -1562,7 +1640,7 @@ function Manager:initPreConnection()
 					table.insert(ports,p)
 				else
 					local tmp = string.gsub(k,"port","")
-					
+
 					local ret, v = StringUtil.stringTo(0, tmp)
 					if ret then
 						ports.append(v)
@@ -1571,12 +1649,12 @@ function Manager:initPreConnection()
 					end
 				end
 			end
-					
+
 			if #ports == 0 then
 				self._rtcout:RTC_ERROR("Invalid format for pre-connection.")
 				self._rtcout:RTC_ERROR("Format must be Comp0.port0?port=Comp1.port1")
 			else
-				
+
 				if configs["dataflow_type"] == nil then
 					configs["dataflow_type"] = "push"
 				end
@@ -1585,12 +1663,12 @@ function Manager:initPreConnection()
 				end
 				local tmp = StringUtil.split(port0_str,"%.")
 				tmp[#tmp] = nil
-				
+
 				local comp0_name = StringUtil.flatten(tmp,"%.")
-				
+
 				local port0_name = port0_str
 				local comp0_ref = nil
-					
+
 				if string.find(comp0_name, "://") == nil then
 					--print(comp0_name)
 					local comp0 = self:getComponent(comp0_name)
@@ -1602,7 +1680,7 @@ function Manager:initPreConnection()
 					end
 				else
 					local rtcs = self._namingManager:string_to_component(comp0_name)
-        
+
 					if #rtcs == 0 then
 						self._rtcout:RTC_ERROR(comp0_name.." not found.")
 					else
@@ -1611,22 +1689,22 @@ function Manager:initPreConnection()
 						port0_name = port0_name[#port0_name]
 					end
 				end
-						
+
 				local port0_var = CORBA_RTCUtil.get_port_by_name(comp0_ref, port0_name)
-      
-      
+
+
 				if port0_var == oil.corba.idl.null then
 					self._rtcout:RTC_DEBUG("port "..port0_str.." found: ")
 				else
 					for k,port_str in ipairs(ports) do
-      
+
 						local tmp = StringUtil.split(port_str, "%.")
 						tmp[#tmp] = nil
 						local comp_name = StringUtil.flatten(tmp,"%.")
 						local port_name = port_str
-						
+
 						local comp_ref = nil
-						 
+
 						if string.find(comp_name, "://") == nil then
 							--print(comp_name)
 							local comp = self:getComponent(comp_name)
@@ -1637,7 +1715,7 @@ function Manager:initPreConnection()
 							end
 						else
 							local rtcs = self._namingManager:string_to_component(comp_name)
-							
+
 							if #rtcs == 0 then
 								self._rtcout:RTC_ERROR(comp_name.." not found.")
 							else
@@ -1645,16 +1723,16 @@ function Manager:initPreConnection()
 								port_name = port_str.split("/")[-1]
 							end
 						end
-						
+
 						if comp_ref ~= nil then
 							port_var = CORBA_RTCUtil.get_port_by_name(comp_ref, port_name)
 
-							
+
 							if port_var == oil.corba.idl.null then
 								self._rtcout:RTC_DEBUG("port "..port_str.." found: ")
 							else
 								local prop = Properties.new()
-										
+
 								for k,v in pairs(configs) do
 									k = StringUtil.eraseBothEndsBlank(k)
 									v = StringUtil.eraseBothEndsBlank(v)
@@ -1664,7 +1742,7 @@ function Manager:initPreConnection()
 								--print(prop)
 								--print(port0_var)
 								--print(port_var)
-											
+
 								if self._ReturnCode_t.RTC_OK ~= CORBA_RTCUtil.connect(c, prop, port0_var, port_var) then
 									self._rtcout.RTC_ERROR("Connection error: "..c)
 								end
@@ -1685,7 +1763,7 @@ function Manager:initPreActivation()
 	local comps = StringUtil.split(tostring(self._config:getProperty("manager.components.preactivation")), ",")
 	for k,c in pairs(comps) do
 		local c = StringUtil.eraseBothEndsBlank(c)
-		
+
 		if c ~= "" then
 			local comp_ref = nil
 			if string.find(c, "://") == nil then
@@ -1745,7 +1823,8 @@ end
 -- ネーミングマネージャを取得
 -- @return ネーミングマネージャ
 function Manager:getNaming()
-
+	self._rtcout:RTC_TRACE("Manager.getNaming()")
+    return self._namingManager
 end
 
 -- モジュールのロード
@@ -1863,7 +1942,7 @@ terminate_Task.new = function(mgr, sleep_time)
 	local obj = {}
 	obj._mgr = mgr
 	obj._sleep_time = sleep_time
-	
+
 	function obj:svc()
 		oil.tasks:suspend(self._sleep_time)
 		self._mgr:shutdown()

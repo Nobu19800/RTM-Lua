@@ -561,6 +561,7 @@ Properties.new = function(argv)
 					value = StringUtil.unescape(value[1])
 					value = StringUtil.eraseHeadBlank(value)
 					value = StringUtil.eraseTailBlank(value)
+					--print(value)
 					--print(key, value)
 					self:setProperty(key, value)
 					pline = ""

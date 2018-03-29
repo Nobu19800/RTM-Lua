@@ -5,7 +5,7 @@ public interface IRtcBuilderConstantsLua {
 	public static final String LANG_LUA = "Lua";
 	public static final String LANG_LUA_ARG = "lua";
 	//
-	public static final int DOC_DEFAULT_WIDTH = 80; 
+	public static final int DOC_DEFAULT_WIDTH = 80;
 	//
 	public static final int DOC_AUTHOR_OFFSET_LUA = 9;
 	public static final int DOC_DEFAULT_OFFSET_LUA = 1;
@@ -21,7 +21,7 @@ public interface IRtcBuilderConstantsLua {
 	public static final int DOC_ACTIVITY_OFFSET_LUA = 4;
 	//
 	public static final String DOC_DEFAULT_PREFIX_LUA = " ";
-	public static final String DOC_MODULE_PREFIX_LUA = "\t";
+	public static final String DOC_MODULE_PREFIX_LUA = "-- ";
 	public static final String DOC_DESC_PREFIX_LUA = "\t\t";
 	public static final String DOC_UNIT_PREFIX_LUA = "\t\t         ";
 	public static final String DOC_NUMBER_PREFIX_LUA = "\t\t           ";

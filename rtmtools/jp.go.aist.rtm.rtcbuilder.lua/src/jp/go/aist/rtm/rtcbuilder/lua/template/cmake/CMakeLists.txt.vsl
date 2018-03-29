@@ -89,19 +89,10 @@ set(IDL_FILES ""
 #foreach($p in ${rtcParam.consumerIdlPathes})
               ${p.idlFile}
 #end)
-
-if(WIN32)
-    set(SCRIPT_FILE ""
-                    idlcompile.bat delete.bat)
-else()
-    set(SCRIPT_FILE ""
-                    idlcompile.sh)
-endif()
 #end
 
 set(EXEC_FILES ""
                ${rtcParam.name}.lua
-#if(${rtcParam.servicePorts.size()}>0)               ${dol}{SCRIPT_FILE}#end
 )
 
 set(OTHER_SRCS CMakeLists.txt
@@ -114,7 +105,7 @@ if(WIN32)
    set(OPENRTM_SHARE_PREFIX "OpenRTM-aist/${dol}{RTM_VER}/Components/${dol}{PROJECT_TYPE}")
    set(INSTALL_PREFIX ${dol}{PROJECT_NAME})
    if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-      set(CMAKE_INSTALL_PREFIX "${dol}{OPENRTM_DIR}Components/${dol}{PROJECT_TYPE}/${dol}{PROJECT_NAME}" CACHE PATH "..." FORCE)
+      set(CMAKE_INSTALL_PREFIX "${dol}{OPENRTM_DIR}/Components/${dol}{PROJECT_TYPE}/${dol}{PROJECT_NAME}" CACHE PATH "..." FORCE)
    endif()
 else()
    set(OPENRTM_SHARE_PREFIX "share/openrtm-${dol}{OPENRTM_VERSION_MAJOR}.${dol}{OPENRTM_VERSION_MINOR}")
@@ -144,7 +135,7 @@ foreach(target ${dol}{EXEC_FILES})
     COMMAND ${dol}{CMAKE_COMMAND} -E copy
         ${dol}{PROJECT_SOURCE_DIR}/${dol}{target} ${dol}{PROJECT_BINARY_DIR}
   )
-endforeach()          
+endforeach()
 
 install(PROGRAMS ${dol}{EXEC_FILES} DESTINATION "${dol}{INSTALL_PREFIX}"
         COMPONENT component)
@@ -162,7 +153,7 @@ configure_file(
     "${dol}{CMAKE_CURRENT_SOURCE_DIR}/cmake/uninstall_target.cmake.in"
     "${dol}{CMAKE_CURRENT_BINARY_DIR}/uninstall_target.cmake"
     IMMEDIATE @ONLY)
-add_custom_target(uninstall COMMAND 
+add_custom_target(uninstall COMMAND
     ${dol}{CMAKE_COMMAND} -P ${dol}{CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 
 if(WIN32)

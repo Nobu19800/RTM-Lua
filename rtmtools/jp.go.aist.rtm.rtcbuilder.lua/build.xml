@@ -54,7 +54,7 @@
 		  <location dir="${targetPlatformLocation}" />
 		</ant4eclipse:targetPlatform>
 		<ant4eclipse:jdtClassPathLibrary name="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">
-			<fileset dir="${eclipse.home}/plugins/org.junit_4.11.0.v201303080030" />
+			<fileset dir="${eclipse.home}/plugins/" includes="**/*junit4*.jar" />
 		</ant4eclipse:jdtClassPathLibrary>
 
 		<ant4eclipse:getJdtClassPath

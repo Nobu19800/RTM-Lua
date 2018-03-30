@@ -408,14 +408,17 @@ end
 -- ORB終了
 -- ロガー終了
 function Manager:shutdown()
-	--self._listeners.manager_:preShutdown()
-	self:shutdownComponents()
-	self:shutdownManagerServant()
-	self:shutdownNaming()
-	self:shutdownORB()
-	self:shutdownManager()
-	--self._listeners.manager_:postShutdown()
-	self:shutdownLogger()
+	if not self.shutdown_start then
+		self.shutdown_start = true
+		--self._listeners.manager_:preShutdown()
+		self:shutdownComponents()
+		self:shutdownManagerServant()
+		self:shutdownNaming()
+		self:shutdownORB()
+		self:shutdownManager()
+		--self._listeners.manager_:postShutdown()
+		self:shutdownLogger()
+	end
 end
 
 
@@ -452,6 +455,7 @@ end
 -- ブロックモードで実行する場合は、step関数を適宜実行する必要がある
 -- また、周期実行コンテキストなどコルーチンで実行する実行コンテキストは使用できない
 function Manager:runManager(no_block)
+	self.shutdown_start = false
 	if no_block == nil then
 		no_block = false
 	end
@@ -480,7 +484,7 @@ function Manager:runManager(no_block)
 		self:initPreCreation()
 		self:initPreConnection()
 		self:initPreActivation()
-		
+
 		--self:unload("ConsoleIn")
 
 
@@ -504,6 +508,8 @@ function Manager:runManager(no_block)
 		--print(CORBA_RTCUtil.get_state(cin))
 
 		--rtc = self._namingManager:string_to_component("rtcname://localhost/*/TkJoyStick0")
+		--rtc = self._namingManager:string_to_component("rtcname://localhost/openrtm.host_cxt/TkJoyStick0")
+		--print(#rtc)
 		--rtc = self._namingManager:string_to_component("rtcloc://localhost:2810/TkJoyStick0")
 
 
@@ -576,38 +582,19 @@ function Manager:step()
 	end)
 end
 
--- モジュールの読み込み
--- @param fname ファイルパス
--- @param initfunc モジュール登録関数名
--- @return リターンコード
-function Manager:loadModule(fname, initfunc)
-	self._listeners.module_:preLoad(fname, initfunc)
-	local success, exception = oil.pcall(
-								function()
-								end)
-	if not success then
-		self._rtcout:RTC_ERROR("Unknown error.")
-		return self._ReturnCode_t.RTC_ERROR
-	end
-	return self._ReturnCode_t.RTC_OK
-end
 
--- モジュールのアンロード
--- @param fname ファイルパス
-function Manager:unloadModule(fname)
-
-end
 
 -- すべてのモジュールをアンロード
 function Manager:unloadAll()
-
+	self._rtcout:RTC_TRACE("Manager.unloadAll()")
+	self._module:unloadAll()
 end
 
 -- ロード済みモジュール一覧取得
 -- @return ロード済みモジュール一覧
 function Manager:getLoadedModules()
-	local ret = {}
-	return ret
+	self._rtcout:RTC_TRACE("Manager.getLoadedModules()")
+	return self._module:getLoadedModules()
 end
 
 -- ロード可能モジュール一覧取得
@@ -617,7 +604,7 @@ function Manager:getLoadableModules()
 	return ret
 end
 
--- RTC生成ファクトリ登録
+-- RTC生成ファクトリの登録
 -- @param profile プロファイル
 -- 「manager.components.naming_policy」の要素で名前付けポリシーを指定
 -- @param new_func 初期化関数
@@ -633,11 +620,32 @@ function Manager:registerFactory(profile, new_func, delete_func)
 	return self._factory:registerObject(factory)
 end
 
+
+-- RTC生成ファクトリの削除
+-- @param id プロファイルのID
+-- @return 削除したファクトリ
+function Manager:unregisterFactory(id)
+	self._rtcout:RTC_TRACE("Manager.unregisterFactory("..id..")")
+	return self._factory:unregisterObject(id)
+end
+
+
+
 -- RTC生成ファクトリプロファイル一覧取得
 -- return RTC生成ファクトリプロファイル一覧
 function Manager:getFactoryProfiles()
-	local ret = {}
-	return ret
+	local factories = self._factory:getObjects()
+
+	if #factories == 0 then
+		return {}
+	end
+
+	local props = {}
+	for k,factory in ipairs(factories) do
+		table.insert(props, factory:profile())
+	end
+
+	return props
 end
 
 -- EC生成ファクトリ登録
@@ -886,7 +894,7 @@ function Manager:deleteComponent(argv)
 			local comps = self:getComponents()
 			--print(#comps)
 			if #comps == 0 then
-				self:createShutdownThread()
+				self:createShutdownThread(1)
 			end
 		end
 	end
@@ -1267,7 +1275,31 @@ end
 
 -- 全RTC終了処理
 function Manager:shutdownComponents()
+	self._rtcout:RTC_TRACE("Manager.shutdownComponents()")
+	local comps = self._namingManager:getObjects()
+    for k,comp in ipairs(comps) do
+		local success, exception = oil.pcall(
+			function()
+				comp:exit()
+				local p = Properties.new({key=comp.getInstanceName()})
+				p:mergeProperties(comp:getProperties())
+		end)
+		if not success then
 
+			self._rtcout:RTC_TRACE(exception)
+		end
+	end
+
+
+	for k,ec in ipairs(self._ecs) do
+		local success, exception = oil.pcall(
+			function()
+				self._orb:deactivate(ec._svr)
+		end)
+		if not success then
+			self._rtcout:RTC_TRACE(exception)
+		end
+	end
 end
 
 -- RTC登録解除
@@ -1957,14 +1989,19 @@ terminate_Task.new = function(mgr, sleep_time)
 end
 
 -- マネージャ終了コルーチンの生成
-function Manager:createShutdownThread()
-	if not self.no_block then
-		Task.start(terminate_Task.new(self, 3))
-	else
-		oil.main(function()
-			oil.newthread(self._orb.run, self._orb)
-			Task.start(terminate_Task.new(self, 3))
-		end)
+function Manager:createShutdownThread(sleep_time)
+	if not self.shutdown_start then
+		if sleep_time == nil then
+			sleep_time = 0
+		end
+		if not self.no_block then
+			Task.start(terminate_Task.new(self, sleep_time))
+		else
+			oil.main(function()
+				oil.newthread(self._orb.run, self._orb)
+				Task.start(terminate_Task.new(self, sleep_time))
+			end)
+		end
 	end
 end
 

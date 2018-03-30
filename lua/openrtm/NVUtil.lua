@@ -369,10 +369,16 @@ end
 -- @param _obj CORBAオブジェクト
 -- @return false：生存
 NVUtil._non_existent = function(_obj)
+	--print(_obj._non_existent)
 	if _obj._non_existent == nil then
 		return false
 	else
-		return _obj:_non_existent()
+		local ret = true
+		local success, exception = oil.pcall(
+			function()
+				ret = _obj:_non_existent()
+		end)
+		return ret
 	end
 end
 

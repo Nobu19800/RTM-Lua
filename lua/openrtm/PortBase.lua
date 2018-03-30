@@ -459,25 +459,16 @@ PortBase.new = function(name)
 	-- @param ports ポート
 	-- @return true：生存、false：消滅済み
  	function obj:checkPorts(ports)
-		return true
-		--[[
 		local ret = true
 		for i, port in ipairs(ports) do
-			local success, exception = oil.pcall(
-				function()
-					if port:_non_existent() then
-						self._rtcout:RTC_WARN("Dead Port reference detected.")
-						ret = false
-					end
-				end)
-			if not success then
-				self._rtcout:RTC_WARN(exception)
-				return false
+			--print(NVUtil._non_existent(port))
+			if NVUtil._non_existent(port) then
+				self._rtcout:RTC_WARN("Dead Port reference detected.")
+				ret = false
 			end
 		end
 
 		return ret
-		]]
 	end
 
 	-- IDが空かを判定
@@ -798,7 +789,7 @@ PortBase.new = function(name)
 		self._rtcout:RTC_TRACE("getProfile()")
 		return self._profile
 	end
-	
+
 	-- 全コネクタ切断
 	-- @return リターンコード
 	function obj:disconnect_all()

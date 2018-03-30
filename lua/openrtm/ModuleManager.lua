@@ -209,8 +209,8 @@ ModuleManager.new = function(prop)
 		local pathChanged=false
 		local file_path = nil
 		local save_path = ""
-		
-		
+
+
 		if StringUtil.isAbsolutePath(file_name) then
 			if not self._absoluteAllowed then
 				error(ModuleManager.NotAllowedOperation.new("Absolute path is not allowed"))
@@ -229,27 +229,27 @@ ModuleManager.new = function(prop)
 				error(ModuleManager.FileNotFound.new(file_name))
 			end
 		end
-		
-		
-		
+
+
+
 		if not self:fileExist(file_path) then
-			
+
 			error(ModuleManager.FileNotFound.new(file_name))
 		end
-		
-		
+
+
 
 		local f = io.open(file_path, "r")
 		if init_func ~= nil then
 			if string.find(f:read("*a"), init_func) == nil then
-				
+
 				error(ModuleManager.FileNotFound.new(file_name))
 			end
 		end
 		f:close()
-		
-		
-		
+
+
+
 		if not pathChanged then
 			package.path = package.path..";"..StringUtil.dirname(file_path).."?.lua"
 		end
@@ -270,23 +270,23 @@ ModuleManager.new = function(prop)
 			package.path = save_path
 		end
 
-		
+
 		file_path = string.gsub(file_path, "\\", "/")
 		file_path = string.gsub(file_path, "//", "/")
-		
+
 		--print(mo,type(mo))
 		--print(file_path)
 		local dll = DLLEntity.new(mo,Properties.new())
-		
+
 		dll.properties:setProperty("file_path",file_path)
 		dll.properties:setProperty("import_name",import_name)
 		self._modules:registerObject(dll)
 
-		
+
 		if init_func == nil then
 			return file_name
 		end
-		
+
 		self:symbol(import_name,init_func)(self._mgr)
 
 		return file_name
@@ -299,7 +299,7 @@ ModuleManager.new = function(prop)
 	-- 存在しない場合は空文字列を返す
 	function obj:findFile(fname, load_path)
 		file_name = fname
-		
+
 		for k, path in ipairs(load_path) do
 			local f = nil
 			local suffix = self._properties:getProperty("manager.modules.Lua.suffixes")
@@ -316,7 +316,7 @@ ModuleManager.new = function(prop)
 			end
 			--local filelist = {}
 			--StringUtil.findFile(path,file_name,filelist)
-			
+
 			--if len(filelist) > 0 then
 			--	return filelist[1]
 			--end
@@ -334,18 +334,18 @@ ModuleManager.new = function(prop)
 			fname = tostring(filename).."."..suffix
 		end
 		--print(fname)
-		
+
 		--if os.path.isfile(fname)
 		--	return True
 		--end
 		--print(fname)
-		
+
 		local f = io.open(fname, "r")
 		if f ~= nil then
 			return true
 		end
 		return false
-			
+
 		--return false
 	end
 
@@ -360,16 +360,16 @@ ModuleManager.new = function(prop)
 		if dll == nil then
 			error(ModuleManager.ModuleNotFound.new(import_name))
 		end
-		
+
 		local func = dll.dll[func_name]
-		
+
 		if func == nil then
 			error(ModuleManager.SymbolNotFound.new(import_name))
 		end
-		
+
 		return func
 	end
-	
+
 	-- モジュールのアンロード
 	-- @param file_name ファイルパス
 	function obj:unload(file_name)
@@ -380,9 +380,30 @@ ModuleManager.new = function(prop)
 			error(ModuleManager.NotFound.new(file_name))
 		end
 		local dll_name = dll.properties:getProperty("import_name")
+		--print(package.loaded[dll_name])
 		package.loaded[dll_name] = nil
 		self._modules:unregisterObject(file_name)
-		
+
+	end
+
+	-- 全モジュールのアンロード
+	function obj:unloadAll()
+		local dlls = self._modules:getObjects()
+		for k,dll in ipairs(dlls) do
+			local ident = dll.properties:getProperty("import_name")
+			self._modules:unregisterObject(ident)
+		end
+	end
+
+	-- ロード済みのモジュール全てのプロファイルを取得
+	-- @return 全モジュールのプロファイル
+	function obj:getLoadedModules()
+		local dlls = self._modules:getObjects()
+		local modules = {}
+		for k,dll in ipairs(dlls) do
+			table.insert(modules, dll.properties)
+		end
+		return modules
 	end
 
 	obj._properties = prop

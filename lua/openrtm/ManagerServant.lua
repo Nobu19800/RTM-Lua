@@ -137,13 +137,11 @@ ManagerServant.new = function()
 
 
 				mgr = RTCUtil.newproxy(self._mgr:getORB(), mgrloc,"IDL:RTM/Manager:1.0")
-				oil.pcall(
-					function()
-						if NVUtil._non_existent(mgr) then
-							mgr = oil.corba.idl.null
-						end
-				end)
-				
+				if NVUtil._non_existent(mgr) then
+					mgr = oil.corba.idl.null
+				end
+				--print(mgr)
+
 		end)
 		if not success then
 			mgr = oil.corba.idl.null
@@ -733,7 +731,8 @@ ManagerServant.new = function()
 	-- マネージャ終了
 	-- @return リターンコード
 	function obj:shutdown()
-		return self._ReturnCode_t.PRECONDITION_NOT_MET
+		self:createShutdownThread(1)
+		return self._ReturnCode_t.RTC_OK
 	end
 
 	-- マネージャ再起動
@@ -784,9 +783,10 @@ ManagerServant.new = function()
 			function()
 				local owner = obj:findManager(config:getProperty("corba.master_manager"))
 				--print(owner)
+				--print(owner)
 				if owner == oil.corba.idl.null then
 					obj._rtcout:RTC_INFO("Master manager not found")
-					return
+					return obj
 				end
 
 				obj:add_master_manager(owner)

@@ -38,22 +38,10 @@ end
 -- @return true：存在する
 CORBA_RTCUtil.is_existing = function(rtc)
 	local ret = true
-	if rtc._non_existent == nil then
-		return true
+	if NVUtil._non_existent(rtc) then
+		ret = false
 	end
-	local success, exception = oil.pcall(
-		function()
-			if NVUtil._non_existent(rtc) then
-				ret = false
-			end
-			ret = true
-	end)
-	if not success then
-		return false
-	else
-		return ret
-	end
-
+	return ret
 end
 
 -- RTCがデフォルトの実行コンテキストで生存しているかを確認

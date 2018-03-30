@@ -1165,13 +1165,8 @@ RTObject.new = function(manager)
 		end
 
 		for i, ec in ipairs(self._ecOther) do
-			local success, exception = oil.pcall(
-				function()
-					if not NVUtil._non_existent(ec) then
-						ec:remove_component(self:getObjRef())
-					end
-				end)
-			if not success then
+			if not NVUtil._non_existent(ec) then
+				ec:remove_component(self:getObjRef())
 			end
 		end
 

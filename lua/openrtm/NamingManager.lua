@@ -137,14 +137,7 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 							cc:setObject(context:resolve(i.binding_name))
 							local _obj = RTCUtil.newproxy(orb, cc:getObject(),"IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
 
-							local ret = false
-							oil.pcall(
-								function()
-									if not NVUtil._non_existent(_obj) then
-										ret = true
-									end
-							end)
-							if ret then
+							if not NVUtil._non_existent(_obj) then
 								table.insert(rtcs, _obj)
 							end
 					end)
@@ -206,19 +199,12 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 								if _obj == oil.corba.idl.null then
 									return {}
 								end
-								local ret = false
-								oil.pcall(
-									function()
-									if NVUtil._non_existent(_obj) then
-										ret = true
-									end
-									if ret then
-										_obj = RTCUtil.newproxy(orb, _obj,"IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
-									end
-								end)
-								if ret then
+								if NVUtil._non_existent(_obj) then
 									return {}
 								end
+
+								_obj = RTCUtil.newproxy(orb, _obj,"IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
+
 
 								table.insert(rtc_list, _obj)
 								return rtc_list
@@ -511,6 +497,14 @@ NamingManager.new = function(manager)
 			end
 		end
 		return {}
+	end
+
+	function obj:getObjects()
+		local comps = {}
+		for k,comp in ipairs(self._compNames) do
+			table.insert(comps, comp.rtobj)
+		end
+		return comps
 	end
 
 	return obj

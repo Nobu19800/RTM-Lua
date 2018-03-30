@@ -107,7 +107,7 @@ Factory.FactoryLua.new = function(profile, new_func, delete_func, policy)
 	end
 	-- RTC削除
 	-- @param mgr マネージャ
-	function obj:destroy(mgr)
+	function obj:destroy(comp)
 		self._Number = self._Number - 1
 		self._policy:onDelete(comp)
 		self._Delete(comp)

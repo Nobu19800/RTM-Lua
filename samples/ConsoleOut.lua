@@ -37,7 +37,7 @@ ConsoleOut.new = function(manager)
 	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
 	
 	-- データ格納変数
-	obj._d_in = {tm={sec=0,nsec=0},data=0}
+	obj._d_in = openrtm.RTCUtil.instantiateDataType("::RTC::TimedLong")
 	-- インポート生成
 	obj._inIn = openrtm.InPort.new("in",obj._d_in,"::RTC::TimedLong")
 		

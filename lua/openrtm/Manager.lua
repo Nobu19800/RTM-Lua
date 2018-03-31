@@ -379,6 +379,9 @@ function Manager:init(argv)
 	end
 	self._initProc = nil
 	self._ecs = {}
+	if self._orb ~= nil then
+		self:createShutdownThread(1)
+	end
 	self._orb = nil
 	self._compManager = ObjectManager.new(InstanceName)
 	self._factory = ObjectManager.new(FactoryPredicate)
@@ -463,8 +466,13 @@ function Manager:runManager(no_block)
 	oil.main(function()
 
 		self:initORB()
+		
 		if no_block then
-			oil.newthread(self._orb.step, self._orb)
+			--oil.newthread(self._orb.step, self._orb)
+			local count = tonumber(self._config:getProperty("corba.step.count"))
+			if count ~= nil then
+				self:run_step(count)
+			end
 		else
 			oil.newthread(self._orb.run, self._orb)
 		end
@@ -480,6 +488,8 @@ function Manager:runManager(no_block)
 		if self._initThread ~= nil then
 			oil.newthread(self._initThread, self)
 		end
+		
+		
 
 		self:initPreCreation()
 		self:initPreConnection()
@@ -577,9 +587,28 @@ end
 -- CORBAの処理を1ステップ進める
 -- ブロックモードの場合のみ有効
 function Manager:step()
-	oil.main(function()
-		oil.newthread(self._orb.step, self._orb)
-	end)
+	if self.no_block then
+		oil.main(function()
+			oil.newthread(self._orb.step, self._orb)
+		end)
+	end
+end
+
+
+-- CORBAの処理を1ステップ進める
+-- ブロックモードの場合のみ有効
+function Manager:run_step(count)
+	if count == nil then
+		count = 1
+	end
+	if self.no_block then
+		local stepfunc = function(orb)
+			for i=1,count do
+				orb:step()
+			end
+		end
+		oil.newthread(stepfunc, self._orb)
+	end
 end
 
 
@@ -1149,6 +1178,7 @@ end
 -- ORB終了
 function Manager:shutdownORB()
 	self._orb:shutdown()
+	self._orb = nil
 end
 
 -- ネームサーバー接続初期化
@@ -1755,7 +1785,8 @@ function Manager:initPreConnection()
 								self._rtcout:RTC_ERROR(comp_name.." not found.")
 							else
 								comp_ref = rtcs[1]
-								port_name = port_str.split("/")[-1]
+								port_name = StringUtil.split(port_str, "/")
+								port_name = port_name[#port_name]
 							end
 						end
 
@@ -1777,7 +1808,7 @@ function Manager:initPreConnection()
 								--print(prop)
 								--print(port0_var)
 								--print(port_var)
-
+								
 								if self._ReturnCode_t.RTC_OK ~= CORBA_RTCUtil.connect(c, prop, port0_var, port_var) then
 									self._rtcout.RTC_ERROR("Connection error: "..c)
 								end

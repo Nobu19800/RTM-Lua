@@ -48,6 +48,7 @@ local default_config= {
 			["corba.nameservice.replace_endpoint"]="NO",
 			["corba.update_master_manager.enable"]="YES",
 			["corba.update_master_manager.interval"]="10.0",
+			["corba.step.count"]="10",
 			["exec_cxt.periodic.type"]="PeriodicExecutionContext",
 			["exec_cxt.periodic.rate"]="1000",
 			["exec_cxt.sync_transition"]="YES",

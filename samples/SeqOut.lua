@@ -37,16 +37,16 @@ SeqOut.new = function(manager)
 	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
 	
 	-- データ格納変数
-	obj._d_octet = {tm={sec=0,nsec=0},data=0}
-	obj._d_short = {tm={sec=0,nsec=0},data=0}
-	obj._d_long = {tm={sec=0,nsec=0},data=0}
-	obj._d_float = {tm={sec=0,nsec=0},data=0}
-	obj._d_double = {tm={sec=0,nsec=0},data=0}
-	obj._d_octetSeq = {tm={sec=0,nsec=0},data=""}
-	obj._d_shortSeq = {tm={sec=0,nsec=0},data={}}
-	obj._d_longSeq = {tm={sec=0,nsec=0},data={}}
-	obj._d_floatSeq = {tm={sec=0,nsec=0},data={}}
-	obj._d_doubleSeq = {tm={sec=0,nsec=0},data={}}
+	obj._d_octet = openrtm.RTCUtil.instantiateDataType("::RTC::TimedOctet")
+	obj._d_short = openrtm.RTCUtil.instantiateDataType("::RTC::TimedShort")
+	obj._d_long = openrtm.RTCUtil.instantiateDataType("::RTC::TimedLong")
+	obj._d_float = openrtm.RTCUtil.instantiateDataType("::RTC::TimedFloat")
+	obj._d_double = openrtm.RTCUtil.instantiateDataType("::RTC::TimedDouble")
+	obj._d_octetSeq = openrtm.RTCUtil.instantiateDataType("::RTC::TimedOctetSeq")
+	obj._d_shortSeq = openrtm.RTCUtil.instantiateDataType("::RTC::TimedShortSeq")
+	obj._d_longSeq = openrtm.RTCUtil.instantiateDataType("::RTC::TimedLongSeq")
+	obj._d_floatSeq = openrtm.RTCUtil.instantiateDataType("::RTC::TimedFloatSeq")
+	obj._d_doubleSeq = openrtm.RTCUtil.instantiateDataType("::RTC::TimedDoubleSeq")
 
 	-- アウトポート生成
 	obj._octetOut = openrtm.OutPort.new("Octet",obj._d_octet,"::RTC::TimedOctet")

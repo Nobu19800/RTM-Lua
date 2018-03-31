@@ -124,6 +124,7 @@ MyServiceProvider.new = function(manager)
 		-- サービスポートにプロバイダオブジェクトを登録
 		local fpath = openrtm.StringUtil.dirname(debug.getinfo(1)["short_src"])
 		local _str = string.gsub(fpath,"\\","/").."idl/MyService.idl"
+		
 		self._myServicePort:registerProvider("myservice0", "MyService", self._myservice0, _str, "IDL:SimpleService/MyService:1.0")
 		-- ポート追加
 		self:addPort(self._myServicePort)

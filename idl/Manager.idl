@@ -234,6 +234,27 @@ module RTM
      */
     RTC::ComponentProfileList get_component_profiles();
 
+    /*!
+     * @if jp
+     * @brief 指定名のRTCオブジェクトリファレンスを取得
+     *
+     * 
+     *
+     * @param name RTC名
+     * @return RTCリスト
+     *
+     * @else
+     * @brief 
+     *
+     *
+     * 
+     * @param name name
+     * @return list of RTC
+     *
+     * @endig
+     */
+    RTC::RTCList get_components_by_name(in string name);
+
     // manager 基本
     /*!
      * @if jp

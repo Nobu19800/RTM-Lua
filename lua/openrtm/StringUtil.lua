@@ -471,7 +471,13 @@ StringUtil.dirname = function(path)
 	end
 	local path_list = StringUtil.split(path, delimiter)
 	path_list[#path_list] = nil
-	return StringUtil.flatten(path_list, delimiter)..delimiter
+	local ret = StringUtil.flatten(path_list, delimiter)
+	if #ret == 0 then
+		return ret
+	else
+		return ret..delimiter
+	end
+	
 end
 
 

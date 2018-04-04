@@ -1,5 +1,5 @@
 package = "openrtm"
-version = "scm-02"
+version = "scm-03"
 source = {
    url = "https://github.com/Nobu19800/RTM-Lua/archive/master.zip",
    dir = "openrtm-master",
@@ -158,7 +158,8 @@ build = {
          ["idl.Manager"] = "idl/Manager.idl",
          ["idl.OpenRTM"] = "idl/OpenRTM.idl",
          ["idl.RTC"] = "idl/RTC.idl",
-         ["idl.SDOPackage"] = "idl/SDOPackage.idl"
+         ["idl.SDOPackage"] = "idl/SDOPackage.idl",
+         ["openrtm_ms"] = "moon/openrtm_ms.moon",
       }
    }
 }

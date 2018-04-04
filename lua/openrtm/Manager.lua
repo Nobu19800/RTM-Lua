@@ -466,7 +466,7 @@ function Manager:runManager(no_block)
 	oil.main(function()
 
 		self:initORB()
-		
+
 		if no_block then
 			--oil.newthread(self._orb.step, self._orb)
 			local count = tonumber(self._config:getProperty("corba.step.count"))
@@ -488,8 +488,8 @@ function Manager:runManager(no_block)
 		if self._initThread ~= nil then
 			oil.newthread(self._initThread, self)
 		end
-		
-		
+
+
 
 		self:initPreCreation()
 		self:initPreConnection()
@@ -799,6 +799,13 @@ function Manager:createComponent(comp_args)
 	--print(comp)
 	--print(comp:getTypeName())
 	--print(comp)
+
+	if comp == nil then
+		self._rtcout:RTC_ERROR("createComponent: RTC creation failed: "..
+							comp_id:getProperty("implementation_id"))
+		return nil
+	end
+
 	if self._config:getProperty("corba.endpoints_ipv4") == "" then
 		self:setEndpointProperty(comp:getObjRef())
 	end
@@ -808,11 +815,7 @@ function Manager:createComponent(comp_args)
 			prop:setProperty(v,self._config:getProperty(v))
 		end
 	end
-	if comp == nil then
-		self._rtcout:RTC_ERROR("createComponent: RTC creation failed: "..
-							comp_id:getProperty("implementation_id"))
-		return nil
-	end
+
 	self._rtcout:RTC_TRACE("RTC Created: "..comp_id:getProperty("implementation_id"))
 	--self._listeners.rtclifecycle_:postCreate(comp)
 	prop:mergeProperties(comp_prop)
@@ -1808,7 +1811,7 @@ function Manager:initPreConnection()
 								--print(prop)
 								--print(port0_var)
 								--print(port_var)
-								
+
 								if self._ReturnCode_t.RTC_OK ~= CORBA_RTCUtil.connect(c, prop, port0_var, port_var) then
 									self._rtcout.RTC_ERROR("Connection error: "..c)
 								end

@@ -117,8 +117,10 @@ end
 -- RTC基底オブジェクト初期化
 -- @param manager マネージャ
 -- @return RTC
-RTObject.new = function(manager)
-	local obj = {}
+RTObject.new = function(manager, obj)
+	if obj == nil then
+		obj = {}
+	end
 	--print(manager)
 	obj._manager = manager
 	obj._orb = obj._manager:getORB()
@@ -1277,8 +1279,12 @@ RTObject.new = function(manager)
 	end
 
 
+
+
 	return obj
 end
+
+
 
 
 return RTObject

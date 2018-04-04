@@ -25,7 +25,7 @@ local DataPortStatus = require "openrtm.DataPortStatus"
 -- @param read_timeout 読み込み時のタイムアウト
 -- @param write_timeout 書き込み時のタイムアウト
 -- @return InPort
-InPort.new = function(name, value, data_type, buffer, read_block, write_block, read_timeout, write_timeout)
+InPort.new = function(name, value, data_type, buffer, read_block, write_block, read_timeout, write_timeout, obj)
 	if read_block == nil then
 		read_block = false
 	end
@@ -38,7 +38,9 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 	if write_timeout == nil then
 		write_timeout = 0
 	end
-	local obj = {}
+	if obj == nil then
+		obj = {}
+	end
 	--print(data_type)
 	setmetatable(obj, {__index=InPortBase.new(name, data_type)})
 	obj._name           = name

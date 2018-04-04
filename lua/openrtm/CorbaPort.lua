@@ -140,8 +140,10 @@ end
 -- CORBAポート初期化関数
 -- @param name ポート名
 -- @return CORBAポート
-CorbaPort.new = function(name)
-	local obj = {}
+CorbaPort.new = function(name, obj)
+	if obj == nil then
+		obj = {}
+	end
 	setmetatable(obj, {__index=PortBase.new(name)})
 	local Manager = require "openrtm.Manager"
 	obj._PortInterfacePolarity = Manager:instance():getORB().types:lookup("::RTC::PortInterfacePolarity").labelvalue

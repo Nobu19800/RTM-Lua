@@ -29,8 +29,11 @@ end
 -- @param data_type データ型
 -- @param buffer バッファ
 -- アウトポート
-OutPort.new = function(name, value, data_type, buffer)
-	local obj = {}
+OutPort.new = function(name, value, data_type, buffer, obj)
+	if obj == nil then
+		obj = {}
+	end
+
 	setmetatable(obj, {__index=OutPortBase.new(name, data_type)})
 
 	obj._value          = value

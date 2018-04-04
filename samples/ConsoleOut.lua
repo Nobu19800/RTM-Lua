@@ -14,7 +14,7 @@ local openrtm  = require "openrtm"
 local consoleout_spec = {
   ["implementation_id"]="ConsoleOut",
   ["type_name"]="ConsoleOut",
-  ["description"]="Console input component",
+  ["description"]="Console output component",
   ["version"]="1.0",
   ["vendor"]="Nobuhiko Miyamoto",
   ["category"]="example",
@@ -35,16 +35,16 @@ ConsoleOut.new = function(manager)
 	local obj = {}
 	-- RTObjectをメタオブジェクトに設定する
 	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
-	
+
 	-- データ格納変数
 	obj._d_in = openrtm.RTCUtil.instantiateDataType("::RTC::TimedLong")
 	-- インポート生成
 	obj._inIn = openrtm.InPort.new("in",obj._d_in,"::RTC::TimedLong")
-		
+
 	-- 初期化時のコールバック関数
 	-- @return リターンコード
 	function obj:onInitialize()
-		
+
 		-- ポート追加
 		self:addInPort("in",self._inIn)
 

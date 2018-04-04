@@ -12,7 +12,7 @@ local openrtm  = require "openrtm"
 local consolein_spec = {
   ["implementation_id"]="ConsoleIn",
   ["type_name"]="ConsoleIn",
-  ["description"]="Console output component",
+  ["description"]="Console input component",
   ["version"]="1.0",
   ["vendor"]="Nobuhiko Miyamoto",
   ["category"]="example",
@@ -37,7 +37,7 @@ ConsoleIn.new = function(manager)
 	obj._d_out = openrtm.RTCUtil.instantiateDataType("::RTC::TimedLong")
 	-- アウトポート生成
 	obj._outOut = openrtm.OutPort.new("out",obj._d_out,"::RTC::TimedLong")
-	
+
 	-- 初期化時のコールバック関数
 	-- @return リターンコード
 	function obj:onInitialize()

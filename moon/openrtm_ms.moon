@@ -11,73 +11,94 @@ openrtm = require "openrtm"
 openrtm_ms = {}
 
 
-
--- RTC基底オブジェクト初期化
--- @param manager マネージャ
--- @return RTC
+-- @class RTObject
+-- RTC基底オブジェクト
 class openrtm_ms.RTObject
+	-- コンストラクタ
+	-- @param manager マネージャ
 	new: (manager) =>
-		tmp = {}
-		for k,v in pairs self.__index
-			tmp[k] = v
-		openrtm.RTObject.new(manager, self)
-		for k,v in pairs tmp
-			self[k] = v
+		obj = openrtm.RTObject.new(manager)
+		for k,v in pairs obj
+			if self[k] == nil
+				self[k] = v
 
 
 
 
 
-
--- InPort初期化
--- @param name ポート名
--- @param value データ変数
--- @param data_type データ型
--- @param buffer バッファ
--- @param read_block 読み込み時ブロックの設定
--- @param write_block 書き込み時時ブロックの設定
--- @param read_timeout 読み込み時のタイムアウト
--- @param write_timeout 書き込み時のタイムアウト
--- @return InPort
+-- @class InPort
+-- InPort
 class openrtm_ms.InPort
+	-- コンストラクタ
+	-- @param name ポート名
+	-- @param value データ変数
+	-- @param data_type データ型
+	-- @param buffer バッファ
+	-- @param read_block 読み込み時ブロックの設定
+	-- @param write_block 書き込み時時ブロックの設定
+	-- @param read_timeout 読み込み時のタイムアウト
+	-- @param write_timeout 書き込み時のタイムアウト
 	new: (name, value, data_type, buffer, read_block, write_block, read_timeout, write_timeout) =>
-		tmp = {}
-		for k,v in pairs self.__index
-			tmp[k] = v
-		openrtm.InPort.new(name, value, data_type, buffer, read_block, write_block, read_timeout, write_timeout, self)
-		for k,v in pairs tmp
-			self[k] = v
+		obj = openrtm.InPort.new(name, value, data_type, buffer, read_block, write_block, read_timeout, write_timeout)
+		for k,v in pairs obj
+			if self[k] == nil
+				self[k] = v
 
 
--- アウトポート初期化
--- @param name ポート名
--- @param value データ変数
--- @param data_type データ型
--- @param buffer バッファ
+-- @class OutPort
 -- アウトポート
 class openrtm_ms.OutPort
+	-- コンストラクタ
+	-- @param name ポート名
+	-- @param value データ変数
+	-- @param data_type データ型
+	-- @param buffer バッファ
 	new: (name, value, data_type, buffer) =>
-		tmp = {}
-		for k,v in pairs self.__index
-			tmp[k] = v
-		openrtm.OutPort.new(name, value, data_type, buffer, self)
-		for k,v in pairs tmp
-			self[k] = v
+		obj = openrtm.OutPort.new(name, value, data_type, buffer)
+		for k,v in pairs obj
+			if self[k] == nil
+				self[k] = v
 
 
 
 
--- CORBAポート初期化関数
--- @param name ポート名
--- @return CORBAポート
+
+
+-- @class CorbaPort
+-- CORBAポート
 class openrtm_ms.CorbaPort
+	-- コンストラクタ
+	-- @param name ポート名
 	new: (name) =>
-		tmp = {}
-		for k,v in pairs self.__index
-			tmp[k] = v
-		openrtm.RTObject.new(name, self)
-		for k,v in pairs tmp
-			self[k] = v
+		obj = openrtm.CorbaPort.new(name)
+		for k,v in pairs obj
+			if self[k] == nil
+				self[k] = v
+
+			
+			
+-- @class Properties
+-- プロパティ
+class openrtm_ms.Properties
+	-- コンストラクタ
+	-- @param argv argv.prop：コピー元のプロパティ、argv.key・argv.value：キーと値、argv.defaults_map：テーブル
+	new: (argv) =>
+		obj = openrtm.Properties.new(argv)
+		for k,v in pairs obj
+			if self[k] == nil
+				self[k] = v
+			
+			
+-- @class CorbaConsumer
+-- CORBAコンシューマオブジェクト初期化関数
+class openrtm_ms.CorbaConsumer
+	-- コンストラクタ
+	-- @param consumer CORBAコンシューマオブジェクト
+	new: (consumer) =>
+		obj = openrtm.CorbaConsumer.new(consumer)
+		for k,v in pairs obj
+			if self[k] == nil
+				self[k] = v
 
 
 return openrtm_ms

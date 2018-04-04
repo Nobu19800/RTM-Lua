@@ -104,7 +104,7 @@ SeqIn.new = function(manager)
 		local doubleSize_ = table.maxn(doubleSeq_.data)
 
 
-		octetSeqDisp_ = {}
+		local octetSeqDisp_ = {}
 		for i = 1,octetSize_ do
 			octetSeqDisp_[i] = string.sub(octetSeq_.data,i,i)
 		end

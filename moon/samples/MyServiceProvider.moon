@@ -37,7 +37,7 @@ class seq_print
 	-- @param val 要素
 	__call: (val) =>
 		print(self._cnt, ": ", val)
-		self._cnt = self._cnt + 1
+		self._cnt += 1
 
 -- @class MyServiceSVC_impl
 -- サービスプロバイダ

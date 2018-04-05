@@ -48,9 +48,9 @@ class MyServiceSVC_impl
 		self._valueList = {}
 		self._value = 0
 		
-    -- echoオペレーション
-    -- @param msg 入力文字列
-    -- @return msgと同じ文字列
+	-- echoオペレーション
+	-- @param msg 入力文字列
+	-- @return msgと同じ文字列
 	echo: (msg) =>
 		table.insert(self._echoList, msg)
 		print("MyService::echo() was called.")
@@ -63,7 +63,7 @@ class MyServiceSVC_impl
 		return msg
 
 	-- get_echo_historyオペレーション
-    -- @return echoリスト
+	-- @return echoリスト
 	get_echo_history: () =>
 		CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 		print("MyService::get_echo_history() was called.")
@@ -71,7 +71,7 @@ class MyServiceSVC_impl
 		return self._echoList
 
 	-- set_valueオペレーション
-    -- @param value 設定値
+	-- @param value 設定値
 	set_value: (value) =>
 		table.insert(self._valueList, value)
 		self._value = value
@@ -80,14 +80,14 @@ class MyServiceSVC_impl
 
 
 	-- get_valueオペレーション
-    -- @return 現在の設定値
+	-- @return 現在の設定値
 	get_value: () =>
 		print("MyService::get_value() was called.")
 		print("Current value: ", self._value)
 		return self._value
     
 	-- get_value_historyオペレーション
-    -- @return 値リスト
+	-- @return 値リスト
 	get_value_history: () =>
 		CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 		print("MyService::get_value_history() was called.")

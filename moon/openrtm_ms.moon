@@ -17,10 +17,13 @@ class openrtm_ms.RTObject
 	-- コンストラクタ
 	-- @param manager マネージャ
 	new: (manager) =>
+		tmp = {}
+		for k,v in pairs self.__index
+			tmp[k] = v
 		obj = openrtm.RTObject.new(manager)
-		for k,v in pairs obj
-			if self[k] == nil
-				self[k] = v
+		setmetatable(self, {__index:obj})
+		for k,v in pairs tmp
+			self[k] = v
 
 
 
@@ -40,9 +43,7 @@ class openrtm_ms.InPort
 	-- @param write_timeout 書き込み時のタイムアウト
 	new: (name, value, data_type, buffer, read_block, write_block, read_timeout, write_timeout) =>
 		obj = openrtm.InPort.new(name, value, data_type, buffer, read_block, write_block, read_timeout, write_timeout)
-		for k,v in pairs obj
-			if self[k] == nil
-				self[k] = v
+		setmetatable(self, {__index:obj})
 
 
 -- @class OutPort
@@ -55,9 +56,8 @@ class openrtm_ms.OutPort
 	-- @param buffer バッファ
 	new: (name, value, data_type, buffer) =>
 		obj = openrtm.OutPort.new(name, value, data_type, buffer)
-		for k,v in pairs obj
-			if self[k] == nil
-				self[k] = v
+		setmetatable(self, {__index:obj})
+
 
 
 
@@ -71,9 +71,7 @@ class openrtm_ms.CorbaPort
 	-- @param name ポート名
 	new: (name) =>
 		obj = openrtm.CorbaPort.new(name)
-		for k,v in pairs obj
-			if self[k] == nil
-				self[k] = v
+		setmetatable(self, {__index:obj})
 
 			
 			
@@ -84,9 +82,7 @@ class openrtm_ms.Properties
 	-- @param argv argv.prop：コピー元のプロパティ、argv.key・argv.value：キーと値、argv.defaults_map：テーブル
 	new: (argv) =>
 		obj = openrtm.Properties.new(argv)
-		for k,v in pairs obj
-			if self[k] == nil
-				self[k] = v
+		setmetatable(self, {__index:obj})
 			
 			
 -- @class CorbaConsumer
@@ -96,9 +92,7 @@ class openrtm_ms.CorbaConsumer
 	-- @param consumer CORBAコンシューマオブジェクト
 	new: (consumer) =>
 		obj = openrtm.CorbaConsumer.new(consumer)
-		for k,v in pairs obj
-			if self[k] == nil
-				self[k] = v
+		setmetatable(self, {__index:obj})
 
 
 return openrtm_ms

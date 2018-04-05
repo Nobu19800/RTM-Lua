@@ -67,7 +67,7 @@ class ConsoleOut extends openrtm_ms.RTObject
 -- ConsoleInコンポーネントの生成ファクトリ登録関数
 -- @param manager マネージャ
 ConsoleOutInit = (manager) -> 
-	prof = openrtm_ms.Properties({defaults_map=consoleout_spec})
+	prof = openrtm_ms.Properties({defaults_map:consoleout_spec})
 	manager\registerFactory(prof, ConsoleOut, openrtm.Factory.Delete)
 
 
@@ -80,15 +80,20 @@ MyModuleInit = (manager) ->
 
 -- ConsoleOut.luaを直接実行している場合はマネージャの起動を行う
 -- ロードして実行している場合はテーブルを返す
-if openrtm.Manager.is_main()
-	manager = openrtm.Manager
-	manager\init(arg)
-	manager\setModuleInitProc(MyModuleInit)
-	manager\activateManager()
-	manager\runManager()
-else
-	obj = {}
-	obj.Init = ConsoleOutInit
-	return obj
+--if openrtm.Manager.is_main()
+--	manager = openrtm.Manager
+--	manager\init(arg)
+--	manager\setModuleInitProc(MyModuleInit)
+--	manager\activateManager()
+--	manager\runManager()
+--else
+--	obj = {}
+--	obj.Init = ConsoleOutInit
+--	return obj
 
+manager = openrtm.Manager
+manager\init(arg)
+manager\setModuleInitProc(MyModuleInit)
+manager\activateManager()
+manager\runManager()
 

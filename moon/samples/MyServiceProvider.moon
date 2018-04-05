@@ -125,7 +125,7 @@ class MyServiceProvider extends openrtm_ms.RTObject
 -- MyServiceProviderコンポーネントの生成ファクトリ登録関数
 -- @param manager マネージャ
 MyServiceProviderInit = (manager) -> 
-	prof = openrtm_ms.Properties({defaults_map=myserviceprovider_spec})
+	prof = openrtm_ms.Properties({defaults_map:myserviceprovider_spec})
 	manager\registerFactory(prof, MyServiceProvider, openrtm.Factory.Delete)
 
 
@@ -138,13 +138,21 @@ MyModuleInit = (manager) ->
 
 -- MyServiceProvider.luaを直接実行している場合はマネージャの起動を行う
 -- ロードして実行している場合はテーブルを返す
-if openrtm.Manager.is_main()
-	manager = openrtm.Manager
-	manager\init(arg)
-	manager\setModuleInitProc(MyModuleInit)
-	manager\activateManager()
-	manager\runManager()
-else
-	obj = {}
-	obj.Init = MyServiceProviderInit
-	return obj
+--if openrtm.Manager.is_main()
+--	manager = openrtm.Manager
+--	manager\init(arg)
+--	manager\setModuleInitProc(MyModuleInit)
+--	manager\activateManager()
+--	manager\runManager()
+--else
+--	obj = {}
+--	obj.Init = MyServiceProviderInit
+--	return obj
+
+
+
+manager = openrtm.Manager
+manager\init(arg)
+manager\setModuleInitProc(MyModuleInit)
+manager\activateManager()
+manager\runManager()

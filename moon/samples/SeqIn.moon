@@ -155,7 +155,7 @@ class SeqIn extends openrtm_ms.RTObject
 -- SeqInコンポーネントの生成ファクトリ登録関数
 -- @param manager マネージャ
 SeqInInit = (manager) -> 
-	prof = openrtm_ms.Properties({defaults_map=seqin_spec})
+	prof = openrtm_ms.Properties({defaults_map:seqin_spec})
 	manager\registerFactory(prof, SeqIn, openrtm.Factory.Delete)
 	
 
@@ -169,15 +169,20 @@ MyModuleInit = (manager) ->
 
 -- SeqIn.luaを直接実行している場合はマネージャの起動を行う
 -- ロードして実行している場合はテーブルを返す
-if openrtm.Manager.is_main()
-	manager = openrtm.Manager
-	manager\init(arg)
-	manager\setModuleInitProc(MyModuleInit)
-	manager\activateManager()
-	manager\runManager()
-else
-	obj = {}
-	obj.Init = SeqInInit
-	return obj
+--if openrtm.Manager.is_main()
+--	manager = openrtm.Manager
+--	manager\init(arg)
+--	manager\setModuleInitProc(MyModuleInit)
+--	manager\activateManager()
+--	manager\runManager()
+--else
+--	obj = {}
+--	obj.Init = SeqInInit
+--	return obj
 
+manager = openrtm.Manager
+manager\init(arg)
+manager\setModuleInitProc(MyModuleInit)
+manager\activateManager()
+manager\runManager()
 

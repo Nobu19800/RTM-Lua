@@ -70,7 +70,7 @@ class ConfigSample extends openrtm_ms.RTObject
 	onExecute: (ec_id) =>
 		c = "                    "
 		print("---------------------------------------")
-		print(" Active Configuration Set: ", self._configsets:getActiveId(),c)
+		print(" Active Configuration Set: ", self._configsets\getActiveId(),c)
 		print("---------------------------------------")
 
 		print("int_param0:       ", self._int_param0._value, c)
@@ -96,7 +96,7 @@ class ConfigSample extends openrtm_ms.RTObject
 -- ConfigSampleコンポーネントの生成ファクトリ登録関数
 -- @param manager マネージャ
 ConfigSampleInit = (manager) -> 
-	prof = openrtm_ms.Properties({defaults_map=configsample_spec})
+	prof = openrtm_ms.Properties({defaults_map:configsample_spec})
 	manager\registerFactory(prof, ConfigSample, openrtm.Factory.Delete)
 
 
@@ -109,15 +109,21 @@ MyModuleInit = (manager) ->
 
 -- ConfigSample.luaを直接実行している場合はマネージャの起動を行う
 -- ロードして実行している場合はテーブルを返す
-if openrtm.Manager.is_main()
-	manager = openrtm.Manager
-	manager\init(arg)
-	manager\setModuleInitProc(MyModuleInit)
-	manager\activateManager()
-	manager\runManager()
-else
-	obj = {}
-	obj.Init = ConfigSampleInit
-	return obj
+--if openrtm.Manager.is_main()
+--	manager = openrtm.Manager
+--	manager\init(arg)
+--	manager\setModuleInitProc(MyModuleInit)
+--	manager\activateManager()
+--	manager\runManager()
+--else
+--	obj = {}
+--	obj.Init = ConfigSampleInit
+--	return obj
+
+manager = openrtm.Manager
+manager\init(arg)
+manager\setModuleInitProc(MyModuleInit)
+manager\activateManager()
+manager\runManager()
 
 

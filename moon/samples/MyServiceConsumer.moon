@@ -54,12 +54,14 @@ class MyServiceConsumer extends openrtm_ms.RTObject
 		self._myservice0 = openrtm_ms.CorbaConsumer("IDL:SimpleService/MyService:1.0")
 
 
+
 	-- 初期化時のコールバック関数
 	-- @return リターンコード
 	onInitialize: =>
 		-- サービスポートにコンシューマオブジェクトを登録
 		fpath = openrtm.StringUtil.dirname(debug.getinfo(1)["short_src"])
 		_str = string.gsub(fpath,"\\","/").."idl/MyService.idl"
+
 		self._myServicePort\registerConsumer("myservice0", "MyService", self._myservice0, _str)
 		-- ポート追加
 		@addPort(self._myServicePort)
@@ -129,7 +131,7 @@ class MyServiceConsumer extends openrtm_ms.RTObject
 -- MyServiceConsumerコンポーネントの生成ファクトリ登録関数
 -- @param manager マネージャ
 MyServiceConsumerInit = (manager) -> 
-	prof = openrtm_ms.Properties({defaults_map=myserviceconsumer_spec})
+	prof = openrtm_ms.Properties({defaults_map:myserviceconsumer_spec})
 	manager\registerFactory(prof, MyServiceConsumer, openrtm.Factory.Delete)
 
 
@@ -142,15 +144,21 @@ MyModuleInit = (manager) ->
 
 -- MyServiceConsumer.luaを直接実行している場合はマネージャの起動を行う
 -- ロードして実行している場合はテーブルを返す
-if openrtm.Manager.is_main()
-	manager = openrtm.Manager
-	manager\init(arg)
-	manager\setModuleInitProc(MyModuleInit)
-	manager\activateManager()
-	manager\runManager()
-else
-	obj = {}
-	obj.Init = MyServiceConsumerInit
-	return obj
+--if openrtm.Manager.is_main()
+--	manager = openrtm.Manager
+--	manager\init(arg)
+--	manager\setModuleInitProc(MyModuleInit)
+--	manager\activateManager()
+--	manager\runManager()
+--else
+--	obj = {}
+--	obj.Init = MyServiceConsumerInit
+--	return obj
 
+
+manager = openrtm.Manager
+manager\init(arg)
+manager\setModuleInitProc(MyModuleInit)
+manager\activateManager()
+manager\runManager()
 

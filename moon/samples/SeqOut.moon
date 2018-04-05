@@ -139,7 +139,7 @@ class SeqOut extends openrtm_ms.RTObject
 -- ConsoleInコンポーネントの生成ファクトリ登録関数
 -- @param manager マネージャ
 SeqOutInit = (manager) -> 
-	prof = openrtm_ms.Properties({defaults_map=seqout_spec})
+	prof = openrtm_ms.Properties({defaults_map:seqout_spec})
 	manager\registerFactory(prof, SeqOut, openrtm.Factory.Delete)
 
 
@@ -153,14 +153,21 @@ MyModuleInit = (manager) ->
 
 -- SeqOut.luaを直接実行している場合はマネージャの起動を行う
 -- ロードして実行している場合はテーブルを返す
-if openrtm.Manager.is_main()
-	manager = openrtm.Manager
-	manager\init(arg)
-	manager\setModuleInitProc(MyModuleInit)
-	manager\activateManager()
-	manager\runManager()
-else
-	obj = {}
-	obj.Init = SeqOutInit
-	return obj
+--if openrtm.Manager.is_main()
+--	manager = openrtm.Manager
+--	manager\init(arg)
+--	manager\setModuleInitProc(MyModuleInit)
+--	manager\activateManager()
+--	manager\runManager()
+--else
+--	obj = {}
+--	obj.Init = SeqOutInit
+--	return obj
+
+
+manager = openrtm.Manager
+manager\init(arg)
+manager\setModuleInitProc(MyModuleInit)
+manager\activateManager()
+manager\runManager()
 

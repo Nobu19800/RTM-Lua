@@ -7,7 +7,6 @@
 
 
 
-openrtm  = require "openrtm"
 openrtm_ms = require "openrtm_ms"
 
 
@@ -35,16 +34,16 @@ class SeqOut extends openrtm_ms.RTObject
 		super manager
 		
 		-- データ格納変数
-		self._d_octet = openrtm.RTCUtil.instantiateDataType("::RTC::TimedOctet")
-		self._d_short = openrtm.RTCUtil.instantiateDataType("::RTC::TimedShort")
-		self._d_long = openrtm.RTCUtil.instantiateDataType("::RTC::TimedLong")
-		self._d_float = openrtm.RTCUtil.instantiateDataType("::RTC::TimedFloat")
-		self._d_double = openrtm.RTCUtil.instantiateDataType("::RTC::TimedDouble")
-		self._d_octetSeq = openrtm.RTCUtil.instantiateDataType("::RTC::TimedOctetSeq")
-		self._d_shortSeq = openrtm.RTCUtil.instantiateDataType("::RTC::TimedShortSeq")
-		self._d_longSeq = openrtm.RTCUtil.instantiateDataType("::RTC::TimedLongSeq")
-		self._d_floatSeq = openrtm.RTCUtil.instantiateDataType("::RTC::TimedFloatSeq")
-		self._d_doubleSeq = openrtm.RTCUtil.instantiateDataType("::RTC::TimedDoubleSeq")
+		self._d_octet = openrtm_ms.RTCUtil.instantiateDataType("::RTC::TimedOctet")
+		self._d_short = openrtm_ms.RTCUtil.instantiateDataType("::RTC::TimedShort")
+		self._d_long = openrtm_ms.RTCUtil.instantiateDataType("::RTC::TimedLong")
+		self._d_float = openrtm_ms.RTCUtil.instantiateDataType("::RTC::TimedFloat")
+		self._d_double = openrtm_ms.RTCUtil.instantiateDataType("::RTC::TimedDouble")
+		self._d_octetSeq = openrtm_ms.RTCUtil.instantiateDataType("::RTC::TimedOctetSeq")
+		self._d_shortSeq = openrtm_ms.RTCUtil.instantiateDataType("::RTC::TimedShortSeq")
+		self._d_longSeq = openrtm_ms.RTCUtil.instantiateDataType("::RTC::TimedLongSeq")
+		self._d_floatSeq = openrtm_ms.RTCUtil.instantiateDataType("::RTC::TimedFloatSeq")
+		self._d_doubleSeq = openrtm_ms.RTCUtil.instantiateDataType("::RTC::TimedDoubleSeq")
 
 		-- アウトポート生成
 		self._octetOut = openrtm_ms.OutPort("Octet",self._d_octet,"::RTC::TimedOctet")
@@ -140,7 +139,7 @@ class SeqOut extends openrtm_ms.RTObject
 -- @param manager マネージャ
 SeqOutInit = (manager) -> 
 	prof = openrtm_ms.Properties({defaults_map:seqout_spec})
-	manager\registerFactory(prof, SeqOut, openrtm.Factory.Delete)
+	manager\registerFactory(prof, SeqOut, openrtm_ms.Factory.Delete)
 
 
 -- ConsoleInコンポーネント生成
@@ -153,8 +152,8 @@ MyModuleInit = (manager) ->
 
 -- SeqOut.luaを直接実行している場合はマネージャの起動を行う
 -- ロードして実行している場合はテーブルを返す
---if openrtm.Manager.is_main()
---	manager = openrtm.Manager
+--if openrtm_ms.Manager.is_main()
+--	manager = openrtm_ms.Manager
 --	manager\init(arg)
 --	manager\setModuleInitProc(MyModuleInit)
 --	manager\activateManager()
@@ -165,7 +164,7 @@ MyModuleInit = (manager) ->
 --	return obj
 
 
-manager = openrtm.Manager
+manager = openrtm_ms.Manager
 manager\init(arg)
 manager\setModuleInitProc(MyModuleInit)
 manager\activateManager()

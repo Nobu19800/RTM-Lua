@@ -5,7 +5,7 @@
 
 
 
-openrtm  = require "openrtm"
+
 openrtm_ms = require "openrtm_ms"
 
 
@@ -97,7 +97,7 @@ class ConfigSample extends openrtm_ms.RTObject
 -- @param manager マネージャ
 ConfigSampleInit = (manager) -> 
 	prof = openrtm_ms.Properties({defaults_map:configsample_spec})
-	manager\registerFactory(prof, ConfigSample, openrtm.Factory.Delete)
+	manager\registerFactory(prof, ConfigSample, openrtm_ms.Factory.Delete)
 
 
 -- ConfigSampleコンポーネント生成
@@ -109,8 +109,8 @@ MyModuleInit = (manager) ->
 
 -- ConfigSample.luaを直接実行している場合はマネージャの起動を行う
 -- ロードして実行している場合はテーブルを返す
---if openrtm.Manager.is_main()
---	manager = openrtm.Manager
+--if openrtm_ms.Manager.is_main()
+--	manager = openrtm_ms.Manager
 --	manager\init(arg)
 --	manager\setModuleInitProc(MyModuleInit)
 --	manager\activateManager()
@@ -120,7 +120,7 @@ MyModuleInit = (manager) ->
 --	obj.Init = ConfigSampleInit
 --	return obj
 
-manager = openrtm.Manager
+manager = openrtm_ms.Manager
 manager\init(arg)
 manager\setModuleInitProc(MyModuleInit)
 manager\activateManager()

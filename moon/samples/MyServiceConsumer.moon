@@ -7,7 +7,7 @@
 
 
 
-openrtm  = require "openrtm"
+
 openrtm_ms = require "openrtm_ms"
 
 -- RTCの仕様をテーブルで定義する
@@ -59,7 +59,7 @@ class MyServiceConsumer extends openrtm_ms.RTObject
 	-- @return リターンコード
 	onInitialize: =>
 		-- サービスポートにコンシューマオブジェクトを登録
-		fpath = openrtm.StringUtil.dirname(debug.getinfo(1)["short_src"])
+		fpath = openrtm_ms.StringUtil.dirname(debug.getinfo(1)["short_src"])
 		_str = string.gsub(fpath,"\\","/").."idl/MyService.idl"
 
 		self._myServicePort\registerConsumer("myservice0", "MyService", self._myservice0, _str)
@@ -87,8 +87,8 @@ class MyServiceConsumer extends openrtm_ms.RTObject
 
 		oil = require "oil"
 
-		argv = openrtm.StringUtil.split(args, " ")
-		argv[#argv] = openrtm.StringUtil.eraseTailBlank(argv[#argv])
+		argv = openrtm_ms.StringUtil.split(args, " ")
+		argv[#argv] = openrtm_ms.StringUtil.eraseTailBlank(argv[#argv])
 
 		
 		func = ->
@@ -106,11 +106,11 @@ class MyServiceConsumer extends openrtm_ms.RTObject
 				print("Current remote value: ", retval)
 			elseif argv[1] == "get_echo_history"
 				-- get_echo_historyオペレーション実行
-				openrtm.CORBA_SeqUtil.for_each(self._myservice0\_ptr()\get_echo_history(),
+				openrtm_ms.CORBA_SeqUtil.for_each(self._myservice0\_ptr()\get_echo_history(),
 											  seq_print())
 			elseif argv[1] == "get_value_history"
 				-- get_value_historyオペレーション実行
-				openrtm.CORBA_SeqUtil.for_each(self._myservice0\_ptr()\get_value_history(),
+				openrtm_ms.CORBA_SeqUtil.for_each(self._myservice0\_ptr()\get_value_history(),
 											  seq_print())
 			else
 				print("Invalid command or argument(s).")
@@ -132,7 +132,7 @@ class MyServiceConsumer extends openrtm_ms.RTObject
 -- @param manager マネージャ
 MyServiceConsumerInit = (manager) -> 
 	prof = openrtm_ms.Properties({defaults_map:myserviceconsumer_spec})
-	manager\registerFactory(prof, MyServiceConsumer, openrtm.Factory.Delete)
+	manager\registerFactory(prof, MyServiceConsumer, openrtm_ms.Factory.Delete)
 
 
 -- MyServiceConsumerコンポーネント生成
@@ -144,8 +144,8 @@ MyModuleInit = (manager) ->
 
 -- MyServiceConsumer.luaを直接実行している場合はマネージャの起動を行う
 -- ロードして実行している場合はテーブルを返す
---if openrtm.Manager.is_main()
---	manager = openrtm.Manager
+--if openrtm_ms.Manager.is_main()
+--	manager = openrtm_ms.Manager
 --	manager\init(arg)
 --	manager\setModuleInitProc(MyModuleInit)
 --	manager\activateManager()
@@ -156,7 +156,7 @@ MyModuleInit = (manager) ->
 --	return obj
 
 
-manager = openrtm.Manager
+manager = openrtm_ms.Manager
 manager\init(arg)
 manager\setModuleInitProc(MyModuleInit)
 manager\activateManager()

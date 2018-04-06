@@ -10,6 +10,11 @@ openrtm = require "openrtm"
 
 openrtm_ms = {}
 
+for k,v in pairs openrtm
+	openrtm_ms[k] = v
+
+openrtm_ms.setTimestamp = openrtm.OutPort.setTimestamp
+
 
 -- @class RTObject
 -- RTC基底オブジェクト

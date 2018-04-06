@@ -7,7 +7,7 @@
 
 
 
-openrtm  = require "openrtm"
+
 openrtm_ms = require "openrtm_ms"
 
 
@@ -33,7 +33,7 @@ class ConsoleOut extends openrtm_ms.RTObject
 	new: (manager) =>
 		super manager
 		-- データ格納変数
-		self._d_in = openrtm.RTCUtil.instantiateDataType("::RTC::TimedLong")
+		self._d_in = openrtm_ms.RTCUtil.instantiateDataType("::RTC::TimedLong")
 		-- インポート生成
 		self._inIn = openrtm_ms.InPort("in",self._d_in,"::RTC::TimedLong")
 
@@ -68,7 +68,7 @@ class ConsoleOut extends openrtm_ms.RTObject
 -- @param manager マネージャ
 ConsoleOutInit = (manager) -> 
 	prof = openrtm_ms.Properties({defaults_map:consoleout_spec})
-	manager\registerFactory(prof, ConsoleOut, openrtm.Factory.Delete)
+	manager\registerFactory(prof, ConsoleOut, openrtm_ms.Factory.Delete)
 
 
 -- ConsoleInコンポーネント生成
@@ -80,8 +80,8 @@ MyModuleInit = (manager) ->
 
 -- ConsoleOut.luaを直接実行している場合はマネージャの起動を行う
 -- ロードして実行している場合はテーブルを返す
---if openrtm.Manager.is_main()
---	manager = openrtm.Manager
+--if openrtm_ms.Manager.is_main()
+--	manager = openrtm_ms.Manager
 --	manager\init(arg)
 --	manager\setModuleInitProc(MyModuleInit)
 --	manager\activateManager()
@@ -91,7 +91,7 @@ MyModuleInit = (manager) ->
 --	obj.Init = ConsoleOutInit
 --	return obj
 
-manager = openrtm.Manager
+manager = openrtm_ms.Manager
 manager\init(arg)
 manager\setModuleInitProc(MyModuleInit)
 manager\activateManager()

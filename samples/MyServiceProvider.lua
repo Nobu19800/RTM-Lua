@@ -69,7 +69,6 @@ MyServiceSVC_impl.new = function()
 	-- get_echo_historyオペレーション
 	-- @return echoリスト
 	function obj:get_echo_history()
-		local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 		print("MyService::get_echo_history() was called.")
 		openrtm.CORBA_SeqUtil.for_each(self._echoList, seq_print.new())
 		return self._echoList
@@ -92,7 +91,6 @@ MyServiceSVC_impl.new = function()
 	-- get_value_historyオペレーション
 	-- @return 値リスト
 	function obj:get_value_history()
-		local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 		print("MyService::get_value_history() was called.")
 		openrtm.CORBA_SeqUtil.for_each(self._valueList, seq_print.new())
 		return self._valueList

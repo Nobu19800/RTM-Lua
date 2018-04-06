@@ -7,7 +7,7 @@
 
 
 
-openrtm  = require "openrtm"
+
 openrtm_ms = require "openrtm_ms"
 
 
@@ -57,7 +57,7 @@ class MyServiceSVC_impl
 		oil = require "oil"
 		for i =1,10
 			print("Message: ", msg)
-			openrtm.Timer.sleep(0.1)
+			openrtm_ms.Timer.sleep(0.1)
 		
 		print("MyService::echo() was finished.")
 		return msg
@@ -65,9 +65,8 @@ class MyServiceSVC_impl
 	-- get_echo_historyオペレーション
 	-- @return echoリスト
 	get_echo_history: () =>
-		CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 		print("MyService::get_echo_history() was called.")
-		openrtm.CORBA_SeqUtil.for_each(self._echoList, seq_print())
+		openrtm_ms.CORBA_SeqUtil.for_each(self._echoList, seq_print())
 		return self._echoList
 
 	-- set_valueオペレーション
@@ -89,9 +88,8 @@ class MyServiceSVC_impl
 	-- get_value_historyオペレーション
 	-- @return 値リスト
 	get_value_history: () =>
-		CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 		print("MyService::get_value_history() was called.")
-		openrtm.CORBA_SeqUtil.for_each(self._valueList, seq_print)
+		openrtm_ms.CORBA_SeqUtil.for_each(self._valueList, seq_print)
 		return self._valueList
 		
 
@@ -111,7 +109,7 @@ class MyServiceProvider extends openrtm_ms.RTObject
 	-- @return リターンコード
 	onInitialize: =>
 		-- サービスポートにプロバイダオブジェクトを登録
-		fpath = openrtm.StringUtil.dirname(debug.getinfo(1)["short_src"])
+		fpath = openrtm_ms.StringUtil.dirname(debug.getinfo(1)["short_src"])
 		_str = string.gsub(fpath,"\\","/").."idl/MyService.idl"
 		
 		self._myServicePort\registerProvider("myservice0", "MyService", self._myservice0, _str, "IDL:SimpleService/MyService:1.0")
@@ -126,7 +124,7 @@ class MyServiceProvider extends openrtm_ms.RTObject
 -- @param manager マネージャ
 MyServiceProviderInit = (manager) -> 
 	prof = openrtm_ms.Properties({defaults_map:myserviceprovider_spec})
-	manager\registerFactory(prof, MyServiceProvider, openrtm.Factory.Delete)
+	manager\registerFactory(prof, MyServiceProvider, openrtm_ms.Factory.Delete)
 
 
 -- MyServiceProviderコンポーネント生成
@@ -138,8 +136,8 @@ MyModuleInit = (manager) ->
 
 -- MyServiceProvider.luaを直接実行している場合はマネージャの起動を行う
 -- ロードして実行している場合はテーブルを返す
---if openrtm.Manager.is_main()
---	manager = openrtm.Manager
+--if openrtm_ms.Manager.is_main()
+--	manager = openrtm_ms.Manager
 --	manager\init(arg)
 --	manager\setModuleInitProc(MyModuleInit)
 --	manager\activateManager()
@@ -151,7 +149,7 @@ MyModuleInit = (manager) ->
 
 
 
-manager = openrtm.Manager
+manager = openrtm_ms.Manager
 manager\init(arg)
 manager\setModuleInitProc(MyModuleInit)
 manager\activateManager()

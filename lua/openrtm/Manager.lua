@@ -1314,7 +1314,7 @@ function Manager:shutdownComponents()
 		local success, exception = oil.pcall(
 			function()
 				comp:exit()
-				local p = Properties.new({key=comp.getInstanceName()})
+				local p = Properties.new({key=comp:getInstanceName()})
 				p:mergeProperties(comp:getProperties())
 		end)
 		if not success then

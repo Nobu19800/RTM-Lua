@@ -92,6 +92,9 @@ OpenHRPExecutionContext.Init = function(manager)
 	ExecutionContextFactory:instance():addFactory("OpenHRPExecutionContext",
 		OpenHRPExecutionContext.new,
 		ECFactory.ECDelete)
+	ExecutionContextFactory:instance():addFactory("SynchExtTriggerEC",
+		OpenHRPExecutionContext.new,
+		ECFactory.ECDelete)
 end
 
 

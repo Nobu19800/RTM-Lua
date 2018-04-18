@@ -1,8 +1,8 @@
 cmake_minimum_required (VERSION 2.6)
 
-project (run_python)
+project (run_lua)
 
-add_executable (rtcd_python rtcd_python.cpp run_python.h)
+add_executable (rtcd_lua rtcd_lua.cpp run_lua.h)
 
 
-add_executable (rtcprof_python rtcprof_python.cpp run_python.h)
+add_executable (rtcprof_lua rtcprof_lua.cpp run_lua.h)

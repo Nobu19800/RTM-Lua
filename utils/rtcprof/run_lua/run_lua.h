@@ -8,7 +8,7 @@
 
 
 
-inline int run_python(const char *file_name, int argc, char *argv[])
+inline int run_lua(const char *file_name, int argc, char *argv[])
 {
 	char Path[MAX_PATH + 1];
 
@@ -22,7 +22,7 @@ inline int run_python(const char *file_name, int argc, char *argv[])
 		_splitpath(Path, drive, dir, fname, ext);
 
 
-		std::string cmd = "python ";
+		std::string cmd = "lua ";
 		cmd = cmd + "\"";
 		cmd = cmd + drive;
 

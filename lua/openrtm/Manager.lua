@@ -1960,18 +1960,22 @@ end
 function Manager:cdrMarshal(data, dataType)
 
 	local encoder = self._orb:newencoder()
+	--encoder.emptychar = ""
+	encoder.align = function(...)return 0 end
 	encoder:put(data, self._orb.types:lookup(dataType))
 	local cdr = encoder:getdata()
 	--for i=1,#cdr do
 	--	print(i,string.byte(string.sub(cdr,i,i)))
 	--end
 	if #cdr == 0 then
-	elseif #cdr == 2 then
-		cdr = string.sub(cdr,2)
-	elseif #cdr == 4 then
-		cdr = string.sub(cdr,3)
 	else
-		cdr = string.sub(cdr,5)
+		cdr = string.sub(cdr,2)
+	--elseif #cdr == 2 then
+	--	cdr = string.sub(cdr,2)
+	--elseif #cdr == 4 then
+	--	cdr = string.sub(cdr,3)
+	--else
+	--	cdr = string.sub(cdr,5)
 	end
 	--for i=1,#cdr do
 	--	print(i,string.byte(string.sub(cdr,i,i)))
@@ -1984,16 +1988,21 @@ end
 -- @param dataType データ型
 -- @return 変換後のデータ
 function Manager:cdrUnmarshal(cdr, dataType)
-
-	if #cdr == 0 then
-	elseif #cdr == 1 then
-		cdr = string.char(1)..cdr
-	elseif #cdr == 2 then
-		cdr = string.char(1)..string.char(255)..cdr
-	else
-		cdr = string.char(1)..string.char(255)..string.char(255)..string.char(255)..cdr
-	end
+	--if #cdr == 0 then
+	--elseif #cdr == 1 then
+	--	cdr = string.char(1)..cdr
+	--elseif #cdr == 2 then
+	--	cdr = string.char(1)..string.char(255)..cdr
+	--else
+	--	cdr = string.char(1)..string.char(255)..string.char(255)..string.char(255)..cdr
+	--end
+	--local Codec  = require "oil.corba.giop.Codec"
+	--Codec.Encoder.emptychar = ""
+	
+	cdr = string.char(1)..cdr
 	local decoder = self._orb:newdecoder(cdr)
+	--decoder.align = Codec.Encoder.align
+	decoder.align = function(...)return 0 end
 	local _data = decoder:get(self._orb.types:lookup(dataType))
 	return _data
 end

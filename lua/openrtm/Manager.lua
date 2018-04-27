@@ -1953,6 +1953,21 @@ function Manager:setinitThread(thread)
 	self._initThread = thread
 end
 
+
+
+local function alignment(self, size)
+	local extra = (self.cursor-2)%size
+	if extra > 0 then return size-extra end
+	return 0
+end
+
+
+local align = function(self, size)
+	local shift = alignment(self, size)
+	--print(self.cursor, shift, size)
+	if shift > 0 then self:jump(shift) end
+end
+
 -- CDR符号化
 -- @param data 変換前のデータ
 -- @param dataType データ型
@@ -1961,8 +1976,11 @@ function Manager:cdrMarshal(data, dataType)
 
 	local encoder = self._orb:newencoder()
 	--encoder.emptychar = ""
-	encoder.align = function(...)return 0 end
+	--encoder.align = function(...)return 0 end
+	encoder.align = align
+	--encoder.cursor = encoder.cursor-1
 	encoder:put(data, self._orb.types:lookup(dataType))
+
 	local cdr = encoder:getdata()
 	--for i=1,#cdr do
 	--	print(i,string.byte(string.sub(cdr,i,i)))
@@ -1998,11 +2016,15 @@ function Manager:cdrUnmarshal(cdr, dataType)
 	--end
 	--local Codec  = require "oil.corba.giop.Codec"
 	--Codec.Encoder.emptychar = ""
-	
+	--print(#cdr)
+
+
 	cdr = string.char(1)..cdr
 	local decoder = self._orb:newdecoder(cdr)
+	--decoder.cursor = decoder.cursor-1
+	decoder.align = align
 	--decoder.align = Codec.Encoder.align
-	decoder.align = function(...)return 0 end
+	--decoder.align = function(...)return 0 end
 	local _data = decoder:get(self._orb.types:lookup(dataType))
 	return _data
 end

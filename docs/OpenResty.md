@@ -2,7 +2,7 @@
 ## 概要
 このページではWEBアプリサーバーOpenResty上で動作するRTCを作成して、以下のようにPython版サンプルコンポーネントのジョイスティックコンポーネントと接続してWEBブラウザ上でジョイスティックの位置を表示するシステムの作成を行います。
 
-* https://www.youtube.com/watch?v=_-Kw8qv_keo
+* [動画](https://www.youtube.com/watch?v=_-Kw8qv_keo)
 
 
 従来はWEBブラウザ上でRTCのデータを表示等をする場合は、以下のようにRTCとWEBサーバーで通信を行う必要がありましたが、

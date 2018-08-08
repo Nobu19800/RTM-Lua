@@ -20,6 +20,7 @@ dependencies = {
    --,"oil >= 0.4beta",
    --"lualogging >= 1.2.0",
    --"lua-rfc-4122-uuid-generator >= 0.0"
+   --"uuid >= 0.0"
 }
 
 

@@ -2,7 +2,7 @@
 ## 概要
 このページではゲームエミュレータBizHawk上で動作するRTCを作成して、以下のようにPython版サンプルコンポーネントのジョイスティックコンポーネントと接続してゲームを操作するシステムの作成を行います。
 
-* https://www.youtube.com/watch?v=5dYfUjRzzQ8
+* [動画](https://www.youtube.com/watch?v=5dYfUjRzzQ8)
 
 ## BizHawkの入手
 以下からBizHawk 1.12.2をダウンロードして適当な場所に展開してください。

@@ -118,7 +118,7 @@ http {
 
 以下から32bit用のOpenRTM Lua版ファイル一式(OpenRTM Lua x.y.z LuaJIT 32bit)をダウンロードしてください。
 
-* [ダウンロード](ダウンロード)
+* [ダウンロード](download.md)
 
 OpenRTM Lua版からOpenRestyにファイルをコピーします。
 
@@ -169,7 +169,7 @@ add_definitions(-Dsnprintf=_snprintf)
 
 RTC BuilderによるRTCの基本的な作成手順は以下のページを参考にしてください。
 
-* [RTC作成手順](RTC作成手順)
+* [RTC作成手順](RTC.md)
 
 上のページの作成手順に従って、以下の仕様のRTCを作成してください。
 
@@ -304,7 +304,7 @@ JSON形式によりサーバークライアントでデータのやり取りを�
 
 TkJoyStickコンポーネントを入手して、`TkJoyStickComp.exe`を実行してください。
 
-* [ダウンロード](ダウンロード)
+* [ダウンロード](download.md)
 
 ### WEBサーバーの起動
 

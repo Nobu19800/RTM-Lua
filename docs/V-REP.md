@@ -14,7 +14,7 @@ V-REPをインストールしたフォルダ(`C:\Program Files\V-REP3`)にOpenRT
 
 以下から64bit用のOpenRTM Lua版ファイル一式(OpenRTM Lua x.y.z 64bit)をダウンロードしてください。
 
-* [ダウンロード](ダウンロード)
+* [ダウンロード](download.md)
 
 OpenRTM Lua版からV-REPにファイルをコピーします。
 
@@ -33,7 +33,7 @@ OpenRTM Lua版からV-REPにファイルをコピーします。
 ## RTC作成
 RTC BuilderによるRTCの基本的な作成手順は以下のページを参考にしてください。
 
-* [RTC作成手順](RTC作成手順)
+* [RTC作成手順](RTC.md)
 
 上のページの作成手順に従って、以下の仕様のRTCを作成してください。
 
@@ -108,7 +108,7 @@ USER MANUAL](http://www.coppeliarobotics.com/helpFiles/en/apiOverview.htm)
 
 TkJoyStickコンポーネントを入手して、`TkJoyStickComp.exe`を実行してください。
 
-* [ダウンロード](ダウンロード)
+* [ダウンロード](download.md)
 
 ### ロボット配置
 `robots`->`mobile`->`Robotnik_Summit_XL140701.ttm`をドラックアンドドロップして配置します。

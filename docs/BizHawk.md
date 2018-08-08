@@ -109,7 +109,7 @@ BizHawkで動作可能なROMイメージを入手してください。
 
 TkJoyStickコンポーネントを入手して、`TkJoyStickComp.exe`を実行してください。
 
-* [ダウンロード](ダウンロード)
+* [ダウンロード](download.md)
 
 ### BizHawkの起動
 `EmuHawk.exe`をダブルクリックして実行してください。

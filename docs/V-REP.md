@@ -1,7 +1,7 @@
 # V-REP上で動作するRTCの作成方法
 このページでは物理シミュレータV-REP上で動作する上で動作するRTCを作成して、以下のようにPython版サンプルコンポーネントのジョイスティックコンポーネントと接続して車体を操作するシステムの作成を行います。
 
-* https://www.youtube.com/watch?v=EaQ2oOxfhSY
+* [動画](https://www.youtube.com/watch?v=EaQ2oOxfhSY)
 
 
 ## V-REPのインストール

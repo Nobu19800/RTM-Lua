@@ -1,95 +1,95 @@
-# OpenRTM Lua��
-## �T�v
-���̃y�[�W�ł�OpenRTM Lua�łɂ��Đ������܂��B
+﻿# OpenRTM Lua版
+## 概要
+このページではOpenRTM Lua版について説明します。
 
-### RT�~�h���E�F�A�Ƃ́H
-[RT�~�h���E�F�A(RTM)](http://www.openrtm.org/openrtm/ja)�̓\�t�g�E�F�A���W���[����g�ݍ��킹�ă��{�b�g�V�X�e�����\�z���邽�߂̕W���K�i�ł��B
-�\�t�g�E�F�A���W���[����**RT�R���|�[�l���g(RTC)**�A���{�b�g�V�X�e����**RT�V�X�e��**�ƌĂт܂��B
-������RT�~�h���E�F�A�̎����Ƃ��Ĉȉ��̂悤�Ȃ��̂�����܂��B
+### RTミドルウェアとは？
+[RTミドルウェア(RTM)](http://www.openrtm.org/openrtm/ja)はソフトウェアモジュールを組み合わせてロボットシステムを構築するための標準規格です。
+ソフトウェアモジュールを**RTコンポーネント(RTC)**、ロボットシステムを**RTシステム**と呼びます。
+既存のRTミドルウェアの実装として以下のようなものがあります。
 
 
-|����|���쌳|����|OS|�R�����g|
+|名称|製作元|言語|OS|コメント|
 |:---|:---|:---|:---|:---|
-|[OpenRTM-aist](http://www.openrtm.org/openrtm/ja)|�Y����|C++�AJava�APython|Windows�AUbuntu�ADebian�AFedora�AVxWorks�AQNX�BMac�͌����ł̓T�|�[�g���Ă��Ȃ��B|�����Ƃ��g���Ă���RTM����(�L���g���Ă���Ƃ͌����Ă��Ȃ�)�BOpenRTM-aist�ɂ̓L���[�A�v���P�[�V�����ƌĂׂ���̂������Ȃ����ߍ�����s���Ă��Ȃ��B|
-|[OpenRTM.NET](http://www.sec.co.jp/robot/openrtmnet/introduction.html)|SEC|.NET(C#�AVisual Basic.NET��)|Windows|.NET��RT�~�h���E�F�A�B�X�V�̕p�x�����Ȃ��A�ŋ߂͂��܂�g���Ă��Ȃ��BGUI���A��ʂ̃A�v���P�[�V���������B|
-|[RTM on Android](http://www.sec.co.jp/robot/rtm_on_android/introduction.html)|SEC|Java|Android|Android��RT�~�h���E�F�A�B�g���Ă��Ȃ��B|
-|HRTM|�{�cR&D|C++|Windows�AUbuntu�AVxWorks|FSM4RTC�̃T�|�[�g���B�I�[�v���\�[�X�ł͂Ȃ����ߊO���ł͎g���Ă��Ȃ��B|
-|[OpenRTM-erlang](https://github.com/gbiggs/openrtm-erl)|�Y����|Erlang|Linux�H|Erlang�͂��܂�g�������Ƃ������̂ł悭������܂���BRTC�������Ă������ɍċN������̂͌��Ă��Ėʔ����B|
-|RTMSafety|SEC|C����|QNX�ATOPPERS�AETAS RTA-OS�AOS�Ȃ�|�@�\���S�̔F�ؑΉ���RT�~�h���E�F�A�B�g�������ƂȂ��B|
-|OPRoS|ETRI|||�悭�m��܂���|
-|GostaiRTC|GOSTAI�ATHALES|C++||�悭�m��܂���|
-|[ReactiveRTM](https://github.com/zoetrope/ReactiveRTM)||.NET|Windows�H|�g�������ƂȂ��ł��B|
+|[OpenRTM-aist](http://www.openrtm.org/openrtm/ja)|産総研|C++、Java、Python|Windows、Ubuntu、Debian、Fedora、VxWorks、QNX。Macは公式ではサポートしていない。|もっとも使われているRTM実装(広く使われているとは言っていない)。OpenRTM-aistにはキラーアプリケーションと呼べるものが何もないため今一つ流行っていない。|
+|[OpenRTM.NET](http://www.sec.co.jp/robot/openrtmnet/introduction.html)|SEC|.NET(C#、Visual Basic.NET等)|Windows|.NET版RTミドルウェア。更新の頻度が少なく、最近はあまり使っていない。GUI等、上位のアプリケーション向け。|
+|[RTM on Android](http://www.sec.co.jp/robot/rtm_on_android/introduction.html)|SEC|Java|Android|Android版RTミドルウェア。使っていない。|
+|HRTM|本田R&D|C++|Windows、Ubuntu、VxWorks|FSM4RTCのサポート等。オープンソースではないため外部では使われていない。|
+|[OpenRTM-erlang](https://github.com/gbiggs/openrtm-erl)|産総研|Erlang|Linux？|Erlangはあまり使ったことが無いのでよく分かりません。RTCが落ちてもすぐに再起動するのは見ていて面白い。|
+|RTMSafety|SEC|C言語|QNX、TOPPERS、ETAS RTA-OS、OSなし|機能安全の認証対応のRTミドルウェア。使ったことない。|
+|OPRoS|ETRI|||よく知りません|
+|GostaiRTC|GOSTAI、THALES|C++||よく知りません|
+|[ReactiveRTM](https://github.com/zoetrope/ReactiveRTM)||.NET|Windows？|使ったことないです。|
 
 
-### OpenRTM Lua�ł̓���
+### OpenRTM Lua版の特徴
 
-OpenRTM Lua�ł��g�p���邱�Ƃɂ��A�����̃A�v���P�[�V�������RTC���N������C++��Python��RTC�Ɛڑ�������ALua�̃��C�u���������p����RTC���쐬����Ƃ��������ł��܂��B
+OpenRTM Lua版を使用することにより、既存のアプリケーション上でRTCを起動してC++やPythonのRTCと接続したり、Luaのライブラリを活用したRTCを作成するという事ができます。
 
 
-OpenRTM Lua�łɂ͈ȉ���3�̓���������܂��B
-#### �y��
-�\�t�g�E�F�A�ꎮ��2MB���x�ƁA����RT�~�h���E�F�A�̎����ɔ�ׂĔ��Ɍy�ʂł��B
+OpenRTM Lua版には以下の3つの特徴があります。
+#### 軽量
+ソフトウェア一式で2MB程度と、他のRTミドルウェアの実装に比べて非常に軽量です。
 
-Lua(1.84MB)>LuaJIT(2.14MB)>>>>Python(7.65MB)>=C++(8.05MB)>>>Java(��)
+Lua(1.84MB)>LuaJIT(2.14MB)>>>>Python(7.65MB)>=C++(8.05MB)>>>Java(笑)
 
 <!-- 
-���쒆�̃������g�p�ʂ�Python�łƔ�r���ď������Ȃ��Ă��܂��B
+動作中のメモリ使用量もPython版と比較して小さくなっています。
 
-�ȉ���ConsoleIn�R���|�[�l���g���s���̃������g�p�ʂł��B
+以下はConsoleInコンポーネント実行時のメモリ使用量です。
 
 C++(2.1MB)>>>Lua(12.5MB)>Python(15.3MB)>>Java(22.0MB)
 -->
 
-#### ���̃\�t�g�E�F�A�ւ̑g�ݍ��݂��\
-Lua�X�N���v�e�B���O�@�\�̂���\�t�g�E�F�A�ł���Αg�ݍ��݉\�ł��B
+#### 他のソフトウェアへの組み込みが可能
+Luaスクリプティング機能のあるソフトウェアであれば組み込み可能です。
 
-�ȉ��͎茳�œ���m�F�����\�t�g�E�F�A�ł��B
+以下は手元で動作確認したソフトウェアです。
 
-AviUtl��NScripter2��ł�RTC���N���ł��܂����A���p���͊F���ł��B
+AviUtlやNScripter2上でもRTCを起動できますが、実用性は皆無です。
 
-���̃V�~�����[�^�A�Q�[���J���c�[�����Ƒ����������ł��B
+剛体シミュレータ、ゲーム開発ツール等と相性がいいです。
 
-��F
+例：
 
-* V-REP(���{�b�g�V�~�����[�^), https://www.youtube.com/watch?v=EaQ2oOxfhSY
-* BizHawk(�Q�[���G�~�����[�^), https://www.youtube.com/watch?v=5dYfUjRzzQ8
-* Laputan Blueprints(���̃V�~�����[�^), https://www.youtube.com/watch?v=FS52TlHDKiU
-* AviUtl(����ҏW�\�t�g)
-* NScripter2(�X�N���v�g�G���W��)
-* LOVE(2D�Q�[���G���W��)
-* Celestia(3D�V�̃V�~�����[�^)
-* OpenResty(WEB�A�v���T�[�o�[), https://www.youtube.com/watch?v=_-Kw8qv_keo, https://www.youtube.com/watch?v=4qxKCBcIIEE
+* V-REP(ロボットシミュレータ), https://www.youtube.com/watch?v=EaQ2oOxfhSY
+* BizHawk(ゲームエミュレータ), https://www.youtube.com/watch?v=5dYfUjRzzQ8
+* Laputan Blueprints(剛体シミュレータ), https://www.youtube.com/watch?v=FS52TlHDKiU
+* AviUtl(動画編集ソフト)
+* NScripter2(スクリプトエンジン)
+* LOVE(2Dゲームエンジン)
+* Celestia(3D天体シミュレータ)
+* OpenResty(WEBアプリサーバー), https://www.youtube.com/watch?v=_-Kw8qv_keo, https://www.youtube.com/watch?v=4qxKCBcIIEE
 
-##### ���p�菇
+##### 利用手順
 
-* [V�]REP��œ��삷��RTC�̍쐬���@](V�]REP��œ��삷��RTC�̍쐬���@)
-* [BizHawk��œ��삷��RTC�̍쐬���@](BizHawk��œ��삷��RTC�̍쐬���@)
-* [Laputan Blueprints��œ��삷��RTC�̍쐬���@](Laputan-Blueprints��œ��삷��RTC�̍쐬���@)
-* [OpenResty��œ��삷��RTC�̍쐬���@](OpenResty��œ��삷��RTC�̍쐬���@)
-
-
-#### ����
-JIT�R���p�C����LuaJIT���p�ɂ��AC++�ɕC�G���鑬�x�œ��삪�\�ł��B
-
-* [��������](��������)
-
-### OpenRTM Lua�ł��g�����ɂ��ARTM���[�U�[�ɂƂ��Ẵ����b�g
-������RTM�ɑΉ����Ă��Ȃ��A�v���P�[�V������RTC�����邱�Ƃɂ��A�l�X��RT�V�X�e�����J���\�ɂȂ�܂��B
-
-�܂�Python�ł͏������x���A�������g�p�ʂ��傫��������LuaJIT�œ��삷��RTC�Ŏ������邱�ƂŁA�X�N���v�g����ɂ������I�ȊJ���ƍ����ȏ����𗼗������邱�Ƃ��\�ł��B
-
-### OpenRTM Lua�ł��g�����ɂ��A��RTM���[�U�[�ɂƂ��Ẵ����b�g
-Lua�X�N���v�g�@�\���T�|�[�g���Ă���A�v���P�[�V������l�X�ȃf�o�C�X�A���邢�͑��̃A�v���P�[�V�����Ɛڑ��\�ɂ��܂��B
-�Ⴆ��Laputan Blueprints��̎ԁA��s�@����LEGO Mindstorms EV3�̃f�o�C�X�ő��삷��Ƃ������Ƃ��ł��܂��B
+* [V‐REP上で動作するRTCの作成方法](V‐REP上で動作するRTCの作成方法)
+* [BizHawk上で動作するRTCの作成方法](BizHawk上で動作するRTCの作成方法)
+* [Laputan Blueprints上で動作するRTCの作成方法](Laputan-Blueprints上で動作するRTCの作成方法)
+* [OpenResty上で動作するRTCの作成方法](OpenResty上で動作するRTCの作成方法)
 
 
-## �_�E�����[�h
+#### 高速
+JITコンパイラのLuaJIT利用により、C++に匹敵する速度で動作が可能です。
 
-* [�_�E�����[�h](�_�E�����[�h)
+* [実験結果](実験結果)
 
-## ����m�F
-�_�E�����[�h�����t�@�C����W�J���āA�o�b�`�t�@�C�����N������ƃT���v���R���|�[�l���g���N�����܂��B
-�T���v���R���|�[�l���g�̎��s�ɂ̓C���X�g�[���s�v�ł��B
+### OpenRTM Lua版を使う事による、RTMユーザーにとってのメリット
+既存のRTMに対応していないアプリケーションをRTC化することにより、様々なRTシステムが開発可能になります。
+
+またPythonでは処理が遅い、メモリ使用量が大きい部分をLuaJITで動作するRTCで実装することで、スクリプト言語による効率的な開発と高速な処理を両立させることが可能です。
+
+### OpenRTM Lua版を使う事による、非RTMユーザーにとってのメリット
+Luaスクリプト機能をサポートしているアプリケーションを様々なデバイス、あるいは他のアプリケーションと接続可能にします。
+例えばLaputan Blueprints上の車、飛行機等をLEGO Mindstorms EV3のデバイスで操作するということができます。
+
+
+## ダウンロード
+
+* [ダウンロード](ダウンロード)
+
+## 動作確認
+ダウンロードしたファイルを展開して、バッチファイルを起動するとサンプルコンポーネントが起動します。
+サンプルコンポーネントの実行にはインストール不要です。
 
 * ConsoleIn.bat
 * ConsoleOut.bat
@@ -99,35 +99,35 @@ Lua�X�N���v�g�@�\���T�|�[�g���Ă���A�v���P�[�V������l�X�ȃf�o�C�X�A���邢�͑��
 * MyServiceProvider.bat
 * ConfigSample.bat
 
-RTSystemEditor�A�l�[���T�[�o�[��OpenRTM-aist�̂��̂��g�p���Ă��������B
+RTSystemEditor、ネームサーバーはOpenRTM-aistのものを使用してください。
 
 * [OpenRTM-aist](http://www.openrtm.org/openrtm/ja/node/6026)
 
-openrtm.org�������Ă���ꍇ�͈ȉ��̃T�C�g������肵�Ă��������B
+openrtm.orgが閉鎖している場合は以下のサイトから入手してください。
 * [openrtm.github.io](https://openrtm.github.io/)
 
-## �C���X�g�[�����@
+## インストール方法
 
-* [Windows](Windows�ւ̃C���X�g�[���菇)
-* [Ubuntu](Ubuntu�ւ̃C���X�g�[���菇)
+* [Windows](Windowsへのインストール手順)
+* [Ubuntu](Ubuntuへのインストール手順)
 
-## RTC�쐬���@
+## RTC作成方法
 
-��OpenRTM-aist 1.2.0��RTC Builder���g���ꍇ��[RTC�쐬�菇](RTC�쐬�菇)���Q�l�ɂ��Ă��������B
+※OpenRTM-aist 1.2.0のRTC Builderを使う場合は[RTC作成手順](RTC作成手順)を参考にしてください。
 
-�T���v�����ɁARTC�쐬���@��������܂��B
+サンプルを例に、RTC作成方法を説明します。
 
 
 
-### ���W���[�����[�h
-�ȉ��̂悤�Ƀ��W���[���̃��[�h���s���܂��B
+### モジュールロード
+以下のようにモジュールのロードを行います。
 
 <pre>
 local openrtm  = require "openrtm"
 </pre>
 
-### RTC�̎d�l���`
-�ȉ��̂悤��RTC�̎d�l���`�����e�[�u�����쐬���܂��B
+### RTCの仕様を定義
+以下のようにRTCの仕様を定義したテーブルを作成します。
 
 <pre>
 local consolein_spec = {
@@ -143,183 +143,183 @@ local consolein_spec = {
   ["lang_type"]="script"}
 </pre>
 
-### RTC�̃e�[�u���쐬
-RTC�̃e�[�u�����쐬����֐����`���܂��B
+### RTCのテーブル作成
+RTCのテーブルを作成する関数を定義します。
 
 <pre>
 local ConsoleIn = {}
 ConsoleIn.new = function(manager)
 	local obj = {}
-	-- RTObject�����^�I�u�W�F�N�g�ɐݒ肷��
+	-- RTObjectをメタオブジェクトに設定する
 	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
-	-- ���������̃R�[���o�b�N�֐�
+	-- 初期化時のコールバック関数
 	function obj:onInitialize()
-	   (�ȗ�)
+	   (省略)
 	end
-	-- �A�N�e�B�u��Ԃ̎��̎��s�֐�
+	-- アクティブ状態の時の実行関数
 	function obj:onExecute(ec_id)
-	   (�ȗ�)
+	   (省略)
 	end
 
 	return obj
 end
 </pre>
 
-### �f�[�^�|�[�g
-�A�E�g�|�[�g�A�C���|�[�g�A�T�[�r�X�|�[�g��onInitialize�֐��Œǉ����܂��B
+### データポート
+アウトポート、インポート、サービスポートをonInitialize関数で追加します。
 
-#### �A�E�g�|�[�g
+#### アウトポート
 <pre>
 ConsoleIn.new = function(manager)
-	(�ȗ�)
-	-- �f�[�^�i�[�ϐ�
+	(省略)
+	-- データ格納変数
 	obj._d_out = openrtm.RTCUtil.instantiateDataType("::RTC::TimedLong")
-	-- �A�E�g�|�[�g����
+	-- アウトポート生成
 	obj._outOut = openrtm.OutPort.new("out",obj._d_out,"::RTC::TimedLong")
-	(�ȗ�)
+	(省略)
 	function obj:onInitialize()
-		-- �|�[�g�ǉ�
+		-- ポート追加
 		self:addOutPort("out",self._outOut)
 
 		return self._ReturnCode_t.RTC_OK
 	end
 </pre>
 
-�f�[�^�̏o�͂��s���ꍇ�́A`self._d_out`�ɑ��M�f�[�^���i�[��A`self._outOut`��write�֐������s���܂��B
+データの出力を行う場合は、`self._d_out`に送信データを格納後、`self._outOut`のwrite関数を実行します。
 
 <pre>
--- �o�̓f�[�^�i�[
+-- 出力データ格納
 self._d_out.data = 1
--- �f�[�^��������
+-- データ書き込み
 self._outOut:write()
 </pre>
 
-#### �C���|�[�g
+#### インポート
 <pre>
 ConsoleOut.new = function(manager)
-	(�ȗ�)
-	-- �f�[�^�i�[�ϐ�
+	(省略)
+	-- データ格納変数
 	obj._d_in = openrtm.RTCUtil.instantiateDataType("::RTC::TimedLong")
-	-- �C���|�[�g����
+	-- インポート生成
 	obj._inIn = openrtm.InPort.new("in",obj._d_in,"::RTC::TimedLong")
-	(�ȗ�)
+	(省略)
 	function obj:onInitialize()
-		-- �|�[�g�ǉ�
+		-- ポート追加
 		self:addInPort("in",self._inIn)
 
 		return self._ReturnCode_t.RTC_OK
 	end
 </pre>
 
-`openrtm.RTCUtil.instantiateDataType`�֐��ɂ��A�f�[�^���i�[����ϐ����������ł��܂��B
+`openrtm.RTCUtil.instantiateDataType`関数により、データを格納する変数を初期化できます。
 
-`openrtm.OutPort.new("out",self._d_out,"::RTC::TimedLong")`�̂悤�ɁA�f�[�^�^�͕�����Ŏw�肷��K�v������܂��B
+`openrtm.OutPort.new("out",self._d_out,"::RTC::TimedLong")`のように、データ型は文字列で指定する必要があります。
 
 
-���̓f�[�^��ǂݍ��ޏꍇ�́A`self._inIn`��read�֐����g�p���܂��B
+入力データを読み込む場合は、`self._inIn`のread関数を使用します。
 
 
 <pre>
--- �o�b�t�@�ɐV�K�f�[�^�����邩���m�F
+-- バッファに新規データがあるかを確認
 if self._inIn:isNew() then
-	-- �f�[�^�ǂݍ���
+	-- データ読み込み
 	local data = self._inIn:read()
 	print("Received: ", data.data)
 end
 </pre>
 
-`isNew`�֐��ŐV�K�f�[�^�̗L�����m�F�ł��܂��B
+`isNew`関数で新規データの有無を確認できます。
 
-### �T�[�r�X�|�[�g
+### サービスポート
 
-#### �v���o�C�_
+#### プロバイダ
 
-�v���o�C�_���̃T�[�r�X�|�[�g�𐶐����邽�߂ɂ́A�܂��v���o�C�_�̃e�[�u�����쐬���܂��B
+プロバイダ側のサービスポートを生成するためには、まずプロバイダのテーブルを作成します。
 
 <pre>
 local MyServiceSVC_impl = {}
 MyServiceSVC_impl.new = function()
 	local obj = {}
-		(�ȗ�)
+		(省略)
 	function obj:echo(msg)
-		(�ȗ�)
+		(省略)
 	end
 	function obj:get_echo_history()
-		(�ȗ�)
+		(省略)
 	end
 	function obj:set_value(value)
-		(�ȗ�)
+		(省略)
 	end
 	function obj:get_value()
-		(�ȗ�)
+		(省略)
 	end
 	function obj:get_value_history()
-		(�ȗ�)
+		(省略)
 	end
 
 	return obj
 end
 </pre>
 
-onInitialize�֐����Ń|�[�g�̐����A�o�^���s���܂��B
+onInitialize関数内でポートの生成、登録を行います。
 
 <pre>
 MyServiceProvider.new = function(manager)
-	(�ȗ�)
-	-- �T�[�r�X�|�[�g����
+	(省略)
+	-- サービスポート生成
 	obj._myServicePort = openrtm.CorbaPort.new("MyService")
-	-- �v���o�C�_�I�u�W�F�N�g����
+	-- プロバイダオブジェクト生成
 	obj._myservice0 = MyServiceSVC_impl.new()
-	(�ȗ�)
+	(省略)
 	function obj:onInitialize()
-		-- �T�[�r�X�|�[�g�Ƀv���o�C�_�I�u�W�F�N�g��o�^
+		-- サービスポートにプロバイダオブジェクトを登録
 		self._myServicePort:registerProvider("myservice0", "MyService", self._myservice0, "idl/MyService.idl", "IDL:SimpleService/MyService:1.0")
-		-- �|�[�g�ǉ�
+		-- ポート追加
 		self:addPort(self._myServicePort)
 
 		return self._ReturnCode_t.RTC_OK
 	end
 </pre>
 
-`self._myServicePort:registerProvider("myservice0", "MyService", self._myservice0, "../idl/MyService.idl", "IDL:SimpleService/MyService:1.0")`�̂悤�ɁAIDL�t�@�C�����A�C���^�[�t�F�[�X���𕶎���Ŏw�肷��K�v������܂��B
+`self._myServicePort:registerProvider("myservice0", "MyService", self._myservice0, "../idl/MyService.idl", "IDL:SimpleService/MyService:1.0")`のように、IDLファイル名、インターフェース名を文字列で指定する必要があります。
 
-### �T�[�r�X�|�[�g
+### サービスポート
 
-#### �R���V���[�}
+#### コンシューマ
 
-�R���V���[�}���̃T�[�r�X�|�[�g��ǉ�����ɂ́A�ȉ��̂悤��onInitialize�֐����Ń|�[�g�̐����A�ǉ����s���܂��B
-`self._myServicePort:registerConsumer("myservice0", "MyService", self._myservice0, "../idl/MyService.idl")`�̂悤��IDL�t�@�C�����𕶎���Ŏw�肷��K�v������܂��B
+コンシューマ側のサービスポートを追加するには、以下のようにonInitialize関数内でポートの生成、追加を行います。
+`self._myServicePort:registerConsumer("myservice0", "MyService", self._myservice0, "../idl/MyService.idl")`のようにIDLファイル名を文字列で指定する必要があります。
 
 <pre>
 MyServiceConsumer.new = function(manager)
-	(�ȗ�)
-	-- �T�[�r�X�|�[�g����
+	(省略)
+	-- サービスポート生成
 	obj._myServicePort = openrtm.CorbaPort.new("MyService")
-	-- �R���V���[�}�I�u�W�F�N�g����
+	-- コンシューマオブジェクト生成
 	obj._myservice0 = openrtm.CorbaConsumer.new("IDL:SimpleService/MyService:1.0")
-	(�ȗ�)
+	(省略)
 	function obj:onInitialize()
-		-- �T�[�r�X�|�[�g�ɃR���V���[�}�I�u�W�F�N�g��o�^
+		-- サービスポートにコンシューマオブジェクトを登録
 		self._myServicePort:registerConsumer("myservice0", "MyService", self._myservice0, "idl/MyService.idl")
-		-- �|�[�g�ǉ�
+		-- ポート追加
 		self:addPort(self._myServicePort)
 
 		return self._ReturnCode_t.RTC_OK
 	end
 </pre>
 
-�I�y���[�V�������Ăяo���ꍇ�́ACorbaConsumer��_ptr�֐��ŃI�u�W�F�N�g���t�@�����X���擾���Ċ֐����Ăяo���܂��B
+オペレーションを呼び出す場合は、CorbaConsumerの_ptr関数でオブジェクトリファレンスを取得して関数を呼び出します。
 
 <pre>
 self._myservice0:_ptr():set_value(val)
 </pre>
 
-### �R���t�B�M�����[�V�����p�����[�^�ݒ�
-�R���t�B�O���[�V�����p�����[�^�̐ݒ�ɂ́A�܂�RTC�̎d�l�ɃR���t�B�O���[�V�����p�����[�^��ǉ����܂��B
+### コンフィギュレーションパラメータ設定
+コンフィグレーションパラメータの設定には、まずRTCの仕様にコンフィグレーションパラメータを追加します。
 
 <pre>
 local configsample_spec = {
-  (�ȗ�)
+  (省略)
   ["conf.default.int_param0"]="0",
   ["conf.default.int_param1"]="1",
   ["conf.default.double_param0"]="0.11",
@@ -329,30 +329,30 @@ local configsample_spec = {
   ["conf.default.vector_param0"]="0.0,1.0,2.0,3.0,4.0"}
 </pre>
 
-onInitialize�֐��ŕϐ����o�C���h���܂��B
-�l��`_value`�Ƃ����L�[�Ɋi�[����܂��B
+onInitialize関数で変数をバインドします。
+値は`_value`というキーに格納されます。
 
 <pre>
 ConfigSample.new = function(manager)
-	(�ȗ�)
-	-- �R���t�B�M�����[�V�����p�����[�^���o�C���h����ϐ�
+	(省略)
+	-- コンフィギュレーションパラメータをバインドする変数
 	obj._int_param0 = {_value=0}
-	(�ȗ�)
+	(省略)
 	function obj:onInitialize()
-		-- �R���t�B�M�����[�V�����p�����[�^��ϐ��Ƀo�C���h����
+		-- コンフィギュレーションパラメータを変数にバインドする
 		self._int_param0 = {_value=0}
-		(�ȗ�)
+		(省略)
 
 
 		self:bindParameter("int_param0", self._int_param0, "0")
-		(����)
+		(書略)
 		return self._ReturnCode_t.RTC_OK
 	end
 </pre>
 
 
-### �R�[���o�b�N��`
-onExecute�R�[���o�b�N�Ȃǂ��`����ꍇ�ɂ��Ă��A�֐����`���ď������L�q���܂��B
+### コールバック定義
+onExecuteコールバックなどを定義する場合についても、関数を定義して処理を記述します。
 
 <pre>
 	function obj:onExecute(ec_id)
@@ -367,10 +367,10 @@ onExecute�R�[���o�b�N�Ȃǂ��`����ꍇ�ɂ��Ă��A�֐����`���ď������L�q���܂
 
 
 
-### RTC�N���̊֐���`
+### RTC起動の関数定義
 
 
-�ȉ��̂悤��RTC�̓o�^�A�����֐����`���܂��B
+以下のようにRTCの登録、生成関数を定義します。
 
 <pre>
 ConsoleIn.Init = function(manager)
@@ -384,8 +384,8 @@ local MyModuleInit = function(manager)
 end
 </pre>
 
-### �}�l�[�W���N��
-�ȉ��̂悤��RTC�����֐���ݒ肵�ă}�l�[�W�����N�����܂��B
+### マネージャ起動
+以下のようにRTC生成関数を設定してマネージャを起動します。
 
 <pre>
 local manager = openrtm.Manager
@@ -396,60 +396,60 @@ manager:runManager()
 </pre>
 
 
-## ���C�Z���X
-MIT���C�Z���X
+## ライセンス
+MITライセンス
 
-## �ˑ����C�u����
+## 依存ライブラリ
 
-* [Lua-5.1](https://www.lua.org/)(MIT���C�Z���X)
-* [OiL-0.4](https://webserver2.tecgraf.puc-rio.br/~maia/oil/index.html)(MIT���C�Z���X)
-* [LuaIDL](https://github.com/LuaDist/luaidl)(MIT���C�Z���X)
-* [loop](https://github.com/LuaDist/loop)(MIT���C�Z���X)
-* [LuaSocket](https://github.com/diegonehab/luasocket)(MIT���C�Z���X)
-* [LuaLogging](https://github.com/Neopallium/lualogging)(MIT���C�Z���X)
-* [LUA-RFC-4122-UUID-Generator](https://github.com/tcjennings/LUA-RFC-4122-UUID-Generator)(MIT���C�Z���X)
+* [Lua-5.1](https://www.lua.org/)(MITライセンス)
+* [OiL-0.4](https://webserver2.tecgraf.puc-rio.br/~maia/oil/index.html)(MITライセンス)
+* [LuaIDL](https://github.com/LuaDist/luaidl)(MITライセンス)
+* [loop](https://github.com/LuaDist/loop)(MITライセンス)
+* [LuaSocket](https://github.com/diegonehab/luasocket)(MITライセンス)
+* [LuaLogging](https://github.com/Neopallium/lualogging)(MITライセンス)
+* [LUA-RFC-4122-UUID-Generator](https://github.com/tcjennings/LUA-RFC-4122-UUID-Generator)(MITライセンス)
 
-* [MoonScript](http://moonscript.org)(MIT���C�Z���X)
-* [LPeg](https://luarocks.org/modules/gvvaughan/lpeg)(MIT���C�Z���X)
-* [argparse](https://github.com/mpeterv/argparse)(MIT���C�Z���X)
+* [MoonScript](http://moonscript.org)(MITライセンス)
+* [LPeg](https://luarocks.org/modules/gvvaughan/lpeg)(MITライセンス)
+* [argparse](https://github.com/mpeterv/argparse)(MITライセンス)
 
-## ����RTM�����ƃf�[�^�|�[�g�ʐM����ꍇ�ɂ���
-OpenRTM-aist 1.0�n�t����DataPort.idl��OiL�ł͓ǂݍ��߂Ȃ����߁AOpenRTM-aist 2.0�t����DataPort.idl���K�v�ɂȂ�܂��B
-����AOpenRTM-aist 1.2�ȑO�A�����OpenRTM.NET�ƒʐM�����i�͂���܂��񂪁A�J������OpenRTM-aist 2.0�Ƃ͒ʐM�ł��܂��B
+## 他のRTM実装とデータポート通信する場合について
+OpenRTM-aist 1.0系付属のDataPort.idlはOiLでは読み込めないため、OpenRTM-aist 2.0付属のDataPort.idlが必要になります。
+現状、OpenRTM-aist 1.2以前、およびOpenRTM.NETと通信する手段はありませんが、開発中のOpenRTM-aist 2.0とは通信できます。
 
-Python�ł�OpenRTM-aist 2.0(�J����)�̃C���X�g�[�����@��������܂��B
+Python版のOpenRTM-aist 2.0(開発中)のインストール方法を説明します。
 
-�܂�OpenRTM-aist���C���X�g�[���[�ŃC���X�g�[�����Ă��������B
-����[TortoiseSVN](https://ja.osdn.net/projects/tortoisesvn/)���ňȉ�����OpenRTM-aist Python�� 2.0�̃\�[�X�R�[�h����肵�܂��B
+まずOpenRTM-aistをインストーラーでインストールしてください。
+次に[TortoiseSVN](https://ja.osdn.net/projects/tortoisesvn/)等で以下からOpenRTM-aist Python版 2.0のソースコードを入手します。
 
 * http://svn.openrtm.org/OpenRTM-aist-Python/trunk/OpenRTM-aist-Python/
 
-setup.py�̈ȉ��̕�����ύX���܂��B
+setup.pyの以下の部分を変更します。
 
 <pre>
 #pkg_data_files_win32 = [("Scripts", ['OpenRTM_aist/utils/rtcd/rtcd_python.exe'])]
 pkg_data_files_win32 = []
 </pre>
 
-OpenRTM-aist Python�� 2.0�̃\�[�X�R�[�h�̃f�B���N�g���Ɉړ����Ĉȉ��̃R�}���h�����s����ƁA�C���X�g�[���[�ŃC���X�g�[������OpenRTM-aist���㏑�����܂��B���p�X�ɓ��{�ꂪ�܂܂�Ă���ꍇ�Ɏ��s���邱�Ƃ�����܂��B���̏ꍇ�̓f�B���N�g����ύX���ăR�}���h�����s���Ă��������B
+OpenRTM-aist Python版 2.0のソースコードのディレクトリに移動して以下のコマンドを実行すると、インストーラーでインストールしたOpenRTM-aistを上書きします。※パスに日本語が含まれている場合に失敗することがあります。その場合はディレクトリを変更してコマンドを実行してください。
 
 <pre>
 python setup.py build
 python setup.py install
 </pre>
 
-## LuaJIT�̗��p
+## LuaJITの利用
 
-* [LuaJIT�̗��p](LuaJIT�̗��p)
+* [LuaJITの利用](LuaJITの利用)
 
-## �J������
+## 開発メモ
 
-* [�J������](�J������)
+* [開発メモ](開発メモ)
 
-## �����[�X�m�[�g
+## リリースノート
 
-* [�����[�X�m�[�g](�����[�X�m�[�g)
+* [リリースノート](リリースノート)
 
-## ���������[�X�ł̒ǉ��A�C������
+## 次期リリースでの追加、修正項目
 
-* [���������[�X�ł̒ǉ��A�C������](���������[�X�ł̒ǉ��A�C������)
+* [次期リリースでの追加、修正項目](次期リリースでの追加、修正項目)

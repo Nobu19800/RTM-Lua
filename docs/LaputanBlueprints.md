@@ -16,7 +16,7 @@ BizHawkを展開したフォルダにOpenRTM Lua版の各ファイルをコピ�
 
 以下から32bit用のOpenRTM Lua版ファイル一式(OpenRTM Lua x.y.z 32bit)をダウンロードしてください。
 
-* [ダウンロード](ダウンロード)
+* [ダウンロード](download.md)
 
 OpenRTM Lua版からBizHawkにファイルをコピーします。
 
@@ -33,7 +33,7 @@ OpenRTM Lua版からBizHawkにファイルをコピーします。
 ## RTC作成
 RTC BuilderによるRTCの基本的な作成手順は以下のページを参考にしてください。
 
-* [RTC作成手順](RTC作成手順)
+* [RTC作成手順](RTC.md)
 
 上のページの作成手順に従って、以下の仕様のRTCを作成してください。
 

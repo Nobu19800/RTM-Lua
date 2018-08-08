@@ -29,7 +29,7 @@ local NVUtil = require "openrtm.NVUtil"
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 local RTCUtil = require "openrtm.RTCUtil"
 
-local uuid4 = require "LUA-RFC-4122-UUID-Generator.uuid4"
+local uuid = require "uuid"
 
 
 RTObject.ECOTHER_OFFSET = 1000
@@ -1281,7 +1281,7 @@ RTObject.new = function(manager)
 	end
 
 
-	obj:setInstanceName(uuid4.getUUID())
+	obj:setInstanceName(uuid())
 
 	return obj
 end

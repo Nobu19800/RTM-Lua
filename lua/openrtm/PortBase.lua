@@ -19,7 +19,7 @@ local PortConnectListener = require "openrtm.PortConnectListener"
 local PortConnectListenerType = PortConnectListener.PortConnectListenerType
 local PortConnectRetListenerType = PortConnectListener.PortConnectRetListenerType
 
-local uuid4 = require "LUA-RFC-4122-UUID-Generator.uuid4"
+local uuid = require "uuid"
 
 local RTCUtil = require "openrtm.RTCUtil"
 
@@ -694,7 +694,7 @@ PortBase.new = function(name)
     -- UUID生成
     -- @return UUID
 	function obj:getUUID()
-		return uuid4.getUUID()
+		return uuid()
 	end
 	-- コネクタプロファイルからインターフェース取得
 	-- @param cprof コネクタプロファイル

@@ -51,14 +51,14 @@ AviUtlやNScripter2上でもRTCを起動できますが、実用性は皆無で�
 
 例：
 
-* V-REP(ロボットシミュレータ), https://www.youtube.com/watch?v=EaQ2oOxfhSY
-* BizHawk(ゲームエミュレータ), https://www.youtube.com/watch?v=5dYfUjRzzQ8
-* Laputan Blueprints(剛体シミュレータ), https://www.youtube.com/watch?v=FS52TlHDKiU
+* V-REP(ロボットシミュレータ), [動画](https://www.youtube.com/watch?v=EaQ2oOxfhSY)
+* BizHawk(ゲームエミュレータ), [動画](https://www.youtube.com/watch?v=5dYfUjRzzQ8)
+* Laputan Blueprints(剛体シミュレータ), [動画](https://www.youtube.com/watch?v=FS52TlHDKiU)
 * AviUtl(動画編集ソフト)
 * NScripter2(スクリプトエンジン)
 * LÖVE(2Dゲームエンジン)
 * Celestia(3D天体シミュレータ)
-* OpenResty(WEBアプリサーバー), https://www.youtube.com/watch?v=_-Kw8qv_keo, https://www.youtube.com/watch?v=4qxKCBcIIEE
+* OpenResty(WEBアプリサーバー), [動画1](https://www.youtube.com/watch?v=_-Kw8qv_keo), [動画2](https://www.youtube.com/watch?v=4qxKCBcIIEE)
 
 ##### 利用手順
 

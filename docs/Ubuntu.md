@@ -16,6 +16,7 @@ $ sudo luarocks install luasocket
 $ sudo luarocks install loop
 $ sudo luarocks install oil
 $ sudo luarocks install lualogging
+$ sudo luarocks install uuid
 </pre>
 
 OpenRTM Lua版のインストールスクリプトを実行してください。

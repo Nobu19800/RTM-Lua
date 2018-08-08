@@ -62,7 +62,7 @@ AviUtlやNScripter2上でもRTCを起動できますが、実用性は皆無で�
 
 ##### 利用手順
 
-* [V‐REP上で動作するRTCの作成方法](V‐REP.md)
+* [V‐REP上で動作するRTCの作成方法](V-REP.md)
 * [BizHawk上で動作するRTCの作成方法](BizHawk.md)
 * [Laputan Blueprints上で動作するRTCの作成方法](LaputanBlueprints.md)
 * [OpenResty上で動作するRTCの作成方法](OpenResty.md)

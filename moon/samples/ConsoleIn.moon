@@ -23,7 +23,7 @@ consolein_spec = {
 
 
 
--- @class ConfigSample
+-- @class ConsoleIn
 class ConsoleIn extends openrtm_ms.RTObject
 	-- コンストラクタ
 	-- @param manager マネージャ

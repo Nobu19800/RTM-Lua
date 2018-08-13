@@ -2,7 +2,7 @@
 ## 概要
 このページでは物理シミュレータLaputan Blueprints上で動作する上で動作するRTCを作成して、以下のようにPython版サンプルコンポーネントのジョイスティックコンポーネントと接続して車体を操作するシステムの作成を行います。
 
-* https://www.youtube.com/watch?v=FS52TlHDKiU
+* [動画](https://www.youtube.com/watch?v=FS52TlHDKiU)
 
 ## Laputan Blueprintsの入手
 以下からLaputan Blueprintsを入手してください。

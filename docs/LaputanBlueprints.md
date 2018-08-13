@@ -1,33 +1,51 @@
 # Laputan Blueprints上で動作するRTCの作成方法
 ## 概要
-このページではゲームエミュレータBizHawk上で動作するRTCを作成して、以下のようにPython版サンプルコンポーネントのジョイスティックコンポーネントと接続してゲームを操作するシステムの作成を行います。
+このページでは物理シミュレータLaputan Blueprints上で動作する上で動作するRTCを作成して、以下のようにPython版サンプルコンポーネントのジョイスティックコンポーネントと接続して車体を操作するシステムの作成を行います。
 
-* [動画](https://www.youtube.com/watch?v=5dYfUjRzzQ8)
+* https://www.youtube.com/watch?v=FS52TlHDKiU
 
-## BizHawkの入手
-以下からBizHawk 1.12.2をダウンロードして適当な場所に展開してください。
+## Laputan Blueprintsの入手
+以下からLaputan Blueprintsを入手してください。
 
-* https://github.com/TASVideos/BizHawk/releases/tag/1.12.2
+* https://sites.google.com/site/laputanblueprints2016/do
 
-※1.13.0以降のバージョンでは何故か動作できていません。
-
-## BizHawkにOpenRTM Lua版をインストール
-BizHawkを展開したフォルダにOpenRTM Lua版の各ファイルをコピーします。
+## Laputan BlueprintsにOpenRTM Lua版をインストール
+Laputan Blueprintsを展開したフォルダにOpenRTM Lua版の各ファイルをコピーします。
 
 以下から32bit用のOpenRTM Lua版ファイル一式(OpenRTM Lua x.y.z 32bit)をダウンロードしてください。
 
 * [ダウンロード](download.md)
 
-OpenRTM Lua版からBizHawkにファイルをコピーします。
+OpenRTM Lua版からLaputan Blueprintsにファイルをコピーします。
 
-`openrtm-lua-x.y.z(x86)\lua\`以下のファイルを全て`BizHawk-1.12.2\Lua\`以下にコピーしてください。
+`openrtm-lua-x.y.z(x86)\lua\`以下のファイルの内`idl`フォルダ以外を全て`Laputan\Laputan Files\LuaModules\`以下にコピーしてください。
+ファイルを上書きするかどうか聞かれますが、構わずコピーしてください。
 
-![openrtmlua220](https://user-images.githubusercontent.com/6216077/37710270-7aa40934-2d50-11e8-9f3c-0c654bc6bab6.png)
+![openrtmlua260](https://user-images.githubusercontent.com/6216077/37710287-86942c6a-2d50-11e8-8b74-a3ba3fadbaa8.png)
 
 
-次に`openrtm-lua-x.y.z(x86)\clibs\`以下のファイルを全て`BizHawk-1.12.2\`以下にコピーしてください。
 
-![openrtmlua230](https://user-images.githubusercontent.com/6216077/37710277-7d9883ae-2d50-11e8-953e-b110d209d5a4.png)
+`idl`フォルダは`Laputan\Laputan Files\`以下にコピーしてください。
+
+![openrtmlua290](https://user-images.githubusercontent.com/6216077/37710299-8fe0648c-2d50-11e8-90ac-0e018d95076f.png)
+
+
+
+次に`openrtm-lua-x.y.z(x86)\clibs\`以下のファイルを全て`Laputan\Laputan Files\`以下にコピーしてください。
+
+![openrtmlua270](https://user-images.githubusercontent.com/6216077/37710296-8d201ff8-2d50-11e8-9e48-4c41aec1d5de.png)
+
+
+## Laputan Blueprintsの設定
+`LB.exe`を実行してLaputan Blueprintsを起動してください。
+`Help`->`Preference`を選択して設定ウインドウを開いてください。
+
+![openrtmlua140](https://user-images.githubusercontent.com/6216077/37710208-4c02cef8-2d50-11e8-924a-3e5454fecbb3.png)
+
+
+`Lua IO Lib`、`Lua OS Lib`のチェックボックスをオンにしてください。
+
+![openrtmlua150](https://user-images.githubusercontent.com/6216077/37710209-4df6c296-2d50-11e8-89c8-720c434cadd3.png)
 
 
 ## RTC作成
@@ -40,7 +58,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 ### 基本プロファイル
 |||
 |---|---|
-|モジュール名|BizHawkSample|
+|モジュール名|LBSample|
 
 ### アクティビティ
 
@@ -50,52 +68,122 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 |||
 |---|---|
 |ポート名|in|
-|データ型|RTC::TimedFloatSeq|
+|データ型|TimedFloatSeq|
 
-### BizHawkSample.luaの編集
+### LBSample.luaの編集
 
-`BizHawkSample.lua`の`onExecute`関数を以下のように編集してください。
+`LBSample.lua`のonExecute関数を編集します。
 
 <pre>
 	function obj:onExecute(ec_id)
 		if self._inIn:isNew() then
 			local data = self._inIn:read()
-			local buttons = {["Left"]=false, ["Right"]=false, ["A"]=false}
-			if data.data[1] > 20 then
-				buttons["Right"] = true
-			elseif data.data[1] < -20 then
-				buttons["Left"] = true
-			end
-			if data.data[2] > 70 then
-				buttons["A"] = true
-			end
-			joypad.set(buttons, 1)
+			lb.controls.Accel.setvalue(data.data[2]/3)
+			lb.controls.Handle.setvalue(-data.data[1]/2)
 		end
-		emu.frameadvance()
 		return self._ReturnCode_t.RTC_OK
 	end
 </pre>
 
-InPortの入力データを、コントローラーの入力に設定しています。
-`emu.frameadvance()`でフレームを更新しています。
+InPortのデータを読み込んで、車のアクセル、ステアリングに入力しています。
+
+編集した`LBSample.lua`を`Laputan\Laputan Files\LuaModules\`以下にコピーしてください。
+![openrtmlua370](https://user-images.githubusercontent.com/6216077/37711256-7b70a36a-2d53-11e8-8780-568e7266ae59.png)
+
+Laputan Blueprintsの関数については情報が少ないのですが、以下のサイトなどに少し情報があるみたいです。
+
+* [RigidChips Wiki](https://www4.atwiki.jp/rigidchips/pages/47.html)
 
 
-編集した`BizHawkSample.lua`を`BizHawk-1.12.2\Lua`にコピーしてください。
+## LB-Dataファイルの編集
+Laputan Blueprintsのサンプル`car.lbd`を編集します。
+`Open bluprint`ボタンを押してファイルを選択してください。
+![openrtmlua160](https://user-images.githubusercontent.com/6216077/37710218-541e0b66-2d50-11e8-802d-114a82b43e9b.png)
 
-![openrtmlua240](https://user-images.githubusercontent.com/6216077/37710279-80d5d2ec-2d50-11e8-9fd7-e35613d4081e.png)
+`car.lbd`を開いたら、`Edit Controls`ボタンを押して`Controls`ウインドウを開いてください。
+![openrtmlua170](https://user-images.githubusercontent.com/6216077/37710221-567b8dfc-2d50-11e8-9d75-68941dc8fe0a.png)
+
+右側に表示された`Controls`ウインドウの下の赤枠のタブを開いてボタンをクリックしてください。
+![openrtmlua180](https://user-images.githubusercontent.com/6216077/37710237-650571da-2d50-11e8-8847-2509b2b7ee13.png)
+
+`Lubricator`ウインドウに表示されたソースコードを編集します。
+![openrtmlua190](https://user-images.githubusercontent.com/6216077/37710256-710a545a-2d50-11e8-8ca4-95b5828f7ce0.png)
+
+以下のコードを上書きしてください。
+
+<pre>
+function OnFrame()
+	lb.drawtext(32,32,"Welcome Laputan Blueprints world!")
+	lb.drawtext(32,52,string.format("FPS=%.2f",lb.getfps()))
+	lb.drawtext(32,72,string.format("OBJ=%d",lb.getobjectcount()))
+
+	local openrtm = require "openrtm"
+	local mgr = openrtm.Manager
+	mgr:step()
+	local comp = mgr:getComponent("LBSample0")
+	local ec = comp:get_owned_contexts()[1]
+	ec:tick()
+end
+function OnInit()
+	lb.print(lb.gettime(),"Init")
+	local openrtm = require "openrtm"
+
+	local mgr = openrtm.Manager
+	mgr:init({"-o","exec_cxt.periodic.type:OpenHRPExecutionContext","-o","manager.modules.load_path:LuaModules","-o","manager.components.precreate:LBSample","-o","manager.components.preconnect:LBSample0.in?port=rtcname://localhost/TkJoyStick0.pos","-o","manager.components.preactivation:LBSample0,rtcname://localhost/TkJoyStick0"})
+	mgr:activateManager()
+	mgr:runManager(true)
+end
+function OnReset()
+	lb.print(lb.gettime(),"Reset")
+	local openrtm = require "openrtm"
+	local mgr = openrtm.Manager
+	mgr:createShutdownThread(1)
+	mgr:unload("LBSample")
+	mgr:unregisterFactory("LBSample")
+end
+</pre>
+
+
+基本は上記のコードの`LBSample`の部分を変更すると、他のRTCにも適用できるようになります。
+
+`mgr:init`関数の引数について説明します。
+`-o`オプションの後にパラメータを指定します。
+
+* `"-o","exec_cxt.periodic.type:OpenHRPExecutionContext"`
+
+実行コンテキストの指定をしています。
+Laputan Blueprints上ではRTCをステップ実行したいので`OpenHRPExecutionContext`という実行コンテキストを指定します。
+
+* `"-o","manager.modules.load_path:LuaModules"`
+
+モジュールを探索するパスを指定します。
+`LBSample.lua`の存在するディレクトリを指定します。
+
+* `"-o","manager.components.precreate:LBSample"`
+
+起動時に生成するRTC名を指定します。
+
+* `"-o","manager.components.preconnect:LBSample0.in?port=rtcname://localhost/TkJoyStick0.pos"`
+
+起動時に接続するポートを指定します。
+この場合は`LBSample0`というRTCの`in`というデータポートを、`TkJoyStick0`というRTCの`pos`というポートに接続します。
+
+ただし、`TkJoyStick0`は別プロセスで起動しているため、`rtcname形式`による指定が必要になります。
+`rtcname形式`はネームサーバーからRTCを取得する方法です。`rtcname://アドレス/RTC名.ポート名`で指定します。
+
+
+* `"-o","manager.components.preactivation:LBSample0,rtcname://localhost/TkJoyStick0"`
+
+起動時にアクティブ化するRTCを指定します。
+
+
+念のために`Save blueprint`ボタンを押してファイルを保存してください。
+![openrtmlua200](https://user-images.githubusercontent.com/6216077/37710263-75e015f0-2d50-11e8-9bb0-362cf3cdb8c0.png)
 
 
 
-BizHawkの関数については、以下のページに説明があります。
-
-- [TasVideos](http://tasvideos.org/Bizhawk/LuaFunctions.html)
 
 
-## ROMの入手
-BizHawkで動作可能なROMイメージを入手してください。
-市販のゲームソフトのROMイメージのダウンロードは違法のため、以下のようなフリーのROMイメージを入手してください。
-
-* [TkShoot 1.00(NES研究室)](http://hp.vector.co.jp/authors/VA042397/nes/games.html#TKSHOOT)
 
 ## 動作確認
 ### ネームサーバー起動
@@ -111,73 +199,34 @@ TkJoyStickコンポーネントを入手して、`TkJoyStickComp.exe`を実行�
 
 * [ダウンロード](download.md)
 
-### BizHawkの起動
-`EmuHawk.exe`をダブルクリックして実行してください。
-
-![openrtmlua70](https://user-images.githubusercontent.com/6216077/37710168-2e32b99c-2d50-11e8-9a67-2a6d3af88d08.png)
-
-`Emulation`->`Pause`をクリックしてゲームを一時停止してください。
-
-![openrtmlua90](https://user-images.githubusercontent.com/6216077/37710175-30e36b32-2d50-11e8-9dfc-8d26ec9e6102.png)
-
-
 ### RTC起動
-`Tools`->`Lua Console`をクリックしてLua Consoleウインドウを表示してください。
 
-![openrtmlua80](https://user-images.githubusercontent.com/6216077/37710172-2fb1a936-2d50-11e8-9c54-7d61c6ea57d0.png)
+LB上で`Experiment/Design`ボタンを押すとシミュレーションを開始します。
+![openrtmlua210](https://user-images.githubusercontent.com/6216077/37710266-77d3511a-2d50-11e8-9953-a0d834e8e9ac.png)
 
-`Open Script`ボタンをクリックして`BizHawkSample.lua`を開いてください。
 
-![openrtmlua100](https://user-images.githubusercontent.com/6216077/37710200-476d6538-2d50-11e8-8584-b5a318a818b3.png)
 
 ### RTSystem作成
 
+起動時にポートの接続、アクティブ化をオプションで設定しているため、RT System Editorでの操作は不要ですが、念のためRT System Editorによる操作手順も説明します。
+
 まずRTCの起動に成功している場合は、以下のようにネームサービスビューにRTCが表示されます。
 
-![openrtmlua500](https://user-images.githubusercontent.com/6216077/38160876-337f7352-34ff-11e8-83b1-75dac6663ad0.png)
+![openrtmlua460](https://user-images.githubusercontent.com/6216077/38156933-15829f1a-34bd-11e8-975f-d1e4f1b712b0.png)
 
 `Open New System Editor`ボタンを押してシステムダイアグラムを表示してください。
 
-![openrtmlua510](https://user-images.githubusercontent.com/6216077/38160886-61b28cfa-34ff-11e8-9d62-4e1f36788e20.png)
+![openrtmlua470](https://user-images.githubusercontent.com/6216077/38156959-3f7e86b2-34bd-11e8-8089-b8d87333e91f.png)
 
 ネームサービスビューからシステムダイアグラムにRTCをドラックアンドドロップしてください。
 
-![openrtmlua520](https://user-images.githubusercontent.com/6216077/38160923-2a4c3418-3500-11e8-91e2-67b6bac78ff9.png)
+![openrtmlua480](https://user-images.githubusercontent.com/6216077/38157017-b6837524-34bd-11e8-8302-91c352f2e786.png)
 
-`TkJoyStick0`の`pos`のOutPortを、`BizHawkSample0`の`in`のInPortにドラックアンドドロップしてください。
-
-![openrtmlua530](https://user-images.githubusercontent.com/6216077/38462572-6f52e29e-3b24-11e8-818c-b191db0eef19.png)
-
+`TkJoyStick0`の`pos`のOutPortを、`LBSample0`の`in`のInPortにドラックアンドドロップしてください。
 これで通信ができるようになります。
+
+![openrtmlua450](https://user-images.githubusercontent.com/6216077/38157072-3f5c6c02-34be-11e8-863a-d15396f7a821.png)
 
 `All Activate`ボタンを押すと`TkJoyStick0`からデータが送信されるため操作ができるようになります。
 
-![openrtmlua540](https://user-images.githubusercontent.com/6216077/38160938-b0843e68-3500-11e8-84cd-89c80e918d2c.png)
-
-
-
-`Emulation`->`Pause`をクリックするとゲームを再開します。
-
-![openrtmlua90](https://user-images.githubusercontent.com/6216077/37710175-30e36b32-2d50-11e8-9dfc-8d26ec9e6102.png)
-
-
-### コネクタ接続、RTCのアクティブ化の自動化
-
-`BizHawkSample.lua`の`manager:init`関数の引数を以下のように変更してください。
-
-<pre>
-manager:init({"-o", "manager.components.preconnect:BizHawkSample0.in?port=rtcname://localhost/TkJoyStick0.pos", "-o", "manager.components.preactivation:BizHawkSample0,rtcname://localhost/TkJoyStick0"})
-</pre>
-
-`-o`オプションでパラメータの設定ができます。
-
-* `"-o", "manager.components.preconnect:BizHawkSample0.in?port=rtcname://localhost/TkJoyStick0.pos"`
-
-起動時に接続するポートを指定します。 この場合はBizHawkSample0というRTCのinというデータポートを、TkJoyStick0というRTCのposというポートに接続します。
-
-ただし、`TkJoyStick0`は別プロセスで起動しているため、`rtcname形式`による指定が必要になります。 `rtcname形式`はネームサーバーからRTCを取得する方法です。`rtcname://アドレス/RTC名.ポート名`で指定します。
-
-
-* `"-o","manager.components.preactivation:BizHawkSample0,rtcname://localhost/TkJoyStick0"`
-
-起動時にアクティブ化するRTCを指定します。
+![openrtmlua490](https://user-images.githubusercontent.com/6216077/38157104-a941a66e-34be-11e8-874f-e97ef109481a.png)

@@ -48,7 +48,7 @@ lcovtools.stop()
 
 --lcovtools.dump(io.stdout)
 
-local f = io.open("result/result.xml", "w")
+local f = io.open("result.xml", "w")
 --f:write(lcovtools.dump())
 lcovtools.dump(f)
 f:close()

@@ -101,7 +101,7 @@ GlobalFactory.Factory.new = function()
 			return GlobalFactory.Factory.NOT_FOUND
 		end
 
-		table.remove(self._creators, id)
+		self._creators[id] = nil
 		return GlobalFactory.Factory.FACTORY_OK
 	end
 
@@ -134,7 +134,7 @@ GlobalFactory.Factory.new = function()
 		if id ~= nil then
 			if self._creators[id] == nil then
 				self._creators[id].destructor_(obj)
-				table.remove(self._creators, id)
+				self._creators[id] = nil
 				return GlobalFactory.Factory.FACTORY_OK
 			end
 		end
@@ -195,6 +195,9 @@ GlobalFactory.Factory.new = function()
 	-- @param obj オブジェクト
 	-- @return 生成関数
 	function obj:objectToCreator(obj)
+		if not self:isProducerOf(obj) then
+			return nil
+		end
 		return self._objects[obj].creator_
 	end
 
@@ -202,6 +205,9 @@ GlobalFactory.Factory.new = function()
 	-- @param obj オブジェクト
 	-- @return 削除関数
 	function obj:objectToDestructor(obj)
+		if not self:isProducerOf(obj) then
+			return nil
+		end
 		return self._objects[obj].destructor_
 	end
 	return obj

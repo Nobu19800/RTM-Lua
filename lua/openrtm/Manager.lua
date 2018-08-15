@@ -32,12 +32,14 @@ local PeriodicExecutionContext = require "openrtm.PeriodicExecutionContext"
 local Factory = require "openrtm.Factory"
 local FactoryLua = Factory.FactoryLua
 local OpenHRPExecutionContext = require "openrtm.OpenHRPExecutionContext"
+local SimulatorExecutionContext = require "openrtm.SimulatorExecutionContext"
 local LogstreamBase = require "openrtm.LogstreamBase"
 local LogstreamFactory = LogstreamBase.LogstreamFactory
 local ModuleManager = require "openrtm.ModuleManager"
 local Task = require "openrtm.Task"
 local CORBA_RTCUtil = require "openrtm.CORBA_RTCUtil"
-
+local SdoServiceConsumerBase = require "openrtm.SdoServiceConsumerBase"
+local SdoServiceConsumerFactory = SdoServiceConsumerBase.SdoServiceConsumerFactory
 
 
 -- ORB_Dummy_ENABLEをtrueに設定した場合、
@@ -413,13 +415,13 @@ end
 function Manager:shutdown()
 	if not self.shutdown_start then
 		self.shutdown_start = true
-		--self._listeners.manager_:preShutdown()
+		self._listeners.manager_:preShutdown()
 		self:shutdownComponents()
 		self:shutdownManagerServant()
 		self:shutdownNaming()
 		self:shutdownORB()
 		self:shutdownManager()
-		--self._listeners.manager_:postShutdown()
+		self._listeners.manager_:postShutdown()
 		self:shutdownLogger()
 	end
 end
@@ -445,6 +447,27 @@ end
 
 -- マネージャアクティブ化
 function Manager:activateManager()
+	local mods = StringUtil.strip(StringUtil.split(self._config:getProperty("manager.modules.preload"), ","))
+
+	for k,mod in ipairs(mods) do
+		if mod == nil or comp == "" then
+		else
+			--local basename = StringUtil.split(StringUtil.basename(mod),"%.")[1]
+			--basename = basename.."Init"
+			
+			local success, exception = oil.pcall(
+				function()
+					--print(mod, "Init")
+					self._module:load(mod, "Init")
+				end)
+			if not success then
+				self._rtcout:RTC_ERROR(exception)
+			end
+		end
+	end
+	sdofactory_ = SdoServiceConsumerFactory:instance()
+    self._config:setProperty("sdo.service.consumer.available_services",
+								StringUtil.flatten(sdofactory_:getIdentifiers()))
 	return true
 end
 
@@ -585,7 +608,7 @@ function Manager:runManager(no_block)
 end
 
 -- CORBAの処理を1ステップ進める
--- ブロックモードの場合のみ有効
+-- ノンブロックモードの場合のみ有効
 function Manager:step()
 	if self.no_block then
 		oil.main(function()
@@ -596,7 +619,7 @@ end
 
 
 -- CORBAの処理を1ステップ進める
--- ブロックモードの場合のみ有効
+-- ノンブロックモードの場合のみ有効
 function Manager:run_step(count)
 	if count == nil then
 		count = 1
@@ -715,7 +738,7 @@ function Manager:createComponent(comp_args)
 			return comp
 		end
 	end
-	--self._listeners.rtclifecycle_:preCreate(comp_args)
+	self._listeners.rtclifecycle_:preCreate(comp_args)
 	if comp_prop:findNode("exported_ports") then
 	end
 	--print(comp_id)
@@ -817,12 +840,12 @@ function Manager:createComponent(comp_args)
 	end
 
 	self._rtcout:RTC_TRACE("RTC Created: "..comp_id:getProperty("implementation_id"))
-	--self._listeners.rtclifecycle_:postCreate(comp)
+	self._listeners.rtclifecycle_:postCreate(comp)
 	prop:mergeProperties(comp_prop)
-	--self._listeners.rtclifecycle_:preConfigure(prop)
+	self._listeners.rtclifecycle_:preConfigure(prop)
 	self:configureComponent(comp,prop)
-	--self._listeners.rtclifecycle_:postConfigure(prop)
-	--self._listeners.rtclifecycle_:preInitialize()
+	self._listeners.rtclifecycle_:postConfigure(prop)
+	self._listeners.rtclifecycle_:preInitialize()
 	if comp:initialize() ~= self._ReturnCode_t.RTC_OK then
 		self._rtcout:RTC_TRACE("RTC initialization failed: "..
                              comp_id:getProperty("implementation_id"))
@@ -834,7 +857,7 @@ function Manager:createComponent(comp_args)
 	end
 	self._rtcout:RTC_TRACE("RTC initialization succeeded: "..
                            comp_id:getProperty("implementation_id"))
-    --self._listeners.rtclifecycle_:postInitialize()
+    self._listeners.rtclifecycle_:postInitialize()
     self:registerComponent(comp)
 	return comp
 end
@@ -851,14 +874,14 @@ function Manager:registerComponent(comp)
     self._compManager:registerObject(comp)
     local names = comp:getNamingNames()
 
-    --self._listeners.naming_:preBind(comp, names)
+    self._listeners.naming_:preBind(comp, names)
 
 	for i, name in ipairs(names) do
 		--print(name)
 		self._rtcout:RTC_TRACE("Bind name: "..name)
 		self._namingManager:bindObject(name, comp)
 	end
-    --self._listeners.naming_:postBind(comp, names)
+    self._listeners.naming_:postBind(comp, names)
 
     self:publishPorts(comp)
     self:subscribePorts(comp)
@@ -875,12 +898,12 @@ function Manager:unregisterComponent(comp)
     self._compManager:unregisterObject(comp:getInstanceName())
     local names = comp:getNamingNames()
 
-    --self._listeners.naming_:preUnbind(comp, names)
+    self._listeners.naming_:preUnbind(comp, names)
     for i,name in ipairs(names) do
 		self._rtcout:RTC_TRACE("Unbind name: "..name)
 		self._namingManager:unbindObject(name)
 	end
-    --self._listeners.naming_:postUnbind(comp, names)
+    self._listeners.naming_:postUnbind(comp, names)
 end
 
 -- 実行コンテキスト生成
@@ -944,65 +967,80 @@ end
 -- @param listener コールバック関数オブジェクト
 -- @param autoclean 自動削除フラグ
 function Manager:addManagerActionListener(listener,autoclean)
-
+	if autoclean == nil then
+		autoclean = true
+	end
+	self._listeners.manager_:addListener(listener, autoclean)
 end
 
 -- ネージャアクションコールバックの登録解除
 -- @param listener コールバック関数オブジェクト
 function Manager:removeManagerActionListener(listener)
-
+	self._listeners.manager_:removeListener(listener)
 end
 
 -- モジュールアクションコールバックの登録
 -- @param listener コールバック関数オブジェクト
 -- @param autoclean 自動削除フラグ
 function Manager:addModuleActionListener(listener, autoclean)
-
+	if autoclean == nil then
+		autoclean = true
+	end
+	self._listeners.module_:addListener(listener, autoclean)
 end
 
 -- モジュールアクションコールバックの登録解除
 -- @param listener コールバック関数オブジェクト
 function Manager:removeModuleActionListener(listener)
-
+	self._listeners.module_:removeListener(listener)
 end
 
 -- RTC状態遷移アクションコールバックの登録
 -- @param listener コールバック関数オブジェクト
 -- @param autoclean 自動削除フラグ
 function Manager:addRtcLifecycleActionListener(listener, autoclean)
-
+	if autoclean == nil then
+		autoclean = true
+	end
+	self._listeners.rtclifecycle_:addListener(listener, autoclean)
 end
 
 -- RTC状態遷移アクションコールバックの登録解除
 -- @param listener コールバック関数オブジェクト
 function Manager:removeRtcLifecycleActionListener(listener)
-
+	self._listeners.rtclifecycle_:removeListener(listener)
 end
 
 -- ネームサーバーアクションコールバックの登録
 -- @param listener コールバック関数オブジェクト
 -- @param autoclean 自動削除フラグ
 function Manager:addNamingActionListener(listener, autoclean)
-
+	if autoclean == nil then
+		autoclean = true
+	end
+	self._listeners.naming_:addListener(listener, autoclean)
 end
 
 -- ネームサーバーアクションコールバックの登録解除
 -- @param listener コールバック関数オブジェクト
 function Manager:removeNamingActionListener(listener)
-
+	self._listeners.naming_:removeListener(listener)
 end
 
 -- ローカルサービスアクションコールバックの登録
 -- @param listener コールバック関数オブジェクト
 -- @param autoclean 自動削除フラグ
 function Manager:addLocalServiceActionListener(listener, autoclean)
-
+	if autoclean == nil then
+		autoclean = true
+	end
+	self._listeners.localservice_:addListener(listener, autoclean)
 end
 
 -- ローカルサービスアクションコールバックの登録解除
 -- @param listener コールバック関数オブジェクト
 function Manager:removeLocalServiceActionListener(listener)
-
+	self._listeners.localservice_:removeListener(listener)
 end
 
 -- ORB取得
@@ -1225,6 +1263,8 @@ function Manager:initExecContext()
 	self._rtcout:RTC_TRACE("Manager.initExecContext()")
 	PeriodicExecutionContext.Init(self)
 	OpenHRPExecutionContext.Init(self)
+	SimulatorExecutionContext.Init(self)
+	
 	return true
 end
 
@@ -1439,7 +1479,7 @@ function Manager:procComponentArgs(comp_arg, comp_id, comp_conf)
 			end
 			if #keyval > 1 then
 				comp_conf:setProperty(keyval[1],keyval[2])
-				self._rtcout:RTC_TRACE("RTC property "..keyval[0]..": "..keyval[1])
+				self._rtcout:RTC_TRACE("RTC property "..keyval[1]..": "..keyval[2])
 			end
 		end
 	end
@@ -1902,8 +1942,8 @@ end
 -- @return リターンコード
 function Manager:load(fname, initfunc)
 	self._rtcout:RTC_TRACE("Manager.load(fname = "..fname..", initfunc = "..initfunc..")")
-    fname = string.gsub(fname, "\\", "./")
-    --self._listeners.module_:preLoad(fname, initfunc)
+	fname = string.gsub(fname, "\\", "./")
+    self._listeners.module_:preLoad(fname, initfunc)
     local success, exception = oil.pcall(
 		function()
 			if initfunc == "" then
@@ -1912,11 +1952,12 @@ function Manager:load(fname, initfunc)
 			--print(fname, initfunc)
 			local path = self._module:load(fname, initfunc)
 			self._rtcout:RTC_DEBUG("module path: "..path)
-			--self._listeners.module_:postLoad(path, initfunc)
+			self._listeners.module_:postLoad(path, initfunc)
 	end)
 	if not success then
 		--print(exception.type)
 		--print(exception.name)
+		
 		if exception.type == "NotAllowedOperation" then
 			self._rtcout:RTC_ERROR("Operation not allowed: "..exception.reason)
 			return self._ReturnCode_t.PRECONDITION_NOT_MET
@@ -1942,10 +1983,16 @@ end
 -- @param fname ファイルパス
 function Manager:unload(fname)
 	self._rtcout:RTC_TRACE("Manager.unload()")
-	--self._listeners.module_:preUnload(fname)
+	self._listeners.module_:preUnload(fname)
 	self._module:unload(fname)
-	--self._listeners.module_:postUnload(fname)
+	self._listeners.module_:postUnload(fname)
 end
+
+
+
+
+
+
 
 
 -- 未使用
@@ -2006,6 +2053,7 @@ end
 -- @param dataType データ型
 -- @return 変換後のデータ
 function Manager:cdrUnmarshal(cdr, dataType)
+	--print(cdr, dataType)
 	--if #cdr == 0 then
 	--elseif #cdr == 1 then
 	--	cdr = string.char(1)..cdr

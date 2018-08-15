@@ -16,6 +16,10 @@ local PublisherBase = require "openrtm.PublisherBase"
 local PublisherFactory = PublisherBase.PublisherFactory
 local Factory = require "openrtm.Factory"
 
+local ConnectorListener = require "openrtm.ConnectorListener"
+local ConnectorDataListenerType = ConnectorListener.ConnectorDataListenerType
+
+
 -- PublisherFlush初期化
 -- @return PublisherFlush
 PublisherFlush.new = function()
@@ -148,7 +152,7 @@ PublisherFlush.new = function()
 	-- @param data データ
 	function obj:onSend(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_SEND]:notify(self._profile, dat
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_SEND]:notify(self._profile, data)
 		end
 	end
 
@@ -156,28 +160,28 @@ PublisherFlush.new = function()
 	-- @param data データ
 	function obj:onReceived(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVED]:notify(self._profile, dat
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVED]:notify(self._profile, data)
 		end
 	end
 	-- データ受信フル時のコールバック実行
 	-- @param data データ
 	function obj:onReceiverFull(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVER_FULL]:notify(self._profile, dat
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVER_FULL]:notify(self._profile, data)
 		end
 	end
 	-- データ受信タイムアウト時のコールバック実行
 	-- @param data データ
 	function obj:onReceiverTimeout(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVER_TIMEOUT]:notify(self._profile, dat
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVER_TIMEOUT]:notify(self._profile, data)
 		end
 	end
 	-- データ受信エラー時のコールバック実行
 	-- @param data データ
 	function obj:onReceiverError(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVER_ERROR]:notify(self._profile, dat
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVER_ERROR]:notify(self._profile, data)
 		end
 	end
 

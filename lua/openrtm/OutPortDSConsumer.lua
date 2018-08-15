@@ -24,6 +24,11 @@ local OutPortConsumerFactory = OutPortConsumer.OutPortConsumerFactory
 
 local RTCUtil = require "openrtm.RTCUtil"
 
+local ConnectorListener = require "openrtm.ConnectorListener"
+local ConnectorListenerType = ConnectorListener.ConnectorListenerType
+local ConnectorDataListenerType = ConnectorListener.ConnectorDataListenerType
+
+
 -- CorbaCdrインターフェースのOutPortConsumerオブジェクト初期化
 -- @return CorbaCdrインターフェースのOutPortConsumerオブジェクト
 OutPortDSConsumer.new = function()
@@ -251,7 +256,7 @@ OutPortDSConsumer.new = function()
 		local orb = Manager:instance():getORB()
 		local var = RTCUtil.newproxy(orb, ior,"IDL:omg.org/RTC/DataPullService:1.0")
 
-		if not NVUtil._is_equivalent(self:_ptr(true), var) then
+		if not NVUtil._is_equivalent(self:_ptr(true), var, self:_ptr(true).getObjRef, var.getObjRef) then
 			self._rtcout:RTC_ERROR("connector property inconsistency")
 			return false
 		end
@@ -284,7 +289,7 @@ OutPortDSConsumer.new = function()
 
 		local obj_ptr = self:_ptr(true)
 
-		if obj_ptr == nil or not NVUtil._is_equivalent(obj_ptr, obj) then
+		if obj_ptr == nil or not NVUtil._is_equivalent(obj_ptr, obj, obj_ptr.getObjRef, obj.getObjRef) then
 			return false
 		end
 
@@ -328,49 +333,49 @@ OutPortDSConsumer.new = function()
 	-- @param data データ
 	function obj:onBufferWrite(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_WRITE]:notify(self._profile, data)
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_WRITE]:notify(self._profile, data)
 		end
 	end
 	-- バッファフル時のコールバック実行
 	-- @param data データ
 	function obj:onBufferFull(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_FULL]:notify(self._profile, data)
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_FULL]:notify(self._profile, data)
 		end
 	end
 	-- データ受信時のコールバック実行
 	-- @param data データ
 	function obj:onReceived(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVED]:notify(self._profile, data)
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVED]:notify(self._profile, data)
 		end
 	end
 	-- 受信データフルのコールバック実行
 	-- @param data データ
 	function obj:onReceiverFull(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVER_FULL]:notify(self._profile, data)
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVER_FULL]:notify(self._profile, data)
 		end
 	end
 	-- 送信データエンプティのコールバック実行
 	-- @param data データ
 	function obj:onSenderEmpty(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connector_[ConnectorDataListenerType.ON_SENDER_EMPTY]:notify(self._profile)
+			self._listeners.connector_[ConnectorDataListenerType.ON_SENDER_EMPTY]:notify(self._profile)
 		end
 	end
 	-- 送信データ時間切れ時のコールバック実行
 	-- @param data データ
 	function obj:onSenderTimeout(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connector_[ConnectorDataListenerType.ON_SENDER_TIMEOUT]:notify(self._profile)
+			self._listeners.connector_[ConnectorDataListenerType.ON_SENDER_TIMEOUT]:notify(self._profile)
 		end
 	end
 	-- 送信エラー時のコールバック実行
 	-- @param data データ
 	function obj:onSenderError(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connector_[ConnectorDataListenerType.ON_SENDER_ERROR]:notify(self._profile)
+			self._listeners.connector_[ConnectorDataListenerType.ON_SENDER_ERROR]:notify(self._profile)
 		end
 	end
 

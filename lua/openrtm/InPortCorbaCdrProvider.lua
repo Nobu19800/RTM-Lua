@@ -23,6 +23,9 @@ local Factory = require "openrtm.Factory"
 local InPortProviderFactory = InPortProvider.InPortProviderFactory
 local RTCUtil = require "openrtm.RTCUtil"
 
+local ConnectorListener = require "openrtm.ConnectorListener"
+local ConnectorDataListenerType = ConnectorListener.ConnectorDataListenerType
+
 
 -- CorbaCdrインターフェースのInPortProviderオブジェクト初期化
 -- @return CorbaCdrインターフェースのInPortProviderオブジェクト
@@ -90,11 +93,12 @@ InPortCorbaCdrProvider.new = function()
 		local success, exception = oil.pcall(
 			function()
 				self._rtcout:RTC_PARANOID("InPortCorbaCdrProvider.put()")
-
+				--[[
 				if self._buffer == nil then
 					self:onReceiverError(data)
 					return self._PortStatus.PORT_ERROR
 				end
+				--]]
 
 				self._rtcout:RTC_PARANOID("received data size: "..#data)
 
@@ -156,58 +160,61 @@ InPortCorbaCdrProvider.new = function()
 	-- @param data データ
 	function obj:onBufferWrite(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_WRITE]:notify(self._profile, data)
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_WRITE]:notify(self._profile, data)
 		end
     end
     -- バッファフル時コールバック
 	-- @param data データ
 	function obj:onBufferFull(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_FULL]:notify(self._profile, data)
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_FULL]:notify(self._profile, data)
 		end
     end
     -- バッファ書き込みタイムアウト時コールバック
 	-- @param data データ
 	function obj:onBufferWriteTimeout(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT]:notify(self._profile, data)
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT]:notify(self._profile, data)
 		end
     end
     -- バッファ上書き時コールバック
 	-- @param data データ
 	function obj:onBufferWriteOverwrite(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_OVERWRITE]:notify(self._profile, data)
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_OVERWRITE]:notify(self._profile, data)
 		end
     end
     -- 受信時コールバック
 	-- @param data データ
 	function obj:onReceived(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVED]:notify(self._profile, data)
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVED]:notify(self._profile, data)
 		end
     end
     -- 受信バッファフル時コールバック
 	-- @param data データ
 	function obj:onReceiverFull(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVER_FULL]:notify(self._profile, data)
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVER_FULL]:notify(self._profile, data)
 		end
     end
     -- 受信タイムアウト時コールバック
 	-- @param data データ
 	function obj:onReceiverTimeout(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVER_TIMEOUT]:notify(self._profile, data)
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVER_TIMEOUT]:notify(self._profile, data)
 		end
     end
     -- 受信エラー時コールバック
 	-- @param data データ
 	function obj:onReceiverError(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVER_ERROR]:notify(self._profile, data)
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVER_ERROR]:notify(self._profile, data)
 		end
-    end
+	end
+	function obj:getObjRef()
+		return self._objref
+	end
 	return obj
 end
 

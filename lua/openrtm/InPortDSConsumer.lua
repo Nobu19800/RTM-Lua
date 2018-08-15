@@ -55,8 +55,8 @@ InPortDSConsumer.new = function()
 			function()
 				local inportcdr = self:getObject()
 				if inportcdr ~= oil.corba.idl.null then
-					ret = self:convertReturnCode(inportcdr:push(data))
-					ret = NVUtil.getPortStatus_RTC(ret)
+					ret = NVUtil.getPortStatus_RTC(inportcdr:push(data))
+					ret = self:convertReturnCode(ret)
 					return
 				end
 				ret = DataPortStatus.CONNECTION_LOST
@@ -132,6 +132,7 @@ InPortDSConsumer.new = function()
 
 		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
+		
 		local _obj = RTCUtil.newproxy(orb, ior,"IDL:omg.org/RTC/DataPushService:1.0")
 
 
@@ -139,7 +140,7 @@ InPortDSConsumer.new = function()
 			self._rtcout:RTC_ERROR("invalid IOR string has been passed")
 			return false
 		end
-
+		
 		if not self:setObject(_obj) then
 			self._rtcout:RTC_WARN("Setting object to consumer failed.")
 			return false
@@ -213,7 +214,7 @@ InPortDSConsumer.new = function()
 		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
 		local var = RTCUtil.newproxy(orb, ior,"IDL:omg.org/RTC/DataPushService:1.0")
-		if not NVUtil._is_equivalent(self:_ptr(true), var) then
+		if not NVUtil._is_equivalent(self:_ptr(true), var, self:_ptr(true).getObjRef, var.getObjRef) then
 			self._rtcout:RTC_ERROR("connector property inconsistency")
 			return false
 		end
@@ -227,7 +228,7 @@ InPortDSConsumer.new = function()
 	-- 以下からリファレンスを取得
 	-- dataport.corba_cdr.inport_ref
 	-- @return true：設定解除成功、false：設定解除失敗
-	function obj:unsubscribeFromRef(self, properties)
+	function obj:unsubscribeFromRef(properties)
 		self._rtcout:RTC_TRACE("unsubscribeFromRef()")
 		local index = NVUtil.find_index(properties,
 										"dataport.data_service.inport_ref")
@@ -246,7 +247,7 @@ InPortDSConsumer.new = function()
 
 		local obj_ptr = self:_ptr(true)
 
-		if obj_ptr == nil or not NVUtil._is_equivalent(obj_ptr, obj) then
+		if obj_ptr == nil or not NVUtil._is_equivalent(obj_ptr, obj, obj_ptr.getObjRef, obj.getObjRef) then
 			return false
 		end
 
@@ -256,6 +257,7 @@ InPortDSConsumer.new = function()
 
 	-- RTC::PortStatusをデータポートステータスに変換
 	function obj:convertReturnCode(ret)
+		
 		if ret == self._PortStatus.PORT_OK then
 			return DataPortStatus.PORT_OK
 

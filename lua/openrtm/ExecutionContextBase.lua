@@ -531,10 +531,46 @@ ExecutionContextBase.new = function(name)
 	function obj:get_kind()
 		return self:getKind()
 	end
+	function obj:getKind()
+		local kind_ = self._profile:getKind()
+    	self._rtcout:RTC_TRACE("getKind() = %s", self:getKindString(kind_))
+    	kind_ = self:onGetKind(kind_)
+    	self._rtcout:RTC_DEBUG("onGetKind() returns %s", self:getKindString(kind_))
+    	return kind_
+	end
 	-- RTCの追加
 	-- @param comp RTC
 	-- @return リターンコード
 	function obj:addComponent(comp)
+		self._rtcout:RTC_TRACE("addComponent()")
+		local ret_ = self:onAddingComponent(comp)
+		if ret_ ~= self._ReturnCode_t.RTC_OK then
+			self._rtcout:RTC_ERROR("Error: onAddingComponent(). RTC is not attached.")
+			return ret_
+		end
+		
+		ret_ = self._worker:addComponent(comp)
+		if ret_ ~= self._ReturnCode_t.RTC_OK then
+		  	self._rtcout:RTC_ERROR("Error: ECWorker addComponent() faild.")
+			return ret_
+		end
+		
+		ret_ = self._profile:addComponent(comp)
+		if ret_ ~= self._ReturnCode_t.RTC_OK then
+			self._rtcout:RTC_ERROR("Error: ECProfile addComponent() faild.")
+			return ret_
+		end
+		
+		ret_ = self:onAddedComponent(comp)
+		if ret_ ~= self._ReturnCode_t.RTC_OK then
+			self._rtcout:RTC_ERROR("Error: onAddedComponent() faild.")
+			self._rtcout:RTC_INFO("Removing attached RTC.")
+			self._worker:removeComponent(comp)
+			self._profile:removeComponent(comp)
+			return ret_
+		end
+	
+		self._rtcout:RTC_INFO("Component has been added to this EC.")
 		return self._ReturnCode_t.RTC_OK
 	end
 	-- RTCの追加
@@ -547,6 +583,35 @@ ExecutionContextBase.new = function(name)
 	-- @param comp RTC
 	-- @return リターンコード
 	function obj:removeComponent(comp)
+		self._rtcout:RTC_TRACE("removeComponent()")
+		local ret_ = self:onRemovingComponent(comp)
+		if ret_ ~= self._ReturnCode_t.RTC_OK then
+			self._rtcout:RTC_ERROR("Error: onRemovingComponent(). RTC will not not attached.")
+			return ret_
+		end
+	
+		ret_ = self._worker:removeComponent(comp)
+		if ret_ ~= self._ReturnCode_t.RTC_OK then
+			self._rtcout:RTC_ERROR("Error: ECWorker removeComponent() faild.")
+			return ret_
+		end
+	
+		ret_ = self._profile:removeComponent(comp)
+		if ret_ ~= self._ReturnCode_t.RTC_OK then
+			self._rtcout:RTC_ERROR("Error: ECProfile removeComponent() faild.")
+			return ret_
+		end
+	
+		ret_ = self:onRemovedComponent(comp)
+		if ret_ ~= self._ReturnCode_t.RTC_OK then
+			self._rtcout:RTC_ERROR("Error: onRemovedComponent() faild.")
+			self._rtcout:RTC_INFO("Removing attached RTC.")
+			self._worker:removeComponent(comp)
+			self._profile:removeComponent(comp)
+			return ret_
+		end
+	
+		self._rtcout:RTC_INFO("Component has been removeed to this EC.")
 		return self._ReturnCode_t.RTC_OK
 	end
 	-- RTCの削除

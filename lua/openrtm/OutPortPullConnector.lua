@@ -17,6 +17,9 @@ local CdrBufferFactory = CdrBufferBase.CdrBufferFactory
 local OutPortProvider = require "openrtm.OutPortProvider"
 local OutPortProviderFactory = OutPortProvider.OutPortProviderFactory
 
+local ConnectorListener = require "openrtm.ConnectorListener"
+local ConnectorListenerType = ConnectorListener.ConnectorListenerType
+
 
 -- Pull型通信OutPortConnectorの初期化
 -- @param info プロファイル
@@ -93,14 +96,14 @@ OutPortPullConnector.new = function(info, provider, listeners, buffer)
 	-- コネクタ接続時のコールバック呼び出し
 	function obj:onConnect()
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connector_[ConnectorListenerType.ON_CONNECT]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_CONNECT]:notify(self._profile)
 		end
 	end
 
 	-- コネクタ切断時のコールバック呼び出し
 	function obj:onDisconnect()
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connector_[ConnectorListenerType.ON_DISCONNECT]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_DISCONNECT]:notify(self._profile)
 		end
 	end
 

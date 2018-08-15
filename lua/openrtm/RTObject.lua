@@ -28,6 +28,15 @@ local StringUtil = require "openrtm.StringUtil"
 local NVUtil = require "openrtm.NVUtil"
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 local RTCUtil = require "openrtm.RTCUtil"
+local PreComponentActionListenerType = ComponentActionListener.PreComponentActionListenerType
+local PostComponentActionListenerType = ComponentActionListener.PostComponentActionListenerType
+local PortActionListenerType = ComponentActionListener.PortActionListenerType
+local ExecutionContextActionListenerType = ComponentActionListener.ExecutionContextActionListenerType
+local PreComponentActionListener = ComponentActionListener.PreComponentActionListener
+local PostComponentActionListener = ComponentActionListener.PostComponentActionListener
+local PortActionListener = ComponentActionListener.PortActionListener
+local ExecutionContextActionListener = ComponentActionListener.ExecutionContextActionListener
+local ComponentActionListeners = ComponentActionListener.ComponentActionListeners
 
 local uuid = require "uuid"
 
@@ -111,6 +120,18 @@ ec_find.new = function(_ec)
 		end
 
 		return ret
+	end
+	setmetatable(obj, {__call=call_func})
+	return obj
+end
+
+
+local svc_name = function(_id)
+	local obj = {}
+	obj._id = _id
+
+	local call_func = function(self, prof)
+		return (self._id == prof.id)
 	end
 	setmetatable(obj, {__call=call_func})
 	return obj
@@ -479,6 +500,7 @@ RTObject.new = function(manager)
 			self._configsets:update("default")
 			self._rtcout:RTC_INFO("Initial active configuration set is default-set.")
 		end
+		self:postOnInitialize(0)
 		return ret
 	end
 
@@ -703,129 +725,234 @@ RTObject.new = function(manager)
     -- 全ポート書き込み
 	function obj:writeAll()
 		self._rtcout:RTC_TRACE("writeAll()")
-    end
+	end
+	
+
+	function obj:addPreComponentActionListener(listener_type, memfunc, autoclean)
+		if autoclean == nil then
+			autoclean = true
+		end
+		local Noname = {}
+		
+		Noname.new = function(memfunc)
+			local _obj = {}
+			setmetatable(_obj, {__index=ComponentActionListener.PreComponentActionListener.new()})
+			_obj._memfunc = memfunc
+			function _obj:call(ec_id)
+				self._memfunc(ec_id)
+			end
+			return _obj
+		end
+
+		listener = Noname.new(memfunc)
+		self._actionListeners.preaction_[listener_type]:addListener(listener, autoclean)
+		return listener
+	end
+
+	function obj:removePreComponentActionListener(listener_type, listener)
+		self._actionListeners.preaction_[listener_type]:removeListener(listener)
+	end
+
+
+	function obj:addPostComponentActionListener(listener_type, memfunc, autoclean)
+		if autoclean == nil then
+			autoclean = true
+		end
+		local Noname = {}
+		
+		Noname.new = function(memfunc)
+			local _obj = {}
+			setmetatable(_obj, {__index=ComponentActionListener.PostComponentActionListener.new()})
+			_obj._memfunc = memfunc
+			function _obj:call(ec_id)
+				self._memfunc(ec_id)
+			end
+			return _obj
+		end
+
+		listener = Noname.new(memfunc)
+		self._actionListeners.postaction_[listener_type]:addListener(listener, autoclean)
+		return listener
+	end
+
+	function obj:removePostComponentActionListener(listener_type, listener)
+		self._actionListeners.postaction_[listener_type]:removeListener(listener)
+	end
+
+
+
+	function obj:addPortActionListener(listener_type, memfunc, autoclean)
+		if autoclean == nil then
+			autoclean = true
+		end
+		local Noname = {}
+		Noname.new = function(memfunc)
+			local _obj = {}
+			setmetatable(_obj, {__index=ComponentActionListener.PortActionListener.new()})
+			_obj._memfunc = memfunc
+			function _obj:call(ec_id)
+				self._memfunc(ec_id)
+			end
+			return _obj
+		end
+
+		listener = Noname.new(memfunc)
+		self._actionListeners.portaction_[listener_type]:addListener(listener, autoclean)
+		return listener
+	end
+
+	function obj:removePortActionListener(listener_type, listener)
+		self._actionListeners.postaction_[listener_type]:removeListener(listener)
+	end
+
+
+
+	function obj:addExecutionContextActionListener(listener_type, memfunc, autoclean)
+		if autoclean == nil then
+			autoclean = true
+		end
+		local Noname = {}
+		Noname.new = function(memfunc)
+			local _obj = {}
+			setmetatable(_obj, {__index=ComponentActionListener.ExecutionContextActionListener.new()})
+			_obj._memfunc = memfunc
+			function _obj:call(ec_id)
+				self._memfunc(ec_id)
+			end
+			return _obj
+		end
+
+		listener = Noname.new(memfunc)
+		self._actionListeners.ecaction_[listener_type]:addListener(listener, autoclean)
+		return listener
+	end
+
+	function obj:removeExecutionContextActionListener(listener_type, listener)
+		self._actionListeners.ecaction_[listener_type]:removeListener(listener)
+	end
+
 
 
 	-- 初期化前のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:preOnInitialize(ec_id)
-		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_INITIALIZE]:notify(ec_id)
+		self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_INITIALIZE]:notify(ec_id)
 	end
 	-- 終了前のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:preOnFinalize(ec_id)
-		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_FINALIZE]:notify(ec_id)
+		self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_FINALIZE]:notify(ec_id)
 	end
 	-- 実行コンテキスト開始前のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:preOnStartup(ec_id)
-		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_STARTUP]:notify(ec_id)
+		self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_STARTUP]:notify(ec_id)
 	end
 	-- 実行コンテキスト停止前のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:preOnShutdown(ec_id)
-		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_SHUTDOWN]:notify(ec_id)
+		self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_SHUTDOWN]:notify(ec_id)
 	end
 	-- アクティブ化前のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:preOnActivated(ec_id)
-		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_ACTIVATED]:notify(ec_id)
+		self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_ACTIVATED]:notify(ec_id)
 	end
 	-- 非アクティブ化前のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:preOnDeactivated(ec_id)
-		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_DEACTIVATED]:notify(ec_id)
+		self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_DEACTIVATED]:notify(ec_id)
 	end
 	-- エラー状態遷移前のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:preOnAborting(ec_id)
-		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_ABORTING]:notify(ec_id)
+		self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_ABORTING]:notify(ec_id)
 	end
 	-- エラー状態コールバック関数実行前のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:preOnError(ec_id)
-		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_ERROR]:notify(ec_id)
+		self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_ERROR]:notify(ec_id)
 	end
 	-- リセット実行前のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:preOnReset(ec_id)
-		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_RESET]:notify(ec_id)
+		self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_RESET]:notify(ec_id)
 	end
 	-- アクティブ状態コールバック関数実行前のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:preOnExecute(ec_id)
-		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_EXECUTE]:notify(ec_id)
+		self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_EXECUTE]:notify(ec_id)
 	end
 	-- 状態更新前のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:preOnStateUpdate(ec_id)
-		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_STATE_UPDATE]:notify(ec_id)
+		self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_STATE_UPDATE]:notify(ec_id)
 	end
 	-- 実行周期変更前のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:preOnRateChanged(ec_id)
-		--self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_RATE_CHANGED]:notify(ec_id)
+		self._actionListeners.preaction_[PreComponentActionListenerType.PRE_ON_RATE_CHANGED]:notify(ec_id)
 	end
 
 	-- 初期化後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnInitialize(ec_id, ret)
-		--self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_INITIALIZE]:notify(ec_id, ret)
+		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_INITIALIZE]:notify(ec_id, ret)
     end
 	-- 終了後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnFinalize(ec_id, ret)
-		--self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_FINALIZE]:notify(ec_id, ret)
+		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_FINALIZE]:notify(ec_id, ret)
     end
     -- 実行コンテキスト開始後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnStartup(ec_id, ret)
-		--self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_STARTUP]:notify(ec_id, ret)
+		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_STARTUP]:notify(ec_id, ret)
     end
     -- 実行コンテキスト停止後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnShutdown(ec_id, ret)
-		--self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_SHUTDOWN]:notify(ec_id, ret)
+		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_SHUTDOWN]:notify(ec_id, ret)
     end
     -- アクティブ化後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnActivated(ec_id, ret)
-		--self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_SHUTDOWN]:notify(ec_id, ret)
+		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_ACTIVATED]:notify(ec_id, ret)
     end
     -- 非アクティブ化後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnDeactivated(ec_id, ret)
-		--self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_DEACTIVATED]:notify(ec_id, ret)
+		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_DEACTIVATED]:notify(ec_id, ret)
     end
     -- エラー状態遷移後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnAborting(ec_id, ret)
-		--self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_ABORTING]:notify(ec_id, ret)
+		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_ABORTING]:notify(ec_id, ret)
     end
     -- エラー状態コールバック関数実行後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnError(ec_id, ret)
-		--self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_ERROR]:notify(ec_id, ret)
+		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_ERROR]:notify(ec_id, ret)
     end
     -- リセット実行後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnReset(ec_id, ret)
-		--self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_RESET]:notify(ec_id, ret)
+		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_RESET]:notify(ec_id, ret)
     end
     -- アクティブ状態コールバック関数実行後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnExecute(ec_id, ret)
-		--self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_EXECUTE]:notify(ec_id, ret)
+		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_EXECUTE]:notify(ec_id, ret)
     end
     -- 状態更新後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnStateUpdate(ec_id, ret)
-		--self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_STATE_UPDATE]:notify(ec_id, ret)
+		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_STATE_UPDATE]:notify(ec_id, ret)
     end
     -- 実行周期変更後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnRateChanged(ec_id, ret)
-		--self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_RATE_CHANGED]:notify(ec_id, ret)
+		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_RATE_CHANGED]:notify(ec_id, ret)
     end
 
 	-- コンフィギュレーションパラメータの変数をバインド
@@ -1111,22 +1238,23 @@ RTObject.new = function(manager)
 	-- ポート追加時のコールバック実行
 	-- @param pprof ポートプロファイル
 	function obj:onAddPort(pprof)
-		--self._actionListeners.portaction_[PortActionListenerType.ADD_PORT]:notify(pprof)
+		self._actionListeners.portaction_[PortActionListenerType.ADD_PORT]:notify(pprof)
     end
     -- ポート削除時のコールバック実行
 	-- @param pprof ポートプロファイル
 	function obj:onRemovePort(pprof)
-		--self._actionListeners.portaction_[PortActionListenerType.REMOVE_PORT]:notify(pprof)
+		self._actionListeners.portaction_[PortActionListenerType.REMOVE_PORT]:notify(pprof)
     end
     -- 実行コンテキストアタッチ時のコールバック実行
     -- @param ec_id 実行コンテキストのID
 	function obj:onAttachExecutionContext(ec_id)
-		--self._actionListeners.ecaction_[ExecutionContextActionListenerType.EC_ATTACHED]:notify(ec_id)
+		
+		self._actionListeners.ecaction_[ExecutionContextActionListenerType.EC_ATTACHED]:notify(ec_id)
     end
     -- 実行コンテキストデタッチ時のコールバック実行
     -- @param ec_id 実行コンテキストのID
 	function obj:onDetachExecutionContext(pprof)
-		--self._actionListeners.ecaction_[ExecutionContextActionListenerType.EC_DETACHED]:notify(ec_id)
+		self._actionListeners.ecaction_[ExecutionContextActionListenerType.EC_DETACHED]:notify(ec_id)
     end
 
 	-- 生存確認
@@ -1182,13 +1310,51 @@ RTObject.new = function(manager)
 	-- @param exec_context 実行コンテキスト
 	-- @return ID
 	function obj:attach_context(exec_context)
-		return -1
+		local ECOTHER_OFFSET = RTObject.ECOTHER_OFFSET
+		self._rtcout:RTC_TRACE("attach_context()")
+
+		local ecs = exec_context
+		if ecs == oil.corba.idl.null then
+			return -1
+		end
+		
+		
+		for i,oec in ipairs(self._ecOther) do
+			if oec == oil.corba.idl.null then
+				self._ecOther[i] = ecs
+				local ec_id = i + ECOTHER_OFFSET
+				self:onAttachExecutionContext(ec_id)
+				return ec_id
+			end
+		end
+		table.insert(self._ecOther,ecs)
+		local ec_id = tonumber(#self._ecOther - 1 + ECOTHER_OFFSET)
+		self:onAttachExecutionContext(ec_id)
+		return ec_id
 	end
 	-- 実行コンテキストのデタッチ
 	-- @param ec_id 実行コンテキストのID
 	-- @return リターンコードリターンコード
 	function obj:detach_context(ec_id)
-		return self._ReturnCode_t.BAD_PARAMETER
+		
+		local ECOTHER_OFFSET = RTObject.ECOTHER_OFFSET
+    	self._rtcout:RTC_TRACE("detach_context(%d)", ec_id)
+    	local len_ = #self._ecOther
+
+		if (tonumber(ec_id) < tonumber(ECOTHER_OFFSET)) or (tonumber(ec_id - ECOTHER_OFFSET) > len_) then
+			return self._ReturnCode_t.BAD_PARAMETER
+		end
+    
+    	local index = tonumber(ec_id - ECOTHER_OFFSET)
+
+    	if index < 0 or self._ecOther[index] == oil.corba.idl.null then
+			return self._ReturnCode_t.BAD_PARAMETER
+		end
+    
+   
+    	self._ecOther[index] = oil.corba.idl.null
+    	self:onDetachExecutionContext(ec_id)
+		return self._ReturnCode_t.RTC_OK
 	end
 
 	-- ポート一覧取得
@@ -1280,6 +1446,44 @@ RTObject.new = function(manager)
 		self._eclist = {}
 	end
 
+	function obj:addSdoServiceProvider(prof, provider)
+		return self._sdoservice:addSdoServiceProvider(prof, provider)
+	end
+
+	function obj:removeSdoServiceProvider(id)
+		return self._sdoservice.removeSdoServiceProvider(id)
+	end
+
+	function obj:addSdoServiceConsumer(prof)
+		return self._sdoservice.addSdoServiceConsumer(prof)
+	end
+
+	function obj:removeSdoServiceConsumer(id)
+		return self._sdoservice.removeSdoServiceConsumer(id)
+	end
+
+
+	function obj:get_sdo_service(_id)
+		self._rtcout:RTC_TRACE("get_sdo_service(%s)", _id)
+		self._sdoSvcProfiles = self._SdoConfigImpl:getServiceProfiles()
+	
+		if _id == "" then
+			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+				description="get_service(): Empty name."
+			})
+		end
+	
+		local index = CORBA_SeqUtil.find(self._sdoSvcProfiles, svc_name(_id))
+	
+		if index < 0 then
+			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+				description="get_service(): Not found"
+			})
+		end
+		
+	
+		return self._sdoSvcProfiles[index].service
+	end
 
 	obj:setInstanceName(uuid())
 

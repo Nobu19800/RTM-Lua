@@ -18,6 +18,11 @@ local InPortProviderFactory = InPortProvider.InPortProviderFactory
 local CdrBufferBase = require "openrtm.CdrBufferBase"
 local CdrBufferFactory = CdrBufferBase.CdrBufferFactory
 
+
+local ConnectorListener = require "openrtm.ConnectorListener"
+local ConnectorListenerType = ConnectorListener.ConnectorListenerType
+local ConnectorDataListenerType = ConnectorListener.ConnectorDataListenerType
+
 -- Push型通信InPortConnectorの初期化
 -- @param info プロファイル
 -- 「buffer」という要素名にバッファの設定を格納
@@ -44,25 +49,28 @@ InPortPushConnector.new = function(info, provider, listeners, buffer)
 		if self._buffer == nil then
 			return DataPortStatus.PRECONDITION_NOT_MET
 		end
-
-		if type(data) == "table" then
-			--print(self._buffer.write, self._buffer.read)
-			--print(self._buffer)
-			ret = self._buffer:read(data)
-			--print(data._data)
-		else
-			local tmp = {_data=data}
-			ret = self._buffer:read(tmp)
+		local cdr = {_data=""}
+		ret = self._buffer:read(cdr)
+		
+		if self._dataType == nil then
+			return BufferStatus.PRECONDITION_NOT_MET
 		end
 
+		if ret == BufferStatus.BUFFER_OK then
+			local Manager = require "openrtm.Manager"
+			data._data = Manager:instance():cdrUnmarshal(cdr._data, self._dataType)
+		end
 
 		if ret == BufferStatus.BUFFER_OK then
+			self:onBufferRead(cdr._data)
 			return DataPortStatus.PORT_OK
 
 		elseif ret == BufferStatus.BUFFER_EMPTY then
+			self:onBufferEmpty()
 			return DataPortStatus.BUFFER_EMPTY
 
 		elseif ret == BufferStatus.TIMEOUT then
+			self:onBufferReadTimeout()
 			return DataPortStatus.BUFFER_TIMEOUT
 
 		elseif ret == BufferStatus.PRECONDITION_NOT_MET then
@@ -117,29 +125,42 @@ InPortPushConnector.new = function(info, provider, listeners, buffer)
 		--print(self._dataType)
 		--print("write")
 
-		if self._dataType == nil then
-			return BufferStatus.PRECONDITION_NOT_MET
-		end
 
-		local Manager = require "openrtm.Manager"
-
-		local _data = Manager:instance():cdrUnmarshal(data, self._dataType)
 		--print(_data.data)
-		return self._buffer:write(_data)
+		return self._buffer:write(data)
 	end
 
 	-- コネクタ接続時のコールバック呼び出し
 	function obj:onConnect()
 		--print("onConnect")
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connector_[ConnectorListenerType.ON_CONNECT]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_CONNECT]:notify(self._profile)
 		end
 	end
 
 	-- コネクタ切断時のコールバック呼び出し
 	function obj:onDisconnect()
 		if self._listeners and self._profile then
-			--self._listeners.connector_[OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_DISCONNECT]:notify(self._profile)
+		end
+	end
+	
+	function obj:onBufferRead(data)
+		
+		if self._listeners and self._profile then
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_READ]:notify(self._profile, data)
+		end
+	end
+	
+	function obj:onBufferEmpty()
+		if self._listeners and self._profile then
+			self._listeners.connector_[ConnectorListenerType.ON_BUFFER_EMPTY]:notify(self._profile)
+		end
+	end
+	
+	function obj:onBufferReadTimeout()
+		if self._listeners and self._profile then
+			self._listeners.connector_[ConnectorListenerType.ON_BUFFER_READ_TIMEOUT]:notify(self._profile)
 		end
     end
 

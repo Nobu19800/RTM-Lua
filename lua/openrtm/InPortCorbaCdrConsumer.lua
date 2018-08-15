@@ -25,6 +25,7 @@ local RTCUtil = require "openrtm.RTCUtil"
 
 
 
+
 -- CorbaCdrインターフェースのInPortConsumerオブジェクト初期化
 -- @return CorbaCdrインターフェースのInPortConsumerオブジェクト
 InPortCorbaCdrConsumer.new = function()
@@ -55,8 +56,9 @@ InPortCorbaCdrConsumer.new = function()
 			function()
 				local inportcdr = self:getObject()
 				if inportcdr ~= oil.corba.idl.null then
-					ret = self:convertReturnCode(inportcdr:put(data))
-					ret = NVUtil.getPortStatus(ret)
+					ret = NVUtil.getPortStatus(inportcdr:put(data))
+					ret = self:convertReturnCode(ret)
+					
 					return
 				end
 				ret = DataPortStatus.CONNECTION_LOST
@@ -216,7 +218,7 @@ InPortCorbaCdrConsumer.new = function()
 		local orb = Manager:instance():getORB()
 		local var = RTCUtil.newproxy(orb, ior,"IDL:openrtm.aist.go.jp/OpenRTM/InPortCdr:1.0")
 
-		if not NVUtil._is_equivalent(self:_ptr(true), var) then
+		if not NVUtil._is_equivalent(self:_ptr(true), var, self:_ptr(true).getObjRef, var.getObjRef) then
 			self._rtcout:RTC_ERROR("connector property inconsistency")
 			return false
 		end
@@ -249,7 +251,7 @@ InPortCorbaCdrConsumer.new = function()
 
 		local obj_ptr = self:_ptr(true)
 
-		if obj_ptr == nil or not NVUtil._is_equivalent(obj_ptr, obj) then
+		if obj_ptr == nil or not NVUtil._is_equivalent(obj_ptr, obj, obj_ptr.getObjRef, obj.getObjRef) then
 			return false
 		end
 

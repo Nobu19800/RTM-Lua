@@ -51,6 +51,7 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
     
 
 	-- ポート名取得
+	-- ※プロファイルのポート名ではない
 	-- @return ポート名
 	function obj:name()
 		return self._name

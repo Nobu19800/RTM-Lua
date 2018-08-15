@@ -302,10 +302,23 @@ StringUtil.table_count = function(tbl, value)
 	local count = 0
 	for i, v in ipairs(tbl) do
 		if value == v then
-			count = 1
+			count = count+1
 		end
 	end
 	return count
+end
+
+-- テーブルに指定の値が何番目に含まれているかを取得
+-- @param tbl テーブル
+-- @param value 値
+-- @return キー
+StringUtil.table_index = function(tbl, value)
+	for i, v in ipairs(tbl) do
+		if value == v then
+			return i
+		end
+	end
+	return -1
 end
 
 -- テーブルに値が含まれるかの確認

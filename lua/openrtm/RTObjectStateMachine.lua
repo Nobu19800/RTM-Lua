@@ -276,7 +276,16 @@ RTObjectStateMachine.new = function(id, comp)
 		if self._modeVar:on_mode_changed(self._id) ~= self._ReturnCode_t.RTC_OK then
 			self._sm:goTo(self._LifeCycleState.ERROR_STATE+1)
 		end
-    end
+	end
+	
+	function obj:getRTObject()
+		return self._rtobj
+	end
+
+	function obj:getExecutionContextHandle()
+		
+		return self._id
+	end
 
 	--print(comp)
 	obj:setComponentAction(comp)

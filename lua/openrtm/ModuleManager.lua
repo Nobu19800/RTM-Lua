@@ -70,6 +70,7 @@ local DLLPred = function(argv)
 	-- @return true：一致
 	local call_func = function(self, dll)
 		--print(self._filepath, dll.properties:getProperty("file_path"))
+		--print(self._import_name, dll.properties:getProperty("import_name"))
 		return (self._import_name == dll.properties:getProperty("import_name"))
 	end
 	setmetatable(obj, {__call=call_func})
@@ -231,7 +232,7 @@ ModuleManager.new = function(prop)
 		end
 
 
-
+		
 		if not self:fileExist(file_path) then
 
 			error(ModuleManager.FileNotFound.new(file_name))
@@ -308,6 +309,8 @@ ModuleManager.new = function(prop)
 			else
 				f = tostring(path).."/"..tostring(file_name)
 			end
+			
+			
 			--print(self:fileExist(f))
 			if self:fileExist(f) then
 				f = string.gsub(f,"\\","/")
@@ -391,6 +394,7 @@ ModuleManager.new = function(prop)
 		local dlls = self._modules:getObjects()
 		for k,dll in ipairs(dlls) do
 			local ident = dll.properties:getProperty("import_name")
+			--print(ident)
 			self._modules:unregisterObject(ident)
 		end
 	end
@@ -413,8 +417,19 @@ ModuleManager.new = function(prop)
 		obj._configPath[k] = StringUtil.eraseHeadBlank(v)
 	end
 	obj._loadPath = StringUtil.split(prop:getProperty(MOD_LOADPTH,"./"), ",")
+	local system_path = StringUtil.split(package.path,";")
+
 	for k, v in pairs(obj._loadPath) do
 		obj._loadPath[k] = StringUtil.eraseHeadBlank(v)
+	end
+
+	for k, v in pairs(system_path) do
+		local path = StringUtil.eraseHeadBlank(v)
+		if path ~= "" then
+			path = StringUtil.dirname(path)
+			table.insert(obj._loadPath, path)
+		end
+		
 	end
 
 	obj._absoluteAllowed = StringUtil.toBool(prop:getProperty(ALLOW_ABSPATH),

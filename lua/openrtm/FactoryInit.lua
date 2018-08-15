@@ -23,10 +23,11 @@ local FactoryInit= function()
 	local OutPortDSConsumer = require "openrtm.OutPortDSConsumer"
 	local NumberingPolicy = require "openrtm.NumberingPolicy"
 	local ProcessUniquePolicy = NumberingPolicy.ProcessUniquePolicy
+	local NamingServiceNumberingPolicy = require "openrtm.NamingServiceNumberingPolicy"
+	local NodeNumberingPolicy = require "openrtm.NodeNumberingPolicy"
 	local CdrRingBuffer = require "openrtm.CdrRingBuffer"
 	local PublisherFlush = require "openrtm.PublisherFlush"
 	local LogstreamFile = require "openrtm.LogstreamFile"
-	
 
 	CdrRingBuffer.Init()
 
@@ -39,6 +40,8 @@ local FactoryInit= function()
 	OutPortDSConsumer.Init()
 	OutPortDSProvider.Init()
 	ProcessUniquePolicy.Init()
+	NamingServiceNumberingPolicy.Init()
+	NodeNumberingPolicy.Init()
 
 	PublisherFlush.Init()
 	

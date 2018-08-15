@@ -1,6 +1,6 @@
 ---------------------------------
 --! @file Properties.lua
---! @brief ƒvƒƒpƒeƒB‘€ìŠÖ”’è‹`
+--! @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£æ“ä½œé–¢æ•°å®šç¾©
 ---------------------------------
 
 --[[
@@ -13,8 +13,8 @@ local Properties= {}
 local StringUtil = require "openrtm.StringUtil"
 --string = require string
 
--- ƒvƒƒpƒeƒB‰Šú‰»
--- @param argv argv.propFƒRƒs[Œ³‚ÌƒvƒƒpƒeƒBAargv.keyEargv.valueFƒL[‚Æ’lAargv.defaults_mapFƒe[ƒuƒ‹
+-- ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£åˆæœŸåŒ–
+-- @param argv argv.propï¼šã‚³ãƒ”ãƒ¼å…ƒã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã€argv.keyãƒ»argv.valueï¼šã‚­ãƒ¼ã¨å€¤ã€argv.defaults_mapï¼šãƒ†ãƒ¼ãƒ–ãƒ«
 Properties.new = function(argv)
 	local obj = {}
 	function obj:init()
@@ -70,20 +70,20 @@ Properties.new = function(argv)
 		end
 		]]
 	end
-	-- ƒL[æ“¾
-	-- @return ƒL[
+	-- ã‚­ãƒ¼å–å¾—
+	-- @return ã‚­ãƒ¼
 	function obj:getName()
 		return self.name
 	end
-	-- ’læ“¾
-	-- @return ’l
+	-- å€¤å–å¾—
+	-- @return å€¤
 	function obj:getValue()
 		return self.value
 	end
-	-- ƒfƒtƒHƒ‹ƒg’lİ’è
-	-- @param key ƒL[
-	-- @param default ƒfƒtƒHƒ‹ƒg’l
-	-- @return ’l
+	-- ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤è¨­å®š
+	-- @param key ã‚­ãƒ¼
+	-- @param default ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
+	-- @return å€¤
 	function obj:getDefaultValue(key, default)
 		if default ~= nil then
 			local keys = StringUtil.split(key, "%.")
@@ -106,10 +106,15 @@ Properties.new = function(argv)
 			end
 		end
 	end
-	-- ƒvƒƒpƒeƒB’læ“¾
-	-- @param key ƒL[
-	-- @param default ƒfƒtƒHƒ‹ƒg’l
-	-- @return ƒvƒƒpƒeƒB
+	-- ãƒ«ãƒ¼ãƒˆè¦ç´ ã®å–å¾—
+	-- @return ãƒ«ãƒ¼ãƒˆè¦ç´ 
+	function obj:getRoot()
+		return self.root
+	end
+	-- ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£å€¤å–å¾—
+	-- @param key ã‚­ãƒ¼
+	-- @param default ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
+	-- @return ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	function obj:getProperty(key, default)
 		--print(key)
 		if default == nil then
@@ -132,9 +137,9 @@ Properties.new = function(argv)
 			end
 		end
 	end
-	-- ƒfƒtƒHƒ‹ƒg’læ“¾
-	-- @param key ƒL[
-	-- @return ƒfƒtƒHƒ‹ƒg’l
+	-- ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤å–å¾—
+	-- @param key ã‚­ãƒ¼
+	-- @return ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
 	function obj:getDefault(key)
 		local keys = StringUtil.split(key, "%.")
 		local node = self:_getNode(keys, 1, self)
@@ -143,10 +148,10 @@ Properties.new = function(argv)
 		end
 		return self.empty
 	end
-	-- ƒvƒƒpƒeƒBİ’è
-	-- @param key ƒL[
-	-- @param value ’l
-	-- @return ƒvƒƒpƒeƒB
+	-- ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£è¨­å®š
+	-- @param key ã‚­ãƒ¼
+	-- @param value å€¤
+	-- @return ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	function obj:setProperty(key, value)
 		--print(self.leaf)
 		if value ~= nil then
@@ -174,10 +179,10 @@ Properties.new = function(argv)
 		end
 		return self.root
 	end
-	-- ƒfƒtƒHƒ‹ƒg’lİ’è
-	-- @param key ƒL[
-	-- @param value ƒfƒtƒHƒ‹ƒg’l
-	-- @return ’l
+	-- ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤è¨­å®š
+	-- @param key ã‚­ãƒ¼
+	-- @param value ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
+	-- @return å€¤
 	function obj:setDefault(key, value)
 		local keys = StringUtil.split(key, "%.")
 		local curr = self
@@ -200,10 +205,10 @@ Properties.new = function(argv)
 		curr.default_value = value
 		return value
 	end
-	--ƒfƒtƒHƒ‹ƒg’l‚ğƒe[ƒuƒ‹‚©‚çİ’è
-	-- @param defaults ƒfƒtƒHƒ‹ƒg’l‚Ìƒe[ƒuƒ‹
-	-- @param num Å‘å”
-	-- @return ƒvƒƒpƒeƒB
+	--ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã‚’ãƒ†ãƒ¼ãƒ–ãƒ«ã‹ã‚‰è¨­å®š
+	-- @param defaults ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã®ãƒ†ãƒ¼ãƒ–ãƒ«
+	-- @param num æœ€å¤§æ•°
+	-- @return ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	function obj:setDefaults(defaults, num)
 		if num == nil then
 			num = 10000
@@ -235,15 +240,15 @@ Properties.new = function(argv)
 		end
 		return self.leaf
 	end
-	-- w’èƒXƒgƒŠ[ƒ€‚ÉƒvƒƒpƒeƒB‚ğo—Í
-	-- @param out ƒAƒEƒgƒXƒgƒŠ[ƒ€
+	-- æŒ‡å®šã‚¹ãƒˆãƒªãƒ¼ãƒ ã«ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å‡ºåŠ›
+	-- @param out ã‚¢ã‚¦ãƒˆã‚¹ãƒˆãƒªãƒ¼ãƒ 
 	function obj:list(out)
 		self:_store(out, "", self)
 		return
 	end
-	-- w’èƒXƒgƒŠ[ƒ€‚©‚çƒvƒƒpƒeƒB‚ğ“ü—Í
-	-- @param inStream ƒCƒ“ƒXƒgƒŠ[ƒ€
-	-- @return ƒvƒƒpƒeƒB
+	-- æŒ‡å®šã‚¹ãƒˆãƒªãƒ¼ãƒ ã‹ã‚‰ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å…¥åŠ›
+	-- @param inStream ã‚¤ãƒ³ã‚¹ãƒˆãƒªãƒ¼ãƒ 
+	-- @return ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	function obj:loadStream(inStream)
 		pline = ""
 		for i, readStr in inStream do
@@ -277,15 +282,15 @@ Properties.new = function(argv)
 		end
 		return self.leaf
 	end
-	-- w’èƒXƒgƒŠ[ƒ€‚Éƒwƒbƒ_‚ğ‹Lq‚µ‚½ƒvƒƒpƒeƒB‚ğo—Í
-	-- @param out ƒAƒEƒgƒXƒgƒŠ[ƒ€
-	-- @param header ƒwƒbƒ_
+	-- æŒ‡å®šã‚¹ãƒˆãƒªãƒ¼ãƒ ã«ãƒ˜ãƒƒãƒ€ã‚’è¨˜è¿°ã—ãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å‡ºåŠ›
+	-- @param out ã‚¢ã‚¦ãƒˆã‚¹ãƒˆãƒªãƒ¼ãƒ 
+	-- @param header ãƒ˜ãƒƒãƒ€
 	function obj:store(out, header)
 		out.write("#"..header.."\n")
 		self:_store(out, "", self)
 	end
-	-- ƒvƒƒpƒeƒB‚ÌƒL[ˆê——‚ğæ“¾
-	-- @return ƒL[ˆê——
+	-- ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ã‚­ãƒ¼ä¸€è¦§ã‚’å–å¾—
+	-- @return ã‚­ãƒ¼ä¸€è¦§
 	function obj:propertyNames()
 		local names = {}
 		for i, leaf in ipairs(self.leaf) do
@@ -293,14 +298,14 @@ Properties.new = function(argv)
 		end
 		return names
 	end
-	-- ƒvƒƒpƒeƒB‚ÌƒL[‚Ì”æ“¾
-	-- @return ƒL[‚Ì”
+	-- ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ã‚­ãƒ¼ã®æ•°å–å¾—
+	-- @return ã‚­ãƒ¼ã®æ•°
 	function obj:size()
 		return #self:propertyNames()
 	end
-	-- w’èƒL[‚Ìƒm[ƒh‚ğŒŸõ
-	-- @param key ƒL[
-	-- @return ƒm[ƒh
+	-- æŒ‡å®šã‚­ãƒ¼ã®ãƒãƒ¼ãƒ‰ã‚’æ¤œç´¢
+	-- @param key ã‚­ãƒ¼
+	-- @return ãƒãƒ¼ãƒ‰
 	function obj:findNode(key)
 		if key == nil then
 			return nil
@@ -312,9 +317,9 @@ Properties.new = function(argv)
 		--print(self:_getNode(keys, 1, self))
 		return self:_getNode(keys, 1, self)
 	end
-	-- w’èƒL[‚Ìƒm[ƒh‚ğæ“¾
-	-- @param key ƒL[
-	-- @return ƒm[ƒh
+	-- æŒ‡å®šã‚­ãƒ¼ã®ãƒãƒ¼ãƒ‰ã‚’å–å¾—
+	-- @param key ã‚­ãƒ¼
+	-- @return ãƒãƒ¼ãƒ‰
 	function obj:getNode(key)
 		if key == nil then
 			return self
@@ -329,9 +334,9 @@ Properties.new = function(argv)
 		--print(self:findNode(key), type(self:findNode(key)))
 		return self:findNode(key)
 	end
-	-- w’èƒL[‚Ìƒm[ƒh‚ğ¶¬
-	-- @param key ƒL[
-	-- @return trueF¶¬¬Œ÷AfalseF¶¬¸”s
+	-- æŒ‡å®šã‚­ãƒ¼ã®ãƒãƒ¼ãƒ‰ã‚’ç”Ÿæˆ
+	-- @param key ã‚­ãƒ¼
+	-- @return trueï¼šç”ŸæˆæˆåŠŸã€falseï¼šç”Ÿæˆå¤±æ•—
 	function obj:createNode(key)
 		if key == "" then
 			return false
@@ -342,9 +347,9 @@ Properties.new = function(argv)
 		self:setProperty(key,"")
 		return true
 	end
-	-- ƒm[ƒhíœ
-	-- @param leaf_name ƒL[
-	-- @return ƒvƒƒpƒeƒB
+	-- ãƒãƒ¼ãƒ‰å‰Šé™¤
+	-- @param leaf_name ã‚­ãƒ¼
+	-- @return ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	function obj:removeNode(leaf_name)
 		for i, leaf in ipairs(self.leaf) do
 			if leaf.name == leaf_name then
@@ -356,9 +361,9 @@ Properties.new = function(argv)
 		return nil
 
 	end
-	-- ƒL[‚Ì‘¶İŠm”F
-	-- @param key ƒL[
-	-- @return ƒvƒƒpƒeƒB
+	-- ã‚­ãƒ¼ã®å­˜åœ¨ç¢ºèª
+	-- @param key ã‚­ãƒ¼
+	-- @return ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	function obj:hasKey(key)
 		--print(self.leaf)
 		for i, leaf in ipairs(self.leaf) do
@@ -368,13 +373,13 @@ Properties.new = function(argv)
 		end
 		return nil
 	end
-	-- ƒvƒƒpƒeƒB‘Síœ
+	-- ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£å…¨å‰Šé™¤
 	function obj:clear()
 		self.leaf = {}
 	end
-	-- ƒvƒƒpƒeƒB‚Ì’Ç‰Á
-	-- @param prop ’Ç‰ÁŒ³‚ÌƒvƒƒpƒeƒB
-	-- @return ’Ç‰Áæ‚ÌƒvƒƒpƒeƒB
+	-- ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®è¿½åŠ 
+	-- @param prop è¿½åŠ å…ƒã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
+	-- @return è¿½åŠ å…ˆã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	function obj:mergeProperties(prop)
 		local keys = prop:propertyNames()
 		for i = 1, prop:size() do
@@ -382,11 +387,11 @@ Properties.new = function(argv)
 		end
 		return self
 	end
-	-- •¶š—ñ‚©‚çƒL[‚Æ’l‚ğæ‚èo‚µ
-	-- @param _str •¶š—ñ(key:value)
-	-- @param key ƒL[ˆê——
-	-- @param value ’lˆê——
-	-- @return ƒvƒƒpƒeƒB
+	-- æ–‡å­—åˆ—ã‹ã‚‰ã‚­ãƒ¼ã¨å€¤ã‚’å–ã‚Šå‡ºã—
+	-- @param _str æ–‡å­—åˆ—(key:value)
+	-- @param key ã‚­ãƒ¼ä¸€è¦§
+	-- @param value å€¤ä¸€è¦§
+	-- @return ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	function obj:splitKeyValue(_str, key, value)
 
 		local length = #_str
@@ -409,11 +414,11 @@ Properties.new = function(argv)
 		table.insert(value,"")
 		return self.leaf
 	end
-	-- •¶š—ñ‚ğ•ªŠ„‚·‚é
-	-- @param _str •¶š—ñ
-	-- @param delim •ªŠ„•¶š
-	-- @param value ’lˆê——
-	-- @return trueG•ªŠ„¬Œ÷AfalseF•ªŠ„¸”s
+	-- æ–‡å­—åˆ—ã‚’åˆ†å‰²ã™ã‚‹
+	-- @param _str æ–‡å­—åˆ—
+	-- @param delim åˆ†å‰²æ–‡å­—
+	-- @param value å€¤ä¸€è¦§
+	-- @return trueï¼›åˆ†å‰²æˆåŠŸã€falseï¼šåˆ†å‰²å¤±æ•—
 	function obj:split( _str, delim, value)
 		if _str == "" then
 			return false
@@ -428,11 +433,11 @@ Properties.new = function(argv)
 		end
 		return true
 	end
-	-- ƒm[ƒhæ“¾
-	-- @param keys ƒL[ˆê——
-	-- @param index ƒL[ˆê——‚ÌƒCƒ“ƒfƒbƒNƒX
-	-- @param curr Œ»İ‚Ìƒm[ƒh
-	-- @param Ÿ‚Ìƒm[ƒh
+	-- ãƒãƒ¼ãƒ‰å–å¾—
+	-- @param keys ã‚­ãƒ¼ä¸€è¦§
+	-- @param index ã‚­ãƒ¼ä¸€è¦§ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+	-- @param curr ç¾åœ¨ã®ãƒãƒ¼ãƒ‰
+	-- @param æ¬¡ã®ãƒãƒ¼ãƒ‰
 	function obj:_getNode(keys, index, curr)
 		--print(keys[index])
 		local _next = curr:hasKey(keys[index])
@@ -447,10 +452,10 @@ Properties.new = function(argv)
 			return _next
 		end
 	end
-	-- ƒm[ƒh‚ÌƒL[ˆê——æ“¾
-	-- @param names ƒL[ˆê——
-	-- @param curr_name Œ»İ’Tõ‚µ‚Ä‚¢‚éƒL[
-	-- @param curr Œ»İ‚Ìƒm[ƒh
+	-- ãƒãƒ¼ãƒ‰ã®ã‚­ãƒ¼ä¸€è¦§å–å¾—
+	-- @param names ã‚­ãƒ¼ä¸€è¦§
+	-- @param curr_name ç¾åœ¨æ¢ç´¢ã—ã¦ã„ã‚‹ã‚­ãƒ¼
+	-- @param curr ç¾åœ¨ã®ãƒãƒ¼ãƒ‰
 	function obj:_propertyNames(names, curr_name, curr)
 		if #curr.leaf > 0 then
 			for i = 1, #curr.leaf do
@@ -461,10 +466,10 @@ Properties.new = function(argv)
 			table.insert(names,curr_name)
 		end
 	end
-	-- w’èƒXƒgƒŠ[ƒ€‚ÉƒvƒƒpƒeƒB‚ğo—Í
-	-- @param out ƒAƒEƒgƒXƒgƒŠ[ƒ€
-	-- @param curr_name Œ»İ‚ÌƒL[
-	-- @param curr Œ»İ‚Ìƒm[ƒh
+	-- æŒ‡å®šã‚¹ãƒˆãƒªãƒ¼ãƒ ã«ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å‡ºåŠ›
+	-- @param out ã‚¢ã‚¦ãƒˆã‚¹ãƒˆãƒªãƒ¼ãƒ 
+	-- @param curr_name ç¾åœ¨ã®ã‚­ãƒ¼
+	-- @param curr ç¾åœ¨ã®ãƒãƒ¼ãƒ‰
 	function obj:_store(out, curr_name, curr)
 		if #curr.leaf > 0 then
 			for i = 1, #curr.leaf do
@@ -484,9 +489,9 @@ Properties.new = function(argv)
 			end
 		end
 	end
-	-- ƒCƒ“ƒfƒ“ƒg¶¬
-	-- @param index Œ»İ‚ÌƒCƒ“ƒfƒ“ƒg”
-	-- @return ƒCƒ“ƒfƒ“ƒg
+	-- ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆç”Ÿæˆ
+	-- @param index ç¾åœ¨ã®ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆæ•°
+	-- @return ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆ
 	function obj:indent(index)
 		--print("indent")
 		local space = ""
@@ -495,11 +500,11 @@ Properties.new = function(argv)
 		end
 		return space
 	end
-	-- ƒvƒƒpƒeƒB‚ğo—Í—p‚É•¶š—ñ‚É•ÏŠ·
-	-- @param out o—Í•¶š—ñ
-	-- @param curr Œ»İ‚Ìƒm[ƒh
-	-- @param index ƒCƒ“ƒfƒ“ƒg”
-	-- @return •¶š—ñ
+	-- ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å‡ºåŠ›ç”¨ã«æ–‡å­—åˆ—ã«å¤‰æ›
+	-- @param out å‡ºåŠ›æ–‡å­—åˆ—
+	-- @param curr ç¾åœ¨ã®ãƒãƒ¼ãƒ‰
+	-- @param index ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆæ•°
+	-- @return æ–‡å­—åˆ—
 	function obj:_dump(out, curr, index)
 		if index ~= 0 then
 			out[1] = out[1]..self:indent(index).."- "..curr.name
@@ -521,14 +526,14 @@ Properties.new = function(argv)
 		end
 		return out[1]
 	end
-	-- ƒvƒƒpƒeƒBæ“¾
-	-- @return ƒvƒƒpƒeƒB
+	-- ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£å–å¾—
+	-- @return ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	function obj:getLeaf()
 		return self.leaf
 	end
 
-	-- ƒtƒ@ƒCƒ‹ƒXƒgƒŠ[ƒ€‚©‚çƒvƒƒpƒeƒB‚ğİ’è
-	-- @param inStream ƒtƒ@ƒCƒ‹ƒXƒgƒŠ[ƒ€
+	-- ãƒ•ã‚¡ã‚¤ãƒ«ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‹ã‚‰ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’è¨­å®š
+	-- @param inStream ãƒ•ã‚¡ã‚¤ãƒ«ã‚¹ãƒˆãƒªãƒ¼ãƒ 
 	function obj:load(inStream)
 		local pline = ""
 		for readStr in inStream:lines() do
@@ -569,9 +574,9 @@ Properties.new = function(argv)
 			end
 		end
 	end
-	-- •¶š—ñ•ÏŠ·ŠÖ”
-	-- @param self ©g‚ÌƒIƒuƒWƒFƒNƒg
-	-- @return •ÏŠ·Œã‚Ì•¶š—ñ
+	-- æ–‡å­—åˆ—å¤‰æ›é–¢æ•°
+	-- @param self è‡ªèº«ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	-- @return å¤‰æ›å¾Œã®æ–‡å­—åˆ—
 	local str_func = function(self)
 		local str = {}
 		table.insert(str,"")

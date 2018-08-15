@@ -22,6 +22,56 @@ local consolein_spec = {
   ["lang_type"]="script"}
 
 
+-- 
+local DataListener = {}
+
+
+-- コネクタデータコールバック関数オブジェクト初期化
+-- @param name コールバック名
+-- @return 関数オブジェクト
+DataListener.new = function(name)
+	local obj = {}
+	setmetatable(obj, {__index=openrtm.ConnectorListener.ConnectorDataListener.new()})
+	obj._name = name
+	-- コネクタデータコールバック関数
+	-- @param info コネクタ情報
+	-- @param cdrdata データ(バイト列)
+	-- @return リスナステータス
+	function obj:call(info, cdrdata)
+		local data = self:__call__(info, cdrdata, "::RTC::TimedLong")
+		print("------------------------------")
+    	print("Listener:       "..self._name)
+    	print("Profile::name:  "..info.name)
+    	print("Profile::id:    "..info.id)
+    	print("Data:           "..data.data)
+    	print("------------------------------")
+		return openrtm.ConnectorListener.ConnectorListenerStatus.NO_CHANGE
+	end
+	return obj
+end
+
+
+-- コネクタコールバック関数オブジェクト初期化
+-- @param name コールバック名
+-- @return 関数オブジェクト
+local ConnListener = {}
+ConnListener.new = function(name)
+	local obj = {}
+	setmetatable(obj, {__index=openrtm.ConnectorListener.ConnectorListener.new()})
+	obj._name = name
+	-- コネクタコールバック関数
+	-- @param info コネクタ情報
+	-- @return リスナステータス
+	function obj:call(info)
+		print("------------------------------")
+    	print("Listener:       "..self._name)
+    	print("Profile::name:  "..info.name)
+    	print("Profile::id:    "..info.id)
+		print("------------------------------")
+		return openrtm.ConnectorListener.ConnectorListenerStatus.NO_CHANGE
+	end
+	return obj
+end
 
 
 local ConsoleIn = {}
@@ -37,6 +87,34 @@ ConsoleIn.new = function(manager)
 	obj._d_out = openrtm.RTCUtil.instantiateDataType("::RTC::TimedLong")
 	-- アウトポート生成
 	obj._outOut = openrtm.OutPort.new("out",obj._d_out,"::RTC::TimedLong")
+
+
+	-- コネクタコールバック関数の設定
+	obj._outOut:addConnectorListener(openrtm.ConnectorListener.ConnectorListenerType.ON_CONNECT,
+									ConnListener.new("ON_CONNECT"))
+	obj._outOut:addConnectorListener(openrtm.ConnectorListener.ConnectorListenerType.ON_DISCONNECT,
+									ConnListener.new("ON_DISCONNECT"))
+
+	obj._outOut:addConnectorDataListener(openrtm.ConnectorListener.ConnectorDataListenerType.ON_BUFFER_WRITE,
+										DataListener.new("ON_BUFFER_WRITE"))
+	obj._outOut:addConnectorDataListener(openrtm.ConnectorListener.ConnectorDataListenerType.ON_BUFFER_FULL,
+										DataListener.new("ON_BUFFER_FULL"))
+	obj._outOut:addConnectorDataListener(openrtm.ConnectorListener.ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT,
+										DataListener.new("ON_BUFFER_WRITE_TIMEOUT"))
+	obj._outOut:addConnectorDataListener(openrtm.ConnectorListener.ConnectorDataListenerType.ON_BUFFER_OVERWRITE,
+										DataListener.new("ON_BUFFER_OVERWRITE"))
+	obj._outOut:addConnectorDataListener(openrtm.ConnectorListener.ConnectorDataListenerType.ON_BUFFER_READ,
+										DataListener.new("ON_BUFFER_READ"))
+	obj._outOut:addConnectorDataListener(openrtm.ConnectorListener.ConnectorDataListenerType.ON_SEND,
+										DataListener.new("ON_SEND"))
+	obj._outOut:addConnectorDataListener(openrtm.ConnectorListener.ConnectorDataListenerType.ON_RECEIVED,
+										DataListener.new("ON_RECEIVED"))
+	obj._outOut:addConnectorDataListener(openrtm.ConnectorListener.ConnectorDataListenerType.ON_RECEIVER_FULL,
+										DataListener.new("ON_RECEIVER_FULL"))
+	obj._outOut:addConnectorDataListener(openrtm.ConnectorListener.ConnectorDataListenerType.ON_RECEIVER_TIMEOUT,
+										DataListener.new("ON_RECEIVER_TIMEOUT"))
+	obj._outOut:addConnectorDataListener(openrtm.ConnectorListener.ConnectorDataListenerType.ON_RECEIVER_ERROR,
+										DataListener.new("ON_RECEIVER_ERROR"))
 
 	-- 初期化時のコールバック関数
 	-- @return リターンコード

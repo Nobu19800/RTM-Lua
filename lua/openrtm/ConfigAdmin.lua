@@ -15,6 +15,9 @@ local ConfigurationListener = require "openrtm.ConfigurationListener"
 local ConfigurationListeners = ConfigurationListener.ConfigurationListeners
 local StringUtil = require "openrtm.StringUtil"
 
+local ConfigurationParamListenerType = ConfigurationListener.ConfigurationParamListenerType
+local ConfigurationSetListenerType = ConfigurationListener.ConfigurationSetListenerType
+local ConfigurationSetNameListenerType = ConfigurationListener.ConfigurationSetNameListenerType
 
 
 local Config = {}
@@ -191,7 +194,7 @@ ConfigAdmin.new = function(configsets)
 	-- コンフィギュレーションセットアクティブ化時のコールバック呼び出し
 	-- @param config_id コンフィギュレーションセットID
 	function obj:onActivateSet(config_id)
-		--self._listeners.configsetname_[OpenRTM_aist.ConfigurationSetNameListenerType.ON_ACTIVATE_CONFIG_SET]:notify(config_id)
+		self._listeners.configsetname_[ConfigurationSetNameListenerType.ON_ACTIVATE_CONFIG_SET]:notify(config_id)
 	end
 	-- コンフィギュレーションパラメータ更新
 	-- ID指定の場合は、指定IDのコンフィギュレーションセットの更新
@@ -314,6 +317,7 @@ ConfigAdmin.new = function(configsets)
 	end
 
 	-- コンフィギュレーションセットの設定
+	-- 指定コンフィギュレーションセットがない場合に、新規にノードは生成しない
 	-- @param config_set コンフィギュレーションセット
 	-- @return true：設定成功、false：設定失敗
 	function obj:setConfigurationSetValues(config_set)
@@ -346,6 +350,7 @@ ConfigAdmin.new = function(configsets)
 	end
 
 	-- コンフィギュレーションセット追加
+	-- 指定コンフィギュレーションセットがない場合に、新規にノードを生成する
 	-- @param configset コンフィギュレーションセット
 	-- @return true：追加成功、false：追加失敗
 	function obj:addConfigurationSet(configset)
@@ -438,7 +443,7 @@ ConfigAdmin.new = function(configsets)
 	function obj:setOnUpdate(cb)
 		print("setOnUpdate function is obsolete.")
 		print("Use addConfigurationSetNameListener instead.")
-		--self._listeners.configsetname_[ConfigurationSetNameListenerType.ON_UPDATE_CONFIG_SET]:addListener(cb, false)
+		self._listeners.configsetname_[ConfigurationSetNameListenerType.ON_UPDATE_CONFIG_SET]:addListener(cb, false)
     end
 
 	-- コンフィギュレーションパラメータ更新時コールバック設定
@@ -446,7 +451,7 @@ ConfigAdmin.new = function(configsets)
 	function obj:setOnUpdateParam(cb)
 		print("setOnUpdateParam function is obsolete.")
 		print("Use addConfigurationParamListener instead.")
-		--self._listeners.configparam_[ConfigurationParamListenerType.ON_UPDATE_CONFIG_PARAM]:addListener(cb, false)
+		self._listeners.configparam_[ConfigurationParamListenerType.ON_UPDATE_CONFIG_PARAM]:addListener(cb, false)
     end
 
 	-- コンフィギュレーションセット設定時コールバック設定
@@ -454,7 +459,7 @@ ConfigAdmin.new = function(configsets)
 	function obj:setOnSetConfigurationSet(cb)
 		print("setOnSetConfigurationSet function is obsolete.")
 		print("Use addConfigurationSetListener instead.")
-		--self._listeners.configset_[ConfigurationSetListenerType.ON_SET_CONFIG_SET]:addListener(cb, false)
+		self._listeners.configset_[ConfigurationSetListenerType.ON_SET_CONFIG_SET]:addListener(cb, false)
     end
 
 	-- コンフィギュレーションセット追加時コールバック設定
@@ -462,7 +467,7 @@ ConfigAdmin.new = function(configsets)
 	function obj:setOnAddConfigurationSet(cb)
 		print("setOnAddConfigurationSet function is obsolete.")
 		print("Use addConfigurationSetListener instead.")
-		--self._listeners.configset_[ConfigurationSetListenerType.ON_ADD_CONFIG_SET]:addListener(cb, false)
+		self._listeners.configset_[ConfigurationSetListenerType.ON_ADD_CONFIG_SET]:addListener(cb, false)
     end
 
 	-- コンフィギュレーションセット削除時コールバック設定
@@ -470,7 +475,7 @@ ConfigAdmin.new = function(configsets)
 	function obj:setOnRemoveConfigurationSet(cb)
 		print("setOnRemoveConfigurationSet function is obsolete.")
 		print("Use addConfigurationSetNameListener instead.")
-		--self._listeners.configsetname_[ConfigurationSetNameListenerType.ON_REMOVE_CONFIG_SET]:addListener(cb, False)
+		self._listeners.configsetname_[ConfigurationSetNameListenerType.ON_REMOVE_CONFIG_SET]:addListener(cb, False)
     end
 
 	-- アクティブなコンフィギュレーションセット設定時コールバック設定
@@ -478,7 +483,7 @@ ConfigAdmin.new = function(configsets)
 	function obj:setOnActivateSet(cb)
 		print("setOnActivateSet function is obsolete.")
 		print("Use addConfigurationSetNameListener instead.")
-		--self._listeners.configsetname_[ConfigurationSetNameListenerType.ON_ACTIVATE_CONFIG_SET]:addListener(cb, false)
+		self._listeners.configsetname_[ConfigurationSetNameListenerType.ON_ACTIVATE_CONFIG_SET]:addListener(cb, false)
     end
 
 	-- コンフィギュレーションパラメータコールバック設定
@@ -489,14 +494,14 @@ ConfigAdmin.new = function(configsets)
 		if autoclean == nil then
 			autoclean = true
 		end
-		--self._listeners.configparam_[_type]:addListener(listener, autoclean)
+		self._listeners.configparam_[_type]:addListener(listener, autoclean)
     end
 
 	-- コンフィギュレーションパラメータコールバック削除
 	-- @param _type コールバックの種別
 	-- @param listener コンフィギュレーションパラメータコールバック
 	function obj:removeConfigurationParamListener(_type, listener)
-		--self._listeners.configparam_[_type]:removeListener(listener)
+		self._listeners.configparam_[_type]:removeListener(listener)
     end
 
 	-- コンフィギュレーションセットコールバック設定
@@ -507,14 +512,14 @@ ConfigAdmin.new = function(configsets)
 		if autoclean == nil then
 			autoclean = true
 		end
-		--self._listeners.configset_[_type]:addListener(listener, autoclean)
+		self._listeners.configset_[_type]:addListener(listener, autoclean)
     end
 
 	-- コンフィギュレーションセットコールバック削除
 	-- @param _type コールバックの種別
 	-- @param listener コンフィギュレーションセットコールバック
 	function obj:removeConfigurationSetListener(_type, listener)
-		--self._listeners.configset_[_type]:removeListener(listener)
+		self._listeners.configset_[_type]:removeListener(listener)
     end
 
 	-- コンフィギュレーションセット名のコールバック設定
@@ -525,20 +530,20 @@ ConfigAdmin.new = function(configsets)
 		if autoclean == nil then
 			autoclean = true
 		end
-		--self._listeners.configsetname_[_type]:addListener(listener, autoclean)
+		self._listeners.configsetname_[_type]:addListener(listener, autoclean)
     end
 
 	-- コンフィギュレーションセット名のコールバック削除
 	-- @param _type コールバックの種別
 	-- @param listener コンフィギュレーションセット名のコールバック
 	function obj:removeConfigurationSetNameListener(_type, listener)
-		--self._listeners.configsetname_[_type]:removeListener(listener)
+		self._listeners.configsetname_[_type]:removeListener(listener)
     end
 
 	-- コンフィギュレーション更新時コールバック呼び出し
 	-- @param config_set コンフィギュレーションセット
 	function obj:onUpdate(config_set)
-		--self._listeners.configsetname_[ConfigurationSetNameListenerType.ON_UPDATE_CONFIG_SET]:notify(config_set)
+		self._listeners.configsetname_[ConfigurationSetNameListenerType.ON_UPDATE_CONFIG_SET]:notify(config_set)
     end
 
 	-- コンフィギュレーションパラメータ更新時コールバック呼び出し
@@ -546,34 +551,34 @@ ConfigAdmin.new = function(configsets)
 	-- @param config_value 値
 	function obj:onUpdateParam(config_param, config_value)
 		table.insert(self._changedParam, config_param)
-		--self._listeners.configparam_[ConfigurationParamListenerType.ON_UPDATE_CONFIG_PARAM]:notify(config_param, config_value)
+		self._listeners.configparam_[ConfigurationParamListenerType.ON_UPDATE_CONFIG_PARAM]:notify(config_param, config_value)
     end
 
 	-- コンフィギュレーション設定時コールバック呼び出し
 	-- @param config_set コンフィギュレーションセット
 	function obj:onSetConfigurationSet(config_set)
-		--self._listeners.configset_[ConfigurationSetListenerType.ON_SET_CONFIG_SET]:notify(config_set)
+		self._listeners.configset_[ConfigurationSetListenerType.ON_SET_CONFIG_SET]:notify(config_set)
     end
 
 	-- コンフィギュレーション追加時コールバック呼び出し
 	-- @param config_set コンフィギュレーションセット
 	function obj:onAddConfigurationSet(config_set)
-		--self._listeners.configset_[ConfigurationSetListenerType.ON_ADD_CONFIG_SET]:notify(config_set)
+		self._listeners.configset_[ConfigurationSetListenerType.ON_ADD_CONFIG_SET]:notify(config_set)
     end
     -- コンフィギュレーション削除時コールバック呼び出し
 	-- @param config_id コンフィギュレーションセットID
 	function obj:onRemoveConfigurationSet(config_id)
-		--self._listeners.configsetname_[ConfigurationSetNameListenerType.ON_REMOVE_CONFIG_SET]:notify(config_id)
+		self._listeners.configsetname_[ConfigurationSetNameListenerType.ON_REMOVE_CONFIG_SET]:notify(config_id)
     end
 
 	-- コンフィギュレーションアクティブ化時コールバック呼び出し
 	-- @param config_id コンフィギュレーションセットID
 	function obj:onActivateSet(config_id)
-		--self._listeners.configsetname_[ConfigurationSetNameListenerType.ON_ACTIVATE_CONFIG_SET]:notify(config_id)
+		self._listeners.configsetname_[ConfigurationSetNameListenerType.ON_ACTIVATE_CONFIG_SET]:notify(config_id)
     end
 
 
-
+	
 	return obj
 end
 

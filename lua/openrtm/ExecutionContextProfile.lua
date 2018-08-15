@@ -14,12 +14,21 @@ local oil = require "oil"
 
 local TimeValue = require "openrtm.TimeValue"
 local NVUtil = require "openrtm.NVUtil"
-
+local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 
 local DEFAULT_PERIOD = 0.000001
 
 
+local find_participant = function(comp)
+	local obj = {}
+	obj._comp = comp
 
+	local call_func = function(self, comp)
+		return NVUtil._is_equivalent(comp, self._comp, comp.getObjRef, self._comp.getObjRef)
+	end
+	setmetatable(obj, {__call=call_func})
+	return obj
+end
 
 -- 実行コンテキストのプロファイル保持オブジェクト初期化関数
 -- @param kind 種別
@@ -100,6 +109,10 @@ ExecutionContextProfile.new = function(kind)
 		self._profile.kind = kind
 		return self._ReturnCode_t.RTC_OK
 	end
+	function obj:getKind()
+		self._rtcout:RTC_TRACE("%s = getKind()", self:getKindString(self._profile.kind))
+    	return self._profile.kind
+	end
 	-- 実行コンテキストの種別を文字列に変換
 	-- @param kind 種別
 	-- @return 文字列に変換した種別
@@ -133,6 +146,51 @@ ExecutionContextProfile.new = function(kind)
 	function obj:getProfile()
 		self._rtcout:RTC_TRACE("getProfile()")
 		return self._profile
+	end
+
+	function obj:addComponent(comp)
+		self._rtcout:RTC_TRACE("addComponent()")
+		if comp == oil.corba.idl.null then
+			self._rtcout:RTC_ERROR("A nil reference was given.")
+    		return self._ReturnCode_t.BAD_PARAMETER
+		end
+   		local rtobj_ = comp
+    	--[[
+		if rtobj_ == oil.corba.idl.null then
+      		self._rtcout:RTC_ERROR("Narrowing was failed.")
+    		return self._ReturnCode_t.RTC_ERROR
+		end
+		--]]
+		table.insert(self._profile.participants, rtobj_)
+        
+    	return self._ReturnCode_t.RTC_OK
+	end
+
+
+	function obj:removeComponent(comp)
+		self._rtcout:RTC_TRACE("removeComponent()")
+		if comp == oil.corba.idl.null then
+			self._rtcout:RTC_ERROR("A nil reference was given.")
+			return self._ReturnCode_t.BAD_PARAMETER
+		end
+
+		local rtobj_ = comp
+		--[[
+		if rtobj_== oil.corba.idl.null then
+			self._rtcout:RTC_ERROR("Narrowing was failed.")
+			return self._ReturnCode_t.RTC_ERROR
+		end
+		--]]
+
+		
+		local index_ = CORBA_SeqUtil.find(self._profile.participants,
+										find_participant(rtobj_))
+		if index_ < 0 then
+			self._rtcout:RTC_ERROR("The given RTObject does not exist in the EC.")
+			return self._ReturnCode_t.BAD_PARAMETER
+		end
+		table.remove(self._profile.participants, index_)
+		return self._ReturnCode_t.RTC_OK
 	end
 
 	return obj

@@ -45,6 +45,7 @@ CorbaConsumer.CorbaConsumerBase.new = function(consumer)
 		end
 
 		self._objref = _obj
+		
 		return true
 	end
 
@@ -79,11 +80,11 @@ CorbaConsumer.new = function(interfaceType, consumer)
 		obj._var = consumer._var
 	end
 	-- オブジェクトリファレンス設定
-	-- @param obj オブジェクトリファレンス
+	-- @param _obj オブジェクトリファレンス
 	-- @return true：設定成功、false：設定失敗
-	function obj:setObject(obj)
+	function obj:setObject(_obj)
 
-		if not self:_setObject(obj) then
+		if not self:_setObject(_obj) then
 			self:releaseObject()
 			return false
 		end

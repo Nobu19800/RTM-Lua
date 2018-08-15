@@ -156,7 +156,7 @@ CorbaPort.new = function(name)
 		self._properties:mergeProperties(prop)
 
 		local num = tonumber(self._properties:getProperty("connection_limit","-1"))
-		if num == ni then
+		if num == nil then
 			self._rtcout:RTC_ERROR("invalid connection_limit value: "..
 								 self._properties:getProperty("connection_limit"))
 		end

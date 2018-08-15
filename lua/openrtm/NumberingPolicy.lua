@@ -42,19 +42,19 @@ NumberingPolicy.ProcessUniquePolicy.new = function()
 	-- RTCへの名前付け
 	-- @param obj RTC
 	-- @return 名前
-	function obj:onCreate(obj)
+	function obj:onCreate(_obj)
 		self._num = self._num + 1
 		local pos = self:find(nil)
 		if pos < 0 then
 			pos = 1
 		end
-		self._objects[pos] = obj
+		self._objects[pos] = _obj
 		return StringUtil.otos(pos-1)
 	end
 	-- RTCの登録解除
 	-- @param obj RTC
-	function obj:onDelete(obj)
-		local pos = self:find(obj)
+	function obj:onDelete(_obj)
+		local pos = self:find(_obj)
 		if pos >= 0 then
 			self._objects[pos] = nil
 			self._num = self._num - 1
@@ -63,10 +63,10 @@ NumberingPolicy.ProcessUniquePolicy.new = function()
 	-- RTCの番号取得
 	-- @param obj RTC
 	-- @return 番号
-	function obj:find(obj)
+	function obj:find(_obj)
 		for i = 1, #self._objects + 1 do
 			local obj_ = self._objects[i]
-			if obj_ == obj then
+			if obj_ == _obj then
 				return i
 			end
 		end

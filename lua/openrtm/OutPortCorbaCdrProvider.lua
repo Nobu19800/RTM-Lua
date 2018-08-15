@@ -22,6 +22,12 @@ local RTCUtil = require "openrtm.RTCUtil"
 
 local NVUtil = require "openrtm.NVUtil"
 
+local ConnectorListener = require "openrtm.ConnectorListener"
+local ConnectorListenerType = ConnectorListener.ConnectorListenerType
+local ConnectorDataListenerType = ConnectorListener.ConnectorDataListenerType
+
+
+
 -- CorbaCdrインターフェースのOutPortProviderオブジェクト初期化
 -- @return CorbaCdrインターフェースのOutPortProviderオブジェクト
 OutPortCorbaCdrProvider.new = function()
@@ -113,7 +119,7 @@ OutPortCorbaCdrProvider.new = function()
 	-- @param data データ
 	function obj:onBufferRead(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_READ]:notify(self._profile, data)
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_READ]:notify(self._profile, data)
 		end
     end
 
@@ -121,38 +127,38 @@ OutPortCorbaCdrProvider.new = function()
 	-- @param data データ
 	function obj:onSend(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connectorData_[ConnectorDataListenerType.ON_SEND]:notify(self._profile, data)
+			self._listeners.connectorData_[ConnectorDataListenerType.ON_SEND]:notify(self._profile, data)
 		end
     end
 
     -- バッファ空時コールバック
 	function obj:onBufferEmpty()
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connector_[ConnectorListenerType.ON_BUFFER_EMPTY]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_BUFFER_EMPTY]:notify(self._profile)
 		end
     end
     -- バッファ読み込みタイムアウト時コールバック
 	function obj:onBufferReadTimeout()
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connector_[ConnectorListenerType.ON_BUFFER_READ_TIMEOUT]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_BUFFER_READ_TIMEOUT]:notify(self._profile)
 		end
     end
     -- 送信データ空時コールバック
 	function obj:onSenderEmpty()
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connector_[ConnectorListenerType.ON_SENDER_EMPTY]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_SENDER_EMPTY]:notify(self._profile)
 		end
     end
     -- データ送信タイムアウト時コールバック
 	function obj:onSenderTimeout()
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connector_[ConnectorListenerType.ON_SENDER_TIMEOUT]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_SENDER_TIMEOUT]:notify(self._profile)
 		end
     end
 	-- データ送信エラー時コールバック
 	function obj:onSenderError()
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connector_[ConnectorListenerType.ON_SENDER_ERROR]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_SENDER_ERROR]:notify(self._profile)
 		end
     end
 	-- バッファステータスをOpenRTM::PortStatusに変換
@@ -186,7 +192,9 @@ OutPortCorbaCdrProvider.new = function()
 		end
 	end
 
-
+	function obj:getObjRef()
+		return self._objref
+	end
 
 
 

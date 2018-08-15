@@ -72,7 +72,7 @@ Factory.FactoryLua.new = function(profile, new_func, delete_func, policy)
 	function obj:init()
 		if policy == nil then
 			local NumberingPolicy = require "openrtm.NumberingPolicy"
-			self._policy = DefaultNumberingPolicy.new()
+			self._policy = NumberingPolicy.ProcessUniquePolicy.new()
 		else
 			self._policy = policy
 		end

@@ -70,7 +70,7 @@ ManagerServant.CompParam.new = function(module_name)
 		obj._vendor = param_list[2]
 		obj._category = param_list[3]
 		obj._impl_id = param_list[4]
-		if param_list[5] then
+		if param_list[5] ~= "" then
 			obj._language = param_list[5]
 		else
 			obj._language = "Lua"
@@ -209,7 +209,7 @@ ManagerServant.new = function()
 	-- @return リターンコード
 	function obj:add_slave_manager(mgr)
 		self._rtcout:RTC_TRACE("add_slave_manager(), "..#self._slaves.." slaves")
-		local index = CORBA_SeqUtil.find(self._masters, is_equiv(mgr))
+		local index = CORBA_SeqUtil.find(self._slaves, is_equiv(mgr))
 
 		if not (index < 1) then
 			self._rtcout:RTC_ERROR("Already exists.")
@@ -255,13 +255,67 @@ ManagerServant.new = function()
 	-- ロード済みモジュール一覧取得
 	-- @return ロード可能モジュール一覧
 	function obj:get_loaded_modules()
-		return {}
+		self._rtcout:RTC_TRACE("get_loaded_modules()")
+		local prof = self._mgr:getLoadedModules()
+		local cprof = {}
+		for k,p in ipairs(prof) do
+			local module_profile = {properties={}}
+			NVUtil.copyFromProperties(module_profile.properties, p)
+			table.insert(cprof, p)
+						
+		end
+
+
+    	if self._isMaster then
+        	for k,slave in ipairs(self._slaves) do
+				local success, exception = oil.pcall(
+					function()
+						local profs = slave:get_loaded_modules()
+						CORBA_SeqUtil.push_back_list(cprof, profs)
+					end
+				)
+				if not success then
+					self._rtcout:RTC_ERROR("Unknown exception cought.")
+          			self._rtcout:RTC_DEBUG(exception)
+          			self._slaves.remove(slave)
+				end
+			end
+		end
+
+    	return cprof
 	end
 
 	-- ファクトリプロファイル一覧取得
 	-- @return ファクトリプロファイル一覧
 	function obj:get_factory_profiles()
-		return {}
+		self._rtcout:RTC_TRACE("get_factory_profiles()")
+		local prof = self._mgr:getFactoryProfiles()
+		local cprof = {}
+		for k,p in ipairs(prof) do
+			local module_profile = {properties={}}
+			NVUtil.copyFromProperties(module_profile.properties, p)
+			table.insert(cprof, p)
+						
+		end
+
+
+    	if self._isMaster then
+        	for k,slave in ipairs(self._slaves) do
+				local success, exception = oil.pcall(
+					function()
+						local profs = slave:get_factory_profiles()
+						CORBA_SeqUtil.push_back_list(cprof, profs)
+					end
+				)
+				if not success then
+					self._rtcout:RTC_ERROR("Unknown exception cought.")
+          			self._rtcout:RTC_DEBUG(exception)
+          			self._slaves.remove(slave)
+				end
+			end
+		end
+
+    	return cprof
 	end
 
 	function obj:findManagerByName(manager_name)

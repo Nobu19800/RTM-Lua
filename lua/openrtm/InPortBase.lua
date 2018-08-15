@@ -22,6 +22,11 @@ local CdrBufferBase = require "openrtm.CdrBufferBase"
 local CdrBufferFactory = CdrBufferBase.CdrBufferFactory
 
 
+local ConnectorDataListenerType = ConnectorListener.ConnectorDataListenerType
+local ConnectorListenerType = ConnectorListener.ConnectorListenerType
+local ConnectorDataListener = ConnectorListener.ConnectorDataListener
+local ConnectorListener = ConnectorListener.ConnectorListener
+
 local OutPortConsumer = require "openrtm.OutPortConsumer"
 local OutPortConsumerFactory = OutPortConsumer.OutPortConsumerFactory
 local InPortProvider = require "openrtm.InPortProvider"
@@ -547,6 +552,59 @@ InPortBase.new = function(name, data_type)
 								con:name().." "..con:id())
 		end
 	end
+
+	function obj:addConnectorDataListener(listener_type, listener, autoclean)
+		if autoclean == nil then
+			autoclean = true
+		end
+		self._rtcout:RTC_TRACE("addConnectorDataListener()")
+
+   		if listener_type < ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM then
+      		self._listeners.connectorData_[listener_type]:addListener(listener, autoclean)
+			return
+		end
+
+	    self._rtcout:RTC_ERROR("addConnectorDataListener(): Invalid listener type.")
+
+	end
+
+	function obj:removeConnectorDataListener(listener_type, listener)
+    	self._rtcout:RTC_TRACE("removeConnectorDataListener()")
+
+    	if listener_type < ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM then
+    		self._listeners.connectorData_[listener_type]:removeListener(listener)
+			return
+		end
+
+    	self._rtcout:RTC_ERROR("removeConnectorDataListener(): Invalid listener type.")
+	end
+	
+
+	function obj:addConnectorListener(listener_type, listener, autoclean)
+		if autoclean == nil then
+			autoclean = true
+		end
+		self._rtcout:RTC_TRACE("addConnectorListener()")
+
+   		if listener_type < ConnectorListenerType.CONNECTOR_LISTENER_NUM then
+      		self._listeners.connector_[listener_type]:addListener(listener, autoclean)
+			return
+		end
+
+	    self._rtcout:RTC_ERROR("addConnectorListener(): Invalid listener type.")
+
+	end
+
+	function obj:removeConnectorListener(listener_type, listener)
+    	self._rtcout:RTC_TRACE("removeConnectorListener()")
+
+    	if listener_type < ConnectorListenerType.CONNECTOR_LISTENER_NUM then
+    		self._listeners.connector_[listener_type]:removeListener(listener)
+			return
+		end
+
+    	self._rtcout:RTC_ERROR("removeConnectorListener(): Invalid listener type.")
+    end
 
 	return obj
 end

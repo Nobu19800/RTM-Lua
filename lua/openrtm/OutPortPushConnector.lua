@@ -24,6 +24,9 @@ local PublisherBase = require "openrtm.PublisherBase"
 local PublisherFactory = PublisherBase.PublisherFactory
 local StringUtil = require "openrtm.StringUtil"
 
+local ConnectorListener = require "openrtm.ConnectorListener"
+local ConnectorListenerType = ConnectorListener.ConnectorListenerType
+
 
 -- Push型通信OutPortConnectorの初期化
 -- @param info プロファイル
@@ -122,14 +125,14 @@ OutPortPushConnector.new = function(info, consumer, listeners, buffer)
 	-- コネクタ接続時のコールバック呼び出し
 	function obj:onConnect()
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connector_[ConnectorListenerType.ON_CONNECT]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_CONNECT]:notify(self._profile)
 		end
 	end
 	
 	-- コネクタ切断時のコールバック呼び出し
 	function obj:onDisconnect()
 		if self._listeners ~= nil and self._profile ~= nil then
-			--self._listeners.connector_[ConnectorListenerType.ON_DISCONNECT]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_DISCONNECT]:notify(self._profile)
 		end
 	end
 	

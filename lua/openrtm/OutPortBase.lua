@@ -20,6 +20,13 @@ local PublisherFactory = PublisherBase.PublisherFactory
 local PortBase = require "openrtm.PortBase"
 local StringUtil = require "openrtm.StringUtil"
 
+
+local ConnectorDataListenerType = ConnectorListener.ConnectorDataListenerType
+local ConnectorListenerType = ConnectorListener.ConnectorListenerType
+local ConnectorDataListener = ConnectorListener.ConnectorDataListener
+local ConnectorListener = ConnectorListener.ConnectorListener
+
+
 local InPortConsumer = require "openrtm.InPortConsumer"
 local InPortConsumerFactory = InPortConsumer.InPortConsumerFactory
 local OutPortProvider = require "openrtm.OutPortProvider"
@@ -545,6 +552,66 @@ OutPortBase.new = function(name, data_type)
 								con:name().." "..con:id())
 		end
 	end
+
+
+	function obj:addConnectorDataListener(listener_type, listener, autoclean)
+		if autoclean == nil then
+			autoclean = true
+		end
+		self._rtcout:RTC_TRACE("addConnectorDataListener()")
+
+		   if listener_type < ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM then
+			self._rtcout:RTC_TRACE("addConnectorDataListener(%s)", ConnectorDataListener.toString(listener_type))
+      		self._listeners.connectorData_[listener_type]:addListener(listener, autoclean)
+			return
+		end
+
+	    self._rtcout:RTC_ERROR("addConnectorDataListener(): Unknown Listener Type")
+
+	end
+
+	function obj:removeConnectorDataListener(listener_type, listener)
+    	self._rtcout:RTC_TRACE("removeConnectorDataListener()")
+
+		if listener_type < ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM then
+			self._rtcout:RTC_TRACE("removeConnectorDataListener(%s)", ConnectorDataListener.toString(listener_type))
+    		self._listeners.connectorData_[listener_type]:removeListener(listener)
+			return
+		end
+
+    	self._rtcout:RTC_ERROR("removeConnectorDataListener(): Unknown Listener Type")
+	end
+	
+
+	function obj:addConnectorListener(listener_type, listener, autoclean)
+		if autoclean == nil then
+			autoclean = true
+		end
+		self._rtcout:RTC_TRACE("addConnectorListener()")
+
+		   if listener_type < ConnectorListenerType.CONNECTOR_LISTENER_NUM then
+			self._rtcout:RTC_TRACE("addConnectorListener(%s)", ConnectorListener.toString(listener_type))
+      		self._listeners.connector_[listener_type]:addListener(listener, autoclean)
+			return
+		end
+
+	    self._rtcout:RTC_ERROR("addConnectorListener(): Unknown Listener Type")
+
+	end
+
+	function obj:removeConnectorListener(listener_type, listener)
+    	self._rtcout:RTC_TRACE("removeConnectorListener()")
+
+		if listener_type < ConnectorListenerType.CONNECTOR_LISTENER_NUM then
+			self._rtcout:RTC_TRACE("removeConnectorListener(%s)", ConnectorListener.toString(listener_type))
+    		self._listeners.connector_[listener_type]:removeListener(listener)
+			return
+		end
+
+    	self._rtcout:RTC_ERROR("removeConnectorListener(): Unknown Listener Type")
+	end
+	
+
 	return obj
 end
 

@@ -70,7 +70,7 @@ ObjectManager.new = function(predicate)
 			predi = self._predicate({prop=id})
 		end
 		for i, _obj in ipairs(self._objects) do
-			if predi(_obj) == true then
+			if predi(_obj) then
 				return _obj
 			end
 		end

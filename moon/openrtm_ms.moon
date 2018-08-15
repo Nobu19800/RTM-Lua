@@ -91,7 +91,7 @@ class openrtm_ms.Properties
 			
 			
 -- @class CorbaConsumer
--- CORBAコンシューマオブジェクト初期化関数
+-- CORBAコンシューマオブジェクト
 class openrtm_ms.CorbaConsumer
 	-- コンストラクタ
 	-- @param consumer CORBAコンシューマオブジェクト
@@ -99,5 +99,166 @@ class openrtm_ms.CorbaConsumer
 		obj = openrtm.CorbaConsumer.new(consumer)
 		setmetatable(self, {__index:obj})
 
+
+
+openrtm_ms.ConnectorListenerStatus = openrtm.ConnectorListener.ConnectorListenerStatus
+openrtm_ms.ConnectorListenerType = openrtm.ConnectorListener.ConnectorListenerType
+openrtm_ms.ConnectorDataListenerType = openrtm.ConnectorListener.ConnectorDataListenerType
+
+-- @class ConnectorDataListener
+-- コネクタデータリスナ
+class openrtm_ms.ConnectorDataListener
+	-- コンストラクタ
+	new: () =>
+		tmp = {}
+		for k,v in pairs self.__index
+			tmp[k] = v
+		obj = openrtm.ConnectorListener.ConnectorDataListener.new()
+		setmetatable(self, {__index:obj})
+		for k,v in pairs tmp
+			self[k] = v
+
+
+-- @class ConnectorListener
+-- コネクタリスナ
+class openrtm_ms.ConnectorListener
+	-- コンストラクタ
+	new: () =>
+		tmp = {}
+		for k,v in pairs self.__index
+			tmp[k] = v
+		obj = openrtm.ConnectorListener.ConnectorListener.new()
+		setmetatable(self, {__index:obj})
+		for k,v in pairs tmp
+			self[k] = v
+
+
+-- @class ManagerActionListener
+-- マネージャアクションリスナ
+class openrtm_ms.ManagerActionListener
+	-- コンストラクタ
+	new: () =>
+		tmp = {}
+		for k,v in pairs self.__index
+			tmp[k] = v
+		obj = openrtm.ManagerActionListener.ManagerActionListener.new()
+		setmetatable(self, {__index:obj})
+		for k,v in pairs tmp
+			self[k] = v
+
+
+-- @class ModuleActionListener
+-- モジュールアクションリスナ
+class openrtm_ms.ModuleActionListener
+	-- コンストラクタ
+	new: () =>
+		tmp = {}
+		for k,v in pairs self.__index
+			tmp[k] = v
+		obj = openrtm.ManagerActionListener.ModuleActionListener.new()
+		setmetatable(self, {__index:obj})
+		for k,v in pairs tmp
+			self[k] = v
+
+
+-- @class RtcLifecycleActionListener
+-- RTC生成、削除に関するアクションリスナ
+class openrtm_ms.RtcLifecycleActionListener
+	-- コンストラクタ
+	new: () =>
+		tmp = {}
+		for k,v in pairs self.__index
+			tmp[k] = v
+		obj = openrtm.ManagerActionListener.RtcLifecycleActionListener.new()
+		setmetatable(self, {__index:obj})
+		for k,v in pairs tmp
+			self[k] = v
+
+-- @class NamingActionListener
+-- ネーミングアクションリスナ
+class openrtm_ms.NamingActionListener
+	-- コンストラクタ
+	new: () =>
+		tmp = {}
+		for k,v in pairs self.__index
+			tmp[k] = v
+		obj = openrtm.ManagerActionListener.NamingActionListener.new()
+		setmetatable(self, {__index:obj})
+		for k,v in pairs tmp
+			self[k] = v
+
+
+-- @class LocalServiceActionListener
+-- ローカルサービスアクションリスナ
+class openrtm_ms.LocalServiceActionListener
+	-- コンストラクタ
+	new: () =>
+		tmp = {}
+		for k,v in pairs self.__index
+			tmp[k] = v
+		obj = openrtm.ManagerActionListener.LocalServiceActionListener.new()
+		setmetatable(self, {__index:obj})
+		for k,v in pairs tmp
+			self[k] = v
+
+
+
+
+-- @class ConfigurationParamListener
+-- コンフィギュレーションパラメータに関するリスナ
+class openrtm_ms.ConfigurationParamListener
+	-- コンストラクタ
+	new: () =>
+		tmp = {}
+		for k,v in pairs self.__index
+			tmp[k] = v
+		obj = openrtm.ConfigurationListener.ConfigurationParamListener.new()
+		setmetatable(self, {__index:obj})
+		for k,v in pairs tmp
+			self[k] = v
+
+
+-- @class ConfigurationParamListener
+-- コンフィギュレーションパラメータに関するリスナ
+class openrtm_ms.ConfigurationParamListener
+	-- コンストラクタ
+	new: () =>
+		tmp = {}
+		for k,v in pairs self.__index
+			tmp[k] = v
+		obj = openrtm.ConfigurationListener.ConfigurationParamListener.new()
+		setmetatable(self, {__index:obj})
+		for k,v in pairs tmp
+			self[k] = v
+
+
+
+-- @class ConfigurationSetNameListener
+-- コンフィギュレーションセットの名前変更に関するリスナ
+class openrtm_ms.ConfigurationSetNameListener
+	-- コンストラクタ
+	new: () =>
+		tmp = {}
+		for k,v in pairs self.__index
+			tmp[k] = v
+		obj = openrtm.ConfigurationListener.ConfigurationSetNameListener.new()
+		setmetatable(self, {__index:obj})
+		for k,v in pairs tmp
+			self[k] = v
+
+
+
+-- @class ConfigurationSetListener
+-- コンフィギュレーションセットに関するリスナ
+class openrtm_ms.ConfigurationSetListener
+	-- コンストラクタ
+	new: () =>
+		tmp = {}
+		for k,v in pairs self.__index
+			tmp[k] = v
+		obj = openrtm.ConfigurationListener.ConfigurationSetListener.new()
+		setmetatable(self, {__index:obj})
+		for k,v in pairs tmp
+			self[k] = v
 
 return openrtm_ms

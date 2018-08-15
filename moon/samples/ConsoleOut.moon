@@ -25,6 +25,47 @@ consoleout_spec = {
   ["lang_type"]:"script"}
 
 
+-- @class DataListener
+class DataListener extends openrtm_ms.ConnectorDataListener
+	-- コンストラクタ
+	-- @param name コールバック名
+	new: (name) =>
+		super 
+		self._name = name
+	-- コールバック関数
+	-- @param info コネクタ情報
+	-- @param cdrdata データ(バイト列)
+	-- @return リスナステータス
+	call: (info, cdrdata) =>
+		local data = self\__call__(info, cdrdata, "::RTC::TimedLong")
+		print("------------------------------")
+		print("Listener:       "..self._name)
+		print("Profile::name:  "..info.name)
+		print("Profile::id:    "..info.id)
+		print("Data:           "..data.data)
+		print("------------------------------")
+		return openrtm_ms.ConnectorListenerStatus.NO_CHANGE
+
+
+-- @class ConnListener
+class ConnListener extends openrtm_ms.ConnectorListener
+	-- コンストラクタ
+	-- @param name コールバック名
+	new: (name) =>
+		super 
+		self._name = name
+	-- コールバック関数
+	-- @param info コネクタ情報
+	-- @return リスナステータス
+	call: (info) =>
+		print("------------------------------")
+		print("Listener:       "..self._name)
+		print("Profile::name:  "..info.name)
+		print("Profile::id:    "..info.id)
+		print("------------------------------")
+		return openrtm_ms.ConnectorListenerStatus.NO_CHANGE
+
+
 
 -- @class ConsoleOut
 class ConsoleOut extends openrtm_ms.RTObject
@@ -36,6 +77,38 @@ class ConsoleOut extends openrtm_ms.RTObject
 		self._d_in = openrtm_ms.RTCUtil.instantiateDataType("::RTC::TimedLong")
 		-- インポート生成
 		self._inIn = openrtm_ms.InPort("in",self._d_in,"::RTC::TimedLong")
+
+
+
+		-- コネクタコールバック関数の設定
+		self._inIn\addConnectorListener(openrtm_ms.ConnectorListenerType.ON_CONNECT,
+									ConnListener("ON_CONNECT"))
+		self._inIn\addConnectorListener(openrtm_ms.ConnectorListenerType.ON_DISCONNECT,
+									ConnListener("ON_DISCONNECT"))
+
+
+
+		self._inIn\addConnectorDataListener(openrtm_ms.ConnectorDataListenerType.ON_BUFFER_WRITE,
+									DataListener("ON_BUFFER_WRITE"))
+		self._inIn\addConnectorDataListener(openrtm_ms.ConnectorDataListenerType.ON_BUFFER_FULL,
+									DataListener("ON_BUFFER_FULL"))
+		self._inIn\addConnectorDataListener(openrtm_ms.ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT,
+									DataListener("ON_BUFFER_WRITE_TIMEOUT"))
+		self._inIn\addConnectorDataListener(openrtm_ms.ConnectorDataListenerType.ON_BUFFER_OVERWRITE,
+									DataListener("ON_BUFFER_OVERWRITE"))
+		self._inIn\addConnectorDataListener(openrtm_ms.ConnectorDataListenerType.ON_BUFFER_READ,
+									DataListener("ON_BUFFER_READ"))
+		self._inIn\addConnectorDataListener(openrtm_ms.ConnectorDataListenerType.ON_SEND,
+									DataListener("ON_SEND"))
+		self._inIn\addConnectorDataListener(openrtm_ms.ConnectorDataListenerType.ON_RECEIVED,
+									DataListener("ON_RECEIVED"))
+		self._inIn\addConnectorDataListener(openrtm_ms.ConnectorDataListenerType.ON_RECEIVER_FULL,
+									DataListener("ON_RECEIVER_FULL"))
+		self._inIn\addConnectorDataListener(openrtm_ms.ConnectorDataListenerType.ON_RECEIVER_TIMEOUT,
+									DataListener("ON_RECEIVER_TIMEOUT"))
+		self._inIn\addConnectorDataListener(openrtm_ms.ConnectorDataListenerType.ON_RECEIVER_ERROR,
+									DataListener("ON_RECEIVER_ERROR"))
+
 
 
 	-- 初期化時のコールバック関数

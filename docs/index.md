@@ -460,4 +460,5 @@ python setup.py install
 
 ## 単体テストの実行手順
 
+* [実行結果](report.html)
 * [単体テストの実行手順](unittest.md)

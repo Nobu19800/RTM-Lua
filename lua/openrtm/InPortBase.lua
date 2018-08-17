@@ -125,7 +125,8 @@ InPortBase.new = function(name, data_type)
 
 		self._rtcout:RTC_PARANOID("available InPortConsumer: "..StringUtil.flatten(consumer_types))
 		local tmp_str = StringUtil.normalize(self._properties:getProperty("consumer_types"))
-		if self._properties:hasKey("consumer_types") and tmp_str  ~= "all" then
+		
+		if self._properties:hasKey("consumer_types") ~= nil and tmp_str  ~= "all" then
 			self._rtcout:RTC_DEBUG("allowed consumers: "..self._properties:getProperty("consumer_types"))
 
 			local temp_types = consumer_types
@@ -314,6 +315,7 @@ InPortBase.new = function(name, data_type)
 			if ret == self._ReturnCode_t.RTC_OK then
 				self._rtcout:RTC_DEBUG("subscribeInterfaces() successfully finished.")
 			end
+			
 
 			self._rtcout:RTC_PARANOID("dataflow_type = push .... create PushConnector")
 
@@ -501,7 +503,7 @@ InPortBase.new = function(name, data_type)
 	function obj:getConnectorById(id)
 		self._rtcout:RTC_TRACE("getConnectorById(id = "..id..")")
 
-		for i, con in ipairs(self._connectors) do
+		for i, con in pairs(self._connectors) do
 			if id == con:id() then
 				return con
 			end
@@ -519,7 +521,7 @@ InPortBase.new = function(name, data_type)
 		local id = connector_profile.connector_id
 		self._rtcout:RTC_PARANOID("connector_id: "..id)
 
-		for i, con in ipairs(self._connectors) do
+		for i, con in pairs(self._connectors) do
 			if id == con:id() then
 				con:deactivate()
 				con:disconnect()
@@ -546,7 +548,7 @@ InPortBase.new = function(name, data_type)
 	-- インターフェースの非アクティブ化
 	function obj:deactivateInterfaces()
 		self._rtcout:RTC_TRACE("deactivateInterfaces()")
-		for i, con in ipairs(self._connectors) do
+		for i, con in pairs(self._connectors) do
 			con:deactivate()
 			self._rtcout:RTC_DEBUG("deactivate connector: "..
 								con:name().." "..con:id())

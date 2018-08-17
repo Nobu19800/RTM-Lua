@@ -89,8 +89,9 @@ CORBA_RTCUtil.get_actual_ec = function(rtc, ec_id)
 		end
 		return eclist[ec_id+1]
 	elseif ec_id >= RTObject.ECOTHER_OFFSET then
-		local pec_id = ec_id - OpenRTM_aist.RTObject.ECOTHER_OFFSET
+		local pec_id = ec_id - RTObject.ECOTHER_OFFSET
 		local eclist = rtc:get_participating_contexts()
+		--print(pec_id, #eclist)
 		if pec_id >= #eclist then
 			return oil.corba.idl.null
 		end
@@ -630,7 +631,10 @@ CORBA_RTCUtil.connect = function(name, prop, port0, port1)
 		return ReturnCode_t.BAD_PARAMETER
 	end
 	local cprof = CORBA_RTCUtil.create_connector(name, prop, port0, port1)
-	local ret, prof = NVUtil.getReturnCode(port0:connect(cprof))
+	
+	local ret, prof = port0:connect(cprof)
+	ret = NVUtil.getReturnCode(ret)
+	
 	--print(ret)
 	return ret
 end
@@ -653,10 +657,13 @@ CORBA_RTCUtil.connect_multi = function(name, prop, port, target_ports)
 	end
 	for k,p in ipairs(target_ports) do
 		if p == oil.corba.idl.null then
+			ret =  ReturnCode_t.BAD_PARAMETER
 		else
 			if NVUtil._is_equivalent(p, port, p.getPortRef, port.getPortRef) then
+				ret =  ReturnCode_t.BAD_PARAMETER
 			else
 				if CORBA_RTCUtil.already_connected(port, p) then
+					ret =  ReturnCode_t.BAD_PARAMETER
 				else
 					if ReturnCode_t.RTC_OK ~= CORBA_RTCUtil.connect(name, prop, port, p) then
 						ret =  ReturnCode_t.BAD_PARAMETER
@@ -723,7 +730,7 @@ CORBA_RTCUtil.connect_by_name = function(name, prop, rtc0, port_name0, rtc1, por
 	if port1 == oil.corba.idl.null then
 		return ReturnCode_t.BAD_PARAMETER
 	end
-
+	
 	return CORBA_RTCUtil.connect(name, prop, port0, port1)
 end
 
@@ -893,6 +900,7 @@ CORBA_RTCUtil.disconnect_by_port_name = function(localport, othername)
 	end
 	local prof = localport:get_port_profile()
 	if prof.name == othername then
+		
 		return ReturnCode_t.BAD_PARAMETER
 	end
 
@@ -901,6 +909,7 @@ CORBA_RTCUtil.disconnect_by_port_name = function(localport, othername)
 		for k2,p in ipairs(c.ports) do
 			if p ~= oil.corba.idl.null then
 				local pp = p:get_port_profile()
+				--print(pp.name,othername)
 				if pp.name == othername then
 					return CORBA_RTCUtil.disconnect(c)
 				end

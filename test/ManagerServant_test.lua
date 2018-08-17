@@ -26,6 +26,7 @@ local testcomp_spec = {
 
 
 
+
 local MyModuleInit = function(manager)
 	local prof = Properties.new({defaults_map=testcomp_spec})
 	manager:registerFactory(prof, RTObject.new, Factory.Delete)
@@ -35,25 +36,28 @@ end
 function TestManagerServant:test_compparam()
 	local compparam = ManagerServant.CompParam.new("RTC:vendor:category:implementation_id:language:version?param1=xxx&param2=yyy")
 	luaunit.assertEquals(compparam._type, "RTC")
-	luaunit.assertEquals(compparam._vendor, "vendor")
-	luaunit.assertEquals(compparam._category, "category")
-	luaunit.assertEquals(compparam._impl_id, "implementation_id")
-	luaunit.assertEquals(compparam._language, "language")
-	luaunit.assertEquals(compparam._version, "version")
+	luaunit.assertEquals(compparam:vendor(), "vendor")
+	luaunit.assertEquals(compparam:category(), "category")
+	luaunit.assertEquals(compparam:impl_id(), "implementation_id")
+	luaunit.assertEquals(compparam:language(), "language")
+	luaunit.assertEquals(compparam:version(), "version")
+	local compparam = ManagerServant.CompParam.new("RTC:vendor:category:implementation_id::version?param1=xxx&param2=yyy")
+	luaunit.assertEquals(compparam:language(), "Lua")
+
 end
 
 
 function TestManagerServant:test_servant()
 	local mgr = require "openrtm.Manager"
-	mgr:init({"-o","corba.step.count:0","-o","exec_cxt.periodic.type:SimulatorExecutionContext"})
+	mgr:init({"-o","corba.step.count:0","-o","exec_cxt.periodic.type:SimulatorExecutionContext","-o"})--,"logger.file_name:stdout"})
 	mgr:setModuleInitProc(MyModuleInit)
 	mgr:activateManager()
 	mgr:runManager(true)
 	local ReturnCode_t  = mgr._ReturnCode_t
 
 	local mgrservant1 = mgr:getManagerServant()
-	local comp0 = mgrservant1:get_components_by_name("*/TestComp0")
-	luaunit.assertNotEquals(comp0, nil)
+	local comps = mgrservant1:get_components_by_name("*/TestComp0")
+	luaunit.assertEquals(#comps, 0)
 	mgr:getConfig():setProperty("manager.name","manager2")
 	local mgrservant2 = ManagerServant.new()
 	mgr:getConfig():setProperty("manager.name","manager3")
@@ -89,16 +93,24 @@ function TestManagerServant:test_servant()
 	local ret = mgrservant2:remove_slave_manager(mgrservant3)
 	luaunit.assertEquals(ret, ReturnCode_t.BAD_PARAMETER)
 
-	
+	local comp0 = nil
 	oil.main(function()
-		local comp0 = mgrservant2:create_component("TestComp")
+		comp0 = mgrservant2:create_component("TestComp")
 		--mgrservant2:delete_component("TestComp0")
 	end)
+
+	
 	luaunit.assertNotEquals(comp0, nil)
 	luaunit.assertEquals(#mgrservant2:get_components(), 1)
 	local profs = mgrservant2:get_component_profiles()
 	luaunit.assertEquals(profs[1].instance_name, "TestComp0")
 
+	local comps = mgrservant1:get_components_by_name("*/TestComp0")
+	luaunit.assertEquals(#comps, 1)
+	local comps = mgrservant1:get_components_by_name("TestComp0")
+	luaunit.assertEquals(#comps, 1)
+	local comps = mgrservant1:get_components_by_name("example/TestComp0")
+	luaunit.assertEquals(#comps, 1)
 
 	local prof = mgrservant3:get_profile()
 	local prop = Properties.new()
@@ -121,10 +133,52 @@ function TestManagerServant:test_servant()
 
 	local str = mgrservant2:getParameterByModulename("testparam",{"RTC?testparam=100"})
 	luaunit.assertEquals(str,"100")
+	local str = mgrservant2:getParameterByModulename("testparam",{"RTC&testparam=100"})
+	luaunit.assertEquals(str,"100")
+	
+	local str = mgrservant2:getParameterByModulename("testparam",{"RTC?testparam=100&param2=101"})
+	luaunit.assertEquals(str,"100")
 
 
 
-	mgr:createShutdownThread(0.01)
+	local ret = mgrservant3:add_master_manager(mgrservant2)
+	local ret = mgrservant3:add_slave_manager(mgrservant2)
+
+	luaunit.assertEquals(mgrservant3:load_module("SampleModule","Init"),ReturnCode_t.RTC_OK)
+	mgrservant3._isMaster = true
+
+	luaunit.assertNotEquals(#mgrservant3:get_loaded_modules(), 0)
+	luaunit.assertNotEquals(#mgrservant3:get_factory_profiles(), 0)
+
+
+	local comp1 = nil
+	oil.main(function()
+		comp1 = mgrservant3:create_component("TestComp")
+	end)
+
+	
+	luaunit.assertNotEquals(comp1, nil)
+
+
+	oil.main(function()
+		luaunit.assertEquals(mgrservant3:delete_component("TestComp1"), ReturnCode_t.RTC_OK)
+		luaunit.assertEquals(mgrservant3:delete_component("TestComp1"), ReturnCode_t.BAD_PARAMETER)
+	end)
+	luaunit.assertIsTrue(mgrservant3:is_master())
+
+
+	mgr:getConfig():setProperty("manager.name","manager4")
+	mgr:getConfig():setProperty("manager.is_master","YES")
+	local mgrservant4 = ManagerServant.new()
+
+	mgrservant3._isMaster = false
+	--mgrservant1:exit()
+	mgrservant2:exit()
+	mgrservant3:exit()
+	mgrservant4:exit()
+
+
+	mgrservant1:shutdown()
 end
 
 

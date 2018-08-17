@@ -5,6 +5,26 @@ local Properties = require "openrtm.Properties"
 TestModuleManager = {}
 
 
+function TestModuleManager:test_error()
+	local error_obj = ModuleManager.Error.new("test")
+	luaunit.assertEquals(tostring(error_obj),"ModuleManager.Error:test")
+	local error_obj = ModuleManager.NotFound.new("test")
+	luaunit.assertEquals(tostring(error_obj),"ModuleManager.NotFound:test")
+	local error_obj = ModuleManager.FileNotFound.new("test")
+	luaunit.assertEquals(tostring(error_obj),"ModuleManager.FileNotFound:test")
+	local error_obj = ModuleManager.ModuleNotFound.new("test")
+	luaunit.assertEquals(tostring(error_obj),"ModuleManager.ModuleNotFound:test")
+	local error_obj = ModuleManager.SymbolNotFound.new("test")
+	luaunit.assertEquals(tostring(error_obj),"ModuleManager.SymbolNotFound:test")
+	local error_obj = ModuleManager.NotAllowedOperation.new("test")
+	luaunit.assertEquals(tostring(error_obj),"ModuleManager.NotAllowedOperation:test")
+	local error_obj = ModuleManager.InvalidArguments.new("test")
+	luaunit.assertEquals(tostring(error_obj),"ModuleManager.InvalidArguments:test")
+	local error_obj = ModuleManager.InvalidOperation.new("test")
+	luaunit.assertEquals(tostring(error_obj),"ModuleManager.InvalidOperation:test")
+
+end
+
 
 function TestModuleManager:test_compparam()
 	local mgr = require "openrtm.Manager"

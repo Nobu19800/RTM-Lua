@@ -71,8 +71,10 @@ function TestConfigAdmin:test_ConfigAdmin()
 	luaunit.assertIsTrue(config:haveConfig("testset1"))
 	luaunit.assertIsTrue(config:activateConfigurationSet("testset1"))
 	luaunit.assertIsTrue(config:activateConfigurationSet("default"))
+	luaunit.assertIsTrue(config:isActive())
 	luaunit.assertIsTrue(config:removeConfigurationSet("testset1"))
-
+	luaunit.assertIsFalse(config:isActive())
+	
 	
 	
 	

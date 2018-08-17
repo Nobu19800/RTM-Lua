@@ -40,7 +40,10 @@ function TestInPortDSConsumer:test_consumer()
 	mgr:init({"-o","corba.step.count:0"})
 	mgr:activateManager()
 	mgr:runManager(true)
+
 	local orb = mgr:getORB()
+	local PortStatus = orb.types:lookup("::RTC::PortStatus").labelvalue
+	
 
 	local consumer = InPortDSConsumer.new()
 	consumer:init(Properties.new())
@@ -50,11 +53,25 @@ function TestInPortDSConsumer:test_consumer()
 
 	local ret = consumer:subscribeInterface({NVUtil.newNV("dataport.data_service.inport_ior",ior)})
 	luaunit.assertIsTrue(ret)
+	local ret = consumer:subscribeInterface({})
+	luaunit.assertIsFalse(ret)
+	local ret = consumer:subscribeInterface({NVUtil.newNV("dataport.data_service.inport_ior","")})
+	luaunit.assertIsFalse(ret)
 		
 	luaunit.assertEquals(consumer:put(""), DataPortStatus.PORT_OK)
 	luaunit.assertEquals(provider._count, 1)
 	
 	consumer:unsubscribeInterface({NVUtil.newNV("dataport.data_service.inport_ior",ior)})
+	consumer:unsubscribeInterface({NVUtil.newNV("dataport.data_service.inport_ior","")})
+	consumer:unsubscribeInterface({})
+
+
+	luaunit.assertEquals(consumer:convertReturnCode(PortStatus.PORT_OK),DataPortStatus.PORT_OK)
+	luaunit.assertEquals(consumer:convertReturnCode(PortStatus.PORT_ERROR),DataPortStatus.PORT_ERROR)
+	luaunit.assertEquals(consumer:convertReturnCode(PortStatus.BUFFER_FULL),DataPortStatus.SEND_FULL)
+	luaunit.assertEquals(consumer:convertReturnCode(PortStatus.BUFFER_TIMEOUT),DataPortStatus.SEND_TIMEOUT)
+	luaunit.assertEquals(consumer:convertReturnCode(PortStatus.UNKNOWN_ERROR),DataPortStatus.UNKNOWN_ERROR)
+
 
 
 	mgr:createShutdownThread(0.01)

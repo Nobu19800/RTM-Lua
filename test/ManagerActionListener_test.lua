@@ -1,5 +1,4 @@
 local luaunit = require "luaunit"
-local InPortPullConnector = require "openrtm.InPortPullConnector"
 local ManagerActionListener = require "openrtm.ManagerActionListener"
 
 

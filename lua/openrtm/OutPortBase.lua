@@ -501,7 +501,7 @@ OutPortBase.new = function(name, data_type)
 	function obj:getConnectorById(id)
 		self._rtcout:RTC_TRACE("getConnectorById(id = "..id..")")
 
-		for i, con in ipairs(self._connectors) do
+		for i, con in pairs(self._connectors) do
 			if id == con:id() then
 				return con
 			end
@@ -519,7 +519,7 @@ OutPortBase.new = function(name, data_type)
 		local id = connector_profile.connector_id
 		self._rtcout:RTC_PARANOID("connector_id: "..id)
 
-		for i, con in ipairs(self._connectors) do
+		for i, con in pairs(self._connectors) do
 			if id == con:id() then
 				con:deactivate()
 				con:disconnect()
@@ -536,7 +536,7 @@ OutPortBase.new = function(name, data_type)
 	-- インターフェースのアクティブ化
 	function obj:activateInterfaces()
 		self._rtcout:RTC_TRACE("activateInterfaces()")
-		for i, con in ipairs(self._connectors) do
+		for i, con in pairs(self._connectors) do
 			con:activate()
 			self._rtcout:RTC_DEBUG("activate connector: "..
 								con:name().." "..con:id())
@@ -546,7 +546,7 @@ OutPortBase.new = function(name, data_type)
 	-- インターフェースの非アクティブ化
 	function obj:deactivateInterfaces()
 		self._rtcout:RTC_TRACE("deactivateInterfaces()")
-		for i, con in ipairs(self._connectors) do
+		for i, con in pairs(self._connectors) do
 			con:deactivate()
 			self._rtcout:RTC_DEBUG("deactivate connector: "..
 								con:name().." "..con:id())

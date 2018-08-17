@@ -152,7 +152,7 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 
 	-- rtcname形式の文字列からRTCを取得
 	-- @param name RTC名(rtcname形式)
-	-- rtcname://localhost/test.host_cxt/ConsoleIn0.out
+	-- rtcname://localhost/test.host_cxt/ConsoleIn0
 	-- @return 一致したRTC一覧
 	function obj:string_to_component(name)
 
@@ -294,7 +294,7 @@ NamingManager.NamingOnManager.new = function(orb, mgr)
 
 	-- rtcloc形式の文字列からRTCを取得
 	-- @param name RTC名(rtcloc形式)
-	-- rtcloc://localhost:2010/Category/ConsoleIn0.out
+	-- rtcloc://localhost:2010/Category/ConsoleIn0
 	-- @return 一致したRTC一覧
 	function obj:string_to_component(name)
 		--print(name)
@@ -368,6 +368,23 @@ NamingManager.Comps.new = function(n, _obj)
 	local obj = {}
 	obj.name = n
 	obj.rtobj = _obj
+	return obj
+end
+
+
+NamingManager.Mgr = {}
+NamingManager.Mgr.new = function(n, _obj)
+	local obj = {}
+	obj.name = n
+	obj.mgr = _obj
+	return obj
+end
+
+NamingManager.Port = {}
+NamingManager.Port.new = function(n, _obj)
+	local obj = {}
+	obj.name = n
+	obj.port = _obj
 	return obj
 end
 
@@ -455,6 +472,26 @@ NamingManager.new = function(manager)
 			end
 		end
 		table.insert(self._compNames, NamingManager.Comps.new(name, rtobj))
+	end
+
+	function obj:registerMgrName(name, mgr)
+		for i, mgrName in ipairs(self._mgrNames) do
+			if mgrName.name == name then
+				mgrName.mgr = mgr
+				return
+			end
+		end
+		table.insert(self._mgrNames, NamingManager.Mgr.new(name, rtobj))
+	end
+
+	function obj:registerPortName(name, port)
+		for i, portName in ipairs(self._portNames) do
+			if portNames.name == name then
+				portName.port = port
+				return
+			end
+		end
+		table.insert(self._portNames, NamingManager.Port.new(name, port))
     end
 
 	-- RTCをネームサーバーから登録解除
@@ -471,17 +508,48 @@ NamingManager.new = function(manager)
 		self:unregisterPortName(name)
 	end
 
+	function obj:unbindAll()
+		self._rtcout:RTC_TRACE("NamingManager::unbindAll(): %d names.", #self._compNames)
+		for i, compName in ipairs(self._compNames) do
+			self:unbindObject(compName.name)
+		end
+		for i, mgrName in ipairs(self._mgrNames) do
+			self:unbindObject(mgrName.name)
+		end
+		for i, portName in ipairs(self._portNames) do
+			self:unbindObject(portName.name)
+		end
+	end
+
 	-- RTCの登録解除
 	-- @param name 登録名
 	function obj:unregisterCompName(name)
+		for i, compName in ipairs(self._compNames) do
+			if compName.name == name then
+				table.remove(self._compNames, i)
+				return
+			end
+		end
 	end
 	-- マネージャの登録解除
 	-- @param name 登録名
 	function obj:unregisterMgrName(name)
+		for i, mgrName in ipairs(self._mgrNames) do
+			if mgrName.name == name then
+				table.remove(self._mgrNames, i)
+				return
+			end
+		end
 	end
 	-- ポートの登録解除
 	-- @param name 登録名
 	function obj:unregisterPortName(name)
+		for i, portName in ipairs(self._portNames) do
+			if portName.name == name then
+				table.remove(self._portNames, i)
+				return
+			end
+		end
 	end
 
 	-- rtcloc、rtcname形式の文字列からRTCを取得

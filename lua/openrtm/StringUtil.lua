@@ -57,9 +57,10 @@ end
 -- @param pos 位置
 -- @return true；エスケープ文字が含まれる、false：含まれない
 StringUtil.isEscaped = function(_str, pos)
-	pos = pos-1
+	--pos = pos-1
 
 	local i = 0
+	--print(string.sub(_str, pos, pos))
 	while pos >= 0 and string.sub(_str, pos, pos) == "\\" do
 		i = i+1
 		pos = pos-1
@@ -238,11 +239,9 @@ end
 -- @param key キー
 -- @return true；含まれる、false：含まれない
 StringUtil.in_key = function(tbl, key)
-    for k, v in pairs (tbl) do
-        if k==val then
-			return true
-		end
-    end
+	if tbl[key] ~= nil then
+		return true
+	end
     return false
 end
 
@@ -269,7 +268,7 @@ StringUtil.unique_strvec.new = function()
 	-- @param s 値
 	-- @return テーブル
 	local call_func = function(self, s)
-		if StringUtil.in_value(self._str, s) == false then
+		if not StringUtil.in_value(self._str, s) then
 			table.insert(self._str, s)
 			return self._str
 		end

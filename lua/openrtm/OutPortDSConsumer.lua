@@ -111,7 +111,7 @@ OutPortDSConsumer.new = function()
 			self._buffer:advanceRptr()
 			return DataPortStatus.PORT_OK
 		end
-		return self:convertReturn(ret,data[0])
+		return self:convertReturn(ret,data._data)
 	end
     -- プロパティからインターフェース情報取得
     -- オブジェクトリファレンスの設定
@@ -270,7 +270,7 @@ OutPortDSConsumer.new = function()
 	-- 以下からリファレンスを取得
 	-- dataport.corba_cdr.outport_ref
 	-- @return true：設定解除成功、false：設定解除失敗
-	function obj:unsubscribeFromRef(self, properties)
+	function obj:unsubscribeFromRef(properties)
 		self._rtcout:RTC_TRACE("unsubscribeFromRef()")
 		local index = NVUtil.find_index(properties,
 										"dataport.data_service.outport_ref")

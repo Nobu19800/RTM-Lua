@@ -19,6 +19,11 @@ local oil = require "oil"
 -- @param idl IDLファイル
 -- @return サーバント
 RTCUtil.newproxy = function(orb, ior, idl)
+	if type(ior) == "table" then
+		if ior.getObjRef ~= nil then
+			return ior:getObjRef()
+		end
+	end
 	if oil.VERSION == "OiL 0.4 beta" then
 		return orb:newproxy(ior,idl)
 	elseif oil.VERSION == "OiL 0.5" then
@@ -89,12 +94,14 @@ RTCUtil.getDataType = function(data, ret)
 		elseif data.type_def._type == "double" then
 			ret[data.name] = 0
 			return
+		--[[
 		elseif data.type_def._type == "ufloat" then
 			ret[data.name] = 0
 			return
 		elseif data.type_def._type == "udouble" then
 			ret[data.name] = 0
 			return
+		--]]
 		elseif data.type_def._type == "char" then
 			ret[data.name] = ""
 			return

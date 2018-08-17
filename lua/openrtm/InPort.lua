@@ -106,7 +106,7 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 		self._rtcout:RTC_TRACE("DataType read()")
 
 		if self._OnRead ~= nil then
-			self._OnRead()
+			self._OnRead:call()
 			self._rtcout:RTC_TRACE("OnRead called")
 		end
 
@@ -130,7 +130,7 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 			self._value = cdr._data
 
 			if self._OnReadConvert ~= nil then
-				self._value = self._OnReadConvert(self._value)
+				self._value = self._OnReadConvert:call(self._value)
 				self._rtcout:RTC_DEBUG("OnReadConvert called")
 				return self._value
 			end

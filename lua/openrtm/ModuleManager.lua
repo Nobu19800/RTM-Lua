@@ -85,6 +85,12 @@ ModuleManager.Error = {}
 ModuleManager.Error.new = function(reason_)
 	local obj = {}
 	obj.reason = reason_
+	obj.type = "Error"
+	local str_func = function(self)
+		local str = "ModuleManager."..self.type..":"..self.reason
+		return str
+	end
+	setmetatable(obj, {__tostring =str_func})
 	return obj
 end
 
@@ -97,6 +103,11 @@ ModuleManager.NotFound.new = function(name_)
 	local obj = {}
 	obj.name = name_
 	obj.type = "NotFound"
+	local str_func = function(self)
+		local str = "ModuleManager."..self.type..":"..self.name
+		return str
+	end
+	setmetatable(obj, {__tostring =str_func})
 	return obj
 end
 
@@ -107,8 +118,12 @@ ModuleManager.FileNotFound = {}
 -- @return 例外オブジェクト
 ModuleManager.FileNotFound.new = function(name_)
 	local obj = {}
-	setmetatable(obj, {__index=ModuleManager.NotFound.new(name_)})
 	obj.type = "FileNotFound"
+	local str_func = function(self)
+		local str = "ModuleManager."..self.type..":"..self.name
+		return str
+	end
+	setmetatable(obj, {__tostring =str_func, __index=ModuleManager.NotFound.new(name_)})
 	return obj
 end
 
@@ -118,8 +133,12 @@ ModuleManager.ModuleNotFound = {}
 -- @return 例外オブジェクト
 ModuleManager.ModuleNotFound.new = function(name_)
 	local obj = {}
-	setmetatable(obj, {__index=ModuleManager.NotFound.new(name_)})
 	obj.type = "ModuleNotFound"
+	local str_func = function(self)
+		local str = "ModuleManager."..self.type..":"..self.name
+		return str
+	end
+	setmetatable(obj, {__tostring =str_func, __index=ModuleManager.NotFound.new(name_)})
 	return obj
 end
 
@@ -129,8 +148,12 @@ ModuleManager.SymbolNotFound = {}
 -- @return 例外オブジェクト
 ModuleManager.SymbolNotFound.new = function(name_)
 	local obj = {}
-	setmetatable(obj, {__index=ModuleManager.NotFound.new(name_)})
 	obj.type = "SymbolNotFound"
+	local str_func = function(self)
+		local str = "ModuleManager."..self.type..":"..self.name
+		return str
+	end
+	setmetatable(obj, {__tostring =str_func, __index=ModuleManager.NotFound.new(name_)})
 	return obj
 end
 
@@ -141,8 +164,12 @@ ModuleManager.NotAllowedOperation = {}
 -- @return 例外オブジェクト
 ModuleManager.NotAllowedOperation.new = function(reason_)
 	local obj = {}
-	setmetatable(obj, {__index=ModuleManager.Error.new(reason_)})
 	obj.type = "NotAllowedOperation"
+	local str_func = function(self)
+		local str = "ModuleManager."..self.type..":"..self.reason
+		return str
+	end
+	setmetatable(obj, {__tostring =str_func, __index=ModuleManager.Error.new(reason_)})
 	return obj
 end
 
@@ -153,8 +180,12 @@ ModuleManager.InvalidArguments = {}
 -- @return 例外オブジェクト
 ModuleManager.InvalidArguments.new = function(reason_)
 	local obj = {}
-	setmetatable(obj, {__index=ModuleManager.Error.new(reason_)})
 	obj.type = "InvalidArguments"
+	local str_func = function(self)
+		local str = "ModuleManager."..self.type..":"..self.reason
+		return str
+	end
+	setmetatable(obj, {__tostring =str_func, __index=ModuleManager.Error.new(reason_)})
 	return obj
 end
 
@@ -165,8 +196,12 @@ ModuleManager.InvalidOperation = {}
 -- @return 例外オブジェクト
 ModuleManager.InvalidOperation.new = function(reason_)
 	local obj = {}
-	setmetatable(obj, {__index=ModuleManager.Error.new(reason_)})
 	obj.type = "InvalidOperation"
+	local str_func = function(self)
+		local str = "ModuleManager."..self.type..":"..self.reason
+		return str
+	end
+	setmetatable(obj, {__tostring =str_func, __index=ModuleManager.Error.new(reason_)})
 	return obj
 end
 

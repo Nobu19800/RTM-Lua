@@ -375,6 +375,16 @@ function TestManager:test_pre()
 	mgr:unloadAll()
 	mgr:createShutdownThread(0.01)
 end
+--[[
+function TestManager:test_mod()
+	package.loaded["openrtm.Manager"] = nil
+	ORB_Dummy_ENABLE = true
+	local Manager = require "openrtm.Manager"
+	package.loaded["openrtm.Manager"] = nil
+	ORB_Dummy_ENABLE = false
+	local Manager = require "openrtm.Manager"
+end
+--]]
 
 
 local Manager = require "openrtm.Manager"

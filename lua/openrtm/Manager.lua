@@ -68,7 +68,9 @@ if ORB_Dummy_ENABLE then
 	oil.main = function(func)
 		func()
 	end
-
+	
+	function ORB_Dummy:loadidlfile(name)
+	end
 
 	function ORB_Dummy.types:lookup(name)
 		local ret = {}
@@ -90,6 +92,13 @@ if ORB_Dummy_ENABLE then
 			ret.labelvalue.ACTIVE_STATE = 2
 			ret.labelvalue.ERROR_STATE = 3
 		elseif name == "::OpenRTM::PortStatus" then
+			ret.labelvalue.PORT_OK = 0
+			ret.labelvalue.PORT_ERROR = 1
+			ret.labelvalue.BUFFER_FULL = 2
+			ret.labelvalue.BUFFER_EMPTY = 3
+			ret.labelvalue.BUFFER_TIMEOUT = 4
+			ret.labelvalue.UNKNOWN_ERROR = 5
+		elseif name == "::RTC::PortStatus" then
 			ret.labelvalue.PORT_OK = 0
 			ret.labelvalue.PORT_ERROR = 1
 			ret.labelvalue.BUFFER_FULL = 2
@@ -178,11 +187,32 @@ if ORB_Dummy_ENABLE then
 
 	Manager.Dummy_InPortCDR = {}
 	Dummy_InPortCDR = Manager.Dummy_InPortCDR
-	Dummy_InPortCDR.ref = nil
 	Dummy_InPortCDR.new = function()
 		local obj = {}
 		function obj:put(data)
-			return Dummy_InPortCDR.ref:put(data)
+			return ORB_Dummy.types:lookup("::OpenRTM::PortStatus").PORT_OK
+		end
+		function obj:push(data)
+			return ORB_Dummy.types:lookup("::RTC::PortStatus").PORT_OK
+		end
+		function obj:getObjRef()
+			return self
+		end
+		return obj
+	end
+
+	Manager.Dummy_OutPortCDR = {}
+	Dummy_OutPortCDR = Manager.Dummy_OutPortCDR
+	Dummy_OutPortCDR.new = function()
+		local obj = {}
+		function obj:get()
+			return ORB_Dummy.types:lookup("::OpenRTM::PortStatus").PORT_OK, ""
+		end
+		function obj:pull()
+			return ORB_Dummy.types:lookup("::RTC::PortStatus").PORT_OK, ""
+		end
+		function obj:getObjRef()
+			return self
 		end
 		return obj
 	end
@@ -199,6 +229,12 @@ if ORB_Dummy_ENABLE then
 			ret = NameServer_dummy
 		elseif idl == "IDL:openrtm.aist.go.jp/OpenRTM/InPortCdr:1.0" and ref == "IOR:Dummy" then
 			ret = Dummy_InPortCDR.new()
+		elseif idl == "IDL:omg.org/RTC/DataPushService:1.0" and ref == "IOR:Dummy" then
+			ret = Dummy_InPortCDR.new()
+		elseif idl == "IDL:openrtm.aist.go.jp/OpenRTM/OutPortCdr:1.0" and ref == "IOR:Dummy" then
+			ret = Dummy_OutPortCDR.new()
+		elseif idl == "IDL:omg.org/RTC/DataPullService:1.0" and ref == "IOR:Dummy" then
+			ret = Dummy_OutPortCDR.new()
 		else
 		end
 		ret._non_existent = function(self)
@@ -448,9 +484,9 @@ end
 -- マネージャアクティブ化
 function Manager:activateManager()
 	local mods = StringUtil.strip(StringUtil.split(self._config:getProperty("manager.modules.preload"), ","))
-
+	
 	for k,mod in ipairs(mods) do
-		if mod == nil or comp == "" then
+		if mod == nil or mod == "" then
 		else
 			--local basename = StringUtil.split(StringUtil.basename(mod),"%.")[1]
 			--basename = basename.."Init"
@@ -465,7 +501,7 @@ function Manager:activateManager()
 			end
 		end
 	end
-	sdofactory_ = SdoServiceConsumerFactory:instance()
+	local sdofactory_ = SdoServiceConsumerFactory:instance()
     self._config:setProperty("sdo.service.consumer.available_services",
 								StringUtil.flatten(sdofactory_:getIdentifiers()))
 	return true

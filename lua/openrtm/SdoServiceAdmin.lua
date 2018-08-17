@@ -70,16 +70,18 @@ SdoServiceAdmin.new = function(rtobj)
 			end
 		end
 
-		local factory = SdoServiceProviderFactory.instance()
+		local factory = SdoServiceProviderFactory:instance()
 		for i,ap_type in ipairs(activeProviderTypes) do
 			local svc = factory:createObject(ap_type)
 			local propkey = self:ifrToKey(ap_type)
 			local properties = {}
 			NVUtil.copyFromProperties(properties, prop:getNode(tostring(propkey)))
-			local prof = SDOPackage.ServiceProfile(tostring(ap_type),
-				tostring(ap_type),
-				properties,
-				svc._svr)
+			local prof = {
+				id = tostring(ap_type),
+				interface_type = tostring(ap_type),
+				properties = properties,
+				service = svc._svr}
+				
 				
 
 			if not svc:init(rtobj, prof) then
@@ -104,6 +106,7 @@ SdoServiceAdmin.new = function(rtobj)
 		self._rtcout:RTC_DEBUG("sdo.service.consumer.available_services: %s",
 			prop:getProperty("sdo.service.consumer.available_services"))
 
+		
 
 		for i, ctype in ipairs(self._consumerTypes) do
 			local tmp = string.lower(ctype)
@@ -198,13 +201,13 @@ SdoServiceAdmin.new = function(rtobj)
     	local profile = sProfile
     
 
-    	if not self.isEnabledConsumerType(sProfile) then
-    		self._rtcout:RTC_ERROR("Not supported consumer type. %s", profile.id)
+    	if not self:isEnabledConsumerType(sProfile) then
+    		self._rtcout:RTC_ERROR("Not supported consumer type. %s", profile.interface_type)
 			return false
 		end
   
-    	if not self.isExistingConsumerType(sProfile) then
-      		self._rtcout:RTC_ERROR("type %s already exists.", profile.id)
+    	if not self:isExistingConsumerType(sProfile) then
+      		self._rtcout:RTC_ERROR("type %s not exists.", profile.interface_type)
 			return false
 		end
     	if tostring(profile.id) ==  "" then
@@ -215,7 +218,7 @@ SdoServiceAdmin.new = function(rtobj)
 
 		local id = tostring(sProfile.id)
     	for i,consumer in ipairs(self._consumers) do
-      		if id == tostring(self._consumers[i].getProfile().id) then
+      		if id == tostring(self._consumers[i]:getProfile().id) then
         		self._rtcout:RTC_INFO("Existing consumer is reinitilized.")
         		self._rtcout:RTC_DEBUG("Propeteis are: %s",
                                NVUtil.toString(sProfile.properties))
@@ -234,8 +237,8 @@ SdoServiceAdmin.new = function(rtobj)
     		self._rtcout:RTC_DEBUG("id:         %s", tostring(sProfile.id))
     		self._rtcout:RTC_DEBUG("IFR:        %s", tostring(sProfile.interface_type))
     		self._rtcout:RTC_DEBUG("properties: %s", NVUtil.toString(sProfile.properties))
-      		factory.deleteObject(consumer)
-      		self._rtcout.RTC_INFO("SDO consumer was deleted by initialization failure")
+      		factory:deleteObject(consumer)
+      		self._rtcout:RTC_INFO("SDO consumer was deleted by initialization failure")
 			return false
 		end
 
@@ -245,12 +248,12 @@ SdoServiceAdmin.new = function(rtobj)
     	return true
 	end
 
-	function obj:addSdoServiceConsumer(id)
+	function obj:removeSdoServiceConsumer(id)
 		if id == "" then
 			self._rtcout:RTC_ERROR("removeSdoServiceConsumer(): id is invalid.")
     		return false
 		end
-		self._rtcout.RTC_TRACE("removeSdoServiceConsumer(id = %s)", id)
+		self._rtcout:RTC_TRACE("removeSdoServiceConsumer(id = %s)", id)
 
     	local strid = id
 
@@ -288,10 +291,11 @@ SdoServiceAdmin.new = function(rtobj)
 	end
 
 	function obj:isExistingConsumerType(sProfile)
-		local factory = SdoServiceConsumerFactory.instance()
-		local consumerTypes = factory.getIdentifiers()
+		local factory = SdoServiceConsumerFactory:instance()
+		local consumerTypes = factory:getIdentifiers()
+		--print(#consumerTypes, sProfile.interface_type)
     	for i, consumer in ipairs(consumerTypes) do
-    		if consumerTypes == tostring(sProfile.interface_type) then
+    		if consumer == tostring(sProfile.interface_type) then
     			self._rtcout:RTC_DEBUG("%s exists in the SDO service factory.", tostring(sProfile.interface_type))
         		self._rtcout:RTC_PARANOID("Available SDO serices in the factory: %s", tostring(StringUtil.flatten(consumerTypes)))
 				return true
@@ -309,8 +313,8 @@ SdoServiceAdmin.new = function(rtobj)
 	function obj:ifrToKey(ifr)
 		local ifrvstr = StringUtil.split(ifr, ":")
 		ifrvstr[2] = string.lower(ifrvstr[2])
-		ifrvstr[2] = string.gsub(file_name, "%.", "_")
-		ifrvstr[2] = string.gsub(file_name, "/", "%.")
+		ifrvstr[2] = string.gsub(ifrvstr[2], "%.", "_")
+		ifrvstr[2] = string.gsub(ifrvstr[2], "/", "%.")
     	return ifrvstr[2]
 	end
 

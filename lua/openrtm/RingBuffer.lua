@@ -14,6 +14,8 @@ local RingBuffer= {}
 local BufferBase = require "openrtm.BufferBase"
 local TimeValue = require "openrtm.TimeValue"
 local BufferStatus = require "openrtm.BufferStatus"
+local StringUtil = require "openrtm.StringUtil"
+
 
 RingBuffer.RINGBUFFER_DEFAULT_LENGTH = 8
 
@@ -100,6 +102,7 @@ RingBuffer.new = function(length)
 
 		self._wpos = (self._wpos + n + self._length) % self._length
 		self._fillcount = self._fillcount + n
+		self._wcount = self._wcount + n
 		return BufferStatus.BUFFER_OK
     end
 
@@ -124,7 +127,14 @@ RingBuffer.new = function(length)
 			nsec = 0
 		end
 		if self:full() then
-			self:advanceRptr()
+			local timedwrite = self._timedwrite
+			local overwrite  = self._overwrite
+			if overwrite then
+				self:advanceRptr()
+			else
+				return BufferStatus.BUFFER_FULL
+			end
+			
 		end
 
 		self:put(value)
@@ -199,7 +209,16 @@ RingBuffer.new = function(length)
 			nsec = 0
 		end
 		if self:empty() then
-			return BufferStatus.BUFFER_EMPTY
+			local timedread = self._timedread
+			local readback  = self._readback
+			if readback then
+				if not (self._wcount > 0) then
+					return BufferStatus.BUFFER_EMPTY
+				end
+				self:advanceRptr(-1)
+			else
+				return BufferStatus.BUFFER_EMPTY
+			end
 		end
 		self:get(value)
 		self:advanceRptr()
@@ -219,14 +238,35 @@ RingBuffer.new = function(length)
 	-- 初期化時にバッファ長さ設定
 	-- @param prop プロパティ
 	function obj:__initLength(prop)
+		local n = tonumber(prop:getProperty("length"))
+		if n ~= nil then
+			self:length(n)
+		end
 	end
 	-- バッファ書き込み時のポリシー設定
 	-- @param prop プロパティ
 	function obj:__initWritePolicy(prop)
+		local policy = StringUtil.normalize(prop:getProperty("write.full_policy"))
+		if policy == "overwrite" then
+			self._overwrite  = true
+      		self._timedwrite = false
+		elseif policy == "do_nothing" then
+			self._overwrite  = false
+      		self._timedwrite = false
+		end
+
 	end
 	-- バッファ読み込み時のポリシー設定
 	-- @param prop プロパティ
 	function obj:__initReadPolicy(prop)
+		local policy = StringUtil.normalize(prop:getProperty("read.empty_policy"))
+		if policy == "readback" then
+			self._readback  = true
+      		self._timedread = false
+		elseif policy == "do_nothing" then
+			self._readback  = false
+      		self._timedread = false
+		end
 	end
 	obj:reset()
 

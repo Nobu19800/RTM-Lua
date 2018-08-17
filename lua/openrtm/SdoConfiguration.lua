@@ -84,7 +84,7 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 					description="ID is empty"
 				})
 		end
-
+		
 		if not self._configsets:haveConfig(config_id) then
 			self._rtcout:RTC_ERROR("No such ConfigurationSet")
 			error(self._orb:newexcept{"SDOPackage::InternalError",
@@ -178,13 +178,27 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 	end
 
 	-- サービスプロファイル追加
-	-- 未実装
 	-- @param sProfile サービスプロファイル
+	-- @return true：追加成功
 	function obj:add_service_profile(sProfile)
 		self._rtcout:RTC_TRACE("add_service_profile()")
-		error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+		if sProfile == nil then
+			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
 					description="sProfile is empty."
 			})
+		end
+		local ret = false
+		local success, exception = oil.pcall(
+			function()
+				ret = self._sdoservice:addSdoServiceConsumer(sProfile)
+		end)
+		if not success then
+			self._rtcout:RTC_ERROR(exception)
+			error(self._orb:newexcept{"SDOPackage::InternalError",
+					description="Configuration.add_service_profile"
+			})
+		end
+		return ret
 	end
 	
 	-- オーガナイゼーションオブジェクト追加
@@ -198,13 +212,27 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 	end
 
 	-- サービスプロファイル削除
-	-- 未実装
 	-- @param id_ ID
+	-- @return true：削除成功
 	function obj:remove_service_profile(id_)
 		self._rtcout:RTC_TRACE("remove_service_profile("..id_..")")
-		error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+		if id_ == "" then
+			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
 					description="id is empty."
 			})
+		end
+		local ret = false
+		local success, exception = oil.pcall(
+			function()
+				ret = self._sdoservice:removeSdoServiceConsumer(id_)
+		end)
+		if not success then
+			self._rtcout:RTC_ERROR(exception)
+			error(self._orb:newexcept{"SDOPackage::InternalError",
+					description="Configuration.remove_service_profile"
+			})
+		end
+		return ret
 	end
 
 	-- オーガナイゼーションオブジェクト削除

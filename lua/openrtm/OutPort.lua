@@ -36,7 +36,11 @@ OutPort.new = function(name, value, data_type, buffer)
 
 	obj._value          = value
     obj._OnWrite        = nil
-    obj._OnWriteConvert = nil
+	obj._OnWriteConvert = nil
+	
+	function obj:name()
+		return self._name
+	end
     
     -- データ書き込み
     -- @param value 送信データ
@@ -49,7 +53,7 @@ OutPort.new = function(name, value, data_type, buffer)
 
 
 		if self._OnWrite ~= nil then
-			self._OnWrite(value)
+			self._OnWrite:call(value)
 		end
 
 		local conn_size = #self._connectors
@@ -60,7 +64,7 @@ OutPort.new = function(name, value, data_type, buffer)
 
 
 		if self._OnWriteConvert ~= nil then
-			value = self._OnWriteConvert(value)
+			value = self._OnWriteConvert:call(value)
 		end
 
 		local result = true

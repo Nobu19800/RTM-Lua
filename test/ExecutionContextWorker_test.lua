@@ -3,10 +3,10 @@ local ExecutionContextWorker = require "openrtm.ExecutionContextWorker"
 local Properties = require "openrtm.Properties"
 
 
-TestExecutionContextProfile = {}
+TestExecutionContextWorker = {}
 
 
-function TestExecutionContextProfile:test_init()
+function TestExecutionContextWorker:test_init()
 	local mgr = require "openrtm.Manager"
 	mgr:init({"-o","corba.step.count:0"})
 	mgr:activateManager()

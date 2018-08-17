@@ -133,6 +133,7 @@ PortBase.new = function(name)
     obj._portconnListeners = nil
 	obj._properties = Properties.new()
 	obj._svr = nil
+	obj._connectors = {}
 
 	-- ポートプロファイル取得
 	-- @return プロファイル
@@ -492,7 +493,7 @@ PortBase.new = function(name)
 	function obj:onNotifyConnect(portname, profile)
 		if self._portconnListeners ~= nil then
 			local _type = PortConnectListenerType.ON_NOTIFY_CONNECT
-			--self._portconnListeners.portconnect_[_type]:notify(portname, profile)
+			self._portconnListeners.portconnect_[_type]:notify(portname, profile)
 		end
     end
     -- コネクタ切断実行時のコールバック実行
@@ -501,7 +502,7 @@ PortBase.new = function(name)
 	function obj:onNotifyDisconnect(portname, profile)
 		if self._portconnListeners ~= nil then
 			local _type = PortConnectListenerType.ON_NOTIFY_DISCONNECT
-			--self._portconnListeners.portconnect_[_type]:notify(portname, profile)
+			self._portconnListeners.portconnect_[_type]:notify(portname, profile)
 		end
     end
     -- インターフェス解放時のコールバック実行
@@ -510,7 +511,7 @@ PortBase.new = function(name)
 	function obj:onUnsubscribeInterfaces(portname, profile)
 		if self._portconnListeners ~= nil then
 			local _type = PortConnectListenerType.ON_UNSUBSCRIBE_INTERFACES
-			--self._portconnListeners.portconnect_[_type]:notify(portname, profile)
+			self._portconnListeners.portconnect_[_type]:notify(portname, profile)
 		end
     end
     -- インターフェス登録時のコールバック実行
@@ -520,7 +521,7 @@ PortBase.new = function(name)
 	function obj:onPublishInterfaces(portname, profile, ret)
 		if self._portconnListeners ~= nil then
 			local _type = PortConnectRetListenerType.ON_PUBLISH_INTERFACES
-			--self._portconnListeners.portconnret_[_type]:notify(portname, profile, ret)
+			self._portconnListeners.portconnret_[_type]:notify(portname, profile, ret)
 		end
     end
     -- 次のポート接続時のコールバック実行
@@ -530,7 +531,7 @@ PortBase.new = function(name)
 	function obj:onConnectNextport(portname, profile, ret)
 		if self._portconnListeners ~= nil then
 			local _type = PortConnectRetListenerType.ON_CONNECT_NEXTPORT
-			--self._portconnListeners.portconnret_[_type]:notify(portname, profile, ret)
+			self._portconnListeners.portconnret_[_type]:notify(portname, profile, ret)
 		end
     end
     -- インターフェ－ス取得時のコールバック実行
@@ -540,7 +541,7 @@ PortBase.new = function(name)
 	function obj:onSubscribeInterfaces(portname, profile, ret)
 		if self._portconnListeners ~= nil then
 			local _type = PortConnectRetListenerType.ON_SUBSCRIBE_INTERFACES
-			--self._portconnListeners.portconnret_[_type]:notify(portname, profile, ret)
+			self._portconnListeners.portconnret_[_type]:notify(portname, profile, ret)
 		end
     end
     -- コネクタ接続後のコールバック実行
@@ -550,7 +551,7 @@ PortBase.new = function(name)
 	function obj:onConnected(portname, profile, ret)
 		if self._portconnListeners ~= nil then
 			local _type = PortConnectRetListenerType.ON_CONNECTED
-			--self._portconnListeners.portconnret_[_type]:notify(portname, profile, ret)
+			self._portconnListeners.portconnret_[_type]:notify(portname, profile, ret)
 		end
     end
     -- 次のポート切断時のコールバック実行
@@ -560,7 +561,7 @@ PortBase.new = function(name)
 	function obj:onDisconnectNextport(portname, profile, ret)
 		if self._portconnListeners ~= nil then
 			local _type = PortConnectRetListenerType.ON_DISCONNECT_NEXT
-			--self._portconnListeners.portconnret_[_type]:notify(portname, profile, ret)
+			self._portconnListeners.portconnret_[_type]:notify(portname, profile, ret)
 		end
     end
     -- コネクタ接断後のコールバック実行
@@ -570,7 +571,7 @@ PortBase.new = function(name)
 	function obj:onDisconnected(portname, profile, ret)
 		if self._portconnListeners ~= nil then
 			local _type = PortConnectRetListenerType.ON_DISCONNECTED
-			--self._portconnListeners.portconnret_[_type]:notify(portname, profile, ret)
+			self._portconnListeners.portconnret_[_type]:notify(portname, profile, ret)
 		end
     end
 
@@ -700,7 +701,7 @@ PortBase.new = function(name)
 	-- @param cprof コネクタプロファイル
 	-- @return リターンコード
 	function obj:subscribeInterfaces(connector_profile)
-		return self._ReturnCode_t.RTC_OK
+		return self._ReturnCode_t.BAD_PARAMETER
     end
     -- プロファイルの設定
     -- @param _key キー

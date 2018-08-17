@@ -10,10 +10,14 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 local SdoServiceProviderBase= {}
 local GlobalFactory = require "openrtm.GlobalFactory"
 local Factory = GlobalFactory.Factory
+local RTCUtil = require "openrtm.RTCUtil"
 --_G["openrtm.SdoServiceProviderBase"] = SdoServiceProviderBase
 
 SdoServiceProviderBase.new = function()
 	local obj = {}
+	local Manager = require "openrtm.Manager"
+	obj._manager = Manager:instance()
+	obj._orb = obj._manager:getORB()
 
 	-- オブジェクトリファレンス生成
 	function obj:createRef()

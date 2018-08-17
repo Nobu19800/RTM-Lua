@@ -240,7 +240,7 @@ CorbaPort.new = function(name)
 
 	-- コネクタプロファイルにオブジェクトを設定する
 	-- 以下の要素名にIOR文字列を登録
-	-- RTC名.port.ポート名
+	-- RTC名.port.ポート名.型名.インスタンス名
 	-- port.型名.インスタンス名
 	-- @param connector_profile コネクタプロファイル
 	-- @return リターンコード

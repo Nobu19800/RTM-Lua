@@ -26,8 +26,12 @@ function TestCorbaNaming:test_naming()
 	function hello:echo(name)
 		return "abc"
 	end
+	
 
 	local svr = orb:newservant(hello, nil, "Hello")
+	function hello:getObjRef()
+		return svr
+	end
 	--local ior = orb:tostring(svr)
 	local objref = RTCUtil.getReference(orb, svr, "Hello")
 

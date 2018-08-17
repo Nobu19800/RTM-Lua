@@ -85,6 +85,10 @@ StateMachine.new = function(num_of_state)
 		self._postdo[state] = call_back
 		return true
 	end
+	function obj:setPreDoAction(state, call_back)
+		self._predo[state] = call_back
+		return true
+	end
 	-- exitアクションのコールバック関数を設定
     -- @param state 状態
     -- @param call_back コールバック関数

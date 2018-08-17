@@ -1033,6 +1033,7 @@ RTObject.new = function(manager)
 		self._rtcout:RTC_TRACE("get_participating_contexts()")
 		local execlist = {}
 		CORBA_SeqUtil.for_each(self._ecOther, ec_copy.new(execlist))
+		--print(#self._ecOther)
 		return execlist
 	end
 
@@ -1048,12 +1049,12 @@ RTObject.new = function(manager)
 		local num = CORBA_SeqUtil.find(self._ecMine, ec_find.new(cxt))
 		--print(num)
 		if num ~= -1 then
-			return num
+			return num-1
 		end
 
 		num = CORBA_SeqUtil.find(self._ecOther, ec_find.new(cxt))
 		if num ~= -1 then
-			return num + 1000
+			return num-1 + 1000
 		end
 
 		return -1
@@ -1336,7 +1337,7 @@ RTObject.new = function(manager)
 	-- @param ec_id 実行コンテキストのID
 	-- @return リターンコードリターンコード
 	function obj:detach_context(ec_id)
-		
+		ec_id = ec_id + 1
 		local ECOTHER_OFFSET = RTObject.ECOTHER_OFFSET
     	self._rtcout:RTC_TRACE("detach_context(%d)", ec_id)
     	local len_ = #self._ecOther
@@ -1346,7 +1347,7 @@ RTObject.new = function(manager)
 		end
     
     	local index = tonumber(ec_id - ECOTHER_OFFSET)
-
+		
     	if index < 0 or self._ecOther[index] == oil.corba.idl.null then
 			return self._ReturnCode_t.BAD_PARAMETER
 		end
@@ -1451,15 +1452,15 @@ RTObject.new = function(manager)
 	end
 
 	function obj:removeSdoServiceProvider(id)
-		return self._sdoservice.removeSdoServiceProvider(id)
+		return self._sdoservice:removeSdoServiceProvider(id)
 	end
 
 	function obj:addSdoServiceConsumer(prof)
-		return self._sdoservice.addSdoServiceConsumer(prof)
+		return self._sdoservice:addSdoServiceConsumer(prof)
 	end
 
 	function obj:removeSdoServiceConsumer(id)
-		return self._sdoservice.removeSdoServiceConsumer(id)
+		return self._sdoservice:removeSdoServiceConsumer(id)
 	end
 
 

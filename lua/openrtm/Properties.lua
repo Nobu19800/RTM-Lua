@@ -80,31 +80,12 @@ Properties.new = function(argv)
 	function obj:getValue()
 		return self.value
 	end
-	-- デフォルト値設定
+	-- デフォルト値取得
 	-- @param key キー
 	-- @param default デフォルト値
 	-- @return 値
 	function obj:getDefaultValue(key, default)
-		if default ~= nil then
-			local keys = StringUtil.split(key, "%.")
-
-			local node = self:_getNode(keys, 1, self)
-			if node ~= nil then
-				if node.value ~= nil then
-					return node.value
-				else
-					return node.default_value
-				end
-			end
-			return self.empty
-		else
-			local value = self:getProperty(key)
-			if value ~= nil then
-				return value
-			else
-				return default
-			end
-		end
+		return self.default_value
 	end
 	-- ルート要素の取得
 	-- @return ルート要素
@@ -251,7 +232,7 @@ Properties.new = function(argv)
 	-- @return プロパティ
 	function obj:loadStream(inStream)
 		pline = ""
-		for i, readStr in inStream do
+		for i, readStr in ipairs(inStream) do
 			if readStr ~= "" then
 				local _str = readStr
 				_str = StringUtil.eraseHeadBlank(_str)
@@ -265,13 +246,11 @@ Properties.new = function(argv)
 						pline = pline..tmp
 					else
 						pline = pline.._str
-						local key = {}
-						local value = {}
-						self:splitKeyValue(pline, key, value)
-						key = OpenRTM_aist.unescape(key)
+						local key, value = self:splitKeyValue(pline)
+						key = StringUtil.unescape(key)
 						key = StringUtil.eraseHeadBlank(key)
 						key = StringUtil.eraseHeadBlank(key)
-						value = OpenRTM_aist.unescape(value)
+						value = StringUtil.unescape(value)
 						value = StringUtil.eraseHeadBlank(value)
 						value = StringUtil.eraseHeadBlank(value)
 						self:setProperty(key, value)
@@ -354,7 +333,7 @@ Properties.new = function(argv)
 		for i, leaf in ipairs(self.leaf) do
 			if leaf.name == leaf_name then
 				local prop = leaf
-				table.remove(prop, i)
+				table.remove(self.leaf, i)
 				return prop
 			end
 		end
@@ -392,27 +371,29 @@ Properties.new = function(argv)
 	-- @param key キー一覧
 	-- @param value 値一覧
 	-- @return プロパティ
-	function obj:splitKeyValue(_str, key, value)
+	function obj:splitKeyValue(_str)
 
+		local key = ""
+		local value = ""
 		local length = #_str
 		for i = 1, length do
 			local s = string.sub(_str,i,i)
 			if (s == ":" or s == "=") and not StringUtil.isEscaped(_str, i) then
-				table.insert(key,string.sub(_str,1,i-1))
-				table.insert(value,string.sub(_str,i+1))
-				return
+				key = string.sub(_str,1,i-1)
+				value = string.sub(_str,i+1)
+				return key, value
 			end
 		end
 		for i = 1, length do
 			if s == " " and not StringUtil.isEscaped(_str, i) then
-				table.insert(key,string.sub(_str,1,i-1))
-				table.insert(value,string.sub(_str,i+1))
-				return
+				key = string.sub(_str,1,i-1)
+				value = string.sub(_str,i+1)			
+				return key, value
 			end
 		end
-		table.insert(key,_str)
-		table.insert(value,"")
-		return self.leaf
+		key = _str
+		value = ""
+		return key, value
 	end
 	-- 文字列を分割する
 	-- @param _str 文字列
@@ -437,7 +418,7 @@ Properties.new = function(argv)
 	-- @param keys キー一覧
 	-- @param index キー一覧のインデックス
 	-- @param curr 現在のノード
-	-- @param 次のノード
+	-- @return 次のノード
 	function obj:_getNode(keys, index, curr)
 		--print(keys[index])
 		local _next = curr:hasKey(keys[index])
@@ -537,7 +518,7 @@ Properties.new = function(argv)
 	function obj:load(inStream)
 		local pline = ""
 		for readStr in inStream:lines() do
-
+			
 			local _str = StringUtil.eraseHeadBlank(readStr)
 
 
@@ -555,15 +536,14 @@ Properties.new = function(argv)
 				else
 					pline = pline.._str
 
-					local key = {}
-					local value = {}
+					
 					--print(key)
-					self:splitKeyValue(pline, key, value)
-					key = StringUtil.unescape(key[1])
+					local key, value = self:splitKeyValue(pline)
+					key = StringUtil.unescape(key)
 					key = StringUtil.eraseHeadBlank(key)
 					key = StringUtil.eraseTailBlank(key)
 
-					value = StringUtil.unescape(value[1])
+					value = StringUtil.unescape(value)
 					value = StringUtil.eraseHeadBlank(value)
 					value = StringUtil.eraseTailBlank(value)
 					--print(value)

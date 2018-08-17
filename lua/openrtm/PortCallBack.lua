@@ -54,7 +54,7 @@ PortCallBack.OnWriteConvert = {}
 PortCallBack.OnWriteConvert.new = function()
 	local obj = {}
 	function obj:call(value)
-		
+		return value
 	end
 	local call_func = function(self, value)
 		self:call(value)
@@ -81,7 +81,7 @@ PortCallBack.OnReadConvert = {}
 PortCallBack.OnReadConvert.new = function()
 	local obj = {}
 	function obj:call(value)
-		
+		return value
 	end
 	local call_func = function(self, value)
 		self:call(value)

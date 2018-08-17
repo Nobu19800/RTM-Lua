@@ -72,27 +72,35 @@ ManagerConfig.new = function(argv)
 			if opt.id == "a" then
 				self._argprop:setProperty("manager.corba_servant", "NO")
 			elseif opt.id == "f" then
-				self._configFile = opt.optarg
+				if opt.optarg ~= nil then
+					self._configFile = opt.optarg
+				end
 			elseif opt.id == "l" then
-				self._configFile = opt.optarg
+				if opt.optarg ~= nil then
+					self._configFile = opt.optarg
+				end
 			elseif opt.id == "o" then
-				local pos = string.find(opt.optarg, ":")
-				if pos ~= nil then
-					local idx = string.sub(opt.optarg,1,pos-1)
-					local value = string.sub(opt.optarg,pos+1)
-					idx = StringUtil.unescape(idx)
-					idx = StringUtil.eraseHeadBlank(idx)
-					idx = StringUtil.eraseTailBlank(idx)
-					
-					value = StringUtil.unescape(value)
-					value = StringUtil.eraseHeadBlank(value)
-					value = StringUtil.eraseTailBlank(value)
-					--print(idx, value)
-					self._argprop:setProperty(idx, value)
+				if opt.optarg ~= nil then
+					local pos = string.find(opt.optarg, ":")
+					if pos ~= nil then
+						local idx = string.sub(opt.optarg,1,pos-1)
+						local value = string.sub(opt.optarg,pos+1)
+						idx = StringUtil.unescape(idx)
+						idx = StringUtil.eraseHeadBlank(idx)
+						idx = StringUtil.eraseTailBlank(idx)
+						
+						value = StringUtil.unescape(value)
+						value = StringUtil.eraseHeadBlank(value)
+						value = StringUtil.eraseTailBlank(value)
+						--print(idx, value)
+						self._argprop:setProperty(idx, value)
+					end
 				end
 			elseif opt.id == "p" then
-				local arg_ = ":"..tostring(opt.optarg)
-				self._argprop:setProperty("corba.endpoints", arg_)
+				if opt.optarg ~= nil then
+					local arg_ = ":"..tostring(opt.optarg)
+					self._argprop:setProperty("corba.endpoints", arg_)
+				end
 			elseif opt.id == "d" then
 				self._isMaster = true
 			end

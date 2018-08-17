@@ -281,16 +281,7 @@ ConfigAdmin.new = function(configsets)
 	end
 
 
-	-- コンフィギュレーションセットIDの存在確認
-	-- @param config_id コンフィギュレーションセットID
-	-- @return true：存在する、false：存在しない
-	function obj:haveConfig(config_id)
-		if self._configsets:hasKey(config_id) == false then
-			return false
-		else
-			return true
-		end
-	end
+
 
 	-- コンフィギュレーション管理オブジェクトがアクティブかを確認
 	-- return true：アクティブ、false：非アクティブ

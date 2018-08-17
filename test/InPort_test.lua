@@ -4,7 +4,7 @@ local OutPort = require "openrtm.OutPort"
 local Properties = require "openrtm.Properties"
 local CORBA_RTCUtil = require "openrtm.CORBA_RTCUtil"
 local ConnectorListener = require "openrtm.ConnectorListener"
-
+local PortCallBack = require "openrtm.PortCallBack"
 
 
 
@@ -36,6 +36,32 @@ ConnListener.new = function(name)
 	return obj
 end
 
+
+
+
+local OnRead = {}
+OnRead.new = function()
+	local obj = {}
+	setmetatable(obj, {__index=PortCallBack.OnRead.new()})
+	obj._count = 0
+	function obj:call()
+		self._count = self._count + 1
+	end
+	return obj
+end
+
+
+local OnReadConvert = {}
+OnReadConvert.new = function()
+	local obj = {}
+	setmetatable(obj, {__index=PortCallBack.OnReadConvert.new()})
+	obj._count = 0
+	function obj:call(value)
+		self._count = self._count + 1
+		return value
+	end
+	return obj
+end
 
 
 
@@ -89,15 +115,10 @@ function TestInPort:test_inport()
 	luaunit.assertIsFalse(inIn:isNew())
 	luaunit.assertIsTrue(inIn:isEmpty())
 	
-	local ret_onread = 0
-	local ret_onreadconv = 0
-	inIn:setOnRead(function()
-		ret_onread = ret_onread+1
-	end)
-	inIn:setOnReadConvert(function(value)
-		ret_onreadconv = ret_onreadconv+1
-		return value 
-	end)
+	local on_read = OnRead.new()
+	inIn:setOnRead(on_read)
+	local on_read_conv = OnReadConvert.new()
+	inIn:setOnReadConvert(on_read_conv)
 
 
 	local d_out = {tm={sec=0,nsec=0},data=0}
@@ -119,8 +140,8 @@ function TestInPort:test_inport()
 	inIn:read()
 	
 	
-	luaunit.assertEquals(ret_onread, 1)
-	luaunit.assertEquals(ret_onreadconv, 1)
+	luaunit.assertEquals(on_read._count, 1)
+	luaunit.assertEquals(on_read_conv._count, 1)
 
 	inIn:update()
 	

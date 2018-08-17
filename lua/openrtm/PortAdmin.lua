@@ -16,7 +16,7 @@ local ObjectManager = require "openrtm.ObjectManager"
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 
 
--- RTCの名前が一致しているか判定する関数オブジェクト初期化
+-- ポートの名前が一致しているか判定する関数オブジェクト初期化
 -- @param argv argv.name：型名、argv.factory：ファクトリ
 -- @return 関数オブジェクト
 local comp_op = function(argv)
@@ -26,7 +26,7 @@ local comp_op = function(argv)
 	elseif argv.factory ~= nil then
 		obj._name = argv.factory:getProfile().name
 	end
-	-- RTCの名前が一致しているか判定する
+	-- ポートの名前が一致しているか判定する
 	-- @param self 自身のオブジェクト
 	-- @param obj RTC
 	-- @return true：一致、false：不一致 

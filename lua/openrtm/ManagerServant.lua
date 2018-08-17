@@ -77,6 +77,22 @@ ManagerServant.CompParam.new = function(module_name)
 		end
 		obj._version = param_list[6]
 	end
+	function obj:vendor()
+		return self._vendor
+	end
+	function obj:category()
+		return self._category
+	end
+	function obj:impl_id()
+		return self._impl_id
+	end
+	function obj:language()
+		return self._language
+	end
+	function obj:version()
+		return self._version
+	end
+
 	return obj
 end
 
@@ -174,12 +190,12 @@ ManagerServant.new = function()
 			else
 				if rtc_name[1] == "*" then
 					if rtc:getInstanceName() == rtc_name[2] then
-						crtcs.append(rtc:getObjRef())
-					else
-						if rtc:getCategory() == rtc_name[1] then
-							if rtc:getInstanceName() == rtc_name[2] then
-								table.insert(crtcs, rtc:getObjRef())
-							end
+						table.insert(crtcs, rtc:getObjRef())
+					end
+				else
+					if rtc:getCategory() == rtc_name[1] then
+						if rtc:getInstanceName() == rtc_name[2] then
+							table.insert(crtcs, rtc:getObjRef())
 						end
 					end
 				end
@@ -334,10 +350,10 @@ ManagerServant.new = function()
 			return ""
 		end
 		local pos = 0
-		if pos0 == nil then
-			pos = pos1
-		else
+		if pos1 == nil then
 			pos = pos0
+		else
+			pos = pos1
 		end
 
 
@@ -348,10 +364,11 @@ ManagerServant.new = function()
 			if endpos == nil then
 				paramstr = string.sub(arg, pos + 1)
 			else
-				paramstr = string.sub(arg, pos + 1, endpos)
+				paramstr = string.sub(arg, pos + 1, pos - 1 + endpos)
 			end
 		else
-			paramstr = string.sub(arg, pos + 1, endpos)
+			paramstr = string.sub(arg, pos + 1, pos - 1 + endpos)
+			--print(arg,paramstr,endpos)
 		end
 		self._rtcout:RTC_VERBOSE(param_name.." arg: "..paramstr)
 
@@ -598,7 +615,8 @@ ManagerServant.new = function()
 						local prof = slave:get_configuration()
 						local prop = Properties.new()
 						NVUtil.copyToProperties(prop, prof)
-						local slave_lang = prop.getProperty("manager.language")
+						local slave_lang = prop:getProperty("manager.language")
+						
 						if slave_lang == comp_param:language() then
 							rtc = slave:create_component(module_name)
 						end
@@ -606,7 +624,7 @@ ManagerServant.new = function()
 				if not success then
 					self._rtcout:RTC_ERROR("Unknown exception cought.")
 					self._rtcout:RTC_DEBUG(exception)
-					self._slaves:remove(slave)
+					table.remove(self._slaves, k)
 				end
 				if rtc ~= oil.corba.idl.null then
 					return rtc
@@ -785,7 +803,7 @@ ManagerServant.new = function()
 	-- マネージャ終了
 	-- @return リターンコード
 	function obj:shutdown()
-		self:createShutdownThread(1)
+		self._mgr:createShutdownThread(1)
 		return self._ReturnCode_t.RTC_OK
 	end
 

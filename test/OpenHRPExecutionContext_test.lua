@@ -1,7 +1,7 @@
 local luaunit = require "luaunit"
 local OpenHRPExecutionContext = require "openrtm.OpenHRPExecutionContext"
 local Properties = require "openrtm.Properties"
-
+local oil = require "oil"
 
 
 
@@ -20,7 +20,11 @@ function TestOpenHRPExecutionContext:test_ec()
 	ec:init(Properties.new())
 	ec:start()
 
-	ec:tick()
+	oil.main(function()
+		for i = 1,1002 do
+			ec:tick()
+		end
+	end)
 
 	ec:stop()
 	

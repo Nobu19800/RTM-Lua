@@ -28,7 +28,6 @@ local ConnectorListener = require "openrtm.ConnectorListener"
 local ConnectorListenerType = ConnectorListener.ConnectorListenerType
 local ConnectorDataListenerType = ConnectorListener.ConnectorDataListenerType
 
-
 -- CorbaCdrインターフェースのOutPortConsumerオブジェクト初期化
 -- @return CorbaCdrインターフェースのOutPortConsumerオブジェクト
 OutPortDSConsumer.new = function()
@@ -199,7 +198,7 @@ OutPortDSConsumer.new = function()
 	function obj:subscribeFromRef(properties)
 		self._rtcout:RTC_TRACE("subscribeFromRef()")
 		local index = NVUtil.find_index(properties,
-										"dataport.data_service.outport_ior")
+										"dataport.data_service.outport_ref")
 		if index < 0 then
 			self._rtcout:RTC_ERROR("outport_ref not found")
 			return false
@@ -361,21 +360,21 @@ OutPortDSConsumer.new = function()
 	-- @param data データ
 	function obj:onSenderEmpty(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			self._listeners.connector_[ConnectorDataListenerType.ON_SENDER_EMPTY]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_SENDER_EMPTY]:notify(self._profile)
 		end
 	end
 	-- 送信データ時間切れ時のコールバック実行
 	-- @param data データ
 	function obj:onSenderTimeout(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			self._listeners.connector_[ConnectorDataListenerType.ON_SENDER_TIMEOUT]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_SENDER_TIMEOUT]:notify(self._profile)
 		end
 	end
 	-- 送信エラー時のコールバック実行
 	-- @param data データ
 	function obj:onSenderError(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			self._listeners.connector_[ConnectorDataListenerType.ON_SENDER_ERROR]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_SENDER_ERROR]:notify(self._profile)
 		end
 	end
 

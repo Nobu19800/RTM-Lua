@@ -783,6 +783,9 @@ PortBase.new = function(name)
 		self._rtcout:RTC_TRACE("getPortRef()")
 		return self._profile.port_ref
 	end
+	function obj:getObjRef()
+		return self._objref
+	end
 
 	-- プロファイル取得
 	-- @return プロファイル

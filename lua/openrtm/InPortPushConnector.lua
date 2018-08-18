@@ -183,7 +183,7 @@ InPortPushConnector.new = function(info, provider, listeners, buffer)
     if obj._buffer == nil or obj._provider == nil then
 		error("")
 	end
-
+	
     obj._buffer:init(info.properties:getNode("buffer"))
     obj._provider:init(info.properties)
     obj._provider:setBuffer(obj._buffer)

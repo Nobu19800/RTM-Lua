@@ -43,6 +43,8 @@ function TestConfigAdmin:test_ConfigAdmin()
 	local properties = Properties.new()
 	
 	local config = ConfigAdmin.new(properties)
+	config:activateConfigurationSet("default")
+	config:update("default")
 	local var = {_value="a"}
 
 	config:setOnUpdateParam(ConfigurationParamListener.new("ON_UPDATE_CONFIG_PARAM"))
@@ -56,6 +58,16 @@ function TestConfigAdmin:test_ConfigAdmin()
 	luaunit.assertIsTrue(config:bindParameter("test",var))
 	luaunit.assertIsTrue(config:isExist("test"))
 
+	local properties3 = Properties.new()
+	properties3.name = "testset3"
+	properties3:setProperty("test","value1")
+	luaunit.assertIsTrue(config:addConfigurationSet(properties3))
+
+	properties3:setProperty("test","value2")
+	luaunit.assertIsTrue(config:setConfigurationSetValues(properties3))
+	luaunit.assertIsTrue(config:activateConfigurationSet("testset3"))
+	config:update()
+	luaunit.assertEquals(var._value,"value2")
 	luaunit.assertIsTrue(config:unbindParameter("test"))
 
 	--config:addConfigurationSet()

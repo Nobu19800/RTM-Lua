@@ -7,6 +7,9 @@ local RTCUtil = require "openrtm.RTCUtil"
 local DataPortStatus = require "openrtm.DataPortStatus"
 local CdrBufferBase = require "openrtm.CdrBufferBase"
 local CdrBufferFactory = CdrBufferBase.CdrBufferFactory
+local RTCUtil = require "openrtm.RTCUtil"
+local DataPortStatus = require "openrtm.DataPortStatus"
+
 
 TestOutPortDSConsumer = {}
 
@@ -47,6 +50,7 @@ function TestOutPortDSConsumer:test_consumer()
 	mgr:activateManager()
 	mgr:runManager(true)
 	local orb = mgr:getORB()
+	local PortStatus = orb.types:lookup("::RTC::PortStatus").labelvalue
 
 	local consumer = OutPortDSConsumer.new()
 	consumer:init(Properties.new())
@@ -57,12 +61,28 @@ function TestOutPortDSConsumer:test_consumer()
 
 	local ret = consumer:subscribeInterface({NVUtil.newNV("dataport.data_service.outport_ior",ior)})
 	luaunit.assertIsTrue(ret)
+	local ret = consumer:subscribeInterface({NVUtil.newNV("dataport.data_service.outport_ior","")})
+	luaunit.assertIsFalse(ret)
+	local ret = consumer:subscribeInterface({})
+	luaunit.assertIsFalse(ret)
+	
+	
+	
 		
 	local data = {_data=""}
 	luaunit.assertEquals(consumer:get(data), DataPortStatus.PORT_OK)
 	luaunit.assertEquals(provider._count, 1)
 	
 	consumer:unsubscribeInterface({NVUtil.newNV("dataport.data_service.outport_ior",ior)})
+	--consumer:unsubscribeInterface({NVUtil.newNV("dataport.data_service.outport_ior","dummy")})
+	--consumer:unsubscribeInterface({})
+
+
+	luaunit.assertEquals(consumer:convertReturn(PortStatus.PORT_OK,""),DataPortStatus.PORT_OK)
+	luaunit.assertEquals(consumer:convertReturn(PortStatus.PORT_ERROR,""),DataPortStatus.PORT_ERROR)
+	luaunit.assertEquals(consumer:convertReturn(PortStatus.BUFFER_FULL,""),DataPortStatus.BUFFER_FULL)
+	luaunit.assertEquals(consumer:convertReturn(PortStatus.BUFFER_TIMEOUT,""),DataPortStatus.BUFFER_TIMEOUT)
+	luaunit.assertEquals(consumer:convertReturn(PortStatus.UNKNOWN_ERROR,""),DataPortStatus.UNKNOWN_ERROR)
 
 
 	mgr:createShutdownThread(0.01)

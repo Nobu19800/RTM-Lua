@@ -286,14 +286,14 @@ ${rtcParam.name}Test.new = function(manager)
 #end
 #if(${rtcParam.getDocActionPostCondition(1).length()}>0)	#if(${rtcParam.IsNotImplemented(1)})--#end	-- @post ${tmpltHelperLua.convertPostShDocLua(${rtcParam.getDocActionPostCondition(1)})}
 #end
-	#if(${rtcParam.IsNotImplemented(1)})--#end	--
-	#if(${rtcParam.IsNotImplemented(1)})--#end	funtion obj:onFinalize()
-	#if(${rtcParam.IsNotImplemented(1)})--#end
+	#if(${rtcParam.IsNotImplemented(1)})--	#end--
+	#if(${rtcParam.IsNotImplemented(1)})--	#end${function} obj:onFinalize()
+	#if(${rtcParam.IsNotImplemented(1)})--	#end
 #if(${tmpltHelper.checkDetailContent(1,${rtcParam})})		${rtcParam.getDetailContent(1)}
 #end
 
-	#if(${rtcParam.IsNotImplemented(1)})--#end	return self._ReturnCode_t.RTC_OK
-	#if(${rtcParam.IsNotImplemented(1)})--#end	end
+	#if(${rtcParam.IsNotImplemented(1)})--	#end	return self._ReturnCode_t.RTC_OK
+	#if(${rtcParam.IsNotImplemented(1)})--	#end${end}
 
 #if(${rtcParam.getDocActionOverView(2).length()}>0)	#if(${rtcParam.IsNotImplemented(2)})--#end${minusminus} ${tmpltHelperLua.convertActivityDocLua(${rtcParam.getDocActionOverView(2)})}
 #end

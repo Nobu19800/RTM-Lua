@@ -120,6 +120,10 @@ ManagerServant.new = function()
 		end
 		return true
 	end
+	
+	function obj:getObjRef()
+		return self._objref
+	end
 
 	function obj:exit()
 		--print(#self._masters)

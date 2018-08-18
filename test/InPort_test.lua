@@ -85,6 +85,11 @@ function TestInPort:test_inport()
 	inIn:addConnectorListener(ConnectorListener.ConnectorListenerType.ON_DISCONNECT,
 		ConnListener.new("ON_DISCONNECT"))
 
+	local lintener = ConnListener.new("ON_CONNECT2")
+	inIn:addConnectorListener(ConnectorListener.ConnectorListenerType.ON_CONNECT, lintener)
+	inIn:removeConnectorListener(ConnectorListener.ConnectorListenerType.ON_CONNECT, lintener)
+
+
 
 	inIn:addConnectorDataListener(ConnectorListener.ConnectorDataListenerType.ON_BUFFER_WRITE,
 		DataListener.new("ON_BUFFER_WRITE"))
@@ -108,6 +113,10 @@ function TestInPort:test_inport()
 		DataListener.new("ON_RECEIVER_ERROR"))
 
 
+	local lintener = DataListener.new("ON_BUFFER_WRITE2")
+	inIn:addConnectorDataListener(ConnectorListener.ConnectorDataListenerType.ON_BUFFER_WRITE,lintener)
+	inIn:removeConnectorDataListener(ConnectorListener.ConnectorDataListenerType.ON_BUFFER_WRITE,lintener)
+	
 
 
 
@@ -125,8 +134,10 @@ function TestInPort:test_inport()
 	local outOut = OutPort.new("out",d_out,"::RTC::TimedLong")
 	outOut:init(prop)
 
-	
-	local ret = CORBA_RTCUtil.connect("testcon",Properties.new(),outOut,inIn)
+	local prop = Properties.new()
+	prop:setProperty("dataport.inport.buffer.write.full_policy","do_nothing")
+	prop:setProperty("dataport.inport.buffer.read.empty_policy","do_nothing")
+	local ret = CORBA_RTCUtil.connect("testcon",prop,outOut,inIn)
 
 	local conprofs = inIn:get_connector_profiles()
 	luaunit.assertEquals(#conprofs, 1)
@@ -136,12 +147,29 @@ function TestInPort:test_inport()
 
 	outOut:write()
 	luaunit.assertIsTrue(inIn:isNew())
+	luaunit.assertIsFalse(inIn:isEmpty())
 
 	inIn:read()
 	
 	
 	luaunit.assertEquals(on_read._count, 1)
 	luaunit.assertEquals(on_read_conv._count, 1)
+
+	inIn:setOnReadConvert(nil)
+	outOut:write()
+	inIn:read()
+
+
+	CORBA_RTCUtil.disconnect_all_by_ref(outOut)
+	inIn:read()
+	local prop = Properties.new()
+	prop:setProperty("dataport.dataflow_type","pull")
+	local ret = CORBA_RTCUtil.connect("testcon",prop,outOut,inIn)
+	outOut:write()
+	luaunit.assertIsFalse(inIn:isNew())
+
+	inIn:read()
+	
 
 	inIn:update()
 	

@@ -87,12 +87,13 @@ CorbaNaming.new = function(orb, name_server)
 	-- {{id="id1",kind="kind1"},...}
 	-- @param context ルートコンテキスト
 	-- @param name_list 登録パス(Nameリスト)
-	function obj:rebindRecursive(context, name_list, obj)
+	-- @param 登録オブジェクト
+	function obj:rebindRecursive(context, name_list, _obj)
 		local length = #name_list
 		for i =1,length do
 			if i == length then
 				--print("test1")
-				context:rebind(self:subName(name_list, i, i), obj)
+				context:rebind(self:subName(name_list, i, i), _obj)
 				--print("test2")
 				return
 			else
@@ -126,7 +127,7 @@ CorbaNaming.new = function(orb, name_server)
 	-- 戻り値は以下のようになる
 	-- {{id="test1",kind="host_cxt"},{id="test2",kind="rtc"}}
 	function obj:toName(sname)
-		if sname == nil then
+		if sname == "" then
 			error("CosNaming.NamingContext.InvalidName")
 		end
 		local string_name = sname

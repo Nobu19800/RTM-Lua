@@ -234,7 +234,7 @@ InPortBase.new = function(name, data_type)
 		if dflow_type == "push" then
 			self._rtcout:RTC_DEBUG("dataflow_type = push .... create PushConnector")
 
-
+			
 			local provider = self:createProvider(cprof, prop)
 
 			if provider == nil then

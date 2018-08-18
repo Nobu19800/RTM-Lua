@@ -60,6 +60,7 @@ Config.new = function(name, var, def_val, trans)
 		if self.string_value == val then
 			return true
 		end
+		
 		self.string_value = val
 
 
@@ -406,28 +407,7 @@ ConfigAdmin.new = function(configsets)
 		return true
 	end
 
-	-- コンフィギュレーションセットのアクティブ化
-	-- @param config_id コンフィギュレーションセットID
-	-- @return true：アクティブ化成功、false：アクティブ化失敗
-	function obj:activateConfigurationSet(config_id)
-		if config_id == "" then
-			return false
-		end
 
-
-		if string.sub(config_id,1,1) == '_' then
-			return false
-		end
-
-		if not self._configsets:hasKey(config_id) then
-			return false
-		end
-		self._activeId = config_id
-		self._active   = true
-		self._changed  = true
-		self:onActivateSet(config_id)
-		return true
-	end
 
 	-- コンフィギュレーション更新時コールバック設定
 	-- @param cb コンフィギュレーションコールバック

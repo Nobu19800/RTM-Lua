@@ -39,14 +39,43 @@ function TestCorbaNaming:test_naming()
 	--orb:step()
 	local ret = oil.corba.idl.null
 	oil.main(function()
-		cn:rebindByString("test1.host_cxt/test2.rtc", objref, true)
+		cn:rebindByString("test1.host_cxt/test2.rtc", objref)
+		cn:rebindByString("test1.host_cxt/test2.rtc", objref)
 		--cn:rebind({{id="test1",kind="host_cxt"},{id="test3",kind="rtc"}}, objref, true)
 		--ret = cn:resolve({{id="test1",kind="host_cxt"},{id="test2",kind="rtc"}})
+		ret = cn:resolve("test1.host_cxt/test2.rtc")
 		ret = cn:resolveStr("test1.host_cxt/test2.rtc")
 		ret = RTCUtil.newproxy(orb, ret, "Hello")
 		cn:unbind({{id="test1",kind="host_cxt"},{id="test2",kind="rtc"}})
 	end)
+	oil.main(function()
+		cn:rebind({{id="test1",kind="host_cxt"},{id="test3",kind="rtc"}}, objref)
+		
+		cn:unbind({{id="test1",kind="host_cxt"},{id="test3",kind="rtc"}})
+	end)
 	luaunit.assertEquals(ret:echo("abc"),"abc")
+
+	local rootcontext = cn:getRootContext()
+	local success, exception = pcall(
+		function()
+			cn:rebindRecursive(rootcontext, 
+							{{id="test1",kind="host_cxt"},{id="test3",kind="rtc"}},
+							objref)
+			cn:unbind({{id="test1",kind="host_cxt"},{id="test2",kind="rtc"}})
+			cn:toName("")
+			cn:toName("test1")
+		end
+	)
+
+	local tbl = {{id="test1",kind="host_cxt"},
+				{id="test2",kind="host_cxt"},
+				{id="test3",kind="rtc"}}
+	local ret = cn:subName(tbl,2,3)
+	luaunit.assertEquals(ret[1].id,"test2")
+	luaunit.assertEquals(ret[2].id,"test3")
+	--print(exception)
+	luaunit.assertIsFalse(success)
+	
 
 
 

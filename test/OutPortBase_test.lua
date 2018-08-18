@@ -38,6 +38,12 @@ function TestOutPortBase:test_outport()
 	local in_provider = outOut:createProvider(conn_prof, prop)
 	luaunit.assertNotEquals(in_provider, nil)
 
+
+	local prop2 = Properties.new()
+	prop2:setProperty("interface_type", "dummy")
+	local in_provider2 = outOut:createProvider(conn_prof, prop2)
+	luaunit.assertEquals(in_provider2, nil)
+
 	local in_provider = InPortDSProvider.new()
 	local ior = orb:tostring(in_provider._svr)
 
@@ -49,6 +55,11 @@ function TestOutPortBase:test_outport()
 					}}
 	local in_consumer = outOut:createConsumer(conn_prof, prop)
 	luaunit.assertNotEquals(in_consumer, nil)
+
+	local prop2 = Properties.new()
+	prop2:setProperty("interface_type", "dummy")
+	local in_consumer2 = outOut:createConsumer(conn_prof, prop2)
+	luaunit.assertEquals(in_consumer2, nil)
 	--luaunit.assertEquals(outOut:name(), "in")
 	
 	

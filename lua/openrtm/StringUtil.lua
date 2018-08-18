@@ -370,7 +370,7 @@ StringUtil._stringToList = function(_type, _str)
 		end
 	elseif #_type > #list_ then
 		local sub = #_type - #list_
-		for i = #list_,#_type_ do
+		for i = #list_,#_type do
 			table.remove(_type, i)
 		end
 	end

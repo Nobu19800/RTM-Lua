@@ -25,11 +25,39 @@ local testcomp_spec = {
 	["conf.default.test_param0"]="0"
 }
 
+local testcomp_spec2 = {
+	["implementation_id"]="TestComp2",
+	["type_name"]="TestComp2",
+	["description"]="TestComp2",
+	["version"]="1.0",
+	["vendor"]="Sample",
+	["category"]="example",
+	["activity_type"]="DataFlowComponent",
+	["max_instance"]="10",
+	["language"]="Lua",
+	["lang_type"]="script",
+	["conf.default.test_param0"]="0"
+}
+
+local TestComp2 = {}
+TestComp2.new = function(manager)
+	local obj = {}
+	setmetatable(obj, {__index=RTObject.new(manager)})
+	function obj:onExecute(ec_id)
+		return self._ReturnCode_t.RTC_ERROR
+	end
+	return obj
+end
+
 local MyModuleInit = function(manager)
 	local prof = Properties.new({defaults_map=testcomp_spec})
 	manager:registerFactory(prof, RTObject.new, Factory.Delete)
 	local comp = manager:createComponent("TestComp")
 	local comp = manager:createComponent("TestComp")
+
+	local prof = Properties.new({defaults_map=testcomp_spec2})
+	manager:registerFactory(prof, TestComp2.new, Factory.Delete)
+	local comp = manager:createComponent("TestComp2")
 end
 
 
@@ -116,6 +144,17 @@ function TestCORBA_RTCUtil:test_component()
 
 	luaunit.assertEquals(#CORBA_RTCUtil.get_participants_rtc(oil.corba.idl.null),0)
 
+
+	local comp2 = mgr:getComponent("TestComp20")
+	local ec2 = CORBA_RTCUtil.get_actual_ec(comp2, 0)
+	luaunit.assertEquals(CORBA_RTCUtil.activate(comp2, 0), ReturnCode_t.RTC_OK)
+	ec2:tick()
+	ec2:tick()
+	luaunit.assertEquals(CORBA_RTCUtil.deactivate(comp2, 0), ReturnCode_t.PRECONDITION_NOT_MET)
+	luaunit.assertEquals(CORBA_RTCUtil.reset(comp2, 0), ReturnCode_t.RTC_OK)
+
+
+	
 	mgr:createShutdownThread(0.01)
 	--luaunit.assertEquals( BufferStatus.toString(BufferStatus.PRECONDITION_NOT_MET), 'PRECONDITION_NOT_MET' )
 end
@@ -236,6 +275,9 @@ function TestCORBA_RTCUtil:test_port()
 	luaunit.assertEquals(CORBA_RTCUtil.disconnect_by_port_name(oil.corba.idl.null,inIn), ReturnCode_t.BAD_PARAMETER)
 	luaunit.assertEquals(CORBA_RTCUtil.disconnect_by_port_name(outOut,"TestComp0.out"), ReturnCode_t.BAD_PARAMETER)
 	luaunit.assertEquals(CORBA_RTCUtil.disconnect_by_port_name(outOut,inIn), ReturnCode_t.BAD_PARAMETER)
+
+
+	
 
 	mgr:createShutdownThread(0.01)
 end

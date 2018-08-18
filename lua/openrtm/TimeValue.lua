@@ -22,6 +22,7 @@ TimeValue.new = function(sec, usec)
 	-- @return 引き算後の時間
 	local sub_func = function(self, tm)
 		local res = TimeValue.new()
+		--print("test",self.tv_sec, self.tv_usec, tm.tv_sec, tm.tv_usec)
 		if self.tv_sec >= tm.tv_sec then
 			if self.tv_usec >= tm.tv_usec then
 				res.tv_sec  = self.tv_sec  - tm.tv_sec

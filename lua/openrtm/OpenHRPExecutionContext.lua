@@ -60,6 +60,7 @@ OpenHRPExecutionContext.new = function()
 
 
 		if self._count > 1000 then
+			
 			local excdotm = t1_ - t0_
 			local excpdotm = t2_ - t1_
 			local slptm_ = period_:toDouble() - (t2_ - t0_)
@@ -68,6 +69,7 @@ OpenHRPExecutionContext.new = function()
 			self._rtcout:RTC_PARANOID("Exec-PostDo: "..excpdotm.." [s]")
 			self._rtcout:RTC_PARANOID("Sleep:       "..slptm_.." [s]")
 		end
+		local t3_ = os.clock()
 		if period_:toDouble() > (t2_ - t0_) then
 			if self._count > 1000 then
 				self._rtcout:RTC_PARANOID("sleeping...")

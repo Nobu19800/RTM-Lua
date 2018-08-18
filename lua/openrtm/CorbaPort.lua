@@ -367,10 +367,12 @@ CorbaPort.new = function(name)
 		local newdesc = string.sub(self._profile.name,1,#self._ownerInstanceName)..
 			".port"..string.sub(self._profile.name,#self._ownerInstanceName+1)
 		newdesc = newdesc..".required."..cons:descriptor()
+		--print(newdesc)
+		
 
 
 		local cons_index = NVUtil.find_index(nv, newdesc)
-		--print(newdesc)
+		--print(cons_index)
 		--print(#nv)
 		--for i,v in ipairs(nv) do
 		--	print(v.name, v.value)
@@ -380,6 +382,7 @@ CorbaPort.new = function(name)
 		end
 
 		local provider = NVUtil.any_from_any(nv[cons_index].value)
+		
 		if provider == "" then
 			self._rtcout:RTC_WARN("Cannot extract Provider interface descriptor")
 			return false

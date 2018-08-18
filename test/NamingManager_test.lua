@@ -8,6 +8,8 @@ local RTObject = require "openrtm.RTObject"
 local Factory = require "openrtm.Factory"
 local CorbaNaming = require "openrtm.CorbaNaming"
 
+local InPort = require "openrtm.InPort"
+
 TestNamingManager = {}
 
 
@@ -104,8 +106,29 @@ function TestNamingManager:test_namingmanager()
 
 	local comp0 = mgr:getComponent("TestComp0")
 	local comps = {}
+
+	local d_in = {tm={sec=0,nsec=0},data=0}
+	local inIn = InPort.new("in",d_in,"::RTC::TimedLong")
+	local prop = Properties.new()
+	inIn:init(prop)
+
+	oil.main(function()
+		nm:bindPortObject("port0.port", inIn._svr)
+		nm:registerPortName("port0.port",inIn._svr)
+		nm:unbindAll()
+	end)
+
+
+	oil.main(function()
+		nm:bindManagerObject("mgr0.mgr", mgr:getManagerServant()._svr)
+		nm:registerMgrName("mgr0.mgr",mgr:getManagerServant()._svr)
+		nm:unbindAll()
+	end)
+
+
 	oil.main(function()
 		nm:bindObject("TestComp02.rtc",comp0._svr)
+		nm:registerCompName("TestComp02.rtc",comp0._svr)
 		nm:unbindObject("TestComp02.rtc")
 		nm:bindObject("TestComp02.rtc",comp0._svr)
 		comps = nm:getObjects()

@@ -7,6 +7,8 @@ local oil = require "oil"
 local StringUtil = require "openrtm.StringUtil"
 local CorbaConsumer = require "openrtm.CorbaConsumer"
 local NVUtil = require "openrtm.NVUtil"
+local CorbaPort = require "openrtm.CorbaPort"
+local CORBA_RTCUtil = require "openrtm.CORBA_RTCUtil"
 
 
 local MyServiceSVC_impl = {}
@@ -37,6 +39,8 @@ function TestCorbaPort:test_port()
 	mgr:activateManager()
 	mgr:runManager(true)
 
+	local orb = mgr:getORB()
+
 	local ReturnCode_t  = mgr._ReturnCode_t
 	
 
@@ -55,6 +59,8 @@ function TestCorbaPort:test_port()
 
 	luaunit.assertIsTrue(myServicePort1:registerConsumer("myservice0", "MyService", myservice0, _str))
 
+	
+
 	myServicePort1:activateInterfaces()
 	myServicePort1:deactivateInterfaces()
 	
@@ -72,12 +78,95 @@ function TestCorbaPort:test_port()
 	luaunit.assertNotEquals(prop:getProperty("unknown.port.MyService1.provided.MyService.myservice0"),"")
 	luaunit.assertNotEquals(prop:getProperty("port.MyService.myservice0"),"")
 	
+	
 
 	local ret = myServicePort1:subscribeInterfaces(conn_prof)
 	luaunit.assertEquals(ret, ReturnCode_t.RTC_OK)
-	
 	myServicePort1:unsubscribeInterfaces(conn_prof)
 
+	local conn_prof = {name="name2",
+						connector_id="con2", 
+						ports={}, 
+						properties={}}
+	
+	local provider = orb:newservant(MyServiceSVC_impl.new(), nil, "IDL:SimpleService/MyService:1.0")
+	local prop = Properties.new()
+	prop:setProperty("unknown.port.MyService1.required.MyService.myservice0","test.sample")
+	prop:setProperty("test.sample",orb:tostring(provider))
+	NVUtil.copyFromProperties(conn_prof.properties, prop)
+	
+	local ret = myServicePort1:subscribeInterfaces(conn_prof)
+	luaunit.assertEquals(ret, ReturnCode_t.RTC_OK)
+	myServicePort1:unsubscribeInterfaces(conn_prof)
+
+
+	local conn_prof = {name="name6",
+						connector_id="con6", 
+						ports={}, 
+						properties={}}
+	
+
+	local prop = Properties.new()
+	prop:setProperty("unknown.port.MyService1.required.MyService.myservice0","test.sample")
+	prop:setProperty("test.sample","")
+	NVUtil.copyFromProperties(conn_prof.properties, prop)
+	
+	local ret = myServicePort1:subscribeInterfaces(conn_prof)
+	luaunit.assertEquals(ret, ReturnCode_t.RTC_OK)
+
+	
+	local conn_prof = {name="name3",
+						connector_id="con3", 
+						ports={}, 
+						properties={}}
+	local prop = Properties.new()
+	prop:setProperty("unknown.port.MyService1.required.MyService.myservice0","")
+	prop:setProperty("port.connection.strictness", "best_effort")
+	NVUtil.copyFromProperties(conn_prof.properties, prop)
+	local ret = myServicePort1:subscribeInterfaces(conn_prof)
+	luaunit.assertEquals(ret, ReturnCode_t.RTC_OK)
+
+
+
+	local conn_prof = {name="name4",
+						connector_id="con4", 
+						ports={}, 
+						properties={}}
+	local prop = Properties.new()
+	prop:setProperty("unknown.port.MyService1.required.MyService.myservice0","")
+	prop:setProperty("port.connection.strictness", "strict")
+	NVUtil.copyFromProperties(conn_prof.properties, prop)
+	local ret = myServicePort1:subscribeInterfaces(conn_prof)
+	luaunit.assertEquals(ret, ReturnCode_t.RTC_ERROR)
+
+
+
+	local conn_prof = {name="name5",
+						connector_id="con5", 
+						ports={}, 
+						properties={}}
+	local prop = Properties.new()
+	prop:setProperty("port.MyService.myservice0","")
+	prop:setProperty("port.connection.strictness", "strict")
+	NVUtil.copyFromProperties(conn_prof.properties, prop)
+	local ret = myServicePort1:subscribeInterfaces(conn_prof)
+	luaunit.assertEquals(ret, ReturnCode_t.RTC_ERROR)
+	myServicePort1:unsubscribeInterfaces(conn_prof)
+
+
+	
+	
+	
+
+
+	local myServicePort2 = CorbaPort.new("MyService1")
+	myServicePort2:init(Properties.new())
+	myServicePort2:registerConsumer("myservice0", "MyService", myservice0, _str)
+
+
+	CORBA_RTCUtil.connect("testcon",Properties.new(),myServicePort1,myServicePort2)
+
+	--myServicePort2:releaseObject()
 	mgr:createShutdownThread(0.01)
 end
 

@@ -86,6 +86,10 @@ function TestOutPort:test_outport()
 	outOut:addConnectorListener(ConnectorListener.ConnectorListenerType.ON_DISCONNECT,
 		ConnListener.new("ON_DISCONNECT"))
 
+	local listener = ConnListener.new("ON_CONNECT")
+	outOut:addConnectorListener(ConnectorListener.ConnectorListenerType.ON_CONNECT,listener)
+	outOut:removeConnectorListener(ConnectorListener.ConnectorListenerType.ON_CONNECT,listener)
+
 
 	outOut:addConnectorDataListener(ConnectorListener.ConnectorDataListenerType.ON_BUFFER_WRITE,
 		DataListener.new("ON_BUFFER_WRITE"))
@@ -109,6 +113,10 @@ function TestOutPort:test_outport()
 		DataListener.new("ON_RECEIVER_ERROR"))
 
 
+	local listener = DataListener.new("ON_BUFFER_WRITE")
+	outOut:addConnectorDataListener(ConnectorListener.ConnectorDataListenerType.ON_BUFFER_WRITE, listener)
+	outOut:removeConnectorDataListener(ConnectorListener.ConnectorDataListenerType.ON_BUFFER_WRITE, listener)
+	
 
 
 
@@ -127,23 +135,35 @@ function TestOutPort:test_outport()
 	local inIn = InPort.new("in",d_in,"::RTC::TimedLong")
 	inIn:init(prop)
 
-	
-	local ret = CORBA_RTCUtil.connect("testcon",Properties.new(),outOut,inIn)
+	local prop = Properties.new()
+	prop:setProperty("dataport.inport.buffer.write.full_policy","do_nothing")
+	prop:setProperty("dataport.inport.buffer.read.empty_policy","do_nothing")
+	prop:setProperty("dataport.inport.buffer.length","3")
+	local ret = CORBA_RTCUtil.connect("testcon",prop,outOut,inIn)
 	
 
 	local conprofs = outOut:get_connector_profiles()
 	luaunit.assertEquals(#conprofs, 1)
 	local con = outOut:getConnectorById(conprofs[1].connector_id)
 	luaunit.assertNotEquals(con, nil)
+	local con = outOut:getConnectorById("dummy")
+	luaunit.assertEquals(con, nil)
 
-
-	outOut:write()
+	outOut:deactivateInterfaces()
+	outOut:activateInterfaces()
 	
+
+
+	luaunit.assertIsTrue(outOut:write())
+
+	luaunit.assertEquals(outOut:getPortDataType(), "::RTC::TimedLong")
 	
 	luaunit.assertEquals(on_write._count, 1)
 	luaunit.assertEquals(on_write_conv._count, 1)
 
-	
+	luaunit.assertIsTrue(outOut:write())
+	luaunit.assertIsTrue(outOut:write())
+	luaunit.assertIsFalse(outOut:write())
 	
 	mgr:createShutdownThread(0.01)
 end

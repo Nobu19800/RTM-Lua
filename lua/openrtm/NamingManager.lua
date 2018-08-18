@@ -461,6 +461,38 @@ NamingManager.new = function(manager)
 
 		self:registerCompName(name, rtobj)
 	end
+	function obj:bindManagerObject(name,  mgr)
+		self._rtcout:RTC_TRACE("NamingManager::bindManagerObject("..name..")")
+		for i, n in ipairs(self._names) do
+			if n.ns ~= nil then
+				local success, exception = oil.pcall(
+					function()
+						n.ns:bindObject(name, mgr)
+					end)
+				if not success then
+					n.ns = nil
+				end
+			end
+		end
+
+		self:registerMgrName(name, mgr)
+	end
+	function obj:bindPortObject(name, port)
+		self._rtcout:RTC_TRACE("NamingManager::bindPortObject("..name..")")
+		for i, n in ipairs(self._names) do
+			if n.ns ~= nil then
+				local success, exception = oil.pcall(
+					function()
+						n.ns:bindObject(name, port)
+					end)
+				if not success then
+					n.ns = nil
+				end
+			end
+		end
+
+		self:registerPortName(name, port)
+	end
 	-- RTCの登録
 	-- @param name 登録名
 	-- @param rtobj RTC
@@ -486,7 +518,7 @@ NamingManager.new = function(manager)
 
 	function obj:registerPortName(name, port)
 		for i, portName in ipairs(self._portNames) do
-			if portNames.name == name then
+			if portName.name == name then
 				portName.port = port
 				return
 			end

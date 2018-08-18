@@ -41,6 +41,8 @@ function TestInPortDSProvider:test_provider()
 	mgr:runManager(true)
 	local PortStatus = mgr:instance():getORB().types:lookup("::RTC::PortStatus").labelvalue
 	local orb = mgr:getORB()
+	local PortStatus = orb.types:lookup("::RTC::PortStatus").labelvalue
+	
 
 	local provider = InPortDSProvider.new()
 	provider:init(Properties.new())
@@ -61,6 +63,16 @@ function TestInPortDSProvider:test_provider()
 		
 	luaunit.assertEquals(provider:push(""), PortStatus.PORT_OK)
 	luaunit.assertEquals(connector._count, 1)
+
+
+	luaunit.assertEquals(provider:convertReturn(BufferStatus.BUFFER_OK,""),PortStatus.PORT_OK)
+	luaunit.assertEquals(provider:convertReturn(BufferStatus.BUFFER_FULL,""),PortStatus.BUFFER_FULL)
+	luaunit.assertEquals(provider:convertReturn(BufferStatus.BUFFER_EMPTY,""),PortStatus.BUFFER_EMPTY)
+	luaunit.assertEquals(provider:convertReturn(BufferStatus.PRECONDITION_NOT_MET,""),PortStatus.PORT_ERROR)
+	luaunit.assertEquals(provider:convertReturn(BufferStatus.TIMEOUT,""),PortStatus.BUFFER_TIMEOUT)
+	luaunit.assertEquals(provider:convertReturn(BufferStatus.NOT_SUPPORTED,""),PortStatus.UNKNOWN_ERROR)
+
+	luaunit.assertNotEquals(provider:getObjRef(),nil)
 
 
 	mgr:createShutdownThread(0.01)

@@ -1,9 +1,0 @@
-
-#if( ${rtcParam.docCreator.length()} > 0 )
- \author ${tmpltHelper.convertAuthorDocLua(${rtcParam.docCreator})}
-#end
-#if( ${rtcParam.docLicense.length()} > 0 )
-
- ${tmpltHelper.convertDocLua(${rtcParam.docLicense})}
-#end
-

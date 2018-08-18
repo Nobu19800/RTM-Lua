@@ -1,3 +1,0 @@
-${sharp}!/bin/sh
-${sharp} postinst script
-set -e

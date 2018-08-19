@@ -19,6 +19,16 @@ $ sudo luarocks install lualogging
 $ sudo luarocks install uuid
 </pre>
 
+
+## LuaRocksからインストール
+以下のコマンドを実行してください。
+
+<pre>
+$ sudo luarocks install openrtm
+</pre>
+
+
+## ソースコードからインストール
 OpenRTM Lua版のインストールスクリプトを実行してください。
 
 <pre>

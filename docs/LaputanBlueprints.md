@@ -7,7 +7,7 @@
 ## Laputan Blueprintsの入手
 以下からLaputan Blueprintsを入手してください。
 
-* https://sites.google.com/site/laputanblueprints2016/do
+* [Laputan Blueprints](https://sites.google.com/site/laputanblueprints2016/do)
 
 ## Laputan BlueprintsにOpenRTM Lua版をインストール
 Laputan Blueprintsを展開したフォルダにOpenRTM Lua版の各ファイルをコピーします。
@@ -56,6 +56,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 上のページの作成手順に従って、以下の仕様のRTCを作成してください。
 
 ### 基本プロファイル
+
 |||
 |---|---|
 |モジュール名|LBSample|
@@ -65,6 +66,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 `onExecute`を有効にしてください。
 
 ### インポート
+
 |||
 |---|---|
 |ポート名|in|

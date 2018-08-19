@@ -28,14 +28,14 @@ class DataListener extends openrtm_ms.ConnectorDataListener
 	-- コンストラクタ
 	-- @param name コールバック名
 	new: (name) =>
-		super 
+		super!
 		self._name = name
 	-- コールバック関数
 	-- @param info コネクタ情報
 	-- @param cdrdata データ(バイト列)
 	-- @return リスナステータス
 	call: (info, cdrdata) =>
-		local data = self\__call__(info, cdrdata, "::RTC::TimedLong")
+		data = @__call__(info, cdrdata, "::RTC::TimedLong")
 		print("------------------------------")
 		print("Listener:       "..self._name)
 		print("Profile::name:  "..info.name)
@@ -50,7 +50,7 @@ class ConnListener extends openrtm_ms.ConnectorListener
 	-- コンストラクタ
 	-- @param name コールバック名
 	new: (name) =>
-		super 
+		super!
 		self._name = name
 	-- コールバック関数
 	-- @param info コネクタ情報

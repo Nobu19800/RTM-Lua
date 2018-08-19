@@ -407,11 +407,17 @@ MITライセンス
 * [loop](https://github.com/LuaDist/loop)(MITライセンス)
 * [LuaSocket](https://github.com/diegonehab/luasocket)(MITライセンス)
 * [LuaLogging](https://github.com/Neopallium/lualogging)(MITライセンス)
-* [LUA-RFC-4122-UUID-Generator](https://github.com/tcjennings/LUA-RFC-4122-UUID-Generator)(MITライセンス)
-
 * [MoonScript](http://moonscript.org)(MITライセンス)
 * [LPeg](https://luarocks.org/modules/gvvaughan/lpeg)(MITライセンス)
 * [argparse](https://github.com/mpeterv/argparse)(MITライセンス)
+
+### Ver. 0.3以降
+* [uuid](https://github.com/Tieske/uuid)(Apache 2.0)
+### Ver. 0.3以前
+* [LUA-RFC-4122-UUID-Generator](https://github.com/tcjennings/LUA-RFC-4122-UUID-Generator)(MITライセンス)
+
+
+
 
 ## 他のRTM実装とデータポート通信する場合について
 OpenRTM-aist 1.0系付属のDataPort.idlはOiLでは読み込めないため、OpenRTM-aist 2.0付属のDataPort.idlが必要になります。

@@ -1,8 +1,8 @@
-package = "openrtm":lower()
+package = "openrtm"
 version = "0.3-1"
 source = {
-   url = "https://github.com/Nobu19800/RTM-Lua/archive/master.zip",
-   dir = "openrtm-master",
+   url = "git://github.com/Nobu19800/RTM-Lua",
+   dir = '.'
 }
 
 description = {
@@ -10,8 +10,9 @@ description = {
    detailed = [[
       
    ]],
-   homepage = "https://github.com/Nobu19800/RTM-Lua/wiki",
-   license = "MIT"
+   homepage = "https://nobu19800.github.io/RTM-Lua/docs/",
+   license = "MIT",
+   maintainer = "nobu@nobu777.net"
 }
 
 
@@ -22,7 +23,7 @@ dependencies = {
    --"loop >= 0.0",
    "luasocket >= 2.0.2",
    --"lualogging >= 0.0.0",
-   --"lua-rfc-4122-uuid-generator >= 0.0"
+   --"lua-rfc-4122-uuid-generator >= 0.0",
    "uuid >= 0.2"
 }
 

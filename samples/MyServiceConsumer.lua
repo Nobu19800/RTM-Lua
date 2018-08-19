@@ -61,7 +61,7 @@ MyServiceConsumer.new = function(manager)
 	-- @return リターンコード
 	function obj:onInitialize()
 		-- サービスポートにコンシューマオブジェクトを登録
-		local fpath = openrtm.StringUtil.dirname(debug.getinfo(1)["short_src"])
+		local fpath = openrtm.StringUtil.dirname(string.sub(debug.getinfo(1)["source"],2))
 		local _str = string.gsub(fpath,"\\","/").."idl/MyService.idl"
 		self._myServicePort:registerConsumer("myservice0", "MyService", self._myservice0, _str)
 		-- ポート追加

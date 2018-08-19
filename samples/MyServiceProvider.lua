@@ -120,7 +120,7 @@ MyServiceProvider.new = function(manager)
 	-- @return リターンコード
 	function obj:onInitialize()
 		-- サービスポートにプロバイダオブジェクトを登録
-		local fpath = openrtm.StringUtil.dirname(debug.getinfo(1)["short_src"])
+		local fpath = openrtm.StringUtil.dirname(string.sub(debug.getinfo(1)["source"],2))
 		local _str = string.gsub(fpath,"\\","/").."idl/MyService.idl"
 		
 		self._myServicePort:registerProvider("myservice0", "MyService", self._myservice0, _str, "IDL:SimpleService/MyService:1.0")

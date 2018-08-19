@@ -1,12 +1,12 @@
-package = "openrtm"
-version = "scm-03"
+package = "openrtm":lower()
+version = "0.3-1"
 source = {
    url = "https://github.com/Nobu19800/RTM-Lua/archive/master.zip",
    dir = "openrtm-master",
 }
 
 description = {
-   summary = "Robot Software Platform for the Lua language",
+   summary = "Robot Software Platform(RT-Middleware) for the Lua language",
    detailed = [[
       
    ]],
@@ -16,18 +16,21 @@ description = {
 
 
 dependencies = {
-   "lua >= 5.1"
-   --,"oil >= 0.4beta",
-   --"lualogging >= 1.2.0",
+   "lua >= 5.1",
+   --"oil >= 0.4beta",
+   --"luaidl >= 0.0",
+   --"loop >= 0.0",
+   "luasocket >= 2.0.2",
+   --"lualogging >= 0.0.0",
    --"lua-rfc-4122-uuid-generator >= 0.0"
-   --"uuid >= 0.0"
+   "uuid >= 0.2"
 }
 
 
 build = {
     type = "builtin",
     modules = {
-        openrtm = "lua/openrtm.lua",
+        ["openrtm"] = "lua/openrtm.lua",
         ["openrtm.Async"] = "lua/openrtm/Async.lua",
         ["openrtm.BufferBase"] = "lua/openrtm/BufferBase.lua",
         ["openrtm.BufferStatus"] = "lua/openrtm/BufferStatus.lua",
@@ -161,7 +164,7 @@ build = {
          ["idl.OpenRTM"] = "idl/OpenRTM.idl",
          ["idl.RTC"] = "idl/RTC.idl",
          ["idl.SDOPackage"] = "idl/SDOPackage.idl",
-         ["openrtm_ms"] = "moon/openrtm_ms.moon",
+         ["openrtm_ms"] = "moon/openrtm_ms.moon"
       }
    }
 }

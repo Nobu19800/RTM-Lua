@@ -2,17 +2,20 @@ cmake_minimum_required (VERSION 2.6)
 
 project (socket)
 
-set(LUA_ROOT ${LUA_ROOT} CACHE PATH "set LUA_ROOT")
+if(MSVC)
+	if(NOT LUA_ROOT)
+		message(FATAL_ERROR "Please set LUA_ROOT.")
+	endif()
+	set(LUA_VERSION ${LUA_VERSION} CACHE PATH "set LUA_VERSION")
 
-if(NOT LUA_ROOT)
-	message(FATAL_ERROR "Please set LUA_ROOT.")
-endif()
-
-set(LUA_VERSION ${LUA_VERSION} CACHE PATH "set LUA_VERSION")
-
-if(NOT LUA_VERSION)
-	message(FATAL_ERROR "Please set LUA_VERSION.")
-endif()
+	if(NOT LUA_VERSION)
+		message(FATAL_ERROR "Please set LUA_VERSION.")
+	endif()
+else(MSVC)
+	if(NOT LUA_VERSION)
+		set(LUA_VERSION 5.1)
+	endif()
+endif(MSVC)
 
 set(srcs
 	src/auxiliar.c
@@ -27,7 +30,6 @@ set(srcs
 	src/tcp.c
 	src/timeout.c
 	src/udp.c
-	src/wsocket.c
 	src/auxiliar.h
 	src/buffer.h
 	src/compat.h
@@ -42,16 +44,45 @@ set(srcs
 	src/tcp.h
 	src/timeout.h
 	src/udp.h
-	src/wsocket.h
 )
 
-ADD_DEFINITIONS("-DLUASOCKET_API=__declspec(dllexport)")
+if(MSVC)
+	set(srcs ${srcs} wsocket.h wsocket.c)
+else(MSVC)
+	set(srcs ${srcs} usocket.h usocket.c unix.h)
+endif(MSVC)
 
 
-include_directories(${LUA_ROOT}/include)
-link_directories(${LUA_ROOT}/lib)
-add_library (luasoket SHARED  ${srcs})
-target_link_libraries(luasoket lua${LUA_VERSION} ws2_32)
+if(MSVC)
+	ADD_DEFINITIONS("-DLUASOCKET_API=__declspec(dllexport)")
+endif(MSVC)
+
+
+if(MSVC)
+else(MSVC)
+	if(LUA_ROOT)
+	else(LUA_ROOT)
+		include_directories(/usr/include/lua${LUA_VERSION})
+	endif(LUA_ROOT)
+endif(MSVC)
+
+if(LUA_ROOT)
+	include_directories(${LUA_ROOT}/include)
+	link_directories(${LUA_ROOT}/lib)
+endif(LUA_ROOT)
+
+add_library (luasoket SHARED ${srcs})
+
+if(MSVC)
+	target_link_libraries(luasoket lua${LUA_VERSION} ws2_32)
+else(MSVC)
+	target_link_libraries(luasoket lua${LUA_VERSION})
+	set_target_properties (luasoket
+                       PROPERTIES PREFIX
+                       "")
+endif(MSVC)
+
+
 
 
 SET_TARGET_PROPERTIES(luasoket PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/socket)
@@ -60,11 +91,21 @@ SET_TARGET_PROPERTIES(luasoket PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINAR
 SET_TARGET_PROPERTIES(luasoket PROPERTIES OUTPUT_NAME core)
 
 
+if(MSVC)
+	ADD_DEFINITIONS("-DMIME_API=__declspec(dllexport)")
+endif(MSVC)
 
-ADD_DEFINITIONS("-DMIME_API=__declspec(dllexport)")
 
 add_library (mine SHARED  src/mime.c src/mime.h src/compat.c src/compat.h)
-target_link_libraries(mine lua${LUA_VERSION} ws2_32)
+
+if(MSVC)
+	target_link_libraries(mine lua${LUA_VERSION} ws2_32)
+else(MSVC)
+	target_link_libraries(mine lua${LUA_VERSION})
+	set_target_properties (mine
+                       PROPERTIES PREFIX
+                       "")
+endif(MSVC)
 
 SET_TARGET_PROPERTIES(mine PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/mine)
 SET_TARGET_PROPERTIES(mine PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/mine)

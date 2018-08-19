@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 2.6)
 
-set(target lua5.3)
+set(target lua53)
 project (${target})
 
 
@@ -72,14 +72,29 @@ set(headers
 
 
 
-add_definitions("-DLUA_BUILD_AS_DLL")
+if(WIN32)
+	ADD_DEFINITIONS(-DLUA_BUILD_AS_DLL)
+else(WIN32)
+	ADD_DEFINITIONS(-DLUA_USE_POSIX)
+endif(WIN32)
 
 
 add_library (${target} SHARED  ${srcs} ${headers}  src/luac.c)
 add_executable (lua  src/lua.c)
-target_link_libraries(lua ${target})
 
-install(TARGETS ${target} ARCHIVE DESTINATION lib)
-install(TARGETS ${target} RUNTIME DESTINATION bin)
+if(WIN32)
+	target_link_libraries(lua ${target})
+else(WIN32)
+	#sudo apt-get install ncurses-dev
+	target_link_libraries(lua ${target} dl readline history ncurses m)
+endif(WIN32)
+
+
+if(WIN32)
+	install(TARGETS ${target} ARCHIVE DESTINATION lib)
+	install(TARGETS ${target} RUNTIME DESTINATION bin)
+else(WIN32)
+	install(TARGETS ${target} LIBRARY DESTINATION lib)
+endif(WIN32)
 install(TARGETS lua RUNTIME DESTINATION bin)
 install(FILES ${headers} DESTINATION include)

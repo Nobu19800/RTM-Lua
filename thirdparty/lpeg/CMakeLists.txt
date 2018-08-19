@@ -2,17 +2,21 @@ cmake_minimum_required (VERSION 2.6)
 
 project (lpeg)
 
-set(LUA_ROOT ${LUA_ROOT} CACHE PATH "set LUA_ROOT")
+if(MSVC)
+	if(NOT LUA_ROOT)
+		message(FATAL_ERROR "Please set LUA_ROOT.")
+	endif()
+	set(LUA_VERSION ${LUA_VERSION} CACHE PATH "set LUA_VERSION")
 
-if(NOT LUA_ROOT)
-	message(FATAL_ERROR "Please set LUA_ROOT.")
-endif()
+	if(NOT LUA_VERSION)
+		message(FATAL_ERROR "Please set LUA_VERSION.")
+	endif()
+else(MSVC)
+	if(NOT LUA_VERSION)
+		set(LUA_VERSION 5.1)
+	endif()
+endif(MSVC)
 
-set(LUA_VERSION ${LUA_VERSION} CACHE PATH "set LUA_VERSION")
-
-if(NOT LUA_VERSION)
-	message(FATAL_ERROR "Please set LUA_VERSION.")
-endif()
 
 set(srcs
 	lpcap.c
@@ -28,13 +32,33 @@ set(srcs
 	lpvm.h
 )
 
-ADD_DEFINITIONS("-DLUASOCKET_API=__declspec(dllexport)")
+if(MSVC)
+	ADD_DEFINITIONS("-DLUASOCKET_API=__declspec(dllexport)")
+endif(MSVC)
 
+if(MSVC)
+else(MSVC)
+	if(LUA_ROOT)
+	else(LUA_ROOT)
+		include_directories(/usr/include/lua${LUA_VERSION})
+	endif(LUA_ROOT)
+endif(MSVC)
 
-include_directories(${LUA_ROOT}/include)
-link_directories(${LUA_ROOT}/lib)
+if(LUA_ROOT)
+	include_directories(${LUA_ROOT}/include)
+	link_directories(${LUA_ROOT}/lib)
+endif(LUA_ROOT)
+
 add_library (lpeg SHARED ${srcs})
-target_link_libraries(lpeg lua${LUA_VERSION})
+
+if(MSVC)
+	target_link_libraries(lpeg lua${LUA_VERSION} ws2_32)
+else(MSVC)
+	target_link_libraries(lpeg lua${LUA_VERSION})
+	set_target_properties (lpeg
+                       PROPERTIES PREFIX
+                       "")
+endif(MSVC)
 
 
 

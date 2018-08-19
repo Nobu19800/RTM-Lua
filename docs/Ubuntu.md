@@ -14,11 +14,22 @@ OiLのインストールだけで、LuaSocketとLOOPは自動的にインスト�
 <pre>
 $ sudo luarocks install luasocket
 $ sudo luarocks install loop
+$ sudo luarocks install luaidl
 $ sudo luarocks install oil
 $ sudo luarocks install lualogging
 $ sudo luarocks install uuid
 </pre>
 
+
+## LuaRocksからインストール
+以下のコマンドを実行してください。
+
+<pre>
+$ sudo luarocks install openrtm
+</pre>
+
+
+## ソースコードからインストール
 OpenRTM Lua版のインストールスクリプトを実行してください。
 
 <pre>

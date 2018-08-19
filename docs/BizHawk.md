@@ -7,7 +7,7 @@
 ## BizHawkの入手
 以下からBizHawk 1.12.2をダウンロードして適当な場所に展開してください。
 
-* https://github.com/TASVideos/BizHawk/releases/tag/1.12.2
+* [BizHawk](https://github.com/TASVideos/BizHawk/releases/tag/1.12.2)
 
 ※1.13.0以降のバージョンでは何故か動作できていません。
 
@@ -38,6 +38,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 上のページの作成手順に従って、以下の仕様のRTCを作成してください。
 
 ### 基本プロファイル
+
 |||
 |---|---|
 |モジュール名|BizHawkSample|
@@ -47,6 +48,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 `onExecute`を有効にしてください。
 
 ### インポート
+
 |||
 |---|---|
 |ポート名|in|

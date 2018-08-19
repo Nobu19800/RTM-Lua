@@ -7,7 +7,7 @@
 ## V-REPのインストール
 以下からV-REPのインストーラーを入手してインストールしてください。
 
-* http://www.coppeliarobotics.com/downloads.html
+* [Coppelia Robotics V-REP: Create. Compose. Simulate. Any Robot.](http://www.coppeliarobotics.com/downloads.html)
 
 ## V-REPにOpenRTM Lua版をインストール
 V-REPをインストールしたフォルダ(`C:\Program Files\V-REP3`)にOpenRTM Lua版の各ファイルをコピーします。
@@ -40,6 +40,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 
 
 ### 基本プロファイル
+
 |||
 |---|---|
 |モジュール名|VRepSample|
@@ -50,6 +51,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 `onExecute`を有効にしてください。
 
 ### インポート
+
 |||
 |---|---|
 |ポート名|in|

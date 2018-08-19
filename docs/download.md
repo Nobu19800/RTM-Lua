@@ -1,5 +1,10 @@
 # ダウンロード
 ## OpenRTM Lua版
+### Ver.0.3.0
+* [OpenRTM Lua 0.3.0 32bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1Hfzgvh7jGPn4C1nP6H06K17NtlKmiiaI&export=download)
+* [OpenRTM Lua 0.3.0 64bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1py6TNLKwZY1pGUx0OlXAz-391PsP29qp&export=download)
+* [OpenRTM Lua 0.3.0 LuaJIT 32bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1o7HFVDPPLebol9clC6KFiscboDVDi99L&export=download)
+* [OpenRTM Lua 0.3.0 LuaJIT 64bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1pGswTktLyUBSPpVo2o6pv1H4ccdAMX9Q&export=download)
 ### Ver.0.2.1
 * [OpenRTM Lua 0.2.1 32bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1RQOpAX5YSexGWcGD0vmaOHKrb89gUQwu&export=download)
 * [OpenRTM Lua 0.2.1 64bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1Dam2ldQSl1i_IFzmviUyvgz56W8UapbK&export=download)

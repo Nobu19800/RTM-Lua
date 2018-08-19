@@ -2,10 +2,21 @@
 ## Luaのインストール
 以下からLua for Windowsのインストーラーを入手してインストールしてください。
 
-* https://github.com/rjpcomputing/luaforwindows/releases
+* [Lua for Windows](https://github.com/rjpcomputing/luaforwindows/releases)
 
 
 ## OpenRTM Lua版のインストール
+
+### LuaRocksからインストール
+
+以下のコマンドを**管理者権限**で実行してください。
+
+<pre>
+luarocks install openrtm
+</pre>
+
+
+### ソースコードからインストール
 
 [OpenRTM Lua版のソースコード](https://github.com/Nobu19800/RTM-Lua/archive/master.zip)を入手して、**install.bat**を**管理者権限**で実行してください。
 

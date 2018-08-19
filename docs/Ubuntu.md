@@ -14,6 +14,7 @@ OiLのインストールだけで、LuaSocketとLOOPは自動的にインスト�
 <pre>
 $ sudo luarocks install luasocket
 $ sudo luarocks install loop
+$ sudo luarocks install luaidl
 $ sudo luarocks install oil
 $ sudo luarocks install lualogging
 $ sudo luarocks install uuid

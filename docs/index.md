@@ -413,7 +413,7 @@ MITライセンス
 
 ### Ver. 0.3以降
 * [uuid](https://github.com/Tieske/uuid)(Apache 2.0)
-### Ver. 0.3以前
+### Ver. 0.2以前
 * [LUA-RFC-4122-UUID-Generator](https://github.com/tcjennings/LUA-RFC-4122-UUID-Generator)(MITライセンス)
 
 

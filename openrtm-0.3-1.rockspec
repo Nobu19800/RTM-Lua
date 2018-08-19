@@ -1,8 +1,7 @@
 package = "openrtm"
 version = "0.3-1"
 source = {
-   url = "git://github.com/Nobu19800/RTM-Lua",
-   dir = '.'
+   url = "git://github.com/Nobu19800/RTM-Lua"
 }
 
 description = {

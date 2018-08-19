@@ -29,3 +29,7 @@
 OpenRTM-aist 2.0リリース以降は、OpenRTM-aist付属のものを使用してください。
 
 * [TkJoyStick.zip](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1UtjmnDnL-bkOi2b0aqnyd8WYMrkrlui0&export=download)
+
+## Linux用共有ライブラリ
+
+* [luamodule_linux](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1I1Owl-O2hsY_7HDmy_77FxfFxzXgxwwb&export=download)

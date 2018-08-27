@@ -4,7 +4,7 @@
 luaunitをインストールする。
 
 <pre>
-$ sudo luarocks install luaunit
+luarocks install luaunit
 </pre>
 
 ## lcovtoolsのインストール

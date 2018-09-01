@@ -8,7 +8,7 @@
 既存のRTミドルウェアの実装として以下のようなものがあります。
 
 
-|名称|製作元|言語|OS|コメント|
+|名称|開発元|言語|OS|コメント|
 |:---|:---|:---|:---|:---|
 |[OpenRTM-aist](http://www.openrtm.org/openrtm/ja)|産総研|C++、Java、Python|Windows、Ubuntu、Debian、Fedora、VxWorks、QNX。Macは公式ではサポートしていない。|もっとも使われているRTM実装(広く使われているとは言っていない)。OpenRTM-aistにはキラーアプリケーションと呼べるものが何もないため今一つ流行っていない。|
 |[OpenRTM.NET](http://www.sec.co.jp/robot/openrtmnet/introduction.html)|SEC|.NET(C#、Visual Basic.NET等)|Windows|.NET版RTミドルウェア。更新の頻度が少なく、最近はあまり使っていない。GUI等、上位のアプリケーション向け。|

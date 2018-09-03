@@ -16,3 +16,5 @@ WindowsではOiLのインストールが上手くいかない。おそらくCの
 luaidlのインストールはできるが、OiLのバージョンが0.4betaのままでluaidlだけ新しいバージョンに移行すると不具合が発生する。
 
 lualoggingのインストールにも失敗するが、この原因は一切不明。
+
+OiLもlualoggingもLua for Windowsに最初から入っているものを使えばいいため、現状問題は無い。

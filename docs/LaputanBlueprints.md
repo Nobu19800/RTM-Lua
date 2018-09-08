@@ -156,10 +156,12 @@ end
 実行コンテキストの指定をしています。
 Laputan Blueprints上ではRTCをステップ実行したいので`OpenHRPExecutionContext`という実行コンテキストを指定します。
 
+<!--
 * `"-o","manager.modules.load_path:LuaModules"`
 
 モジュールを探索するパスを指定します。
 `LBSample.lua`の存在するディレクトリを指定します。
+-->
 
 * `"-o","manager.components.precreate:LBSample"`
 

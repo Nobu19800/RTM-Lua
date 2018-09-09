@@ -160,7 +160,7 @@ CORBA_RTCUtil.activate = function(rtc, ec_id)
 	if ec == oil.corba.idl.null then
 		return ReturnCode_t.BAD_PARAMETER
 	end
-	return ec:activate_component(rtc)
+	return NVUtil.getReturnCode(ec:activate_component(rtc))
 end
 
 -- RTCの非アクティブ化
@@ -181,7 +181,7 @@ CORBA_RTCUtil.deactivate = function(rtc, ec_id)
 	if ec == oil.corba.idl.null then
 		return ReturnCode_t.BAD_PARAMETER
 	end
-	return ec:deactivate_component(rtc)
+	return NVUtil.getReturnCode(ec:deactivate_component(rtc))
 end
 
 
@@ -203,7 +203,7 @@ CORBA_RTCUtil.reset = function(rtc, ec_id)
 	if ec == oil.corba.idl.null then
 		return ReturnCode_t.BAD_PARAMETER
 	end
-	return ec:reset_component(rtc)
+	return NVUtil.getReturnCode(ec:reset_component(rtc))
 end
 
 
@@ -350,7 +350,7 @@ CORBA_RTCUtil.add_rtc_to_default_ec = function(localcomp, othercomp)
 	if ec == oil.corba.idl.null then
 		return ReturnCode_t.BAD_PARAMETER
 	end
-	return ec:add_component(othercomp)
+	return NVUtil.getReturnCode(ec:add_component(othercomp))
 end
 
 
@@ -368,7 +368,7 @@ CORBA_RTCUtil.remove_rtc_to_default_ec = function(localcomp, othercomp)
 	if ec == oil.corba.idl.null then
 		return ReturnCode_t.BAD_PARAMETER
 	end
-	return ec:remove_component(othercomp)
+	return NVUtil.getReturnCode(ec:remove_component(othercomp))
 end
 
 

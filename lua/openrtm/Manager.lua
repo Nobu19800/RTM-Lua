@@ -1929,7 +1929,7 @@ function Manager:initPreActivation()
 			if comp_ref ~= nil then
 				local ret = CORBA_RTCUtil.activate(comp_ref)
 				if ret ~= self._ReturnCode_t.RTC_OK then
-					self._rtcout:RTC_ERROR(c.." activation filed.")
+					self._rtcout:RTC_ERROR(c.." activation failed.")
 				else
 					self._rtcout:RTC_INFO(c.." activated.")
 				end

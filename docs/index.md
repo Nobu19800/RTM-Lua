@@ -66,6 +66,7 @@ AviUtlやNScripter2上でもRTCを起動できますが、実用性は皆無で�
 * [BizHawk上で動作するRTCの作成方法](BizHawk.md)
 * [Laputan Blueprints上で動作するRTCの作成方法](LaputanBlueprints.md)
 * [OpenResty上で動作するRTCの作成方法](OpenResty.md)
+* [LÖVE上で動作するRTCの作成方法](love2d.md)
 
 
 #### 高速
@@ -397,7 +398,7 @@ manager:runManager()
 
 
 ## ライセンス
-MITライセンス
+LGPLライセンス
 
 ## 依存ライブラリ
 

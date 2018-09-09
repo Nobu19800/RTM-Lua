@@ -131,7 +131,7 @@ function OnInit()
 	local openrtm = require "openrtm"
 
 	local mgr = openrtm.Manager
-	mgr:init({"-o","exec_cxt.periodic.type:OpenHRPExecutionContext","-o","manager.modules.load_path:LuaModules","-o","manager.components.precreate:LBSample","-o","manager.components.preconnect:LBSample0.in?port=rtcname://localhost/TkJoyStick0.pos","-o","manager.components.preactivation:LBSample0,rtcname://localhost/TkJoyStick0"})
+	mgr:init({"-o","exec_cxt.periodic.type:OpenHRPExecutionContext","-o","manager.components.precreate:LBSample","-o","manager.components.preconnect:LBSample0.in?port=rtcname://localhost/TkJoyStick0.pos","-o","manager.components.preactivation:LBSample0,rtcname://localhost/TkJoyStick0"})
 	mgr:activateManager()
 	mgr:runManager(true)
 end
@@ -156,10 +156,12 @@ end
 実行コンテキストの指定をしています。
 Laputan Blueprints上ではRTCをステップ実行したいので`OpenHRPExecutionContext`という実行コンテキストを指定します。
 
+<!--
 * `"-o","manager.modules.load_path:LuaModules"`
 
 モジュールを探索するパスを指定します。
 `LBSample.lua`の存在するディレクトリを指定します。
+-->
 
 * `"-o","manager.components.precreate:LBSample"`
 

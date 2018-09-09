@@ -122,8 +122,8 @@ function love.load()
     local openrtm = require "openrtm"
 
 
-	  local mgr = openrtm.Manager
-  	mgr:init({"-o","exec_cxt.periodic.type:OpenHRPExecutionContext","-o","manager.components.precreate:LOVESample","-o","manager.components.preconnect:LOVESample0.in?port=rtcname://localhost/TkJoyStick0.pos","-o","manager.components.preactivation:LOVESample0,rtcname://localhost/TkJoyStick0"})
+    local mgr = openrtm.Manager
+    mgr:init({"-o","exec_cxt.periodic.type:OpenHRPExecutionContext","-o","manager.components.precreate:LOVESample","-o","manager.components.preconnect:LOVESample0.in?port=rtcname://localhost/TkJoyStick0.pos","-o","manager.components.preactivation:LOVESample0,rtcname://localhost/TkJoyStick0"})
     mgr:activateManager()
     mgr:runManager(true)
     
@@ -176,12 +176,12 @@ function love.update(dt)
     world:update(dt)
     
     local openrtm = require "openrtm"
-	  local mgr = openrtm.Manager
+    local mgr = openrtm.Manager
     mgr:step()
 
     local comp = mgr:getComponent("LOVESample0")
-	  local ec = comp:get_owned_contexts()[1]
-	  ec:tick()
+    local ec = comp:get_owned_contexts()[1]
+    ec:tick()
 end
 </pre>
 

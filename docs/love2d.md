@@ -2,7 +2,7 @@
 ## 概要
 このページではゲームエンジンLÖVE上で動作する上で動作するRTCを作成して、以下のようにPython版サンプルコンポーネントのジョイスティックコンポーネントと接続して物体を操作するシステムの作成を行います。
 
-* [動画](https://www.youtube.com/watch?v=FS52TlHDKiU)
+* [動画](https://www.youtube.com/watch?v=2xYkcu1eFfM)
 
 ## LÖVEの入手
 以下からLÖVEを入手してください。

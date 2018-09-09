@@ -1,5 +1,5 @@
 package = "openrtm"
-version = "0.3-1"
+version = "0.3-2"
 source = {
    url = "git://github.com/Nobu19800/RTM-Lua"
 }
@@ -10,19 +10,19 @@ description = {
       
    ]],
    homepage = "https://nobu19800.github.io/RTM-Lua/docs/",
-   license = "MIT",
+   license = "LGPL",
    maintainer = "nobu@nobu777.net"
 }
 
 
 dependencies = {
    "lua >= 5.1",
-   --"oil >= 0.4beta",
-   --"luaidl >= 0.0",
-   --"loop >= 0.0",
+   --"oil",
+   --"luaidl",
+   "loop",
    "luasocket >= 2.0.2",
-   --"lualogging >= 0.0.0",
-   --"lua-rfc-4122-uuid-generator >= 0.0",
+   --"lualogging",
+   --"lua-rfc-4122-uuid-generator",
    "uuid >= 0.2"
 }
 

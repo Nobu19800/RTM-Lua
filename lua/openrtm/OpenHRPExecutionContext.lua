@@ -71,11 +71,13 @@ OpenHRPExecutionContext.new = function()
 		end
 		local t3_ = os.clock()
 		if period_:toDouble() > (t2_ - t0_) then
+			--[[
 			if self._count > 1000 then
 				self._rtcout:RTC_PARANOID("sleeping...")
 				local slptm_ = period_:toDouble() - (t2_ - t0_)
 				oil.tasks:suspend(slptm_)
 			end
+			]]
 		end
 
 		if self._count > 1000 then

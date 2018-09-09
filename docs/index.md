@@ -56,7 +56,7 @@ AviUtlやNScripter2上でもRTCを起動できますが、実用性は皆無で�
 * Laputan Blueprints(剛体シミュレータ), [動画](https://www.youtube.com/watch?v=FS52TlHDKiU)
 * AviUtl(動画編集ソフト)
 * NScripter2(スクリプトエンジン)
-* LÖVE(2Dゲームエンジン)
+* LÖVE(2Dゲームエンジン), [動画](https://www.youtube.com/watch?v=2xYkcu1eFfM)
 * Celestia(3D天体シミュレータ)
 * OpenResty(WEBアプリサーバー), [動画1](https://www.youtube.com/watch?v=_-Kw8qv_keo), [動画2](https://www.youtube.com/watch?v=4qxKCBcIIEE)
 

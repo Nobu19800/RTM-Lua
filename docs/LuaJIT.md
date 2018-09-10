@@ -10,6 +10,7 @@ bin\luajit test.lua
 </pre>
 
 ただしOpenRTM Luaを使用する場合は、以下のコマンドでモジュール検索パスを設定する必要があります。
+パスはOpenRTM Luaを展開したフォルダによって適宜変更してください。
 
 <pre>
 set LUA_PATH=..\\lua\\?.lua;

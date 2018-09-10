@@ -113,7 +113,7 @@ http {
 
 `sample.html`には以下のように記述してください。
 
-* https://github.com/Nobu19800/RTM-Lua-Sample/blob/master/OpenRestySample/rtc-server/public/images/sample.html
+* [sample.html](https://github.com/Nobu19800/RTM-Lua-Sample/blob/master/OpenRestySample/rtc-server/public/images/sample.html)
 
 ## OpenRestyにOpenRTM Lua版をインストール
 

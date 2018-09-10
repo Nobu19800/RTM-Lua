@@ -8,13 +8,13 @@
 従来はWEBブラウザ上でRTCのデータを表示等をする場合は、以下のようにRTCとWEBサーバーで通信を行う必要がありましたが、
 
 
-<img src=https://user-images.githubusercontent.com/6216077/38496525-df36abee-3c38-11e8-9043-332ef49f2584.png height=250>
 
+![openrtmlua7102](https://user-images.githubusercontent.com/6216077/38496525-df36abee-3c38-11e8-9043-332ef49f2584.png)
 
 WEBサーバー上でRTCを起動することで、以下のように構成が簡単になります。
 
 
-<img src=https://user-images.githubusercontent.com/6216077/38496798-c739dbd2-3c39-11e8-96e3-5580fd4c214e.png height=250>
+![openrtmlua7103](https://user-images.githubusercontent.com/6216077/38496798-c739dbd2-3c39-11e8-96e3-5580fd4c214e.png)
 
 
 この構成にする事によって、従来の方法では難しかったWEBブラウザでの操作のタイミングでOutPortからデータを送信する、サービスポートの操作を呼び出すという事が容易に実現できます。

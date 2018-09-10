@@ -9,6 +9,13 @@ luajit.exeにLuaファイルをドラッグアンドドロップするか、以�
 bin\luajit test.lua
 </pre>
 
+ただしOpenRTM Luaを使用する場合は、以下のコマンドでモジュール検索パスを設定する必要があります。
+
+<pre>
+set LUA_PATH=..\\lua\\?.lua;
+set LUA_CPATH=..\\clibs\\?.dll;
+</pre>
+
 ## Ubuntu
 
 以下のコマンドでインストールして使用してください。

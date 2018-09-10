@@ -1,7 +1,7 @@
 # MoonScriptの利用
 ## MoonScriptとは？
 
-* https://moonscript.org/
+* [MoonScript](https://moonscript.org/)
 
 Luaトランスレータ言語です。ロゴがダサいのが特徴です。
 

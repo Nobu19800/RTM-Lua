@@ -56,7 +56,29 @@ test_func(obj)
 ## インストール
 ### Windows
 
-インストール方法不明。知っている人がいれば教えてください。
+OpenRTM Lua版にMoonScriptの実行環境も含めてあります。
+
+* [ダウンロード](download.md)
+
+
+
+以下のコマンドでモジュール検索パスを設定する必要があります。
+パスはOpenRTM Luaを展開したフォルダによって適宜変更してください。
+
+<pre>
+set LUA_PATH=openrtm-lua-0.3.0(x86)\\lua\\?.lua;openrtm-lua-0.3.0(x86)\\moon\\lua\\?.lua
+set LUA_CPATH=openrtm-lua-0.3.0(x86)\\clibs\\?.dll;openrtm-lua-0.3.0(x86)\\moon\\clibs\\?.dll;
+</pre>
+
+
+その後、以下のコマンドでRTCが起動できます。
+ファイル名は適宜変更してください。
+
+<pre>
+lua openrtm-lua-0.3.0(x86)/moon/bin/moon test.lua
+</pre>
+
+
 
 ### Ubuntu
 

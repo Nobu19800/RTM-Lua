@@ -4,6 +4,7 @@
 [ダウンロード](download.md)からLuaJIT用のバイナリを入手して利用してください。
 
 luajit.exeにLuaファイルをドラッグアンドドロップするか、以下のコマンドを入力してください。
+ファイル名は適宜変更してください。
 
 <pre>
 bin\luajit test.lua

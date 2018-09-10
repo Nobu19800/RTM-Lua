@@ -25,6 +25,9 @@ RTCUtil.newproxy = function(orb, ior, idl)
 		end
 	end
 	if oil.VERSION == "OiL 0.4 beta" then
+		if type(ior) == "table" then
+			ior = orb:tostring(ior)
+		end
 		return orb:newproxy(ior,idl)
 	elseif oil.VERSION == "OiL 0.5" then
 		return orb:newproxy(ior,nil,idl)

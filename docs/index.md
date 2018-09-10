@@ -405,7 +405,7 @@ LGPLライセンス
 ## 依存ライブラリ
 
 * [Lua-5.1](https://www.lua.org/)(MITライセンス)
-* [OiL-0.4](https://webserver2.tecgraf.puc-rio.br/~maia/oil/index.html)(MITライセンス)
+* [OiL-0.5](https://webserver2.tecgraf.puc-rio.br/~maia/oil/index.html)(MITライセンス)
 * [LuaIDL](https://github.com/LuaDist/luaidl)(MITライセンス)
 * [loop](https://github.com/LuaDist/loop)(MITライセンス)
 * [LuaSocket](https://github.com/diegonehab/luasocket)(MITライセンス)

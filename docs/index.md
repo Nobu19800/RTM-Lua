@@ -5,8 +5,6 @@
 ![openrtm-lua_logo2](https://user-images.githubusercontent.com/6216077/45281648-68ad6400-b513-11e8-9571-190a34a0198a.png)
 
 
-<iframe width="400" height="225" src="http://www.youtube.com/embed/2xYkcu1eFfM" frameborder="0" allowfullscreen=""></iframe>
-
 
 ### RTミドルウェアとは？
 [RTミドルウェア(RTM)](http://www.openrtm.org/openrtm/ja)はソフトウェアモジュールを組み合わせてロボットシステムを構築するための標準規格です。

@@ -12,20 +12,20 @@
 ## LÖVEにOpenRTM Lua版をインストール
 LÖVEを展開したフォルダにOpenRTM Lua版の各ファイルをコピーします。
 
-以下からOpenRTM Lua版ファイル一式(OpenRTM Lua x.y.z 64bit(もしくは32bit))をダウンロードしてください。
+以下からOpenRTM Lua版ファイル一式(OpenRTM Lua x.y.z Lua5.1 64bit(もしくは32bit))をダウンロードしてください。
 32bit版のLÖVEを使用する場合は32bit版、64bit版のLÖVEを使用する場合は64bit版を使用します。
 
 * [ダウンロード](download.md)
 
 OpenRTM Lua版からLÖVEにファイルをコピーします。
 
-`openrtm-lua-x.y.z(x64)\lua`フォルダを`love-11.1.0-win64\`以下にコピーしてください。
+`openrtm-lua-x.y.z(x64)-lua5.1\lua`フォルダを`love-11.1.0-win64\`以下にコピーしてください。
 
 ![love2d-1](https://user-images.githubusercontent.com/6216077/45256448-938f9f00-b3d1-11e8-93b5-d9c84c6646f8.png)
 
 
 
-次に`openrtm-lua-x.y.z(x64)\clibs\`以下のファイルを全て`love-11.1.0-win64\`以下にコピーしてください。
+次に`openrtm-lua-x.y.z(x64)-lua5.1\clibs\`以下のファイルを全て`love-11.1.0-win64\`以下にコピーしてください。
 
 ![love2d-2](https://user-images.githubusercontent.com/6216077/45256531-88893e80-b3d2-11e8-940e-c9178a4b6f57.png)
 

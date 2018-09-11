@@ -425,6 +425,7 @@ LGPLライセンス
 
 
 ### Lua 5.2
+* [Lua-5.2](https://www.lua.org/)(MITライセンス)
 * [OiL-0.7](https://github.com/renatomaia/oil)(MITライセンス)
 * [loop-collections](https://github.com/renatomaia/loop-collections)(MITライセンス)
 * [LOOP](https://github.com/renatomaia/loop)(MITライセンス)

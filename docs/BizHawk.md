@@ -14,18 +14,18 @@
 ## BizHawkにOpenRTM Lua版をインストール
 BizHawkを展開したフォルダにOpenRTM Lua版の各ファイルをコピーします。
 
-以下から32bit用のOpenRTM Lua版ファイル一式(OpenRTM Lua x.y.z 32bit)をダウンロードしてください。
+以下から32bit用のOpenRTM Lua版ファイル一式(OpenRTM Lua x.y.z Lua5.1 32bit)をダウンロードしてください。
 
 * [ダウンロード](download.md)
 
 OpenRTM Lua版からBizHawkにファイルをコピーします。
 
-`openrtm-lua-x.y.z(x86)\lua\`以下のファイルを全て`BizHawk-1.12.2\Lua\`以下にコピーしてください。
+`openrtm-lua-x.y.z(x86)-lua5.1\lua\`以下のファイルを全て`BizHawk-1.12.2\Lua\`以下にコピーしてください。
 
 ![openrtmlua220](https://user-images.githubusercontent.com/6216077/37710270-7aa40934-2d50-11e8-9f3c-0c654bc6bab6.png)
 
 
-次に`openrtm-lua-x.y.z(x86)\clibs\`以下のファイルを全て`BizHawk-1.12.2\`以下にコピーしてください。
+次に`openrtm-lua-x.y.z(x86)-lua5.1\clibs\`以下のファイルを全て`BizHawk-1.12.2\`以下にコピーしてください。
 
 ![openrtmlua230](https://user-images.githubusercontent.com/6216077/37710277-7d9883ae-2d50-11e8-953e-b110d209d5a4.png)
 

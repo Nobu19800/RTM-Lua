@@ -18,3 +18,15 @@ luaidlのインストールはできるが、OiLのバージョンが0.4betaの�
 lualoggingのインストールにも失敗するが、この原因は一切不明。
 
 OiLもlualoggingもLua for Windowsに最初から入っているものを使えばいいため、現状問題は無い。
+
+## OiL 0.7の問題
+
+OiL 0.7は何故かoil.VERSIONで取得できるバージョンが0.6になっている。
+
+また、Codec.luaのstruct関数455目に以下を追加しないと落ちることがある。
+
+<pre>
+if field.name == "port" then
+	val = tonumber(val)
+end
+</pre>

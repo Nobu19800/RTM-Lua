@@ -6,7 +6,6 @@
 
 
 
-
 local openrtm  = require "openrtm"
 
 
@@ -98,10 +97,10 @@ SeqIn.new = function(manager)
 		local doubleSeq_ = self._doubleSeqIn:read()
 
 		local octetSize_  = #octetSeq_.data
-		local shortSize_  = table.maxn(shortSeq_.data)
-		local longSize_   = table.maxn(longSeq_.data)
-		local floatSize_  = table.maxn(floatSeq_.data)
-		local doubleSize_ = table.maxn(doubleSeq_.data)
+		local shortSize_  = #shortSeq_.data
+		local longSize_   = #longSeq_.data
+		local floatSize_  = #floatSeq_.data
+		local doubleSize_ = #doubleSeq_.data
 
 
 		local octetSeqDisp_ = {}

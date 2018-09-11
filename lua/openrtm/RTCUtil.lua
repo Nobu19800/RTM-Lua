@@ -29,7 +29,7 @@ RTCUtil.newproxy = function(orb, ior, idl)
 			ior = orb:tostring(ior)
 		end
 		return orb:newproxy(ior,idl)
-	elseif oil.VERSION == "OiL 0.5" then
+	elseif oil.VERSION == "OiL 0.5" or oil.VERSION == "OiL 0.6" then
 		return orb:newproxy(ior,nil,idl)
 	end
 	return nil
@@ -44,7 +44,7 @@ RTCUtil.getReference = function(orb, servant, idl)
 	if oil.VERSION == "OiL 0.4 beta" then
 		local ior = orb:tostring(servant)
 		return RTCUtil.newproxy(orb, ior, idl)
-	elseif oil.VERSION == "OiL 0.5" then
+	elseif oil.VERSION == "OiL 0.5" or oil.VERSION == "OiL 0.6" then
 		return servant
 	end
 	return nil

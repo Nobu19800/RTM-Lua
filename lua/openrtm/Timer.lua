@@ -20,7 +20,11 @@ end
 -- 一定時間待機
 -- @param tm 待機時間
 Timer.sleep = function(tm)
-	oil.tasks:suspend(tm)
+	if oil.VERSION == "OiL 0.6" then
+		oil.sleep(tm)
+	else
+		oil.tasks:suspend(tm)
+	end
 end
 
 

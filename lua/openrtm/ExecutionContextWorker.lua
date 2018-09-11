@@ -11,7 +11,7 @@ local ExecutionContextWorker= {}
 --_G["openrtm.ExecutionContextWorker"] = ExecutionContextWorker
 
 
-
+local oil = require "oil"
 local RTObjectStateMachine = require "openrtm.RTObjectStateMachine"
 local StringUtil = require "openrtm.StringUtil"
 

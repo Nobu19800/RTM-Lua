@@ -19,6 +19,7 @@ local ECFactory = require "openrtm.ECFactory"
 local oil = require "oil"
 
 local RTCUtil = require "openrtm.RTCUtil"
+local Timer = require "openrtm.Timer"
 
 local DEFAULT_PERIOD = 0.000001
 
@@ -75,7 +76,8 @@ OpenHRPExecutionContext.new = function()
 			if self._count > 1000 then
 				self._rtcout:RTC_PARANOID("sleeping...")
 				local slptm_ = period_:toDouble() - (t2_ - t0_)
-				oil.tasks:suspend(slptm_)
+				--oil.tasks:suspend(slptm_)
+				Timer.sleep(slptm_)
 			end
 			]]
 		end

@@ -10,6 +10,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 local CorbaPort= {}
 --_G["openrtm.CorbaPort"] = CorbaPort
 
+local oil = require "oil"
 local PortBase = require "openrtm.PortBase"
 local Properties = require "openrtm.Properties"
 local StringUtil = require "openrtm.StringUtil"

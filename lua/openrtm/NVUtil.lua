@@ -260,6 +260,23 @@ NVUtil._is_equivalent = function(obj1, obj2, obj1_ref, obj2_ref)
 		else
 			return obj1:_is_equivalent(obj2)
 		end
+	elseif oil.VERSION == "OiL 0.6" then
+		if obj1._is_equivalent == nil then
+
+			obj1 = obj1_ref(obj1)
+		end
+		if obj2._is_equivalent == nil then
+			obj2 = obj2_ref(obj2)
+		end
+		if obj1._is_equivalent == nil and obj2._is_equivalent == nil then
+			return (obj1 == obj2)
+		else
+			if obj1._is_equivalent ~= nil then
+				return obj1:_is_equivalent(obj2)
+			else
+				return obj2:_is_equivalent(obj1)
+			end
+		end
 	end
 end
 

@@ -3,10 +3,11 @@ cmake_minimum_required (VERSION 2.6)
 project (lpeg)
 
 if(MSVC)
+	set(LUA_ROOT ${LUA_ROOT} CACHE PATH "set LUA_ROOT")
 	if(NOT LUA_ROOT)
 		message(FATAL_ERROR "Please set LUA_ROOT.")
 	endif()
-	set(LUA_VERSION ${LUA_VERSION} CACHE PATH "set LUA_VERSION")
+	set(LUA_VERSION ${LUA_VERSION} CACHE STRING "set LUA_VERSION")
 
 	if(NOT LUA_VERSION)
 		message(FATAL_ERROR "Please set LUA_VERSION.")

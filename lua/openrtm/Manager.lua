@@ -41,6 +41,7 @@ local CORBA_RTCUtil = require "openrtm.CORBA_RTCUtil"
 local SdoServiceConsumerBase = require "openrtm.SdoServiceConsumerBase"
 local SdoServiceConsumerFactory = SdoServiceConsumerBase.SdoServiceConsumerFactory
 
+local Timer = require "openrtm.Timer"
 
 -- ORB_Dummy_ENABLEをtrueに設定した場合、
 -- oil関連の処理はすべてダミー関数に置き換えられる
@@ -1198,10 +1199,23 @@ function Manager:initORB()
 	if ORB_Dummy_ENABLE then
 		self._orb = ORB_Dummy
 	else
-		self._orb = oil.init{ flavor = "cooperative;corba;intercepted;typed;base;" }
+		if oil.VERSION == "OiL 0.6" then
+			self._orb = oil.init{ flavor = "cooperative;corba;" }
+		else
+			self._orb = oil.init{ flavor = "cooperative;corba;intercepted;typed;base;" }
+		end
 
 		if oil.VERSION == "OiL 0.5" then
 			oil.corba.idl.null = nil
+		elseif oil.VERSION == "OiL 0.6" then
+			oil.corba = {}
+			oil.corba.idl = {}
+			oil.corba.idl.null = nil
+
+			oil.pcall = pcall
+			self._orb.tostring = function(self, str)
+					return tostring(str)
+					end
 		end
 
 		self._orb:loadidlfile(Manager:findIdLFile("CosNaming.idl"))
@@ -2131,7 +2145,8 @@ terminate_Task.new = function(mgr, sleep_time)
 	obj._sleep_time = sleep_time
 
 	function obj:svc()
-		oil.tasks:suspend(self._sleep_time)
+		--oil.tasks:suspend(self._sleep_time)
+		Timer.sleep(self._sleep_time)
 		self._mgr:shutdown()
 	end
 	return obj

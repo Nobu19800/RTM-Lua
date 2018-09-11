@@ -10,6 +10,8 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 local InPortBase= {}
 --_G["openrtm.InPortBase"] = InPortBase
 
+local oil = require "oil"
+
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 local Properties = require "openrtm.Properties"
 local ConnectorListener = require "openrtm.ConnectorListener"

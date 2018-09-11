@@ -225,6 +225,7 @@ PortBase.new = function(name)
 				--print(#connector_profile.ports)
 				retval,connector_profile = connector_profile.ports[1]:notify_connect(connector_profile)
 				--print(retval)
+				retval = NVUtil.getReturnCode(retval)
 				if retval ~= self._ReturnCode_t.RTC_OK then
 					self._rtcout:RTC_ERROR("Connection failed. cleanup.")
 					self:disconnect(connector_profile.connector_id)

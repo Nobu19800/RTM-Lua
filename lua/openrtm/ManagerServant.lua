@@ -16,6 +16,7 @@ local oil = require "oil"
 local RTCUtil = require "openrtm.RTCUtil"
 local Properties = require "openrtm.Properties"
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
+local Timer = require "openrtm.Timer"
 
 
 
@@ -458,7 +459,8 @@ ManagerServant.new = function()
 
 			local ret = os.execute(cmd)
 
-			oil.tasks:suspend(0.01)
+			--oil.tasks:suspend(0.01)
+			Timer.sleep(0.01)
 			local count = 0
 			local t0_ = os.clock()
 			while mgrobj == oil.corba.idl.null do
@@ -494,7 +496,8 @@ ManagerServant.new = function()
 				if (t1_ - t0_) > 10.0 and count > 10 then
 					break
 				end
-				oil.tasks:suspend(0.01)
+				--oil.tasks:suspend(0.01)
+				Timer.sleep(0.01)
 
 			end
 
@@ -554,7 +557,8 @@ ManagerServant.new = function()
 
 			self._rtcout:RTC_DEBUG("Invoking command: "..cmd..".")
 			local ret = os.execute(cmd)
-			oil.tasks:suspend(0.01)
+			--oil.tasks:suspend(0.01)
+			Timer.sleep(0.01)
 			local count = 0
 			local t0_ = os.clock()
 			while mgrobj == oil.corba.idl.null do
@@ -567,7 +571,8 @@ ManagerServant.new = function()
 				if (t1_ - t0_) > 10.0 and count > 10 then
 					break
 				end
-				oil.tasks:suspend(0.01)
+				--oil.tasks:suspend(0.01)
+				Timer.sleep(0.01)
 
 			end
 

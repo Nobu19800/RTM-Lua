@@ -22,6 +22,7 @@ local Task = require "openrtm.Task"
 local oil = require "oil"
 
 local RTCUtil = require "openrtm.RTCUtil"
+local Timer = require "openrtm.Timer"
 
 
 
@@ -85,9 +86,14 @@ PeriodicExecutionContext.new = function()
 				--print(period_:toDouble())
 				local slptm_ = period_:toDouble() - (t1_ - t0_)
 				--print(slptm_)
-				oil.tasks:suspend(slptm_)
+				--oil.tasks:suspend(slptm_)
+				Timer.sleep(slptm_)
 			else
-				coroutine.yield(1)
+				if oil.VERSION == "OiL 0.6" then
+					Timer.sleep(0)
+				else
+					coroutine.yield(1)
+				end
 			end
 
 			--oil.tasks:suspend(1)

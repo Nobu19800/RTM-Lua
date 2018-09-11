@@ -10,6 +10,7 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 local OutPortBase= {}
 --_G["openrtm.OutPortBase"] = OutPortBase
 
+local oil = require "oil"
 
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 local Properties = require "openrtm.Properties"

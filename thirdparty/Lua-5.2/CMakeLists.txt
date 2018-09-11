@@ -74,6 +74,8 @@ else(WIN32)
 	ADD_DEFINITIONS(-DLUA_USE_POSIX)
 endif(WIN32)
 
+ADD_DEFINITIONS(-DLUA_COMPAT_MODULE)
+
 
 add_library (${target} SHARED  ${srcs} ${headers}  src/luac.c)
 add_executable (lua  src/lua.c)

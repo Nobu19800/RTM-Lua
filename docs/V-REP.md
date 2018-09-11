@@ -12,13 +12,13 @@
 ## V-REPにOpenRTM Lua版をインストール
 V-REPをインストールしたフォルダ(`C:\Program Files\V-REP3`、もしくは任意ディレクトリの`V-REP_PRO_EDU_V3_5_0_Linux`)にOpenRTM Lua版の各ファイルをコピーします。
 
-以下から64bit用のOpenRTM Lua版ファイル一式(OpenRTM Lua x.y.z 64bit)をダウンロードしてください。
+以下から64bit用のOpenRTM Lua版ファイル一式(OpenRTM Lua x.y.z Lua5.1 64bit)をダウンロードしてください。
 
 * [ダウンロード](download.md)
 
 OpenRTM Lua版からV-REPにファイルをコピーします。
 
-`openrtm-lua-x.y.z(x64)\lua\`以下のファイルを全て`C:\Program Files\V-REP3\V-REP_PRO_EDU\lua\`以下にコピーしてください。
+`openrtm-lua-x.y.z(x64)-lua5.1\lua\`以下のファイルを全て`C:\Program Files\V-REP3\V-REP_PRO_EDU\lua\`以下にコピーしてください。
 Ubuntuの場合は任意ディレクトリの`V-REP_PRO_EDU_V3_5_0_Linux`以下にコピーします。
 
 ![openrtmlua340](https://user-images.githubusercontent.com/6216077/37710309-97ec79f4-2d50-11e8-9f3c-3efd55eac308.png)
@@ -28,7 +28,7 @@ Ubuntuの場合は任意ディレクトリの`V-REP_PRO_EDU_V3_5_0_Linux`以下�
 
 ### Windowsの場合
 
-`openrtm-lua-x.y.z(x64)\clibs\`以下のファイルを全て`C:\Program Files\V-REP3\V-REP_PRO_EDU\`以下にコピーしてください。
+`openrtm-lua-x.y.z(x64)-lua5.1\clibs\`以下のファイルを全て`C:\Program Files\V-REP3\V-REP_PRO_EDU\`以下にコピーしてください。
 
 
 ![openrtmlua360](https://user-images.githubusercontent.com/6216077/37710315-9af9581a-2d50-11e8-803d-560ab910f990.png)

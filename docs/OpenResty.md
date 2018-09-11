@@ -126,12 +126,12 @@ http {
 
 OpenRTM Lua版からOpenRestyにファイルをコピーします。
 
-`openrtm-lua-x.y.z(LuaJITx86)\lua`フォルダを、`rtc-server`以下にコピーしてください。
+`openrtm-lua-x.y.z(x86)-LuaJIT\lua`フォルダを、`rtc-server`以下にコピーしてください。
 
 ![openrtmlua720](https://user-images.githubusercontent.com/6216077/38462313-e53bedb6-3b1f-11e8-839a-f70f328d4d45.png)
 
 
-`openrtm-lua-x.y.z(LuaJITx86)\lua\idl`フォルダを、`rtc-server`以下にコピーしてください。
+`openrtm-lua-x.y.z(x86)-LuaJIT\lua\idl`フォルダを、`rtc-server`以下にコピーしてください。
 
 ![openrtmlua730](https://user-images.githubusercontent.com/6216077/38462315-f0f29a42-3b1f-11e8-87c9-c47c7efb0896.png)
 

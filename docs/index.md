@@ -94,7 +94,7 @@ Luaスクリプト機能をサポートしているアプリケーションを�
 ![system2](https://user-images.githubusercontent.com/6216077/45331599-9c859980-b5a6-11e8-8f8d-aac694eb648e.png)
 
 * LuaのRTCとは別のマシンで起動したC++のRTCと接続
-![system4](https://user-images.githubusercontent.com/6216077/45331719-38afa080-b5a7-11e8-913e-25c6c85acacf.png)
+![system4](https://user-images.githubusercontent.com/6216077/45331752-67c61200-b5a7-11e8-8d80-070351ca4ecc.png)
 
 
 ## ダウンロード

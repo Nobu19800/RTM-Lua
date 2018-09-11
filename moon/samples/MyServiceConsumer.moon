@@ -92,10 +92,10 @@ class MyServiceConsumer extends openrtm_ms.RTObject
 
 		
 		func = ->
-			if argv[1] == "echo" and table.maxn(argv) > 1
+			if argv[1] == "echo" and #argv > 1
 				-- echoオペレーション実行
 				print("echo() finished: ", self._myservice0\_ptr()\echo(argv[2]))
-			elseif argv[1] == "set_value" and table.maxn(argv) > 1 then
+			elseif argv[1] == "set_value" and #argv > 1 then
 				val = tonumber(argv[2])
 				-- set_valueオペレーション実行
 				self._myservice0\_ptr()\set_value(val)

@@ -95,10 +95,10 @@ class SeqIn extends openrtm_ms.RTObject
 		doubleSeq_ = self._doubleSeqIn\read()
 
 		octetSize_  = #octetSeq_.data
-		shortSize_  = table.maxn(shortSeq_.data)
-		longSize_   = table.maxn(longSeq_.data)
-		floatSize_  = table.maxn(floatSeq_.data)
-		doubleSize_ = table.maxn(doubleSeq_.data)
+		shortSize_  = #shortSeq_.data
+		longSize_   = #longSeq_.data
+		floatSize_  = #floatSeq_.data
+		doubleSize_ = #doubleSeq_.data
 
 
 		octetSeqDisp_ = {}

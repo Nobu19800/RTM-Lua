@@ -88,13 +88,13 @@ Luaスクリプト機能をサポートしているアプリケーションを�
 例えばLaputan Blueprints上の車、飛行機等をLEGO Mindstorms EV3のデバイスで操作するということができます。
 
 * LuaのRTCとPythonのRTCを接続
-![system1](https://user-images.githubusercontent.com/6216077/45331593-95f72200-b5a6-11e8-8b4d-4e7c8f4f21b7.png)
+![system1](https://user-images.githubusercontent.com/6216077/45331814-d5723e00-b5a7-11e8-86bc-2b5cc3569e34.png)
 
 * LuaのRTCとJavaのRTCを接続
-![system2](https://user-images.githubusercontent.com/6216077/45331599-9c859980-b5a6-11e8-8f8d-aac694eb648e.png)
+![system2](https://user-images.githubusercontent.com/6216077/45331817-d73c0180-b5a7-11e8-8095-877b7bf50899.png)
 
 * LuaのRTCとは別のマシンで起動したC++のRTCと接続
-![system4](https://user-images.githubusercontent.com/6216077/45331752-67c61200-b5a7-11e8-8d80-070351ca4ecc.png)
+![system4](https://user-images.githubusercontent.com/6216077/45331818-d905c500-b5a7-11e8-9c54-21e7beaa2bb3.png)
 
 
 ## ダウンロード

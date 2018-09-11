@@ -87,6 +87,16 @@ JITコンパイラのLuaJIT利用により、C++に匹敵する速度で動作�
 Luaスクリプト機能をサポートしているアプリケーションを様々なデバイス、あるいは他のアプリケーションと接続可能にします。
 例えばLaputan Blueprints上の車、飛行機等をLEGO Mindstorms EV3のデバイスで操作するということができます。
 
+* LuaのRTCとPythonのRTCを接続
+![system1](https://user-images.githubusercontent.com/6216077/45331593-95f72200-b5a6-11e8-8b4d-4e7c8f4f21b7.png)
+
+* LuaのRTCとJava、C#のRTCを接続
+![system2](https://user-images.githubusercontent.com/6216077/45331599-9c859980-b5a6-11e8-8f8d-aac694eb648e.png)
+![system3](https://user-images.githubusercontent.com/6216077/45331601-9ee7f380-b5a6-11e8-91fb-4193bb18679e.png)
+
+* LuaのRTCとは別のマシンで起動したC++のRTCと接続
+![system4](https://user-images.githubusercontent.com/6216077/45331605-a1e2e400-b5a6-11e8-9286-92214f5ff5db.png)
+
 
 ## ダウンロード
 

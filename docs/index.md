@@ -415,11 +415,31 @@ LGPLライセンス
 
 ## 依存ライブラリ
 
+### Lua 5.1
 * [Lua-5.1](https://www.lua.org/)(MITライセンス)
 * [OiL-0.5](https://webserver2.tecgraf.puc-rio.br/~maia/oil/index.html)(MITライセンス)
 * [LuaIDL](https://github.com/LuaDist/luaidl)(MITライセンス)
 * [LOOP](https://github.com/LuaDist/loop)(MITライセンス)
 * [LuaSocket](https://github.com/diegonehab/luasocket)(MITライセンス)
+
+
+
+### Lua 5.2
+* [OiL-0.7](https://github.com/renatomaia/oil)(MITライセンス)
+* [loop-collections](https://github.com/renatomaia/loop-collections)(MITライセンス)
+* [LOOP](https://github.com/renatomaia/loop)(MITライセンス)
+* [cothread](https://github.com/renatomaia/cothread)(MITライセンス)
+* [LuaSocket](https://github.com/renatomaia/luasocket)(MITライセンス)
+* [loop-compdev](https://github.com/renatomaia/loop-compdev)(MITライセンス)
+* [luatuple](https://github.com/renatomaia/luatuple)(MITライセンス)
+* [loop-serializing](https://github.com/renatomaia/loop-serializing)(MITライセンス)
+* [loop-parsing](https://github.com/renatomaia/loop-parsing)(MITライセンス)
+* [loop-objects](https://github.com/renatomaia/loop-objects)(MITライセンス)
+* [loop-debugging](https://github.com/renatomaia/loop-debugging)(MITライセンス)
+* [struct](https://luarocks.org/modules/luarocks/struct)(MITライセンス)
+
+
+### Lua 5.1、5.2共通
 * [LuaLogging](https://github.com/Neopallium/lualogging)(MITライセンス)
 * [MoonScript](http://moonscript.org)(MITライセンス)
 * [LPeg](https://luarocks.org/modules/gvvaughan/lpeg)(MITライセンス)

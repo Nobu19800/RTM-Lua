@@ -11,8 +11,8 @@
 * [OpenRTM Lua 0.3.1 LuaJIT 64bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1goXi2rB2HIHrEy-x05-t6oCoemNJlnsQ&export=download)
 
 #### Lua 5.2
-* [OpenRTM Lua 0.3.1 Lua5.2 32bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1c94tCmhc9u-fOAtVUyyLdIcNLyXXGDr-&export=download)
-* [OpenRTM Lua 0.3.1 Lua5.2 64bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1_zYvumgWWBH1b2RlRICW8M-_NsPOn72b&export=download)
+* [OpenRTM Lua 0.3.1 Lua5.2 32bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1_t5sMJpXUA-V14Ctx-odTMtLTClYPkiJ&export=download)
+* [OpenRTM Lua 0.3.1 Lua5.2 64bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=13rB140a13AASqSamBrqR7H9n7Zsd4Sna&export=download)
 
 
 ### Ver.0.3.0

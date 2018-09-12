@@ -37,6 +37,10 @@ OutPortPullConnector.new = function(info, provider, listeners, buffer)
 	-- @param data data._dataを書き込み
 	-- @return リターンコード(バッファの書き込み結果による)
 	function obj:write(data)
+		if self._directMode then
+			return DataPortStatus.PORT_OK
+		end
+	  
 		local Manager = require "openrtm.Manager"
 
 		local cdr_data = Manager:instance():cdrMarshal(data._data, data._type)
@@ -107,6 +111,10 @@ OutPortPullConnector.new = function(info, provider, listeners, buffer)
 		end
 	end
 
+	function obj:setDirectMode()
+		self._directMode = true
+	end
+
 
 
 
@@ -114,7 +122,8 @@ OutPortPullConnector.new = function(info, provider, listeners, buffer)
 
 	obj._provider = provider
     obj._listeners = listeners
-    obj._buffer = buffer
+	obj._buffer = buffer
+	obj._directMode = false
 
 
     obj._inPortListeners = nil

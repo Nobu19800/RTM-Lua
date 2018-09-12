@@ -47,6 +47,20 @@ OutPortPushConnector.new = function(info, consumer, listeners, buffer)
 	function obj:write(data)
 		self._rtcout:RTC_TRACE("write()")
 
+		if self._directInPort ~= nil then
+			if self._directInPort:isNew() then
+				self._rtcout:RTC_TRACE("ONBUFFER_OVERWRITE(InPort,OutPort), ")
+				self._rtcout:RTC_TRACE("ON_RECEIVER_FULL(InPort,OutPort) ")
+				self._rtcout:RTC_TRACE("callback called in direct mode.")
+			end
+			self._rtcout:RTC_TRACE("ON_BUFFER_WRITE(InPort,OutPort), ")
+			self._rtcout:RTC_TRACE("callback called in direct mode.")
+			self._directInPort:write(data._data)
+			self._rtcout:RTC_TRACE("ON_RECEIVED(InPort,OutPort), ")
+			self._rtcout:RTC_TRACE("callback called in direct mode.")
+			return DataPortStatus.PORT_OK
+		end
+
 		local Manager = require "openrtm.Manager"
 
 		local cdr_data = Manager:instance():cdrMarshal(data._data, data._type)
@@ -140,6 +154,11 @@ OutPortPushConnector.new = function(info, consumer, listeners, buffer)
 	-- @param directInPort InPortサーバントオブジェクト
 	-- @return true：設定成功、false：設定失敗
 	function obj:setInPort(directInPort)
+		if self._directInPort ~= nil then
+			return false
+		end
+		self._directInPort = directInPort
+		self._inPortListeners = self._directInPort._listeners
 		return false
 	end
 

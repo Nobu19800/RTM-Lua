@@ -46,7 +46,9 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 	obj._name           = name
     obj._value          = value
     obj._OnRead         = nil
-    obj._OnReadConvert  = nil
+	obj._OnReadConvert  = nil
+	
+	obj._directNewData = false
 
     
 
@@ -63,6 +65,10 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 		self._rtcout:RTC_TRACE("isNew()")
 
 
+		if self._directNewData then
+			self._rtcout:RTC_TRACE("isNew() returns true because of direct write.")
+			return true
+		end
 
 		if #self._connectors == 0 then
 			self._rtcout:RTC_DEBUG("no connectors")
@@ -83,6 +89,11 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 	-- @return true：存在しない、false：存在する
 	function obj:isEmpty()
 		self._rtcout:RTC_TRACE("isEmpty()")
+
+		if self._directNewData then
+			return false
+		end
+	  
 		if #self._connectors == 0 then
 			self._rtcout:RTC_DEBUG("no connectors")
 			return true
@@ -111,7 +122,15 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 		end
 
 
-
+		if self._directNewData then
+			self._rtcout:RTC_TRACE("Direct data transfer")
+			if self._OnReadConvert ~= nil then
+				self._value = self._OnReadConvert:call(self._value)
+				self._rtcout:RTC_TRACE("OnReadConvert for direct data called")
+			end
+			self._directNewData = false
+			return self._value
+		end
 
 		
 
@@ -163,6 +182,11 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 	-- out_value = on_rconvert(in_value)という関数を指定
 	function obj:setOnReadConvert(on_rconvert)
 		self._OnReadConvert = on_rconvert
+	end
+
+	function obj:write(data)
+		self._value = data
+		self._directNewData = true
 	end
 
 

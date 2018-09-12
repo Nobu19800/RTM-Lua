@@ -40,6 +40,28 @@ InPortPullConnector.new = function(info, consumer, listeners, buffer)
 	-- PORT_ERROR：コンシューマがnil、データ型が不明
 	function obj:read(data)
 		self._rtcout:RTC_TRACE("InPortPullConnector.read()")
+
+
+		if self._directOutPort ~= nil then
+			if self._directOutPort:isEmpty() then
+				self._listeners.connector_[ConnectorListenerType.ON_BUFFER_EMPTY]:notify(self._profile)
+				self._outPortListeners.connector_[ConnectorListenerType.ON_SENDER_EMPTY]:notify(self._profile)
+				self._rtcout:RTC_TRACE("ON_BUFFER_EMPTY(InPort,OutPort), ")
+				self._rtcout:RTC_TRACE("ON_SENDER_EMPTY(InPort,OutPort) ")
+				self._rtcout:RTC_TRACE("callback called in direct mode.")
+			end
+			self._directOutPort:read(data)
+			self._rtcout:RTC_TRACE("ON_BUFFER_READ(OutPort), ")
+			self._rtcout:RTC_TRACE("callback called in direct mode.")
+			self._rtcout:RTC_TRACE("ON_SEND(OutPort), ")
+			self._rtcout:RTC_TRACE("callback called in direct mode.")
+			self._rtcout:RTC_TRACE("ON_RECEIVED(InPort), ")
+			self._rtcout:RTC_TRACE("callback called in direct mode.")
+			self._rtcout:RTC_TRACE("ON_BUFFER_WRITE(InPort), ")
+			self._rtcout:RTC_TRACE("callback called in direct mode.")
+			return DataPortStatus.PORT_OK
+		end
+
 		if self._consumer == nil then
 			return DataPortStatus.PORT_ERROR
 		end
@@ -107,8 +129,19 @@ InPortPullConnector.new = function(info, consumer, listeners, buffer)
 		end
 	end
 
+	function obj:setOutPort(directOutPort)
+		if self._directOutPort ~= nil then
+			return false
+		end
+		self._directOutPort = directOutPort
+		self._outPortListeners = self._directOutPort._listeners
+		return true
+	end
+
     obj._consumer = consumer
-    obj._listeners = listeners
+	obj._listeners = listeners
+	obj._directOutPort = nil
+    obj._outPortListeners = nil
 
 
     if buffer == nil then

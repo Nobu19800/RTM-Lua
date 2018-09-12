@@ -21,6 +21,10 @@ local FactoryInit= function()
 	local InPortDSConsumer = require "openrtm.InPortDSConsumer"
 	local OutPortDSProvider = require "openrtm.OutPortDSProvider"
 	local OutPortDSConsumer = require "openrtm.OutPortDSConsumer"
+	local InPortDirectProvider = require "openrtm.InPortDirectProvider"
+	local InPortDirectConsumer = require "openrtm.InPortDirectConsumer"
+	local OutPortDirectProvider = require "openrtm.OutPortDirectProvider"
+	local OutPortDirectConsumer = require "openrtm.OutPortDirectConsumer"
 	local NumberingPolicy = require "openrtm.NumberingPolicy"
 	local ProcessUniquePolicy = NumberingPolicy.ProcessUniquePolicy
 	local NamingServiceNumberingPolicy = require "openrtm.NamingServiceNumberingPolicy"
@@ -39,6 +43,10 @@ local FactoryInit= function()
 	InPortDSProvider.Init()
 	OutPortDSConsumer.Init()
 	OutPortDSProvider.Init()
+	InPortDirectConsumer.Init()
+	InPortDirectProvider.Init()
+	OutPortDirectConsumer.Init()
+	OutPortDirectProvider.Init()
 	ProcessUniquePolicy.Init()
 	NamingServiceNumberingPolicy.Init()
 	NodeNumberingPolicy.Init()

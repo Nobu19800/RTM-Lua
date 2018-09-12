@@ -407,6 +407,19 @@ InPortBase.new = function(name, data_type)
 					self._rtcout:RTC_TRACE("InPortPullConnector created")
 				end
 
+				if StringUtil.normalize(prop:getProperty("interface_type")) == "direct" then
+					
+					if consumer_ ~= nil then
+						local outport = self:getLocalOutPort(profile)
+						if outport == nil then
+							self._rtcout:RTC_TRACE("interface_type is direct, ")
+							self._rtcout:RTC_TRACE("but a peer OutPort servant could not be obtained.")
+							return nil
+						end
+						connector:setOutPort(outport)
+					end
+				end
+
 
 				table.insert(self._connectors, connector)
 				self._rtcout:RTC_PARANOID("connector push backed: "..#self._connectors)
@@ -608,7 +621,23 @@ InPortBase.new = function(name, data_type)
 		end
 
     	self._rtcout:RTC_ERROR("removeConnectorListener(): Invalid listener type.")
-    end
+	end
+	
+	function obj:getLocalOutPort(profile)
+		self._rtcout:RTC_DEBUG("Trying direct port connection.")
+		self._rtcout:RTC_DEBUG("Current connector profile: name=%s, id=%s", profile.name, profile.id)
+		for k,p in pairs(profile.ports) do
+			if not NVUtil._is_equivalent(self, p, self.getObjRef, p.getObjRef) then
+				self._rtcout:RTC_DEBUG("Peer port found: %s.", p)
+				if p.getObjRef == nil then
+					return nil
+				end
+        		self._rtcout:RTC_DEBUG("OutPortBase servant pointer is obtained.")
+        		return p
+			end
+		end
+		return nil
+	end
 
 	return obj
 end

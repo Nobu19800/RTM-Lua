@@ -1199,10 +1199,43 @@ function Manager:initORB()
 	if ORB_Dummy_ENABLE then
 		self._orb = ORB_Dummy
 	else
+		local endpoints = self:createORBEndpoints()
+		local port = nil
+
+
+		if #endpoints > 0 then
+			local endpoint = endpoints[1]
+			port = StringUtil.split(endpoint, ":")[2]
+		end
+		
+		
+		
+		
 		if oil.VERSION == "OiL 0.6" then
-			self._orb = oil.init{ flavor = "cooperative;corba;" }
+			if StringUtil.toBool(self._config:getProperty("corba.ssl.enable"), "YES", "NO", false) then
+				local key_file = self._config:getProperty("corba.ssl.key_file")
+				local ca_file = self._config:getProperty("corba.ssl.certificate_authority_file")
+				
+				
+				self._orb = oil.init{
+					flavor = "cooperative;corba;corba.ssl;kernel.ssl",
+					port=port,
+					options = {
+						client = {
+							security = "required",
+							ssl = {
+								key = key_file,
+								certificate = ca_file
+							},
+						},
+					},
+				}
+			else
+				self._orb = oil.init{ flavor = "cooperative;corba;", port=port }
+			end
+			
 		else
-			self._orb = oil.init{ flavor = "cooperative;corba;intercepted;typed;base;" }
+			self._orb = oil.init{ flavor = "cooperative;corba;intercepted;typed;base;", port=port }
 		end
 
 		if oil.VERSION == "OiL 0.5" then
@@ -1254,9 +1287,31 @@ function Manager:createORBOptions()
 end
 
 -- プロパティからエンドポイント一覧を取得
--- @param endpoints エンドポイント一覧を格納する変数
-function Manager:createORBEndpoints(endpoints)
+-- @return エンドポイント一覧を格納する変数
+function Manager:createORBEndpoints()
+	local endpoints = {}
+	local prop = self._config:getProperty("corba.endpoints")
 
+	
+	if StringUtil.toBool(self._config:getProperty("manager.is_master"), "YES", "NO", false) then
+		local mm = self._config:getProperty("corba.master_manager", ":2810")
+		local mmm = StringUtil.split(mm, ":")
+		local master = ""
+		if #mmm == 2 then
+			master = ":"..mmm[2]
+		else
+			master = ":2810"
+		end
+		table.insert(endpoints, master)
+	elseif prop == "" then
+		return endpoints
+	end
+	
+	local strs = StringUtil.split(prop, ",")
+	for k,v in ipairs(strs) do
+		table.insert(endpoints, v)
+	end
+	return endpoints
 end
 
 -- エンドポイントのオプション生成

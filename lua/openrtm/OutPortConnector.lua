@@ -23,7 +23,8 @@ OutPortConnector.new = function(info)
 	--print(obj._rtcout)
 	obj._ReturnCode_t = Manager:instance():getORB().types:lookup("::RTC::ReturnCode_t").labelvalue
     obj._profile = info
-    obj._endian = true
+	obj._endian = true
+	obj._directMode = false
     
     -- プロファイル取得
     -- @return プロファイル
@@ -50,6 +51,14 @@ OutPortConnector.new = function(info)
 	function obj:setConnectorInfo(profile)
 		self._profile = profile
 		return self._ReturnCode_t.RTC_OK
+	end
+
+	function obj:setDirectMode()
+		self._directMode = true
+	end
+
+	function obj:directMode()
+		return self._directMode
 	end
 
 	return obj

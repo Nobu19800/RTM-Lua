@@ -37,6 +37,9 @@ OutPort.new = function(name, value, data_type, buffer)
 	obj._value          = value
     obj._OnWrite        = nil
 	obj._OnWriteConvert = nil
+
+	obj._directNewData = false
+    obj._directValue = value
 	
 	function obj:name()
 		return self._name
@@ -70,12 +73,17 @@ OutPort.new = function(name, value, data_type, buffer)
 		local result = true
 
 		for i, con in ipairs(self._connectors) do
-			local ret = con:write({_data=value, _type=self._data_type})
-			if ret ~= DataPortStatus.PORT_OK then
-				result = false
-				if ret == DataPortStatus.CONNECTION_LOST then
-					self:disconnect(con:id())
+			if not con:directMode() then
+				local ret = con:write({_data=value, _type=self._data_type})
+				if ret ~= DataPortStatus.PORT_OK then
+					result = false
+					if ret == DataPortStatus.CONNECTION_LOST then
+						self:disconnect(con:id())
+					end
 				end
+			else
+				self._directValue = value
+				self._directNewData = true
 			end
 		end
 
@@ -95,6 +103,19 @@ OutPort.new = function(name, value, data_type, buffer)
 	-- @return データ型
 	function obj:getPortDataType()
 		return self._data_type
+	end
+
+
+	function obj:read(data)
+		self._directNewData = false
+		data._data = self._directValue
+		if self._OnWriteConvert ~= nil then
+			data._data = self._OnWriteConvert(data._data)
+		end
+	end
+
+	function obj:isEmpty()
+		return (not self._directNewData)
 	end
 
 

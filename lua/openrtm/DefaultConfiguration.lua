@@ -85,7 +85,8 @@ local default_config= {
 			["manager.modules.C++.load_paths"]="",
 			["manager.modules.Python.load_paths"]="",
 			["manager.modules.Java.load_paths"]="",
-			["manager.modules.Lua.load_paths"]=""
+			["manager.modules.Lua.load_paths"]="",
+			["corba.ssl.enable"]="NO"
 }
 
 

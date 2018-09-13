@@ -184,7 +184,7 @@ C++、Pythonは7になっていますが、これは5～8で変動します。
 Luaはluacの使用により起動が高速化します。
 まとめてluacを実行する場合は、以下のスクリプトをopenrtm-lua-0.3.1(x64)-lua5.1直下にコピーして実行してください。
 
-https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/scripts/luac_run.py
+* [luac_run.py](https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/scripts/luac_run.py)
 
 ### Windows
 

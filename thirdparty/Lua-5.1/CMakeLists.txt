@@ -70,8 +70,9 @@ else(WIN32)
 endif(WIN32)
 
 
-add_library (${target} SHARED  ${srcs} ${headers}  src/luac.c)
+add_library (${target} SHARED  ${srcs} ${headers})
 add_executable (lua src/lua.c)
+add_executable (luac src/luac.c ${srcs})
 
 
 if(WIN32)
@@ -79,6 +80,7 @@ if(WIN32)
 else(WIN32)
 	#sudo apt-get install ncurses-dev
 	target_link_libraries(lua ${target} dl readline history ncurses m)
+	target_link_libraries(luac dl readline history ncurses m)
 endif(WIN32)
 
 
@@ -91,4 +93,5 @@ else(WIN32)
 	install(TARGETS ${target} LIBRARY DESTINATION lib)
 endif(WIN32)
 install(TARGETS lua RUNTIME DESTINATION bin)
+install(TARGETS luac RUNTIME DESTINATION bin)
 install(FILES ${headers} DESTINATION include)

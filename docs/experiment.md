@@ -181,7 +181,7 @@ C++、Pythonは7になっていますが、これは5～8で変動します。
 2. RTCのonInitialize関数内でPythonプロセスのCORBAオペレーション呼び出し
 3. PythonプロセスのCORBAオペレーション呼び出し時に時間計測
 
-Luaはluacの使用により起動が高速化します。
+Luaはluacによるコンパイルで起動が高速化するとどこかで見たのですが、見ての通り全然変わっていません。
 まとめてluacを実行する場合は、以下のスクリプトをopenrtm-lua-0.3.1(x64)-lua5.1直下にコピーして実行してください。
 
 * [luac_run.py](https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/scripts/luac_run.py)
@@ -210,7 +210,7 @@ Luaはluacの使用により起動が高速化します。
 |言語|結果[s]|
 |---|---|
 |Lua|0.510135|
-|Lua(luac使用)|0.375378|
+|Lua(luac使用)|0.505378|
 |LuaJIT|0.310405|
 |C++|0.015031|
 |Python|0.082029|

@@ -22,7 +22,7 @@ bin\luajit test.lua
 
 ## Ubuntu
 
-以下のコマンドでインストールして使用してください。
+以下のコマンドでLuaJITをインストールして使用してください。
 
 <pre>
 sudo apt-get install luajit

@@ -2,18 +2,21 @@ cmake_minimum_required (VERSION 2.6)
 
 project (ssl)
 
+set(LUA_ROOT ${LUA_ROOT} CACHE PATH "set LUA_ROOT")
+set(LUA_VERSION ${LUA_VERSION} CACHE STRING "set LUA_VERSION")
+set(OPENSSL_ROOT ${OPENSSL_ROOT} CACHE PATH "set OPENSSL_ROOT")
+
+
 if(MSVC)
-	set(LUA_ROOT ${LUA_ROOT} CACHE PATH "set LUA_ROOT")
 	if(NOT LUA_ROOT)
 		message(FATAL_ERROR "Please set LUA_ROOT.")
 	endif()
-	set(LUA_VERSION ${LUA_VERSION} CACHE STRING "set LUA_VERSION")
 
 	if(NOT LUA_VERSION)
 		message(FATAL_ERROR "Please set LUA_VERSION.")
 	endif()
 
-	set(OPENSSL_ROOT ${OPENSSL_ROOT} CACHE PATH "set OPENSSL_ROOT")
+	
 	if(NOT OPENSSL_ROOT)
 		message(FATAL_ERROR "Please set OPENSSL_ROOT.")
 	endif()

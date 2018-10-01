@@ -17,9 +17,8 @@ OiL 0.7のみサポートする。
 
 * トピック通信機能
 
-[luamqtt](https://luarocks.org/modules/xhaskx/luamqtt)を使用したトピック通信機能を実装する。
+[luamqtt](https://luarocks.org/modules/xhaskx/luamqtt)、もしくは[mqtt_lua](https://github.com/geekscape/mqtt_lua)を使用したトピック通信機能を実装する。
 会津大が開発している既存のMQTTによる通信インターフェースの仕様に合わせたものを作る。
-仕様、ソースコードなどは公開されていないのが問題。
 
 
 

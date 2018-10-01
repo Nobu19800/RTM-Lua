@@ -12,7 +12,7 @@
 以下のコマンドを**管理者権限**で実行してください。
 
 <pre>
-luarocks install openrtm
+luarocks install openrtm 0.3-4
 </pre>
 
 

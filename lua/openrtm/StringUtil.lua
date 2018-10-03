@@ -580,4 +580,19 @@ StringUtil.urlparam2map = function(_str)
 end
 
 
+-- リスト1とリスト2の差分を取得
+-- @param list1 リスト1
+-- @param list2 リスト2
+-- @return 差分リスト
+StringUtil.difference = function(list1, list2)
+	local ret = {}
+	for k,v in ipairs(list1) do
+		if StringUtil.table_count(list2, v) == 0 then
+			table.insert(ret, v)
+		end
+	end
+	return ret
+end
+
+
 return StringUtil

@@ -132,7 +132,9 @@ SdoServiceAdmin.new = function(rtobj)
 
 		self._consumers = {}
 	end
-	
+
+	-- サービスプロバイダのプロファイル一覧取得
+	-- @return プロファイル一覧
 	function obj:getServiceProviderProfiles()
 		local prof = {}
 		for i,provider in ipairs(self._providers) do
@@ -141,6 +143,9 @@ SdoServiceAdmin.new = function(rtobj)
 		return prof
 	end
 
+	-- 指定IDのサービスプロバイダのプロファイル取得
+	-- @param id 識別子
+	-- @return プロファイル
 	function obj:getServiceProviderProfile(id)
 		local idstr = id
 
@@ -155,11 +160,17 @@ SdoServiceAdmin.new = function(rtobj)
 			})
 	end
 
+	-- 指定IDのサービスプロバイダを取得
+	-- @return サービスプロバイダ
 	function obj:getServiceProvider(id)
 		local prof = self:getServiceProviderProfile(id)
     	return prof.service
 	end
 
+	-- サービスプロバイダ追加
+	-- @param prof プロファイル
+	-- @param provider サービスプロバイダ
+	-- @return true：追加成功
 	function obj:addSdoServiceProvider(prof, provider)
 		self._rtcout:RTC_TRACE("SdoServiceAdmin::addSdoServiceProvider(if=%s)",
                            prof.interface_type)
@@ -176,6 +187,9 @@ SdoServiceAdmin.new = function(rtobj)
     	return true
 	end
 
+	-- サービスプロバイダ削除
+	-- @param id 識別子
+	-- @return true：削除成功
 	function obj:removeSdoServiceProvider(id)
 		self._rtcout:RTC_TRACE("removeSdoServiceProvider(%d)", id)
     
@@ -185,7 +199,7 @@ SdoServiceAdmin.new = function(rtobj)
 			if strid == tostring(provider:getProfile().id) then
         		provider:finalize()
         		local factory = SdoServiceProviderFactory:instance()
-    			factory:deleteObject(self._providers[idx])
+    			factory:deleteObject(self._providers[i])
 				table.remove(self._providers, i)
     			self._rtcout:RTC_INFO("SDO service provider has been deleted: %s", id)
 				return true
@@ -195,6 +209,9 @@ SdoServiceAdmin.new = function(rtobj)
     	return false
 	end
 
+	-- サービスコンシューマ追加
+	-- @param sProfile プロファイル(ServiceProfile)
+	-- @return true：追加成功
 	function obj:addSdoServiceConsumer(sProfile)
 		self._rtcout:RTC_TRACE("addSdoServiceConsumer(IFR = %s)",
                            sProfile.interface_type)
@@ -248,6 +265,9 @@ SdoServiceAdmin.new = function(rtobj)
     	return true
 	end
 
+	-- サービスコンシューマ削除
+	-- @param id 識別子
+	-- @return true：削除成功
 	function obj:removeSdoServiceConsumer(id)
 		if id == "" then
 			self._rtcout:RTC_ERROR("removeSdoServiceConsumer(): id is invalid.")
@@ -272,6 +292,9 @@ SdoServiceAdmin.new = function(rtobj)
     	return false
 	end
 
+	-- 指定コンシューマ型が有効かの確認
+	-- @param sProfile プロファイル(ServiceProfile)
+	-- @return true：有効
 	function obj:isEnabledConsumerType(sProfile)
 		if self._allConsumerEnabled then
 			return true
@@ -290,6 +313,9 @@ SdoServiceAdmin.new = function(rtobj)
     	return false
 	end
 
+	-- 指定コンシューマ型が存在するかの確認
+	-- @param sProfile プロファイル(ServiceProfile)
+	-- @return true：存在する
 	function obj:isExistingConsumerType(sProfile)
 		local factory = SdoServiceConsumerFactory:instance()
 		local consumerTypes = factory:getIdentifiers()
@@ -306,10 +332,15 @@ SdoServiceAdmin.new = function(rtobj)
     	return false
 	end
 
+	-- uuid取得
+	-- @return uuid
 	function obj:getUUID()
 		return uuid()
 	end
 
+	-- IFR形式をキーに変換
+	-- @param ifr IFR形式文字列
+	-- @return キー
 	function obj:ifrToKey(ifr)
 		local ifrvstr = StringUtil.split(ifr, ":")
 		ifrvstr[2] = string.lower(ifrvstr[2])

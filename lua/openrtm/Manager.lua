@@ -40,6 +40,7 @@ local Task = require "openrtm.Task"
 local CORBA_RTCUtil = require "openrtm.CORBA_RTCUtil"
 local SdoServiceConsumerBase = require "openrtm.SdoServiceConsumerBase"
 local SdoServiceConsumerFactory = SdoServiceConsumerBase.SdoServiceConsumerFactory
+local PeriodicECSharedComposite = require "openrtm.PeriodicECSharedComposite"
 
 local Timer = require "openrtm.Timer"
 
@@ -1376,6 +1377,8 @@ end
 -- 複合コンポーネント生成ファクトリ初期化
 -- @return true：登録成功、false：登録失敗
 function Manager:initComposite()
+	self._rtcout:RTC_TRACE("Manager.initComposite()")
+	PeriodicECSharedComposite.Init(self)
 	return true
 end
 
@@ -1618,30 +1621,54 @@ function Manager:configureComponent(comp, prop)
 	local name_prop = Properties.new()
 	local config_fname = {}
 	if self._config:getProperty(name_conf) ~= "" then
+		local conff = io.open(self._config:getProperty(name_conf), "r")
+		if conff ~= nil then
+			name_prop:load(conff)
+			self._rtcout:RTC_INFO("Component instance conf file: %s loaded.",
+                              self._config:getProperty(name_conf))
+        	self._rtcout:RTC_DEBUG(name_prop)
+			table.insert(config_fname, self._config:getProperty(name_conf))
+		else
+			print("Not found. : "..self._config:getProperty(name_conf))
+		end
 	end
-	if self._config:findNode(category.."."..inst_name) then
+	
+	if self._config:findNode(category.."."..inst_name) ~= nil then
 		local temp_ = Properties.new({prop=self._config:getNode(category.."."..inst_name)})
 		local keys_ = temp_:propertyNames()
+		
 		if not (#keys_ == 1 and keys_[#keys_] == "config_file") then
 			name_prop:mergeProperties(self._config:getNode(category.."."..inst_name))
 			self._rtcout:RTC_INFO("Component name conf exists in rtc.conf. Merged.")
 			self._rtcout:RTC_INFO(name_prop)
-			if self._config:findNode("config_file") then
+			if self._config:findNode("config_file") ~= nil then
 				table.insert(config_fname, self._config:getProperty("config_file"))
 			end
 		end
 
 	end
+
 	if self._config:getProperty(type_conf) ~= "" then
+		local conff = io.open(self._config:getProperty(type_conf), "r")
+		if conff ~= nil then
+			type_prop:load(conff)
+			self._rtcout:RTC_INFO("Component instance conf file: %s loaded.",
+                              self._config:getProperty(type_conf))
+        	self._rtcout:RTC_DEBUG(type_prop)
+			table.insert(config_fname, self._config:getProperty(type_conf))
+		else
+			print("Not found. : "..self._config:getProperty(type_conf))
+		end
 	end
-	if self._config:findNode(category.."."..type_name) then
+
+	if self._config:findNode(category.."."..type_name) ~= nil  then
 		local temp_ = Properties.new({prop=self._config:getNode(category.."."..type_name)})
 		local keys_ = temp_:propertyNames()
 		if not (#keys_ == 1 and keys_[#keys_] == "config_file") then
 			type_prop:mergeProperties(self._config:getNode(category.."."..type_name))
 			self._rtcout:RTC_INFO("Component name conf exists in rtc.conf. Merged.")
 			self._rtcout:RTC_INFO(type_prop)
-			if self._config:findNode("config_file") then
+			if self._config:findNode("config_file") ~= nil  then
 				table.insert(config_fname, self._config:getProperty("config_file"))
 			end
 		end

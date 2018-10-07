@@ -131,6 +131,35 @@ ExecutionContextProfile.new = function(kind)
 
 		return kinds_[kind_+1]
 	end
+	-- オーナーRTC設定
+	-- @param comp RTC
+	-- @return リターンコード
+	-- RTC_OK：設定成功
+	function obj:setOwner(comp)
+		self._rtcout:RTC_TRACE("setOwner()")
+    	if comp == oil.corba.idl.null then
+			return self._ReturnCode_t.BAD_PARAMETER
+		end
+		--[[
+		local rtobj_ = RTCUtil.newproxy(orb, sdo,"IDL:omg.org/RTC/RTObject:1.0")
+    	if rtobj_ == oil.corba.idl.null then
+      		self._rtcout:RTC_ERROR("Narrowing failed.")
+			return self._ReturnCode_t.RTC_ERROR
+		end
+
+		self._profile.owner = rtobj_
+		]]
+		self._profile.owner = comp
+    	return self._ReturnCode_t.RTC_OK
+	end
+
+	-- オーナーRTC取得
+	-- @return オーナーRTC
+	function obj:getOwner()
+		self._rtcout:RTC_TRACE("getOwner()")
+		return self._profile.owner
+	end
+
 	-- 実行周期取得
 	-- @return 実行周期(Hz)
 	function obj:getRate()

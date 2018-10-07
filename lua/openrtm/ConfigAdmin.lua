@@ -113,7 +113,7 @@ ConfigAdmin.new = function(configsets)
 		if self:isExist(param_name) then
 			return false
 		end
-
+		
 		local ret, value = trans(var._value, def_val)
 		--if type(value) == "table" then
 		--	print(#value)

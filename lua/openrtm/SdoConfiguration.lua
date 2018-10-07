@@ -14,6 +14,7 @@ local oil = require "oil"
 local NVUtil = require "openrtm.NVUtil"
 local Properties = require "openrtm.Properties"
 local RTCUtil = require "openrtm.RTCUtil"
+local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 
 SdoConfiguration.Configuration_impl = {}
 
@@ -168,13 +169,17 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 	end
 
 	-- デバイスプロファイル設定
-	-- 未実装
 	-- @param dProfile デバイスプロファイル
+	-- @return true：設定成功
 	function obj:set_device_profile(dProfile)
 		self._rtcout:RTC_TRACE("set_device_profile()")
-		error(self._orb:newexcept{"SDOPackage::InvalidParameter",
-					description="dProfile is empty."
-			})
+		if dProfile == nil then
+			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+						description="dProfile is empty."
+				})
+		end
+		self._deviceProfile = dProfile
+		return true
 	end
 
 	-- サービスプロファイル追加
@@ -201,14 +206,18 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 		return ret
 	end
 	
-	-- オーガナイゼーションオブジェクト追加
-	-- 未実装
-	-- @param org オーガナイゼーションオブジェクト
+	-- 構成オブジェクト追加
+	-- @param org 構成オブジェクト
+	-- @return true：追加成功
 	function obj:add_organization(org)
 		self._rtcout:RTC_TRACE("add_organization()")
-		error(self._orb:newexcept{"SDOPackage::InvalidParameter",
-					description="org is empty."
-			})
+		if org == nil then
+			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+						description="org is empty."
+				})
+		end
+		table.insert(self._organizations, org)
+		return true
 	end
 
 	-- サービスプロファイル削除
@@ -236,17 +245,21 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 	end
 
 	-- オーガナイゼーションオブジェクト削除
-	-- 未実装
 	-- @param organization_id ID
+	-- @return true：削除成功
 	function obj:remove_organization(organization_id)
 		self._rtcout:RTC_TRACE("remove_organization("..organization_id..")")
-		error(self._orb:newexcept{"SDOPackage::InvalidParameter",
-					description="id is empty."
-			})
+		if organization_id == nil then
+			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+						description="id is empty."
+				})
+		end
+		CORBA_SeqUtil.erase_if(self._organizations, self.org_id.new(organization_id))
+		
+		return true
 	end
 
 	-- コンフィギュレーションパラメータ一覧取得
-	-- 未実装
 	-- @return コンフィギュレーションパラメータ一覧
 	function obj:get_configuration_parameters()
 		self._rtcout:RTC_TRACE("get_configuration_parameters()")
@@ -299,8 +312,113 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 
 		return config_sets
 	end
+	
+	-- デバイスプロファイル取得
+	-- @return デバイスプロファイル
+	function obj:getDeviceProfile()
+		return self._deviceProfile
+	end
+
+	-- SDOサービスプロファイル一覧取得
+	-- @return SDOサービスプロファイル一覧
+	function obj:getServiceProfiles()
+		return self._serviceProfiles
+	end
+
+	-- 指定IDのSDOサービスプロファイル取得
+	-- @param id 識別子
+	-- @return SDOサービスプロファイル
+	function obj:getServiceProfile(id)
+		local index = CORBA_SeqUtil.find(self._serviceProfiles, self.service_id(id))
+		if index < 0 then
+			return {id="",
+					interface_type="",
+					properties={},
+					service=oil.corba.idl.null}
+		end
 
 
+		-- 構成オブジェクト一覧取得
+		-- @return 構成オブジェクト一覧
+		function obj:getOrganizations()
+			return self._organizations
+		end
+
+		return self._serviceProfiles[index]
+	end
+
+	obj.nv_name = {}
+	-- NameValueオブジェクトが指定名と一致するかの判定する関数オブジェクト
+	-- @param name_ 名前
+	-- @return 関数オブジェクト
+	obj.nv_name.new = function(name_)
+		local obj = {}
+		obj._name = tostring(name_)
+		-- コールバック関数
+		-- @param nv NameValueオブジェクト
+		-- @return true：一致
+		local call_func = function(self, nv)
+			local name_ = tostring(nv.name)
+			return (self._name == name_)
+		end
+		setmetatable(obj, {__call=call_func})
+		
+		return obj
+	end
+
+	obj.service_id = {}
+	-- SDOサービスプロファイルが指定名と一致するかの判定する関数オブジェクト
+	-- @param name_ 名前
+	-- @return 関数オブジェクト
+	obj.service_id.new = function(id_)
+		local obj = {}
+		obj._id = tostring(id_)
+		-- コールバック関数
+		-- @param s SDOサービスプロファイル
+		-- @return true：一致
+		local call_func = function(self, s)
+			local id_  = tostring(s.id)
+			return (self._id == id_)
+		end
+		setmetatable(obj, {__call=call_func})
+		return obj
+	end
+
+	obj.org_id = {}
+	-- 構成オブジェクトが指定名と一致するかの判定する関数オブジェクト
+	-- @param name_ 名前
+	-- @return 関数オブジェクト
+	obj.org_id.new = function(id_)
+		local obj = {}
+		obj._id = tostring(id_)
+		-- コールバック関数
+		-- @param s 構成オブジェクト
+		-- @return true：一致
+		local call_func = function(self, o)
+			local id_  = tostring(o:get_organization_id())
+			return (self._id == id_)
+		end
+		setmetatable(obj, {__call=call_func})
+		return obj
+	end
+
+	obj.config_id = {}
+	-- コンフィギュレーションセットが指定名と一致するかの判定する関数オブジェクト
+	-- @param name_ 名前
+	-- @return 関数オブジェクト
+	obj.config_id.new = function(id_)
+		local obj = {}
+		obj._id = tostring(id_)
+		-- コールバック関数
+		-- @param c コンフィギュレーションセット
+		-- @return true：一致
+		local call_func = function(self, c)
+			local id_  = tostring(c.id)
+			return (self._id == id_)
+		end
+		setmetatable(obj, {__call=call_func})
+		return obj
+	end
 
 
 

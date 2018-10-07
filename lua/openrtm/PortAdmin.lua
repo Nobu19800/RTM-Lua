@@ -14,6 +14,7 @@ local PortAdmin= {}
 local oil = require "oil"
 local ObjectManager = require "openrtm.ObjectManager"
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
+local NVUtil = require "openrtm.NVUtil"
 
 
 -- ポートの名前が一致しているか判定する関数オブジェクト初期化
@@ -46,7 +47,7 @@ local find_port_name = {}
 find_port_name.new = function(name)
 	local obj = {}
 	obj._name = name
-	--ポート名が一致しているか判定する
+	-- ポート名が一致しているか判定する
 	-- @param self 自身のオブジェクト
 	-- @param p ポート
 	-- @return true：一致、false：不一致
@@ -55,6 +56,25 @@ find_port_name.new = function(name)
 		local name_ = prof.name
 		--print(self._name, name_)
 		return (self._name == name_)
+	end
+	setmetatable(obj, {__call=call_func})
+	return obj
+end
+
+
+local find_port = {}
+-- ポートが一致しているか判定する関数オブジェクト初期化
+-- @param p ポート
+-- @return 関数オブジェクト
+find_port.new = function(p)
+	local obj = {}
+	obj._port = p
+	-- ポートが一致しているか判定する
+	-- @param self 自身のオブジェクト
+	-- @param p ポート
+	-- @return true：一致、false：不一致
+	local call_func = function(self, p)
+		return NVUtil._is_equivalent(self._port, p, self._port.getObjRef, p.getObjRef)
 	end
 	setmetatable(obj, {__call=call_func})
 	return obj
@@ -111,6 +131,21 @@ PortAdmin.new = function(orb)
 		return self._portServants:registerObject(port)
 	end
 
+	-- ポート追加
+	-- @param port ポート(オブジェクトリファレンス)
+	-- @return true：登録成功、false：登録失敗
+	function obj:addPortRef(port)
+		local prof = port:get_port_profile()
+		local name = prof.name
+		local index = CORBA_SeqUtil.find(self._portRefs,
+									find_port_name.new(name))
+		if index >= 0 then
+			return false
+		end
+		table.insert(self._portRefs, port)
+		return true
+	end
+
 	-- ポート削除
 	-- @param port ポート
 	-- @return true：削除成功、false：削除失敗
@@ -122,6 +157,7 @@ PortAdmin.new = function(orb)
 			port:disconnect_all()
 			tmp = port:getProfile().name
 			--print(#self._portRefs)
+			
 			CORBA_SeqUtil.erase_if(self._portRefs, find_port_name.new(tmp))
 			--print(#self._portRefs)
 			port:deactivate()
@@ -141,6 +177,14 @@ PortAdmin.new = function(orb)
 			return false
 		end
 		return ret
+	end
+
+	-- ポート削除
+	-- @param port ポート(オブジェクトリファレンス)
+	-- @return true：削除成功、false：削除失敗
+	function obj:removePortRef(port)
+		CORBA_SeqUtil.erase_if(self._portRefs, find_port.new(port))
+		return true
 	end
 
 	-- ポートのオブジェクトリファレンス一覧取得

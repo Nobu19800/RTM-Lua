@@ -1106,6 +1106,13 @@ RTObject.new = function(manager)
 		return self._portAdmin:addPort(port)
 	end
 
+	-- ポート追加
+	-- @param port ポート(オブジェクトリファレンス)
+	-- @return true：登録成功、false：登録失敗
+	function obj:addPortRef(port)
+		return self._portAdmin:addPortRef(port)
+	end
+
 
 
 	-- インポート追加
@@ -1215,6 +1222,14 @@ RTObject.new = function(manager)
 		self._rtcout:RTC_TRACE("removePort()")
 		self:onRemovePort(port:getPortProfile())
 		return self._portAdmin:removePort(port)
+	end
+
+	-- ポート削除
+	-- @param port ポート(オブジェクトリファレンス)
+	-- @return true：削除成功、false：削除失敗
+	function obj:removePortRef(port)
+		self._rtcout:RTC_TRACE("removePort()")
+		return self._portAdmin:removePortRef(port)
 	end
 
 	-- プロファイル取得
@@ -1447,23 +1462,39 @@ RTObject.new = function(manager)
 		self._eclist = {}
 	end
 
+	-- SDOサービスプロバイダ追加
+	-- @param prof プロファイル
+	-- @param provider SDOサービスプロバイダ
+	-- @return true：追加成功
 	function obj:addSdoServiceProvider(prof, provider)
 		return self._sdoservice:addSdoServiceProvider(prof, provider)
 	end
 
+	-- SDOサービスプロバイダ削除
+	-- @param id 識別子
+	-- @return true：削除成功
 	function obj:removeSdoServiceProvider(id)
 		return self._sdoservice:removeSdoServiceProvider(id)
 	end
 
+	-- SDOサービスコンシューマ追加
+	-- @param prof プロファイル
+	-- @return true：追加成功
 	function obj:addSdoServiceConsumer(prof)
 		return self._sdoservice:addSdoServiceConsumer(prof)
 	end
 
+	-- SDOサービスコンシューマ削除
+	-- @param id 識別子
+	-- @return true：削除成功
 	function obj:removeSdoServiceConsumer(id)
 		return self._sdoservice:removeSdoServiceConsumer(id)
 	end
 
 
+	-- 指定IDのSDOサービスプロファイルを取得
+	-- @param _id 識別子
+	-- @return SDOサービスプロファイル
 	function obj:get_sdo_service(_id)
 		self._rtcout:RTC_TRACE("get_sdo_service(%s)", _id)
 		self._sdoSvcProfiles = self._SdoConfigImpl:getServiceProfiles()
@@ -1485,6 +1516,68 @@ RTObject.new = function(manager)
 	
 		return self._sdoSvcProfiles[index].service
 	end
+
+	-- 構成オブジェクト一覧取得
+	-- @return 構成オブジェクト一覧
+	function obj:get_owned_organizations()
+		self._rtcout:RTC_TRACE("get_owned_organizations()")
+		return self._sdoOwnedOrganizations
+	end
+
+	-- SDOのID取得
+	-- @return SDOのID
+	function obj:get_sdo_id()
+		self._rtcout:RTC_TRACE("get_sdo_id()")
+		return self._profile.instance_name
+	end
+
+	-- SDOの型
+	-- @return SDOの型
+	function obj:get_sdo_type()
+		self._rtcout:RTC_TRACE("get_sdo_type()")
+		return self._profile.description
+	end
+
+	-- デバイスプロファイル取得
+	-- @return デバイスプロファイル
+	function obj:get_device_profile()
+		self._rtcout:RTC_TRACE("get_device_profile()")
+		return self._SdoConfigImpl:getDeviceProfile()
+	end
+
+	-- サービスプロファイル一覧取得
+	-- @return サービスプロファイル一覧
+	function obj:get_service_profiles()
+		self._rtcout:RTC_TRACE("get_service_profiles()")
+		self._sdoSvcProfiles = self._SdoConfigImpl:getServiceProfiles()
+		return self._sdoSvcProfiles
+	end
+
+	-- 指定IDのサービスプロファイル取得
+	-- @param _id 識別子
+	-- @return サービスプロファイル
+	function obj:get_service_profile(_id)
+		self._rtcout:RTC_TRACE("get_service_profile(%s)", _id)
+		self._sdoSvcProfiles = self._SdoConfigImpl:getServiceProfiles()
+		if _id == "" then
+			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+						description="get_service_profile(): Empty name."
+				})
+		end
+		local index = CORBA_SeqUtil.find(self._sdoSvcProfiles, svc_name(_id))
+
+		if index < 0 then
+			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
+						description="get_service_profile(): Not found"
+				})
+		end
+  
+		return self._sdoSvcProfiles[index]
+	end
+
+
+
+    
 
 	obj:setInstanceName(uuid())
 

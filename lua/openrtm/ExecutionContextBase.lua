@@ -136,6 +136,7 @@ ExecutionContextBase.new = function(name)
 	-- BAD_PARAMETER：RTCが不正
 	-- RTC_ERROR：実行コンテキストが不正
 	function obj:bindComponent(rtc)
+		self:setOwner(rtc:getObjRef())
 		return self._worker:bindComponent(rtc)
 	end
 
@@ -638,6 +639,21 @@ ExecutionContextBase.new = function(name)
 		self._rtcout:RTC_DEBUG(props_)
 		return self:onGetProfile(prof_)
 	end
+
+	-- オーナーRTC設定
+	-- @param comp RTC
+	-- @return リターンコード
+	-- RTC_OK：設定成功
+	function obj:setOwner(comp)
+		return self._profile:setOwner(comp)
+	end
+
+	-- オーナーRTC取得
+	-- @return オーナーRTC
+	function obj:getOwner()
+		return self._profile:getOwner()
+	end
+
 	-- 実行コンテキストの種別取得
 	-- @return 種別
 	function obj:getKindString(kind)

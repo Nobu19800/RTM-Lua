@@ -298,7 +298,7 @@ ManagerServant.new = function()
 				if not success then
 					self._rtcout:RTC_ERROR("Unknown exception cought.")
           			self._rtcout:RTC_DEBUG(exception)
-          			self._slaves.remove(slave)
+          			table.remove(self._slaves, k)
 				end
 			end
 		end
@@ -331,7 +331,7 @@ ManagerServant.new = function()
 				if not success then
 					self._rtcout:RTC_ERROR("Unknown exception cought.")
           			self._rtcout:RTC_DEBUG(exception)
-          			self._slaves.remove(slave)
+          			table.remove(self._slaves, k)
 				end
 			end
 		end
@@ -452,7 +452,7 @@ ManagerServant.new = function()
 					if not success then
 						self._rtcout:RTC_ERROR("Unknown exception cought.")
 						self._rtcout:RTC_DEBUG(exception)
-						self._slaves:remove(slave)
+						table.remove(self._slaves, k)
 					end
 				end
 			end
@@ -481,7 +481,7 @@ ManagerServant.new = function()
 						if not success then
 							self._rtcout:RTC_ERROR("Unknown exception cought.")
 							self._rtcout:RTC_DEBUG(exception)
-							self._slaves:remove(slave)
+							table.remove(self._slaves, k)
 						end
 					end
 				else

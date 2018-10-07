@@ -13,6 +13,7 @@ local RTCUtil = require "openrtm.RTCUtil"
 local uuid = require "uuid"
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 local oil = require "oil"
+local NVUtil = require "openrtm.NVUtil"
 
 
 -- NameValueオブジェクトと指定名と一致するか判定する関数オブジェクト
@@ -151,8 +152,8 @@ SdoOrganization.Organization_impl.new = function(sdo)
     	local index = CORBA_SeqUtil.find(self._orgProperty.properties, nv_name(name))
 
     	if index < 0 then
-    		local nv = SDOPackage.NameValue(name, value)
-    		CORBA_SeqUtil.push_back_list(self._orgProperty.properties, nv)
+    		local nv = NVUtil.newNV(name, value)
+    		table.insert(self._orgProperty.properties, nv)
 		else
 			self._orgProperty.properties[index].value = value
 		end
@@ -210,7 +211,7 @@ SdoOrganization.Organization_impl.new = function(sdo)
 
 	-- メンバー一覧取得
 	-- @return メンバー一覧
-	function obj:get_members(sdo)
+	function obj:get_members()
 		self.__rtcout:RTC_TRACE("get_members()")
 		return self._memberList
 	end

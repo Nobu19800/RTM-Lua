@@ -168,6 +168,37 @@ function TestOutPort:test_outport()
 	mgr:createShutdownThread(0.01)
 end
 
+function TestOutPort:test_direct()
+	local mgr = require "openrtm.Manager"
+	mgr:init({"-o","corba.step.count:0"})
+	mgr:activateManager()
+	mgr:runManager(true)
+
+	local ReturnCode_t  = mgr._ReturnCode_t
+
+
+	local d_out = {tm={sec=0,nsec=0},data=10}
+	local outOut = OutPort.new("out",d_out,"::RTC::TimedLong")
+	local prop = Properties.new()
+	outOut:init(prop)
+	local d_in = {tm={sec=0,nsec=0},data=0}
+	local inIn = InPort.new("in",d_in,"::RTC::TimedLong")
+	inIn:init(prop)
+
+
+	local prop = Properties.new()
+	prop:setProperty("dataport.dataflow_type","push")
+	prop:setProperty("dataport.interface_type","direct")
+	local ret = CORBA_RTCUtil.connect("testcon",prop,outOut,inIn)
+	luaunit.assertIsTrue(outOut:write())
+	luaunit.assertIsTrue(inIn:isNew())
+	local data = inIn:read()
+	luaunit.assertIsFalse(inIn:isNew())
+	luaunit.assertEquals(data.data, 10)
+
+	mgr:createShutdownThread(0.01)
+end
+
 
 local Manager = require "openrtm.Manager"
 if Manager.is_main() then

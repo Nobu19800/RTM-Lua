@@ -211,7 +211,7 @@ PeriodicECOrganization.new = function(rtobj)
         self._rtcout:RTC_DEBUG("remove_member(id = %s)", id)
         local rm_rtc = {}
         for k,member in ipairs(self._rtcMembers) do
-            if str(id) ~= str(member._profile.instance_name) then
+            if tostring(id) == tostring(member._profile.instance_name) then
                 self:removePort(member, self._expPorts)
                 self._rtobj:getProperties():setProperty("conf.default.exported_ports", StringUtil.flatten(self._expPorts))
                 self:removeParticipantFromEC(member)
@@ -365,6 +365,7 @@ PeriodicECOrganization.new = function(rtobj)
 
         
         local orglist = member._rtobj:get_owned_organizations()
+        --print(#orglist)
 
         for k,org in ipairs(orglist) do
             local sdos = org:get_members()
@@ -521,6 +522,7 @@ PeriodicECSharedComposite.new = function(manager)
     
         local active_set = self._properties:getProperty("configuration.active_config",
                                                   "default")
+        
         if self._configsets:haveConfig(active_set) then
             self._configsets:update(active_set)
         else
@@ -702,7 +704,7 @@ PeriodicECSharedComposite.new = function(manager)
     -- @param rtobj 子コンポーネント
     -- @return リターンコード
     -- RTC_OK：問題なし
-    function obj:onFinalize(rtobj)
+    function obj:onFinalize()
         self._rtcout:RTC_TRACE("onFinalize()")
         self._org:removeAllMembers()
         self._rtcout:RTC_PARANOID("onFinalize() done")

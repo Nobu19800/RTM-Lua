@@ -628,7 +628,7 @@ InPortBase.new = function(name, data_type)
 		self._rtcout:RTC_DEBUG("Current connector profile: name=%s, id=%s", profile.name, profile.id)
 		for k,p in pairs(profile.ports) do
 			if not NVUtil._is_equivalent(self, p, self.getObjRef, p.getObjRef) then
-				self._rtcout:RTC_DEBUG("Peer port found: %s.", p)
+				self._rtcout:RTC_DEBUG("Peer port found: %s.", tostring(p))
 				if p.getObjRef == nil then
 					return nil
 				end

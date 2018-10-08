@@ -41,6 +41,7 @@ local CORBA_RTCUtil = require "openrtm.CORBA_RTCUtil"
 local SdoServiceConsumerBase = require "openrtm.SdoServiceConsumerBase"
 local SdoServiceConsumerFactory = SdoServiceConsumerBase.SdoServiceConsumerFactory
 local PeriodicECSharedComposite = require "openrtm.PeriodicECSharedComposite"
+local ManagerInfo = require "openrtm.ManagerInfo"
 
 local Timer = require "openrtm.Timer"
 
@@ -1273,7 +1274,8 @@ end
 -- IDLファイルは、Manager.luaの存在するディレクトリの2階層上のディレクトリを検索する
 -- @return IDLファイルパス
 function Manager:findIdLFile(name)
-	local fpath = StringUtil.dirname(string.sub(debug.getinfo(1)["source"],2))
+	local fpath = StringUtil.dirname(ManagerInfo.getfilepath())
+	--local fpath = StringUtil.dirname(string.sub(debug.getinfo(1)["source"],2))
 	--local fpath = StringUtil.dirname(string.gsub(debug.getinfo(1)["source"],"@",""))
 	--print(fpath)
 	local _str = string.gsub(fpath,"\\","/").."../idl/"..name
@@ -1879,115 +1881,129 @@ function Manager:initPreConnection()
 				if k == "port" then
 					table.insert(ports,p)
 				else
+					local pos = string.find(k,"port")
 					local tmp = string.gsub(k,"port","")
 
 					local ret, v = StringUtil.stringTo(0, tmp)
-					if ret then
-						ports.append(v)
+					
+					if ret and pos ~= nil then
+						table.insert(ports, p)
 					else
 						configs[k] = p
 					end
 				end
 			end
 
-			if #ports == 0 then
-				self._rtcout:RTC_ERROR("Invalid format for pre-connection.")
-				self._rtcout:RTC_ERROR("Format must be Comp0.port0?port=Comp1.port1")
+			--if #ports == 0 then
+			--	self._rtcout:RTC_ERROR("Invalid format for pre-connection.")
+			--	self._rtcout:RTC_ERROR("Format must be Comp0.port0?port=Comp1.port1")
+			--else
+
+			if configs["dataflow_type"] == nil then
+				configs["dataflow_type"] = "push"
+			end
+			if configs["interface_type"] == nil then
+				configs["interface_type"] = "data_service"
+			end
+			local tmp = StringUtil.split(port0_str,"%.")
+			tmp[#tmp] = nil
+
+			local comp0_name = StringUtil.flatten(tmp,"%.")
+
+			local port0_name = port0_str
+			local comp0_ref = nil
+
+			if string.find(comp0_name, "://") == nil then
+				--print(comp0_name)
+				local comp0 = self:getComponent(comp0_name)
+				--print(comp0)
+				if comp0 == nil then
+					self._rtcout:RTC_ERROR(comp0_name.." not found.")
+				else
+					comp0_ref = comp0:getObjRef()
+				end
 			else
+				local rtcs = self._namingManager:string_to_component(comp0_name)
 
-				if configs["dataflow_type"] == nil then
-					configs["dataflow_type"] = "push"
-				end
-				if configs["interface_type"] == nil then
-					configs["interface_type"] = "data_service"
-				end
-				local tmp = StringUtil.split(port0_str,"%.")
-				tmp[#tmp] = nil
-
-				local comp0_name = StringUtil.flatten(tmp,"%.")
-
-				local port0_name = port0_str
-				local comp0_ref = nil
-
-				if string.find(comp0_name, "://") == nil then
-					--print(comp0_name)
-					local comp0 = self:getComponent(comp0_name)
-					--print(comp0)
-					if comp0 == nil then
-						self._rtcout:RTC_ERROR(comp0_name.." not found.")
-					else
-						comp0_ref = comp0:getObjRef()
-					end
+				if #rtcs == 0 then
+					self._rtcout:RTC_ERROR(comp0_name.." not found.")
 				else
-					local rtcs = self._namingManager:string_to_component(comp0_name)
+					comp0_ref = rtcs[1]
+					port0_name = StringUtil.split(port0_str, "/")
+					port0_name = port0_name[#port0_name]
+				end
+			end
 
-					if #rtcs == 0 then
-						self._rtcout:RTC_ERROR(comp0_name.." not found.")
-					else
-						comp0_ref = rtcs[1]
-						port0_name = StringUtil.split(port0_str, "/")
-						port0_name = port0_name[#port0_name]
+			local port0_var = CORBA_RTCUtil.get_port_by_name(comp0_ref, port0_name)
+
+
+			if port0_var == oil.corba.idl.null then
+				self._rtcout:RTC_DEBUG("port "..port0_str.." found: ")
+			else
+				if #ports == 0 then
+					local prop = Properties.new()
+
+					for k,v in pairs(configs) do
+						k = StringUtil.eraseBothEndsBlank(k)
+						v = StringUtil.eraseBothEndsBlank(v)
+						prop:setProperty("dataport."..k,v)
+					end
+					if self._ReturnCode_t.RTC_OK ~= CORBA_RTCUtil.connect(c, prop, port0_var, oil.corba.idl.null) then
+						self._rtcout.RTC_ERROR("Connection error: "..c)
 					end
 				end
+				for k,port_str in ipairs(ports) do
 
-				local port0_var = CORBA_RTCUtil.get_port_by_name(comp0_ref, port0_name)
+					local tmp = StringUtil.split(port_str, "%.")
+					tmp[#tmp] = nil
+					local comp_name = StringUtil.flatten(tmp,"%.")
+					local port_name = port_str
 
+					local comp_ref = nil
 
-				if port0_var == oil.corba.idl.null then
-					self._rtcout:RTC_DEBUG("port "..port0_str.." found: ")
-				else
-					for k,port_str in ipairs(ports) do
-
-						local tmp = StringUtil.split(port_str, "%.")
-						tmp[#tmp] = nil
-						local comp_name = StringUtil.flatten(tmp,"%.")
-						local port_name = port_str
-
-						local comp_ref = nil
-
-						if string.find(comp_name, "://") == nil then
-							--print(comp_name)
-							local comp = self:getComponent(comp_name)
-							if comp == nil then
-								self._rtcout:RTC_ERROR(comp_name.." not found.")
-							else
-								comp_ref = comp:getObjRef()
-							end
+					if string.find(comp_name, "://") == nil then
+						--print(comp_name)
+						local comp = self:getComponent(comp_name)
+						if comp == nil then
+							self._rtcout:RTC_ERROR(comp_name.." not found.")
 						else
-							local rtcs = self._namingManager:string_to_component(comp_name)
-
-							if #rtcs == 0 then
-								self._rtcout:RTC_ERROR(comp_name.." not found.")
-							else
-								comp_ref = rtcs[1]
-								port_name = StringUtil.split(port_str, "/")
-								port_name = port_name[#port_name]
-							end
+							comp_ref = comp:getObjRef()
 						end
+					else
+						local rtcs = self._namingManager:string_to_component(comp_name)
 
-						if comp_ref ~= nil then
-							port_var = CORBA_RTCUtil.get_port_by_name(comp_ref, port_name)
+						if #rtcs == 0 then
+							self._rtcout:RTC_ERROR(comp_name.." not found.")
+						else
+							comp_ref = rtcs[1]
+							port_name = StringUtil.split(port_str, "/")
+							port_name = port_name[#port_name]
+						end
+					end
+
+					if comp_ref ~= nil then
+						port_var = CORBA_RTCUtil.get_port_by_name(comp_ref, port_name)
 
 
-							if port_var == oil.corba.idl.null then
-								self._rtcout:RTC_DEBUG("port "..port_str.." found: ")
-							else
-								local prop = Properties.new()
+						if port_var == oil.corba.idl.null then
+							self._rtcout:RTC_DEBUG("port "..port_str.." found: ")
+						else
+							local prop = Properties.new()
 
-								for k,v in pairs(configs) do
-									k = StringUtil.eraseBothEndsBlank(k)
-									v = StringUtil.eraseBothEndsBlank(v)
-									prop:setProperty("dataport."..k,v)
-								end
-								--print(c)
-								--print(prop)
-								--print(port0_var)
-								--print(port_var)
-
-								if self._ReturnCode_t.RTC_OK ~= CORBA_RTCUtil.connect(c, prop, port0_var, port_var) then
-									self._rtcout.RTC_ERROR("Connection error: "..c)
-								end
+							for k,v in pairs(configs) do
+								k = StringUtil.eraseBothEndsBlank(k)
+								v = StringUtil.eraseBothEndsBlank(v)
+								prop:setProperty("dataport."..k,v)
 							end
+							--print(c)
+							--print(prop)
+							--print(port0_var)
+							--print(port_var)
+
+							if self._ReturnCode_t.RTC_OK ~= CORBA_RTCUtil.connect(c, prop, port0_var, port_var) then
+								self._rtcout.RTC_ERROR("Connection error: "..c)
+							end
+							--end
 						end
 					end
 				end
@@ -2212,7 +2228,8 @@ end
 -- スタンドアロンコンポーネントかの判定
 -- @return true：スタンドアロンコンポーネント、false：rtcdでの実行
 Manager.is_main = function()
-	return (debug.getinfo(4 + (offset or 0)) == nil)
+	--return (debug.getinfo(4 + (offset or 0)) == nil)
+	return ManagerInfo.is_main()
 end
 
 

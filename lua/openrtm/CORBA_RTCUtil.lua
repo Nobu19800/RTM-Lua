@@ -573,7 +573,12 @@ end
 -- @return コネクタプロファイル
 CORBA_RTCUtil.create_connector = function(name, prop_arg, port0, port1)
 	local prop = prop_arg
-	local conn_prof = {name=name, connector_id="", ports={port0, port1}, properties={}}
+	local conn_prof = {name=name, connector_id="", ports={}, properties={}}
+	if port1 == oil.corba.idl.null then
+		conn_prof.ports = {port0}
+	else
+		conn_prof.ports = {port0, port1}
+	end
 
 
 	if tostring(prop:getProperty("dataport.dataflow_type")) == "" then
@@ -624,12 +629,12 @@ CORBA_RTCUtil.connect = function(name, prop, port0, port1)
 	if port0 == oil.corba.idl.null then
 		return ReturnCode_t.BAD_PARAMETER
 	end
-	if port1 == oil.corba.idl.null then
-		return ReturnCode_t.BAD_PARAMETER
+	if port1 ~= oil.corba.idl.null then
+		if NVUtil._is_equivalent(port0, port1, port0.getPortRef, port1.getPortRef) then
+			return ReturnCode_t.BAD_PARAMETER
+		end
 	end
-	if NVUtil._is_equivalent(port0, port1, port0.getPortRef, port1.getPortRef) then
-		return ReturnCode_t.BAD_PARAMETER
-	end
+
 	local cprof = CORBA_RTCUtil.create_connector(name, prop, port0, port1)
 	
 	local ret, prof = port0:connect(cprof)

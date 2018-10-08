@@ -8,7 +8,7 @@ def find_all_files(directory):
             #print(root, file)
             name, ext = os.path.splitext(file)
             #print name
-            if name != "Manager" and ext == ".lua":
+            if name != "ManagerInfo" and ext == ".lua":
                 path = os.path.join(root, file)
                 subprocess.call(["luac","-o",path,path])
                 

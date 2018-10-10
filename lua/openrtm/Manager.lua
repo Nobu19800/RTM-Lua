@@ -1203,11 +1203,14 @@ function Manager:initORB()
 	else
 		local endpoints = self:createORBEndpoints()
 		local port = nil
+		local host = nil
 
 
 		if #endpoints > 0 then
 			local endpoint = endpoints[1]
-			port = StringUtil.split(endpoint, ":")[2]
+			local tmp = StringUtil.split(endpoint, ":")
+			host = tmp[1]
+			port = tmp[2]
 		end
 		
 		
@@ -1221,6 +1224,7 @@ function Manager:initORB()
 				
 				self._orb = oil.init{
 					flavor = "cooperative;corba;corba.ssl;kernel.ssl",
+					host=host,
 					port=port,
 					options = {
 						client = {
@@ -1233,11 +1237,11 @@ function Manager:initORB()
 					},
 				}
 			else
-				self._orb = oil.init{ flavor = "cooperative;corba;", port=port }
+				self._orb = oil.init{ flavor = "cooperative;corba;", host=host, port=port }
 			end
 			
 		else
-			self._orb = oil.init{ flavor = "cooperative;corba;intercepted;typed;base;", port=port }
+			self._orb = oil.init{ flavor = "cooperative;corba;intercepted;typed;base;", host=host, port=port }
 		end
 
 		if oil.VERSION == "OiL 0.5" then

@@ -142,7 +142,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 |||
 |---|---|
 |ポート名|touch|
-|データ型|TimedBoolean|
+|データ型|TimedBooleanSeq|
 
 
 ### EV3Sample.luaの編集

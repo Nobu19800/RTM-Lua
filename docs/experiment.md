@@ -1,6 +1,6 @@
 # 実験結果
 
-以下の結果についてはWindows 10、Ubuntu 14.04で計測していますが、UbuntuについてはParallels仮想環境で実験しているため、実環境のUbuntuとは結果が異なる場合があります。
+以下の結果についてはWindows 10、Ubuntu 14.04、ev3dev(jessie)で計測していますが、UbuntuについてはParallels仮想環境で実験しているため、実環境のUbuntuとは結果が異なる場合があります。
 
 
 

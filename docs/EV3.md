@@ -127,7 +127,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 
 ### アクティビティ
 
-`onActivated`、`onExecute`を有効にしてください。
+`onActivated`、`onDeactivated`、`onExecute`を有効にしてください。
 
 ### インポート
 

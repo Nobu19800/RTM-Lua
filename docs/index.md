@@ -124,6 +124,7 @@ openrtm.orgが閉鎖している場合は以下のサイトから入手してく
 
 * [Windows](Windows.md)
 * [Ubuntu](Ubuntu.md)
+* [Mac OSX](Mac.md)
 
 ## RTC作成方法
 

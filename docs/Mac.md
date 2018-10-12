@@ -35,3 +35,11 @@ OpenRTM-aistのインストールなどは以下のページを参考にして�
 * [Mac OSX + OpenRTM-aistパッケージ](http://sugarsweetrobotics.com/?page_id=111)
 * [OpenRTM-aistをMac OS X Mavericksにインストールする](https://qiita.com/switchback_sus4/items/25a969fcc30da2cdff3b)
 * [OpenRTMのOSXへのインストール](http://docs.fabo.io/openrtm/installosx.html)
+
+
+単純にネームサーバーを起動したいだけであれば、omniORBをインストール後にomniNamesを実行するだけでも可能です。
+
+<pre>
+brew install omniorb
+omniNames -start 2809 -logdir $PWD
+</pre>

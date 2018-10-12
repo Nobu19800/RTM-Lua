@@ -19,9 +19,13 @@ luarocksによりopenrtmをインストールしてください。
 
 <pre>
 luarocks --lua-dir=/usr/local/opt/lua@5.1 install openrtm
-luarocks --lua-dir=/usr/local/opt/lua@5.1 path
 </pre>
 
+理由はよく分かりませんが、`--local`オプションを設定していないにもかかわらずローカルのディレクトリにインストールされるようなので、以下のコマンドの出力結果をコマンドで入力して実行してください。
+
+<pre>
+luarocks --lua-dir=/usr/local/opt/lua@5.1 path
+</pre>
 
 これでインストール完了です。
 実行する場合は`lua-5.1`コマンドで実行してください。

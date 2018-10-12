@@ -89,9 +89,23 @@ l = LargeMotor()
 -- m = MediumMotor()
 -- 接続したか確認
 print(l:connected())
+-- 速度調整機能をオンにします
+-- ev3devのstretchではオンオフを切り替えることができないためpcallで呼び出す
+pcall(
+	function()
+		l:setSpeedRegulationEnabled("on")
+	end
+)
+
+speed = 360
 -- 速度の設定
-l:setSpeedSP(500)
-l:setPositionSP(0)
+-- カウント数を入力する
+l:setSpeedSP(math.floor(speed/360*l:countPerRot()))
+
+pos = 180
+-- 位置の設定
+-- カウント数を入力する
+l:setPositionSP(math.floor(pos/360*l:countPerRot()))
 -- 位置制御開始
 l:setCommand("run-to-abs-pos")
 </pre>
@@ -105,9 +119,25 @@ l = LargeMotor()
 -- m = MediumMotor()
 -- 接続したか確認
 print(l:connected())
-l:setSpeedSP(500)
+
+-- 速度調整機能をオンにします
+-- ev3devのstretchではオンオフを切り替えることができないためpcallで呼び出す
+pcall(
+	function()
+		l:setSpeedRegulationEnabled("on")
+	end
+)
+
+speed = 360
+-- 速度の設定
+-- カウント数を入力する
+l:setSpeedSP(math.floor(speed/360*l:countPerRot()))
+-- 速度制御開始
+l:setCommand("run-forever")
 -- 標準入力待ち
-l:stop()
+io.read()
+-- 停止
+l:setCommand("stop")
 </pre>
 
 

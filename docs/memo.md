@@ -32,3 +32,7 @@ if field.name == "port" then
 	val = tonumber(val)
 end
 </pre>
+
+## ARMの問題
+ARMアーキテクチャで動作させたときにFloat型、Double型のアンマーシャリングが失敗する。
+OiL-0.5.2以前の問題な可能性もあるが、OiL-0.7では動作未確認。

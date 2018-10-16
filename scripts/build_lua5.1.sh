@@ -13,6 +13,7 @@ cd build
 cmake .. -DLUA_VERSION=5.1
 make
 
+
 cd ../..
 mkdir $build_path/socket
 cp oil-0.5/src/build/core.so $build_path/socket

@@ -12,7 +12,7 @@ $ sudo apt-get install lua5.2
 $ wget https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.0/openrtm-lua-0.4.0.x86.-lua5.2.zip
 $ unzip openrtm-lua-0.4.0.x86.-lua5.2.zip
 $ mv "openrtm-lua-0.4.0(x86)-lua5.2" openrtm-lua
-$ wget https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.0/luamodule_raspbian.tar.gz
+$ wget https://github.com/Nobu19800/RTM-Lua/releases/download/v0.3.1/luamodule_raspbian.tar.gz
 $ tar xf luamodule_raspbian.tar.gz
 $ cp -rf luamodule_raspbian/* openrtm-lua/clibs/
 </pre>

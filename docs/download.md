@@ -56,3 +56,7 @@ OpenRTM-aist 2.0リリース以降は、OpenRTM-aist付属のものを使用し�
 ## ev3dev用共有ライブラリ
 
 * [luamodule_ev3dev](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.3.1/luamodule_ev3.tar.gz)
+
+## Raspbian用共有ライブラリ
+
+* [luamodule_raspbian.tar.gz](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.3.1/luamodule_raspbian.tar.gz)

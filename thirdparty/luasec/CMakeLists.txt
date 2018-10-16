@@ -119,7 +119,10 @@ else(MSVC)
 endif(MSVC)
 
 
+if(MSVC)
+	install(TARGETS ssl RUNTIME DESTINATION ${LUA_ROOT}/clibs)
+else(MSVC)
+	install(TARGETS ssl LIBRARY DESTINATION ${LUA_ROOT}/clibs)
+endif(MSVC)
 
-
-install(TARGETS ssl RUNTIME DESTINATION ${LUA_ROOT}/clibs)
 install(FILES src/https.lua src/ssl.lua DESTINATION ${LUA_ROOT}/lua)

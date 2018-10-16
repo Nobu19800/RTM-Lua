@@ -63,7 +63,10 @@ else(MSVC)
 endif(MSVC)
 
 
+if(MSVC)
+	install(TARGETS lpeg RUNTIME DESTINATION ${LUA_ROOT}/clibs)
+else(MSVC)
+	install(TARGETS lpeg LIBRARY DESTINATION ${LUA_ROOT}/clibs)
+endif(MSVC)
 
-
-install(TARGETS lpeg RUNTIME DESTINATION ${LUA_ROOT}/clibs)
 install(FILES re.lua DESTINATION ${LUA_ROOT}/lua)

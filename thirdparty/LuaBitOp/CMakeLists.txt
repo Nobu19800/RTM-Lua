@@ -54,5 +54,9 @@ endif(MSVC)
 
 
 
+if(MSVC)
+	install(TARGETS bit RUNTIME DESTINATION ${LUA_ROOT}/clibs)
+else(MSVC)
+	install(TARGETS bit LIBRARY DESTINATION ${LUA_ROOT}/clibs)
+endif(MSVC)
 
-install(TARGETS bit RUNTIME DESTINATION ${LUA_ROOT}/clibs)

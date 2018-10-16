@@ -57,5 +57,8 @@ endif(MSVC)
 
 
 
-
-install(TARGETS struct RUNTIME DESTINATION ${LUA_ROOT}/clibs)
+if(MSVC)
+	install(TARGETS struct RUNTIME DESTINATION ${LUA_ROOT}/clibs)
+else(MSVC)
+	install(TARGETS struct LIBRARY DESTINATION ${LUA_ROOT}/clibs)
+endif(MSVC)

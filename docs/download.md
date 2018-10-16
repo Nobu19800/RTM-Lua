@@ -47,12 +47,12 @@ OpenRTM-aist 2.0リリース以降は、OpenRTM-aist付属のものを使用し�
 
 ## Linux用共有ライブラリ(Lua 5.1用)
 
-* [luamodule_linux](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1I1Owl-O2hsY_7HDmy_77FxfFxzXgxwwb&export=download)
+* [luamodule_linux](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.3.1/luamodule_linux.tar.gz)
 
 ## Linux用共有ライブラリ(Lua 5.2用)
 
-* [luamodule_ubuntu_lua52](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1NLb9wZ4ZUin8paUbHHAc44-pFJD-f4OW&export=download)
+* [luamodule_ubuntu_lua52](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.3.1/luamodule_ubuntu_lua52.tar.gz)
 
 ## ev3dev用共有ライブラリ
 
-* [luamodule_ev3dev](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1MspQP4PeEAH4xBXAFviQYmBF2delCNZq&export=download)
+* [luamodule_ev3dev](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.3.1/luamodule_ev3.tar.gz)

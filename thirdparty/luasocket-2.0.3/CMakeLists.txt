@@ -123,8 +123,14 @@ set(lua_files
 	src/tp.lua
 	src/url.lua
 )
-install(TARGETS luasoket RUNTIME DESTINATION ${LUA_ROOT}/clibs/socket)
-install(TARGETS mine RUNTIME DESTINATION ${LUA_ROOT}/clibs/mine)
+
+if(MSVC)
+	install(TARGETS luasoket RUNTIME DESTINATION ${LUA_ROOT}/clibs/socket)
+	install(TARGETS mine RUNTIME DESTINATION ${LUA_ROOT}/clibs/mine)
+else(MSVC)
+	install(TARGETS luasoket LIBRARY DESTINATION ${LUA_ROOT}/clibs/socket)
+	install(TARGETS mine LIBRARY DESTINATION ${LUA_ROOT}/clibs/mine)
+endif(MSVC)
 install(FILES ${lua_files} DESTINATION ${LUA_ROOT}/lua/socket)
 install(FILES src/socket.lua DESTINATION ${LUA_ROOT}/lua)
 install(FILES src/mime.lua DESTINATION ${LUA_ROOT}/lua)

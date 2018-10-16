@@ -29,4 +29,4 @@ make
 
 cd ../..
 mkdir $build_path/socket
-cp luasocket-2.0.3/build/lib/socket/core.so $build_path/socket
+cp luasocket-2.0.3/build/lib/socket/core.so $build_path/socket/

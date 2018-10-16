@@ -16,6 +16,6 @@ make
 
 cd ../../..
 mkdir $build_path/socket
-cp oil-0.5/src/build/core.so $build_path/socket
+cp oil-0.5/src/build/core.so $build_path/socket/
 mkdir $build_path/socket
-cp oil-0.5/src/build/bit.so $build_path/oil
+cp oil-0.5/src/build/bit.so $build_path/oil/

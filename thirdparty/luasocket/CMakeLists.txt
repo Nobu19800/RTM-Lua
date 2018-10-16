@@ -1,18 +1,12 @@
 cmake_minimum_required (VERSION 2.6)
 
-project (struct)
-
-
-set(LUA_ROOT ${LUA_ROOT} CACHE PATH "set LUA_ROOT")
-set(LUA_VERSION ${LUA_VERSION} CACHE STRING "set LUA_VERSION")
-
+project (socket)
 
 if(MSVC)
-	
 	if(NOT LUA_ROOT)
 		message(FATAL_ERROR "Please set LUA_ROOT.")
 	endif()
-	
+	set(LUA_VERSION ${LUA_VERSION} CACHE PATH "set LUA_VERSION")
 
 	if(NOT LUA_VERSION)
 		message(FATAL_ERROR "Please set LUA_VERSION.")
@@ -23,15 +17,46 @@ else(MSVC)
 	endif()
 endif(MSVC)
 
-
 set(srcs
-	struct.c
+	src/auxiliar.c
+	src/buffer.c
+	src/compat.c
+	src/except.c
+	src/inet.c
+	src/io.c
+	src/luasocket.c
+	src/options.c
+	src/select.c
+	src/tcp.c
+	src/timeout.c
+	src/udp.c
+	src/auxiliar.h
+	src/buffer.h
+	src/compat.h
+	src/except.h
+	src/inet.h
+	src/io.h
+	src/luasocket.h
+	src/options.h
+	src/pierror.h
+	src/select.h
+	src/socket.h
+	src/tcp.h
+	src/timeout.h
+	src/udp.h
 )
 
 if(MSVC)
-	ADD_DEFINITIONS("-DLUA_BUILD_AS_DLL")
-	ADD_DEFINITIONS("-DLUA_LIB")
+	set(srcs ${srcs} wsocket.h wsocket.c)
+else(MSVC)
+	set(srcs ${srcs} usocket.h usocket.c unix.h)
 endif(MSVC)
+
+
+if(MSVC)
+	ADD_DEFINITIONS("-DLUASOCKET_API=__declspec(dllexport)")
+endif(MSVC)
+
 
 if(MSVC)
 else(MSVC)
@@ -46,13 +71,13 @@ if(LUA_ROOT)
 	link_directories(${LUA_ROOT}/lib)
 endif(LUA_ROOT)
 
-add_library (struct SHARED ${srcs})
+add_library (luasoket SHARED ${srcs})
 
 if(MSVC)
-	target_link_libraries(struct lua${LUA_VERSION} ws2_32)
+	target_link_libraries(luasoket lua${LUA_VERSION} ws2_32)
 else(MSVC)
-	target_link_libraries(struct lua${LUA_VERSION})
-	set_target_properties (struct
+	target_link_libraries(luasoket lua${LUA_VERSION})
+	set_target_properties (luasoket
                        PROPERTIES PREFIX
                        "")
 endif(MSVC)
@@ -60,4 +85,51 @@ endif(MSVC)
 
 
 
-install(TARGETS struct RUNTIME DESTINATION ${LUA_ROOT}/clibs)
+SET_TARGET_PROPERTIES(luasoket PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/socket)
+SET_TARGET_PROPERTIES(luasoket PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/socket)
+SET_TARGET_PROPERTIES(luasoket PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/socket)
+SET_TARGET_PROPERTIES(luasoket PROPERTIES OUTPUT_NAME core)
+
+
+if(MSVC)
+	ADD_DEFINITIONS("-DMIME_API=__declspec(dllexport)")
+endif(MSVC)
+
+
+add_library (mine SHARED  src/mime.c src/mime.h src/compat.c src/compat.h)
+
+if(MSVC)
+	target_link_libraries(mine lua${LUA_VERSION} ws2_32)
+else(MSVC)
+	target_link_libraries(mine lua${LUA_VERSION})
+	set_target_properties (mine
+                       PROPERTIES PREFIX
+                       "")
+endif(MSVC)
+
+SET_TARGET_PROPERTIES(mine PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/mine)
+SET_TARGET_PROPERTIES(mine PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/mine)
+SET_TARGET_PROPERTIES(mine PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/mine)
+SET_TARGET_PROPERTIES(mine PROPERTIES OUTPUT_NAME core)
+
+
+set(lua_files 
+	src/ftp.lua
+	src/headers.lua
+	src/http.lua
+	src/ltn12.lua
+	src/mbox.lua
+	src/mime.lua
+	src/smtp.lua
+	src/tp.lua
+	src/url.lua
+)
+if(MSVC)
+	install(TARGETS luasoket RUNTIME DESTINATION ${LUA_ROOT}/clibs/socket)
+	install(TARGETS mine RUNTIME DESTINATION ${LUA_ROOT}/clibs/mine)
+else(MSVC)
+	install(TARGETS luasoket LIBRARY DESTINATION ${LUA_ROOT}/clibs/socket)
+	install(TARGETS mine LIBRARY DESTINATION ${LUA_ROOT}/clibs/mine)
+endif(MSVC)
+install(FILES ${lua_files} DESTINATION ${LUA_ROOT}/lua/socket)
+install(FILES src/socket.lua DESTINATION ${LUA_ROOT}/lua)

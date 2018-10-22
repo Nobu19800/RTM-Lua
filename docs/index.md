@@ -127,6 +127,8 @@ openrtm.orgが閉鎖している場合は以下のサイトから入手してく
 * [Mac OSX](Mac.md)
 * [Raspbian](Raspbian.md)
 * [ev3dev](ev3dev.md)
+* [Haiku](haiku.md)
+* [Windows 10 IoT](windows10iot.md)
 
 ## RTC作成方法
 

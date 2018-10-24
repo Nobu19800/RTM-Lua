@@ -1,4 +1,4 @@
-package = "LuaSocket"
+﻿package = "LuaSocket"
 version = "scm-0"
 source = {
    url = "https://github.com/diegonehab/luasocket/archive/master.zip",

@@ -121,14 +121,21 @@ openrtm.orgが閉鎖している場合は以下のサイトから入手してく
 * [openrtm.github.io](https://openrtm.github.io/)
 
 ## インストール方法
+以下のように様々なOSに対応しています。
+OpenRTM Luaは歴史上初めてHaiku OSに対応したロボット用ミドルウェアです。
+
 
 * [Windows](Windows.md)
-* [Ubuntu](Ubuntu.md)
+* [Windows 10 IoT](windows10iot.md)
+* [Haiku](haiku.md)
 * [Mac OSX](Mac.md)
+* [Ubuntu](Ubuntu.md)
 * [Raspbian](Raspbian.md)
 * [ev3dev](ev3dev.md)
-* [Haiku](haiku.md)
-* [Windows 10 IoT](windows10iot.md)
+
+
+
+
 
 ## RTC作成方法
 

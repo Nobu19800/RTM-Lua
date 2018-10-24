@@ -63,7 +63,7 @@ local function make_plat(plat)
 		["socket.url"] = "src/url.lua",
 		["socket.tp"] = "src/tp.lua",
 		["socket.ftp"] = "src/ftp.lua",
-		["socket.headers"] = "src/headers.lua",
+		["socket.mbox"] = "src/mbox.lua",
 		["socket.smtp"] = "src/smtp.lua",
 		ltn12 = "src/ltn12.lua",
 		socket = "src/socket.lua",

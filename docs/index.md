@@ -23,7 +23,7 @@
 |OPRoS|ETRI|||よく知りません|
 |GostaiRTC|GOSTAI、THALES|C++||よく知りません|
 |[ReactiveRTM](https://github.com/zoetrope/ReactiveRTM)||.NET|Windows？|使ったことないです。|
-|OpenRTM Lua||Lua|Windows、Ubuntu、Mac OSX、Haiku|このページで説明します。|
+|OpenRTM Lua||Lua|Windows、Ubuntu、Debian、Mac OSX、Haiku|このページで説明します。|
 
 
 ### OpenRTM Lua版の特徴

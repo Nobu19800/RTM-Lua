@@ -122,7 +122,7 @@ openrtm.orgが閉鎖している場合は以下のサイトから入手してく
 
 ## インストール方法
 以下のように様々なOSに対応しています。
-OpenRTM Luaは歴史上初めてHaiku OSに対応したロボット用ミドルウェアです。
+2018年10月現在、Haiku OSに対応したロボット用ミドルウェアはOpenRTM Luaのみです。
 
 
 * [Windows](Windows.md)

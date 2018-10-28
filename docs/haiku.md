@@ -47,5 +47,16 @@ cd luasocket
 後は以下のようにluarocksでopenrtmをインストールしてください。
 
 <pre>
-luarocks install openrtm
+/haiku/luarocks/bin/luarocks install openrtm
+</pre>
+
+
+
+サンプルは以下のように実行する。
+Windows以外のOSではエンドポイントが適切に設定されない場合があるので、`corba.endpoints`オプションを指定する。
+
+<pre>
+git clone https://github.com/Nobu19800/RTM-Lua
+cd RTM-Lua/samples
+/haiku/lua/bin/lua ConfigSample.lua -o corba.endpoints:IPアドレス
 </pre>

@@ -113,6 +113,7 @@ Luaスクリプト機能をサポートしているアプリケーションを�
 * MyServiceConsumer.bat
 * MyServiceProvider.bat
 * ConfigSample.bat
+* Composite.bat
 
 RTSystemEditor、ネームサーバーはOpenRTM-aistのものを使用してください。
 

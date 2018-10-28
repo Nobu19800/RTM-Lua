@@ -5,6 +5,8 @@
 #### Lua 5.1
 * [OpenRTM Lua 0.4.0 Lua5.1 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.0/openrtm-lua-0.4.0-x86-lua5.1.zip)
 * [OpenRTM Lua 0.4.0 Lua5.1 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.0/openrtm-lua-0.4.0-x64-lua5.1.zip)
+* [OpenRTM Lua 0.4.0 Lua5.1 ARM](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.0/openrtm-lua-0.4.0-arm-lua5.1.zip)
+
 
 #### LuaJIT
 * [OpenRTM Lua 0.4.0 LuaJIT 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.0/openrtm-lua-0.4.0-x86-LuaJIT.zip)
@@ -13,11 +15,9 @@
 #### Lua 5.2
 * [OpenRTM Lua 0.4.0 Lua5.2 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.0/openrtm-lua-0.4.0-x86-lua5.2.zip)
 * [OpenRTM Lua 0.4.0 Lua5.2 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.0/openrtm-lua-0.4.0-x64-lua5.2.zip)
+* [OpenRTM Lua 0.4.0 Lua5.2 ARM](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.0/openrtm-lua-0.4.0-arm-lua5.2.zip)
 
 
-#### Windows 10 Iot用
-* 
-* 
 
 ### Ver.0.3.1
 #### Lua 5.1

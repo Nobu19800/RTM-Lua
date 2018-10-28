@@ -54,6 +54,7 @@ cd luasocket
 
 サンプルは以下のように実行する。
 Windows以外のOSではエンドポイントが適切に設定されない場合があるので、`corba.endpoints`オプションを指定する。
+現状Haikuでネームサーバーを起動する方法がないため、Windows等ほかのネームサーバーにRTCを登録する。もしくは、ネームサーバーには登録せずにマネージャ経由でアクセスする。
 
 <pre>
 git clone https://github.com/Nobu19800/RTM-Lua

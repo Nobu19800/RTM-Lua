@@ -58,5 +58,5 @@ Windows以外のOSではエンドポイントが適切に設定されない場�
 <pre>
 git clone https://github.com/Nobu19800/RTM-Lua
 cd RTM-Lua/samples
-/haiku/lua/bin/lua ConfigSample.lua -o corba.endpoints:IPアドレス
+/haiku/lua/bin/lua ConfigSample.lua -o corba.endpoints:HaikuのIPアドレス -o corba.nameservers:Windows等のIPアドレス
 </pre>

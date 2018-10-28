@@ -10,6 +10,7 @@ Copyright (c) 2018 Nobuhiko Miyamoto
 local PeriodicECSharedComposite = {}
 --_G["openrtm.PeriodicECSharedComposite"] = PeriodicECSharedComposite
 
+local oil = require "oil"
 local StringUtil = require "openrtm.StringUtil"
 local ConfigurationListener = require "openrtm.ConfigurationListener"
 local ConfigurationSetListener = ConfigurationListener.ConfigurationSetListener

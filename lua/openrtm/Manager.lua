@@ -418,12 +418,19 @@ function Manager:init(argv)
 	if argv == nil then
 		argv = {}
 	end
+
+	
 	self._initProc = nil
 	self._ecs = {}
 	if self._orb ~= nil then
 		self:createShutdownThread(1)
 	end
 	self._orb = nil
+
+	if oil.VERSION == "OiL 0.6" then
+		oil.pcall = pcall
+	end
+
 	self._compManager = ObjectManager.new(InstanceName)
 	self._factory = ObjectManager.new(FactoryPredicate)
 	self._ecfactory = ObjectManager.new(ECFactoryPredicate)
@@ -1251,10 +1258,10 @@ function Manager:initORB()
 			oil.corba.idl = {}
 			oil.corba.idl.null = nil
 
-			oil.pcall = pcall
+			
 			self._orb.tostring = function(self, str)
 					return tostring(str)
-					end
+			end
 		end
 
 		self._orb:loadidlfile(Manager:findIdLFile("CosNaming.idl"))

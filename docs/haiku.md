@@ -34,6 +34,12 @@ make
 make install
 </pre>
 
+以下のコマンドで表示されたコマンドを実行してモジュールのパスを設定する。
+
+<pre>
+/haiku/luarocks/bin/luarocks path
+</pre>
+
 ## OpenRTM Luaのインストール
 
 LuaSocketはLuaRocksに登録されたパッケージがHaikuに対応していないため、以下のようにソースコードからインストールしてください。
@@ -59,5 +65,6 @@ Windows以外のOSではエンドポイントが適切に設定されない場�
 <pre>
 git clone https://github.com/Nobu19800/RTM-Lua
 cd RTM-Lua/samples
+
 /haiku/lua/bin/lua ConfigSample.lua -o corba.endpoints:HaikuのIPアドレス -o corba.nameservers:Windows等のIPアドレス
 </pre>

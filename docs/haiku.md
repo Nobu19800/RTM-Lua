@@ -42,18 +42,22 @@ make install
 
 ## OpenRTM Luaのインストール
 
-LuaSocketはLuaRocksに登録されたパッケージがHaikuに対応していないため、以下のようにソースコードからインストールしてください。
 
-<pre>
-git clone https://github.com/renatomaia/luasocket
-cd luasocket
-/haiku/luarocks/bin/luarocks build NETWORK_DIR=/boot/system/
-</pre>
 
 後は以下のようにluarocksでopenrtmをインストールしてください。
 
 <pre>
 /haiku/luarocks/bin/luarocks install openrtm
+</pre>
+
+
+LuaSocketはLuaRocksに登録されたパッケージがHaikuに対応していないため、一旦削除して以下のようにソースコードからインストールしてください。
+
+<pre>
+/haiku/luarocks/bin/luarocks remove --force luasocket
+git clone https://github.com/renatomaia/luasocket
+cd luasocket
+/haiku/luarocks/bin/luarocks build NETWORK_DIR=/boot/system/
 </pre>
 
 

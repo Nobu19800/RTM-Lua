@@ -54,7 +54,7 @@ make install
 LuaSocketはLuaRocksに登録されたパッケージがHaikuに対応していないため、一旦削除して以下のようにソースコードからインストールしてください。
 
 <pre>
-/haiku/luarocks/bin/luarocks remove --force luasocket
+/haiku/luarocks/bin/luarocks --force remove luasocket
 git clone https://github.com/renatomaia/luasocket
 cd luasocket
 /haiku/luarocks/bin/luarocks build NETWORK_DIR=/boot/system/

@@ -18,7 +18,7 @@ Laputan Blueprintsを展開したフォルダにOpenRTM Lua版の各ファイル
 
 OpenRTM Lua版からLaputan Blueprintsにファイルをコピーします。
 
-`openrtm-lua-x.y.z(x86)-lua5.1\lua\`以下のファイルの内`idl`フォルダ以外を全て`Laputan\Laputan Files\LuaModules\`以下にコピーしてください。
+`openrtm-lua-x.y.z-x86-lua5.1\lua\`以下のファイルの内`idl`フォルダ以外を全て`Laputan\Laputan Files\LuaModules\`以下にコピーしてください。
 ファイルを上書きするかどうか聞かれますが、構わずコピーしてください。
 
 ![openrtmlua260](https://user-images.githubusercontent.com/6216077/37710287-86942c6a-2d50-11e8-8b74-a3ba3fadbaa8.png)
@@ -31,7 +31,7 @@ OpenRTM Lua版からLaputan Blueprintsにファイルをコピーします。
 
 
 
-次に`openrtm-lua-x.y.z(x86)-lua5.1\clibs\`以下のファイルを全て`Laputan\Laputan Files\`以下にコピーしてください。
+次に`openrtm-lua-x.y.z-x86-lua5.1\clibs\`以下のファイルを全て`Laputan\Laputan Files\`以下にコピーしてください。
 
 ![openrtmlua270](https://user-images.githubusercontent.com/6216077/37710296-8d201ff8-2d50-11e8-9e48-4c41aec1d5de.png)
 

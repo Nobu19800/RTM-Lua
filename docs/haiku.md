@@ -15,6 +15,8 @@ VMWare上でHaiku OSを動作させる手順を説明します。
 
 ## Luaのインストール
 
+Haiku Depotでもインストールはできますが、LuaRocksをインストールするとLua 5.3がついでにインストールされる上に、何故かlua.h等がインストールされないため、ソースコードからインストールします。
+
 <pre>
 wget https://www.lua.org/ftp/lua-5.1.5.tar.gz
 tar xf lua-5.1.5.tar.gz

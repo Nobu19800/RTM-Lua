@@ -1,5 +1,5 @@
 package = "openrtm"
-version = "0.3-5"
+version = "0.4-0"
 source = {
    url = "git://github.com/Nobu19800/RTM-Lua"
 }
@@ -17,11 +17,11 @@ description = {
 
 dependencies = {
    "lua >= 5.1,< 5.3",
-   "oil",
-   "luaidl",
+   --"oil",
+   --"luaidl",
    "loop",
    "luasocket >= 2.0.2",
-   "lualogging",
+   --"lualogging",
    --"lua-rfc-4122-uuid-generator",
    "uuid >= 0.2"
 }
@@ -86,6 +86,7 @@ build = {
         ["openrtm.Manager"] = "lua/openrtm/Manager.lua",
         ["openrtm.ManagerActionListener"] = "lua/openrtm/ManagerActionListener.lua",
         ["openrtm.ManagerConfig"] = "lua/openrtm/ManagerConfig.lua",
+        ["openrtm.ManagerInfo"] = "lua/openrtm/ManagerInfo.lua",
         ["openrtm.ManagerServant"] = "lua/openrtm/ManagerServant.lua",
         ["openrtm.ModuleManager"] = "lua/openrtm/ModuleManager.lua",
         ["openrtm.NamingManager"] = "lua/openrtm/NamingManager.lua",

@@ -176,3 +176,107 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 
 
 ### EV3Sample.luaの編集
+
+`onActivated`関数を以下のように編集してください。
+
+<pre>
+	function obj:onActivated(ec_id)
+		self._touchsensor1 = TouchSensor("in1")
+		if not self._touchsensor1:connected() then
+			return self._ReturnCode_t.RTC_ERROR
+		end
+		self._touchsensor2 = TouchSensor("in2")
+		if not self._touchsensor2:connected() then
+			return self._ReturnCode_t.RTC_ERROR
+		end
+
+		self._lmotor1 = LargeMotor("outA")
+		if not self._lmotor1:connected() then
+			return self._ReturnCode_t.RTC_ERROR
+		end
+
+		self._lmotor2 = LargeMotor("outB")
+		if not self._lmotor2:connected() then
+			return self._ReturnCode_t.RTC_ERROR
+		end
+		
+		return self._ReturnCode_t.RTC_OK
+	end
+</pre>
+
+
+`onDeactivated`関数を以下のように編集してください。
+
+<pre>
+	function obj:onDeactivated(ec_id)
+		if self._lmotor1 ~= nil then
+			self._lmotor1:stop()
+		end
+		if self._lmotor2 ~= nil then
+			self._lmotor2:stop()
+		end
+		return self._ReturnCode_t.RTC_OK
+	end
+</pre>
+
+
+`onExecute`関数を以下のように編集してください。
+
+<pre>
+	function obj:onExecute(ec_id)
+		local wheelRadius = 0.056
+		local wheelDistance = 0.108
+
+		self._d_touch.data = {self._touchsensor1:pressed(),
+							  self._touchsensor2:pressed()}
+		openrtm.OutPort.setTimestamp(self._d_touch)
+		obj._touchOut:write()
+
+		if self._velocityIn:isNew() then
+			local data = self._velocityIn:read()
+			local r = wheelRadius/2.0
+			local d = wheelDistance/2.0
+			local vx = data.data.vx
+			local va = data.data.va
+			local right_motor_speed = (vx + va*d)/r
+			local left_motor_speed = (vx - va*d)/r
+
+			local cpr1 = self._lmotor1:countPerRot()
+			local cpr2 = self._lmotor2:countPerRot()
+			
+			local speed1 = right_motor_speed/(2*math.pi)*cpr1
+			local speed2 = left_motor_speed/(2*math.pi)*cpr2
+
+
+			
+			self._lmotor1:setSpeedSP(speed1)
+			self._lmotor1:setCommand("run-to-abs-pos")
+
+			self._lmotor2:setSpeedSP(speed2)
+			self._lmotor2:setCommand("run-to-abs-pos")
+		end
+
+		return self._ReturnCode_t.RTC_OK
+	end
+</pre>
+
+
+## 動作確認
+### ネームサーバー起動
+事前にネームサーバーの起動が必要です。
+
+* [OpenRTM-aistを10分で始めよう！](https://www.openrtm.org/openrtm/ja/node/6026#toc3)
+
+※OpenRTM-aist 1.2以降ではRT System Editorにネームサーバー起動ボタンがあるため、手順が簡単になっています。
+
+### TkJoyStickコンポーネントの起動
+
+TkJoyStickコンポーネントを入手して、`TkJoyStickComp.exe`を実行してください。
+
+* [ダウンロード](download.md)
+
+### 
+
+### RTC起動
+
+### RTSystem作成

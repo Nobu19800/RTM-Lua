@@ -177,28 +177,61 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 
 ### EV3Sample.luaの編集
 
+先頭付近で`ev3dev`のモジュールのロードを行ってください。
+`ev3dev.lua`はEV3Sample.luaと同じディレクトリに配置してください。
+
+<pre>
+require 'ev3dev'
+</pre>
+
 `onActivated`関数を以下のように編集してください。
+タッチセンサ、Lモーターの初期化を行います。
 
 <pre>
 	function obj:onActivated(ec_id)
+		-- ポート1に接続したタッチセンサの初期化
 		self._touchsensor1 = TouchSensor("in1")
+		-- 接続失敗でエラーに遷移
 		if not self._touchsensor1:connected() then
 			return self._ReturnCode_t.RTC_ERROR
 		end
-		self._touchsensor2 = TouchSensor("in2")
+		-- ポート3に接続したタッチセンサの初期化
+		self._touchsensor2 = TouchSensor("in3")
+		-- 接続失敗でエラーに遷移
 		if not self._touchsensor2:connected() then
 			return self._ReturnCode_t.RTC_ERROR
 		end
 
-		self._lmotor1 = LargeMotor("outA")
+		-- ポートBに接続したLモーターの初期化
+		-- 右側の車輪を回転させるモーター
+		self._lmotor1 = LargeMotor("outB")
+		-- 接続失敗でエラーに遷移
 		if not self._lmotor1:connected() then
 			return self._ReturnCode_t.RTC_ERROR
 		end
+		-- 速度調整機能をオンにする
+		-- ev3devのstretchではオンオフを切り替えることができないためpcallで呼び出す
+		pcall(
+			function()
+				self._lmotor1:setSpeedRegulationEnabled("on")
+			end
+		)
 
-		self._lmotor2 = LargeMotor("outB")
+		-- ポートCに接続したLモーターの初期化
+		-- 左側の車輪を回転させるモーター
+		self._lmotor2 = LargeMotor("outC")
+		-- 接続失敗でエラーに遷移
 		if not self._lmotor2:connected() then
 			return self._ReturnCode_t.RTC_ERROR
 		end
+
+		-- 速度調整機能をオンにする
+		-- ev3devのstretchではオンオフを切り替えることができないためpcallで呼び出す
+		pcall(
+			function()
+				self._lmotor2:setSpeedRegulationEnabled("on")
+			end
+		)
 		
 		return self._ReturnCode_t.RTC_OK
 	end
@@ -206,14 +239,17 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 
 
 `onDeactivated`関数を以下のように編集してください。
+Lモーターを停止する処理を書きます。
 
 <pre>
 	function obj:onDeactivated(ec_id)
+		-- ポートAのLモーターを停止
 		if self._lmotor1 ~= nil then
-			self._lmotor1:stop()
+			self._lmotor1:setCommand("stop")
 		end
+		-- ポートCのLモーターを停止
 		if self._lmotor2 ~= nil then
-			self._lmotor2:stop()
+			self._lmotor2:setCommand("stop")
 		end
 		return self._ReturnCode_t.RTC_OK
 	end
@@ -221,39 +257,50 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 
 
 `onExecute`関数を以下のように編集してください。
+タッチセンサの値をOutPortから送信、InPortから受信した速度指令からLモーターの回転速度を計算して駆動する処理を書きます。
 
 <pre>
 	function obj:onExecute(ec_id)
-		local wheelRadius = 0.056
+		-- 車輪の半径
+		local wheelRadius = 0.028
+		-- 車輪間の距離
 		local wheelDistance = 0.108
 
+		-- タッチセンサの値を格納
 		self._d_touch.data = {self._touchsensor1:pressed(),
 							  self._touchsensor2:pressed()}
+		-- データにタイムスタンプを設定
 		openrtm.OutPort.setTimestamp(self._d_touch)
+		-- touchのOutPortからタッチセンサの値を送信
 		obj._touchOut:write()
 
+		-- velocityのInPortに入力がある場合
 		if self._velocityIn:isNew() then
+			-- データ読み込み
 			local data = self._velocityIn:read()
-			local r = wheelRadius/2.0
+			-- 直進速度vx、旋回角速度vaから左右の車輪の回転速度を計算
+			local r = wheelRadius
 			local d = wheelDistance/2.0
 			local vx = data.data.vx
 			local va = data.data.va
 			local right_motor_speed = (vx + va*d)/r
 			local left_motor_speed = (vx - va*d)/r
 
+			-- モーター1回転当たりのカウントを取得
 			local cpr1 = self._lmotor1:countPerRot()
 			local cpr2 = self._lmotor2:countPerRot()
 			
+			-- 回転速度[rad]からモーターに指令するカウント数に変換
 			local speed1 = right_motor_speed/(2*math.pi)*cpr1
 			local speed2 = left_motor_speed/(2*math.pi)*cpr2
 
 
-			
-			self._lmotor1:setSpeedSP(speed1)
-			self._lmotor1:setCommand("run-to-abs-pos")
+			-- モーターに回転速度を指令
+			self._lmotor1:setSpeedSP(math.floor(speed1))
+			self._lmotor1:setCommand("run-forever")
 
-			self._lmotor2:setSpeedSP(speed2)
-			self._lmotor2:setCommand("run-to-abs-pos")
+			self._lmotor2:setSpeedSP(math.floor(speed2))
+			self._lmotor2:setCommand("run-forever")
 		end
 
 		return self._ReturnCode_t.RTC_OK

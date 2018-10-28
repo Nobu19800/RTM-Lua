@@ -39,7 +39,8 @@ VMWareで新しい仮想マシンを作成します。
 
 ![haiku5](https://user-images.githubusercontent.com/6216077/47612414-39e84e80-dabd-11e8-9e38-918e8a56c16d.png)
 
-メモリ256MBでは厳しいため、ハードウェアのカスタマイズでメモリを増やします。
+インストール実行時にメモリ256MBでは厳しいため、ハードウェアのカスタマイズでメモリを増やします。
+普通に起動する場合は256MBでもそれなりに軽快に動きます。
 
 ![haiku7-1](https://user-images.githubusercontent.com/6216077/47612426-7b78f980-dabd-11e8-96c8-889acc2c0546.png)
 ![haiku6](https://user-images.githubusercontent.com/6216077/47612429-a8c5a780-dabd-11e8-907d-552c40474d54.png)

@@ -42,7 +42,6 @@
         - [Ver. 0.3以降](#ver-03以降)
         - [Ver. 0.2以前](#ver-02以前)
     - [他のRTM実装とデータポート通信する場合について](#他のrtm実装とデータポート通信する場合について)
-- [pkg_data_files_win32 = [("Scripts", ['OpenRTM_aist/utils/rtcd/rtcd_python.exe'])]](#pkg_data_files_win32--scripts-openrtm_aistutilsrtcdrtcd_pythonexe)
     - [LuaJITの利用](#luajitの利用)
     - [MoonScriptの利用](#moonscriptの利用)
     - [開発メモ](#開発メモ)

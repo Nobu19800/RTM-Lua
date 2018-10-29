@@ -21,6 +21,6 @@ $ cp -rf luamodule_raspbian/* openrtm-lua/clibs/
 RTCの実行時には、以下のように環境変数`LUA_PATH`と`LUA_CPATH`を設定してください。
 
 <pre>
-$ export LUA_PATH='/home/pi/openrtm-lua/lua/?.lua'
-$ export LUA_CPATH='/home/pi/openrtm-lua/clibs/?.so'
+$ export LUA_PATH='./?.lua;/home/pi/openrtm-lua/lua/?.lua'
+$ export LUA_CPATH='./?.so;/home/pi/openrtm-lua/clibs/?.so'
 </pre>

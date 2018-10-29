@@ -24,3 +24,11 @@ RTCの実行時には、以下のように環境変数`LUA_PATH`と`LUA_CPATH`�
 $ export LUA_PATH='./?.lua;/home/pi/openrtm-lua/lua/?.lua'
 $ export LUA_CPATH='./?.so;/home/pi/openrtm-lua/clibs/?.so'
 </pre>
+
+
+## omniORBのインストール
+ネームサーバー等が使えたほうが便利なため、以下のコマンドでomniORBをインストールしてください。
+
+<pre>
+sudo apt-get install omniorb-nameserver
+</pre>

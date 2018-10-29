@@ -68,6 +68,10 @@ OpenRTM-aist 2.0リリース以降は、OpenRTM-aist付属のものを使用し�
 
 * [FloatSeqToVelocity.zip](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1JT590IzLDYHT-lnLp4YLO91AsQmYpExB&export=download)
 
+## Windows 10 IoT用ネームサーバー
+
+* [winiot_nameserver.zip](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1l9gxk8fTFr6ZjnsSyRfll7njOvCRSz7P&export=download)
+
 ## Linux用共有ライブラリ(Lua 5.1用)
 
 * [luamodule_linux](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.3.1/luamodule_linux.tar.gz)

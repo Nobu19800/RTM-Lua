@@ -322,15 +322,51 @@ TkJoyStickコンポーネントを入手して、`TkJoyStickComp.exe`を実行�
 
 * [ダウンロード](download.md)
 
-### 
+
+### FloatSeqToVelocityコンポーネントの起動
+
+FloatSeqToVelocityコンポーネントを入手して、`FloatSeqToVelocity.exe`を実行してください。
+
+* [ダウンロード](download.md)
+
+### EV3起動、接続
+
+EV3のタッチセンサ、Lモーターを以下のように接続して、電源を投入してください。
+
+|ポート|デバイス|
+|---|---|
+|ポート1|タッチセンサ(左)|
+|ポート3|タッチセンサ(右)|
+|ポートB|Lモーター(右)|
+|ポートB|Lモーター(左)|
 
 ### RTC起動
 
+EV3にTera Term等でリモートログインして`EV3Sample.lua`をEV3に転送してください。
+
+転送後、以下のコマンドを実行してください。
+RTCの起動には1分程かかります。
+
+
+<pre>
+lua EV3Sample.lua -o corba.endpoints:EV3のIPアドレス
+</pre>
+
+
 ### RTSystem作成
 
+まずRTCの起動に成功している場合は、以下のようにネームサービスビューにRTCが表示されます。
 ![ev3dev1](https://user-images.githubusercontent.com/6216077/47643247-3e406480-dbae-11e8-908c-180413a5e14d.png)
+
+`Open New System Editor`ボタンを押してシステムダイアグラムを表示してください。
 ![ev3dev6](https://user-images.githubusercontent.com/6216077/47643249-3ed8fb00-dbae-11e8-9ce8-289fa1fb5721.png)
+
+ネームサービスビューからシステムダイアグラムにRTCをドラックアンドドロップしてください。
 ![ev3dev3](https://user-images.githubusercontent.com/6216077/47643245-3e406480-dbae-11e8-97f7-70b4b3d2c627.png)
+
+`TkJoyStick0`の`pos`のOutPortを`FloatSeqToVelocity0`の`in`のInPortに、`FloatSeqToVelocity0`の`out`のOutPortを`EV3Sample0`の`velocity`のInPortにドラックアンドドロップしてください。 これで通信ができるようになります。
 ![ev3dev7](https://user-images.githubusercontent.com/6216077/47643248-3ed8fb00-dbae-11e8-9e85-a2deed17265d.png)
+
+`All Activate`ボタンを押すと`TkJoyStick0`からデータが送信されるため操作ができるようになります。
 ![ev3dev5](https://user-images.githubusercontent.com/6216077/47643251-3ed8fb00-dbae-11e8-8635-710cac8c6b94.png)
 

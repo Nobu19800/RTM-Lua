@@ -5,7 +5,10 @@
 ![openrtm-lua_logo2](https://user-images.githubusercontent.com/6216077/45281648-68ad6400-b513-11e8-9571-190a34a0198a.png)
 
 ## ソースコード
-* [ソースコード](https://github.com/Nobu19800/RTM-Lua)
+* [OpenRTM Lua](https://github.com/Nobu19800/RTM-Lua)
+* [サンプルコンポーネント](https://github.com/Nobu19800/RTM-Lua)
+* [計測用コンポーネント](https://github.com/Nobu19800/RTM-Lua-test)
+* [RTC Builder用プラグイン](https://github.com/Nobu19800/jp.go.aist.rtm.rtcbuilder.lua)
 
 ### RTミドルウェアとは？
 [RTミドルウェア(RTM)](http://www.openrtm.org/openrtm/ja)はソフトウェアモジュールを組み合わせてロボットシステムを構築するための標準規格です。

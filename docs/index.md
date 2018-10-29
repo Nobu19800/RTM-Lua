@@ -519,3 +519,7 @@ python setup.py install
 
 * [単体テストの実行手順](unittest.md)
 * [解析結果](report.html)
+
+## その他
+
+* [EV3での利用方法](EV3.md)

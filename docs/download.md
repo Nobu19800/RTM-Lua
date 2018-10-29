@@ -63,6 +63,11 @@ OpenRTM-aist 2.0リリース以降は、OpenRTM-aist付属のものを使用し�
 
 * [TkJoyStick.zip](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1UtjmnDnL-bkOi2b0aqnyd8WYMrkrlui0&export=download)
 
+## FloatSeqToVelocity
+以下のファイルはTimedFloatSeq型をTimedVelocity2D型に変換する[FloatSeqToVelocity](https://github.com/Nobu19800/FloatSeqToVelocity)コンポーネントをEXE化したものです。
+
+* [FloatSeqToVelocity.zip](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1JT590IzLDYHT-lnLp4YLO91AsQmYpExB&export=download)
+
 ## Linux用共有ライブラリ(Lua 5.1用)
 
 * [luamodule_linux](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.3.1/luamodule_linux.tar.gz)

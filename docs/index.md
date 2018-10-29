@@ -524,6 +524,13 @@ python setup.py install
 * [単体テストの実行手順](unittest.md)
 * [解析結果](report.html)
 
+## 参考にしたソースコード
+
+* [OpenRTM-aist C++版](http://svn.openrtm.org/OpenRTM-aist/)
+* [OpenRTM-aist Python版](http://svn.openrtm.org/OpenRTM-aist-Python/)
+* [RTCBuilder](http://svn.openrtm.org/rtmtools/)
+
 ## その他
 
 * [EV3での利用方法](EV3.md)
+

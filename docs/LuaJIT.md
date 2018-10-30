@@ -7,15 +7,15 @@
 パスはOpenRTM Luaを展開したフォルダによって適宜変更してください。
 
 <pre>
-set LUA_PATH=openrtm-lua-0.4.0-LuaJIT-x86\\lua\\?.lua;
-set LUA_CPATH=openrtm-lua-0.4.0-LuaJIT-x86\\clibs\\?.dll;
+> set LUA_PATH=openrtm-lua-0.4.0-LuaJIT-x86\\lua\\?.lua;
+> set LUA_CPATH=openrtm-lua-0.4.0-LuaJIT-x86\\clibs\\?.dll;
 </pre>
 
 luajit.exeにLuaファイルをドラッグアンドドロップするか、以下のコマンドを入力することでRTCを起動できます。
 ファイル名は適宜変更してください。
 
 <pre>
-bin\luajit test.lua
+> bin\luajit test.lua
 </pre>
 
 
@@ -25,11 +25,11 @@ bin\luajit test.lua
 以下のコマンドでLuaJITをインストールして使用してください。
 
 <pre>
-sudo apt-get install luajit
+$ sudo apt-get install luajit
 </pre>
 
 以下のコマンドを入力することでRTCを起動できます。
 
 <pre>
-luajit test.lua
+$ luajit test.lua
 </pre>

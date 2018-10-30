@@ -29,6 +29,6 @@ $ export LUA_CPATH='./?.so;/home/robot/openrtm-lua/clibs/?.so'
 ネームサーバー等が使えたほうが便利なため、以下のコマンドでomniORBをインストールしてください。
 
 <pre>
-sudo apt-get install omniorb-nameserver
+$ sudo apt-get install omniorb-nameserver
 </pre>
 

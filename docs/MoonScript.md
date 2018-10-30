@@ -66,8 +66,8 @@ OpenRTM Lua版にMoonScriptの実行環境も含めてあります。
 パスはOpenRTM Luaを展開したフォルダによって適宜変更してください。
 
 <pre>
-set LUA_PATH=openrtm-lua-0.3.0(x86)\\lua\\?.lua;openrtm-lua-0.3.0(x86)\\moon\\lua\\?.lua
-set LUA_CPATH=openrtm-lua-0.3.0(x86)\\clibs\\?.dll;openrtm-lua-0.3.0(x86)\\moon\\clibs\\?.dll;
+> set LUA_PATH=openrtm-lua-0.3.0(x86)\\lua\\?.lua;openrtm-lua-0.3.0(x86)\\moon\\lua\\?.lua
+> set LUA_CPATH=openrtm-lua-0.3.0(x86)\\clibs\\?.dll;openrtm-lua-0.3.0(x86)\\moon\\clibs\\?.dll;
 </pre>
 
 
@@ -75,7 +75,7 @@ set LUA_CPATH=openrtm-lua-0.3.0(x86)\\clibs\\?.dll;openrtm-lua-0.3.0(x86)\\moon\
 ファイル名は適宜変更してください。
 
 <pre>
-lua openrtm-lua-0.3.0(x86)/moon/bin/moon test.lua
+> lua openrtm-lua-0.3.0(x86)/moon/bin/moon test.lua
 </pre>
 
 
@@ -85,7 +85,13 @@ lua openrtm-lua-0.3.0(x86)/moon/bin/moon test.lua
 LuaRocksでインストールします。
 
 <pre>
-sudo luarocks install moonscript
+$ sudo luarocks install moonscript
+</pre>
+
+以下のコマンドで実行します。
+
+<pre>
+$ moon test.lua
 </pre>
 
 

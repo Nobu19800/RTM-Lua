@@ -107,7 +107,7 @@ openrtm_ms = require "openrtm_ms"
 </pre>
 
 
-###RTCの仕様を定義
+### RTCの仕様を定義
 
 以下のようにRTCの仕様を定義したテーブルを作成します。
 

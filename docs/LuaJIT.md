@@ -7,8 +7,8 @@
 パスはOpenRTM Luaを展開したフォルダによって適宜変更してください。
 
 <pre>
-set LUA_PATH=openrtm-lua-0.3.0(LuaJITx86)\\lua\\?.lua;
-set LUA_CPATH=openrtm-lua-0.3.0(LuaJITx86)\\clibs\\?.dll;
+set LUA_PATH=openrtm-lua-0.4.0-LuaJIT-x86\\lua\\?.lua;
+set LUA_CPATH=openrtm-lua-0.4.0-LuaJIT-x86\\clibs\\?.dll;
 </pre>
 
 luajit.exeにLuaファイルをドラッグアンドドロップするか、以下のコマンドを入力することでRTCを起動できます。

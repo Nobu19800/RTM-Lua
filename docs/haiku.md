@@ -7,7 +7,7 @@
 
 Googleが開発している組み込み向けOSのFuchsiaは、カーネルとしてZirconを採用しています。
 ZirconはHaikuが採用しているNewOSと同じ人物が開発しています。
-5年後にはandroidはFuchsiaに置き換わると言われており、近い将来組み込み向けOSからLinuxカーネルが駆逐されてBeOSの流れを汲むZirconが天下を取るとか取らないとからしいです。つまりHaikuに対応するのも無駄ではありません。
+5年後にはAndroidはFuchsiaに置き換わると言われており、近い将来組み込み向けOSからLinuxカーネルが駆逐されてBeOSの流れを汲むZirconが天下を取るとか取らないとからしいです。つまりHaikuに対応するのも無駄ではありません。
 
 ## VMWareによるHaikuの仮想環境構築
 

@@ -10,4 +10,4 @@ OpenRTM-aistと比較して非常に軽量(ファイル一式で2MB程度)であ
 
 詳細は以下のページに記載してあります。
 
-* https://nobu19800.github.io/RTM-Lua/docs/
+* [マニュアル](https://nobu19800.github.io/RTM-Lua/docs/)

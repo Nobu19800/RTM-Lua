@@ -106,28 +106,28 @@ Haiku起動後、`Applications`->`Terminal`を実行してください。
 Haiku Depotでもインストールはできますが、LuaRocksをインストールするとLua 5.3がついでにインストールされる上に、何故かlua.h等がインストールされないため、ソースコードからインストールします。
 
 <pre>
-wget https://www.lua.org/ftp/lua-5.1.5.tar.gz
-tar xf lua-5.1.5.tar.gz
-cd lua-5.1.5
-make bsd
-make install INSTALL_TOP=/haiku/lua
+$ wget https://www.lua.org/ftp/lua-5.1.5.tar.gz
+$ tar xf lua-5.1.5.tar.gz
+$ cd lua-5.1.5
+$ make bsd
+$ make install INSTALL_TOP=/haiku/lua
 </pre>
 
 ## LuaRocksのインストール
 
 <pre>
-wget http://luarocks.github.io/luarocks/releases/luarocks-3.0.3.tar.gz
-tar xf luarocks-3.0.3.tar.gz
-cd luarocks-3.0.3
-./configure --prefix=/haiku/luarocks --with-lua=/haiku/lua
-make 
-make install
+$ wget http://luarocks.github.io/luarocks/releases/luarocks-3.0.3.tar.gz
+$ tar xf luarocks-3.0.3.tar.gz
+$ cd luarocks-3.0.3
+$ ./configure --prefix=/haiku/luarocks --with-lua=/haiku/lua
+$ make 
+$ make install
 </pre>
 
 以下のコマンドで表示されたコマンドを実行してモジュールのパスを設定する。
 
 <pre>
-/haiku/luarocks/bin/luarocks path
+$ /haiku/luarocks/bin/luarocks path
 </pre>
 
 ## OpenRTM Luaのインストール
@@ -136,17 +136,17 @@ make install
 LuaSocketはLuaRocksに登録されたパッケージがHaikuに対応していないため、以下のようにソースコードからインストールしてください。
 
 <pre>
-/haiku/luarocks/bin/luarocks --force remove luasocket
-git clone https://github.com/renatomaia/luasocket
-cd luasocket
-/haiku/luarocks/bin/luarocks make NETWORK_DIR=/boot/system/
+$ /haiku/luarocks/bin/luarocks --force remove luasocket
+$ git clone https://github.com/renatomaia/luasocket
+$ cd luasocket
+$ /haiku/luarocks/bin/luarocks make NETWORK_DIR=/boot/system/
 </pre>
 
 
 後は以下のようにluarocksでopenrtmをインストールしてください。
 
 <pre>
-/haiku/luarocks/bin/luarocks install openrtm
+$ /haiku/luarocks/bin/luarocks install openrtm
 </pre>
 
 

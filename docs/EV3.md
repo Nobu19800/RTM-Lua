@@ -9,7 +9,7 @@
 以下のコマンドでev3dev.luaを入手してください。
 
 <pre>
-git clone -b master https://github.com/Nobu19800/ev3dev-lang
+$ git clone -b master https://github.com/Nobu19800/ev3dev-lang
 </pre>
 
 ## ev3devの動作確認
@@ -349,7 +349,7 @@ RTCの起動には1分程かかります。
 
 
 <pre>
-lua EV3Sample.lua -o corba.endpoints:EV3のIPアドレス
+$ lua EV3Sample.lua -o corba.endpoints:EV3のIPアドレス
 </pre>
 
 

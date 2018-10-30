@@ -70,7 +70,7 @@ OpenRTM-aist 2.0リリース以降は、OpenRTM-aist付属のものを使用し�
 
 ## Windows 10 IoT用ネームサーバー
 
-* [winiot_nameserver.zip](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1l9gxk8fTFr6ZjnsSyRfll7njOvCRSz7P&export=download)
+* [winiot_nameserver.zip](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.0/winiot_nameserver.zip)
 
 ## Linux用共有ライブラリ(Lua 5.1用)
 

@@ -197,7 +197,7 @@ C++、Pythonは7になっていますが、これは5～8で変動します。
 3. PythonプロセスのCORBAオペレーション呼び出し時に時間計測
 
 Luaはluacによるコンパイルで起動が高速化するとどこかで見たのですが、見ての通りあまり変わっていません。
-まとめてluacを実行する場合は、以下のスクリプトをopenrtm-lua-x.y.z(x64)-lua5.1直下にコピーして実行してください。
+まとめてluacを実行する場合は、以下のスクリプトをopenrtm-lua-x.y.z-x64-lua5.1直下にコピーして実行してください。
 
 * [luac_run.py](https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/scripts/luac_run.py)
 

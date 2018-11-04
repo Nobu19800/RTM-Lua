@@ -23,15 +23,19 @@ RT System EditorからRTCを操作するためには、最低でもコンポー�
 |---|---|
 |on_initialize|初期化時に呼び出す|
 |on_finalize|終了時に呼び出す|
-|on_startup|実行コンテキスト開始時に呼び出す|
-|on_shutdown|実行コンテキスト停止時に呼び出す|
-|on_activated|アクティブ状態遷移時に呼び出す|
-|on_deactivated|非アクティブ状態遷移時に呼び出す|
-|on_aborting|エラー状態遷移時に呼び出す|
-|on_error|エラー状態時に呼び出す|
-|on_reset|リセット実行時に呼び出す|
+|**on_startup**|実行コンテキスト開始時に呼び出す|
+|**on_shutdown**|実行コンテキスト停止時に呼び出す|
+|**on_activated**|アクティブ状態遷移時に呼び出す|
+|**on_deactivated**|非アクティブ状態遷移時に呼び出す|
+|**on_aborting**|エラー状態遷移時に呼び出す|
+|**on_error**|エラー状態時に呼び出す|
+|**on_reset**|リセット実行時に呼び出す|
 
-<span style="color: red; ">赤</span>
+上記の太字のオペレーションは実行コンテキストから呼び出されます。
+
+![on_activated](https://user-images.githubusercontent.com/6216077/47964658-5b7aa480-e080-11e8-9bb9-a5828d747e80.png)
+
+機能として実行コンテキストが別のプロセス、マシン上のRTCを操作する機能を削る場合は、`ComponentAction`インターフェースのオペレーションはリモート呼び出しする必要がないためCORBAで実装する必要もありません。
 
 
 

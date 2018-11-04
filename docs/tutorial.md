@@ -16,7 +16,7 @@ OpenRTPはOpenRTM-aistに付属しているRTミドルウェアの開発ツー�
 RT System EditorはRTCを組み合わせてRTシステムを構築するためのツールです。
 RTCの状態の操作、コネクタの接続などができます。
 
-`パースペクティブ`を開くボタンを押して表示したウィンドウから`RT System Editor`を選択して開くボタンを押します。
+`パースペクティブを開く`ボタンを押して表示したウィンドウから`RT System Editor`を選択して開くボタンを押します。
 
 ![tutorial2](https://user-images.githubusercontent.com/6216077/47963218-37ad6380-e06c-11e8-8af6-a157897b4c73.png)
 

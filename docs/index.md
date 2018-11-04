@@ -166,6 +166,10 @@ RTSystemEditor、ネームサーバーはOpenRTM-aistのものを使用してく
 openrtm.orgが閉鎖している場合は以下のサイトから入手してください。
 * [openrtm.github.io](https://openrtm.github.io/)
 
+以下の手順で簡単な動作確認ができます。
+
+* [チュートリアル](tutorial.md)
+
 ## インストール方法
 以下のように様々なOSに対応しています。
 OpenRTM Luaは世界で初めてHaiku OSに対応したロボット用ミドルウェアです。

@@ -1,6 +1,8 @@
 # EV3上で動作するRTCの作成方法
 このページではLEGO Mindstorms EV3上で動作するRTCの作成を行います。
 
+* [動画](https://www.youtube.com/watch?v=H0giknMJY48)
+
 以下の作業は全てev3devにリモートログインして実行してください。
 
 

@@ -33,7 +33,8 @@ RT System EditorからRTCを操作するためには、最低でもコンポー�
 
 上記の太字のオペレーションは実行コンテキストから呼び出されます。
 
-![on_activated](https://user-images.githubusercontent.com/6216077/48066665-8f390400-e211-11e8-8963-043e84173ccf.png)
+![on_activated](https://user-images.githubusercontent.com/6216077/48067694-39b22680-e214-11e8-9442-fc8df7717f56.png)
+
 
 `on_initialize`、`on_finalize`はOpenRTM-aistでは内部からしか呼び出されるようになっていない。
 

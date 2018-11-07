@@ -87,3 +87,8 @@ OpenRTM-aist 2.0リリース以降は、OpenRTM-aist付属のものを使用し�
 ## Raspbian用共有ライブラリ
 
 * [luamodule_raspbian.tar.gz](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.3.1/luamodule_raspbian.tar.gz)
+
+## LOVEStringIO
+LÖVEで作成したGUIで文字列の入力、表示を行うRTC。
+
+* [LOVEStringIO.zip](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1okGSOVfJhOEf2HxdD7LkRRiywamnNUHC&export=download)

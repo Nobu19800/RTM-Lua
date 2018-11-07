@@ -9,6 +9,10 @@
 
 * [LÖVE - Free 2D Game Engine](https://love2d.org/)
 
+※LÖVEの新しいバージョンで色が描画されない不具合があります。問題が発生した場合はLÖVEの0.10.2を入手してください。
+
+* [https://bitbucket.org/rude/love/downloads/](https://bitbucket.org/rude/love/downloads/)
+
 ## LÖVEにOpenRTM Lua版をインストール
 LÖVEを展開したフォルダにOpenRTM Lua版の各ファイルをコピーします。
 

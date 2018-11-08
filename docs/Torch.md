@@ -124,9 +124,9 @@ Lua 5.2に対応したライブラリをインストールする必要があり�
 以下のコマンドで、コマンドを実行したディレクトリにOpenRTM-Luaがインストールされます。
 
 <pre>
-$ wget https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.0/openrtm-lua-0.4.0-x86-lua5.2.zip
-$ unzip openrtm-lua-0.4.0-x86-lua5.2.zip
-$ mv openrtm-lua-0.4.0-x86-lua5.2 openrtm-lua
+$ wget https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.0/openrtm-lua-0.4.1-x86-lua5.2.zip
+$ unzip openrtm-lua-0.4.1-x86-lua5.2.zip
+$ mv openrtm-lua-0.4.1-x86-lua5.2 openrtm-lua
 $ wget https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.0/luamodule_ubuntu_lua51.tar.gz
 $ tar xf luamodule_ubuntu_lua51.tar.gz
 $ cp -rf luamodule_ubuntu_lua51/* openrtm-lua/clibs/

@@ -346,6 +346,8 @@ Google Chrome等のWEBブラウザから`http://localhost:1080/index.html?comman
 
 ![openrtmlua790](https://user-images.githubusercontent.com/6216077/38462661-d3496f88-3b25-11e8-9bbf-ce674ebf62e5.png)
 
+※ステップ実行をしている側のRTC(今回は`OpenRestySample0`)の`connect`関数を呼び出すと接続に失敗します。必ず、今回の場合は`TkJoyStick0`の`pos`を選択してドラックアンドドロップしてください。
+
 これで通信ができるようになります。
 
 `All Activate`ボタンを押すと`TkJoyStick0`からデータが送信されるためWEBブラウザ上の画像が動くようになります。
@@ -358,7 +360,7 @@ Google Chrome等のWEBブラウザから`http://localhost:1080/index.html?comman
 `imahe.lua`の`manager:init`関数の引数を以下のように変更してください。
 
 <pre>
-manager:init({"-o","logger.enable:NO","-o","exec_cxt.periodic.type:OpenHRPExecutionContext", "-o", "manager.components.preconnect:OpenRestySample0.in?port=rtcname://localhost/TkJoyStick0.pos", "-o", "manager.components.preactivation:OpenRestySample0,rtcname://localhost/TkJoyStick0"})
+manager:init({"-o","logger.enable:NO","-o","exec_cxt.periodic.type:OpenHRPExecutionContext", "-o", "manager.components.preconnect:OpenRestySample0.in?port=rtcname://localhost/TkJoyStick0.pos", "-o", "manager.components.preactivation:OpenRestySample0,rtcname://localhost/TkJoyStick0","-o","corba.step.count:4"})
 </pre>
 
 `-o`オプションでパラメータの設定ができます。
@@ -374,6 +376,11 @@ manager:init({"-o","logger.enable:NO","-o","exec_cxt.periodic.type:OpenHRPExecut
 
 起動時にアクティブ化するRTCを指定します。
 
+* `"-o","corba.step.count:4"`
+
+ORBをステップ実行するときのみ有効なオプションです。
+指定回数だけORBをステップ実行します。ORBから処理要求がない場合は、要求があるまで待ちます。
+preconnect等で外部のRTCと接続する場合に必要です。
 
 ## 注意事項
 今回はInPortのみを使用しましたが、OutPortを使用する場合についてはデータ転送の際に以下のように`oil.main`関数で実行する必要があります。

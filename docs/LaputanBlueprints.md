@@ -234,3 +234,15 @@ LB上で`Experiment/Design`ボタンを押すとシミュレーションを開�
 `All Activate`ボタンを押すと`TkJoyStick0`からデータが送信されるため操作ができるようになります。
 
 ![openrtmlua490](https://user-images.githubusercontent.com/6216077/38157104-a941a66e-34be-11e8-874f-e97ef109481a.png)
+
+
+## 注意事項
+今回はInPortのみを使用しましたが、OutPortを使用する場合についてはデータ転送の際に以下のように`oil.main`関数で実行する必要があります。
+また、サービスポートのプロバイダ側についても同じです。
+`oil.main`関数で実行する必要があるのは、今回のようにORBをステップ実行した時のみです。
+
+<pre>
+oil.main(function()
+	self._outOut:write()
+end)
+</pre>

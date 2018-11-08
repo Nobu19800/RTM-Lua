@@ -658,7 +658,9 @@ end
 function Manager:step()
 	if self.no_block then
 		oil.main(function()
-			oil.newthread(self._orb.step, self._orb)
+			if self._orb:pending() then
+				oil.newthread(self._orb.step, self._orb)
+			end
 		end)
 	end
 end
@@ -673,7 +675,9 @@ function Manager:run_step(count)
 	if self.no_block then
 		local stepfunc = function(orb)
 			for i=1,count do
-				orb:step()
+				if self._orb:pending() then
+					orb:step()
+				end
 			end
 		end
 		oil.newthread(stepfunc, self._orb)

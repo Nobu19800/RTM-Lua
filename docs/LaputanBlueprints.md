@@ -236,6 +236,8 @@ LB上で`Experiment/Design`ボタンを押すとシミュレーションを開�
 
 ![openrtmlua450](https://user-images.githubusercontent.com/6216077/38157072-3f5c6c02-34be-11e8-863a-d15396f7a821.png)
 
+※ステップ実行をしている側のRTC(今回は`LBSample0`)の`connect`関数を呼び出すと接続に失敗します。必ず、今回の場合は`TkJoyStick0`の`pos`を選択してドラックアンドドロップしてください。
+
 `All Activate`ボタンを押すと`TkJoyStick0`からデータが送信されるため操作ができるようになります。
 
 ![openrtmlua490](https://user-images.githubusercontent.com/6216077/38157104-a941a66e-34be-11e8-874f-e97ef109481a.png)

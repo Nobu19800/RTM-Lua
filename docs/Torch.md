@@ -257,6 +257,20 @@ local list = require "pl.List"
 	end
 </pre>
 
+Torchで実行する場合にConversation.luaを直接実行したかの判別ができないため、以下の部分を編集します。
+
+<pre>
+--if openrtm.Manager.is_main() then
+	local manager = openrtm.Manager
+	manager:init(arg)
+	manager:setModuleInitProc(MyModuleInit)
+	manager:activateManager()
+	manager:runManager()
+--else
+--	return Conversation
+--end
+</pre>
+
 ## 動作確認
 
 ### StringOut、StringInコンポーネントの起動

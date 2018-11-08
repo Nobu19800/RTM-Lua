@@ -127,7 +127,7 @@ function love.load()
 
 
     local mgr = openrtm.Manager
-    mgr:init({"-o","exec_cxt.periodic.type:OpenHRPExecutionContext","-o","manager.components.precreate:LOVESample","-o","manager.components.preconnect:LOVESample0.in?port=rtcname://localhost/TkJoyStick0.pos","-o","manager.components.preactivation:LOVESample0,rtcname://localhost/TkJoyStick0"})
+    mgr:init({"-o","exec_cxt.periodic.type:OpenHRPExecutionContext","-o","manager.components.precreate:LOVESample","-o","manager.components.preconnect:LOVESample0.in?port=rtcname://localhost/TkJoyStick0.pos","-o","manager.components.preactivation:LOVESample0,rtcname://localhost/TkJoyStick0","-o","corba.step.count:4"})
     mgr:activateManager()
     mgr:runManager(true)
     
@@ -171,6 +171,13 @@ LÖVE上ではRTCをステップ実行したいので`OpenHRPExecutionContext`�
 * `"-o","manager.components.preactivation:LOVESample0,rtcname://localhost/TkJoyStick0"`
 
 起動時にアクティブ化するRTCを指定します。
+
+
+* `"-o","corba.step.count:4"`
+
+ORBをステップ実行するときのみ有効なオプションです。
+指定回数だけORBをステップ実行します。ORBから処理要求がない場合は、要求があるまで待ちます。
+preconnect等で外部のRTCと接続する場合に必要です。
 
 
 `love.update`関数は以下のように編集します。
@@ -238,6 +245,7 @@ TkJoyStickコンポーネントを入手して、`TkJoyStickComp.exe`を実行�
 
 ![love2d-8](https://user-images.githubusercontent.com/6216077/45259759-e9366c80-b40e-11e8-8080-e5c49552ba52.png)
 
+※ステップ実行をしている側のRTC(今回は`LOVESample0`)の`connect`関数を呼び出すと接続に失敗します。必ず、今回の場合は`TkJoyStick0`の`pos`を選択してドラックアンドドロップしてください。
 
 `All Activate`ボタンを押すと`TkJoyStick0`からデータが送信されるため操作ができるようになります。
 

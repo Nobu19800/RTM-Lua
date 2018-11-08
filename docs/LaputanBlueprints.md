@@ -131,7 +131,7 @@ function OnInit()
 	local openrtm = require "openrtm"
 
 	local mgr = openrtm.Manager
-	mgr:init({"-o","exec_cxt.periodic.type:OpenHRPExecutionContext","-o","manager.components.precreate:LBSample","-o","manager.components.preconnect:LBSample0.in?port=rtcname://localhost/TkJoyStick0.pos","-o","manager.components.preactivation:LBSample0,rtcname://localhost/TkJoyStick0"})
+	mgr:init({"-o","exec_cxt.periodic.type:OpenHRPExecutionContext","-o","manager.components.precreate:LBSample","-o","manager.components.preconnect:LBSample0.in?port=rtcname://localhost/TkJoyStick0.pos","-o","manager.components.preactivation:LBSample0,rtcname://localhost/TkJoyStick0","-o","corba.step.count:4"})
 	mgr:activateManager()
 	mgr:runManager(true)
 end
@@ -180,6 +180,11 @@ Laputan Blueprints上ではRTCをステップ実行したいので`OpenHRPExecut
 
 起動時にアクティブ化するRTCを指定します。
 
+* `"-o","corba.step.count:4"`
+
+ORBをステップ実行するときのみ有効なオプションです。
+指定回数だけORBをステップ実行します。ORBから処理要求がない場合は、要求があるまで待ちます。
+preconnect等で外部のRTCと接続する場合に必要です。
 
 念のために`Save blueprint`ボタンを押してファイルを保存してください。
 ![openrtmlua200](https://user-images.githubusercontent.com/6216077/37710263-75e015f0-2d50-11e8-9bb0-362cf3cdb8c0.png)

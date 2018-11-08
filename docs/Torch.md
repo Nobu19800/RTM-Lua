@@ -274,5 +274,27 @@ Torchで実行する場合にConversation.luaを直接実行したかの判別�
 ## 動作確認
 
 ### StringOut、StringInコンポーネントの起動
+動作確認用の`StringOut`、`StringIn`コンポーネントを入手します。
+
+<pre>
+git clone https://github.com/Nobu19800/StringIO
+</pre>
+
+
+以下のコマンドで`StringOut`コンポーネントを起動してください。
+
+<pre>
+cd StringIO/StringIn
+python StringIn.py
+</pre>
+
+以下のコマンドで`StringIn`コンポーネントを起動してください。
+
+<pre>
+cd StringIO/StringOut
+python StringOut.py
+</pre>
 
 ### RTC起動
+
+### RTSystem作成

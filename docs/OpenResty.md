@@ -373,3 +373,15 @@ manager:init({"-o","logger.enable:NO","-o","exec_cxt.periodic.type:OpenHRPExecut
 * `"-o","manager.components.preactivation:OpenRestySample0,rtcname://localhost/TkJoyStick0"`
 
 起動時にアクティブ化するRTCを指定します。
+
+
+## 注意事項
+今回はInPortのみを使用しましたが、OutPortを使用する場合についてはデータ転送の際に以下のように`oil.main`関数で実行する必要があります。
+また、サービスポートのプロバイダ側についても同じです。
+`oil.main`関数で実行する必要があるのは、今回のようにORBをステップ実行した時のみです。
+
+<pre>
+oil.main(function()
+	self._outOut:write()
+end)
+</pre>

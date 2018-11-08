@@ -12,7 +12,7 @@
 ## Laputan BlueprintsにOpenRTM Lua版をインストール
 Laputan Blueprintsを展開したフォルダにOpenRTM Lua版の各ファイルをコピーします。
 
-以下から32bit用のOpenRTM Lua版ファイル一式(OpenRTM-Lua-x.y.z-Lua5.1-32bit)をダウンロードしてください。
+以下から32bit用のOpenRTM Lua版ファイル一式(OpenRTM Lua x.y.z Lua5.1 32bit)をダウンロードしてください。
 
 * [ダウンロード](download.md)
 

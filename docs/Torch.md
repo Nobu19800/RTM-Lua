@@ -275,6 +275,7 @@ Torchで実行する場合にConversation.luaを直接実行したかの判別�
 
 ### StringOut、StringInコンポーネントの起動
 動作確認用の`StringOut`、`StringIn`コンポーネントを入手します。
+`StringOut`、`StringIn`コンポーネントの実行にはOpenRTM-aist Python版のインストールが必要です。
 
 <pre>
 git clone https://github.com/Nobu19800/StringIO

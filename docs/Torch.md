@@ -256,3 +256,9 @@ local list = require "pl.List"
 		return self:pred2sent(wordIds)
 	end
 </pre>
+
+## 動作確認
+
+### StringOut、StringInコンポーネントの起動
+
+### RTC起動

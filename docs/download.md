@@ -72,13 +72,17 @@ OpenRTM-aist 2.0リリース以降は、OpenRTM-aist付属のものを使用し�
 
 * [winiot_nameserver.zip](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.0/winiot_nameserver.zip)
 
-## Linux用共有ライブラリ(Lua 5.1用)
+## Linux用共有ライブラリ(OiL 0.5、Lua 5.1用)
 
 * [luamodule_linux](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.3.1/luamodule_linux.tar.gz)
 
-## Linux用共有ライブラリ(Lua 5.2用)
+## Linux用共有ライブラリ(OiL 0.7、Lua 5.2用)
 
 * [luamodule_ubuntu_lua52](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.3.1/luamodule_ubuntu_lua52.tar.gz)
+
+## Linux用共有ライブラリ(OiL 0.7、Lua 5.1用)
+
+* [luamodule_ubuntu_lua5](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.0/luamodule_ubuntu_lua51.tar.gz)
 
 ## ev3dev用共有ライブラリ
 

@@ -538,10 +538,13 @@ function Manager:runManager(no_block)
 
 		if no_block then
 			--oil.newthread(self._orb.step, self._orb)
+			--[[
 			local count = tonumber(self._config:getProperty("corba.step.count"))
 			if count ~= nil then
-				self:run_step(count)
+				--self:run_step(count)
 			end
+			]]
+			self:run_step()
 		else
 			oil.newthread(self._orb.run, self._orb)
 		end
@@ -668,16 +671,22 @@ end
 
 -- CORBAの処理を1ステップ進める
 -- ノンブロックモードの場合のみ有効
-function Manager:run_step(count)
-	if count == nil then
-		count = 1
-	end
+function Manager:run_step()
+--function Manager:run_step(count)
+	--if count == nil then
+	--	count = 1
+	--end
 	if self.no_block then
 		local stepfunc = function(orb)
+			--[[
 			for i=1,count do
 				if self._orb:pending() then
 					orb:step()
 				end
+			end
+			]]
+			while self._orb:pending() do
+				orb:step()
 			end
 		end
 		oil.newthread(stepfunc, self._orb)

@@ -245,7 +245,7 @@ end
 
 function TestManager:test_manager()
 	local mgr = require "openrtm.Manager"
-	mgr:init({"-o","corba.step.count:0"})
+	mgr:init({})
 	mgr:activateManager()
 	local ret = false
 	local func = function(mgr)

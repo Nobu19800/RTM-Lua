@@ -69,7 +69,7 @@ end
 function TestOutPort:test_outport()
 
 	local mgr = require "openrtm.Manager"
-	mgr:init({"-o","corba.step.count:0"})
+	mgr:init({})
 	mgr:activateManager()
 	mgr:runManager(true)
 
@@ -170,7 +170,7 @@ end
 
 function TestOutPort:test_direct()
 	local mgr = require "openrtm.Manager"
-	mgr:init({"-o","corba.step.count:0"})
+	mgr:init({})
 	mgr:activateManager()
 	mgr:runManager(true)
 

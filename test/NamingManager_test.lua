@@ -38,7 +38,7 @@ end
 
 function TestNamingManager:test_namingoncorba()
 	local mgr = require "openrtm.Manager"
-	mgr:init({"-o","corba.step.count:0","-o","exec_cxt.periodic.type:SimulatorExecutionContext"})
+	mgr:init({"-o","exec_cxt.periodic.type:SimulatorExecutionContext"})
 	mgr:activateManager()
 	mgr:setModuleInitProc(MyModuleInit)
 	mgr:runManager(true)
@@ -78,7 +78,7 @@ end
 
 function TestNamingManager:test_namingonmanager()
 	local mgr = require "openrtm.Manager"
-	mgr:init({"-o","corba.step.count:0","-o","exec_cxt.periodic.type:SimulatorExecutionContext"})
+	mgr:init({"-o","exec_cxt.periodic.type:SimulatorExecutionContext"})
 	mgr:activateManager()
 	mgr:setModuleInitProc(MyModuleInit)
 	mgr:runManager(true)
@@ -93,7 +93,7 @@ end
 
 function TestNamingManager:test_namingmanager()
 	local mgr = require "openrtm.Manager"
-	mgr:init({"-o","corba.step.count:0","-o","exec_cxt.periodic.type:SimulatorExecutionContext"})
+	mgr:init({"-o","exec_cxt.periodic.type:SimulatorExecutionContext"})
 	mgr:activateManager()
 	mgr:setModuleInitProc(MyModuleInit)
 	mgr:runManager(true)

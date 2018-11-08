@@ -8,7 +8,7 @@ TestNVUtil = {}
 
 function TestNVUtil:test_code()
 	local mgr = require "openrtm.Manager"
-	mgr:init({"-o","corba.step.count:0"})
+	mgr:init({})
 	mgr:activateManager()
 	mgr:runManager(true)
 

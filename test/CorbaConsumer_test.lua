@@ -10,7 +10,7 @@ local CorbaConsumer = require "openrtm.CorbaConsumer"
 TestCorbaConsumer = {}
 function TestCorbaConsumer:test_func()
 	local mgr = require "openrtm.Manager"
-	mgr:init({"-o","corba.step.count:0"})
+	mgr:init({})
 	mgr:activateManager()
 	mgr:runManager(true)
 	

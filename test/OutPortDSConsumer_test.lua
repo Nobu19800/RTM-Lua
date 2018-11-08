@@ -46,7 +46,7 @@ end
 function TestOutPortDSConsumer:test_consumer()
 
 	local mgr = require "openrtm.Manager"
-	mgr:init({"-o","corba.step.count:0"})
+	mgr:init({})
 	mgr:activateManager()
 	mgr:runManager(true)
 	local orb = mgr:getORB()

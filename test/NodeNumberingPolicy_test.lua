@@ -46,7 +46,7 @@ end
 TestNodeNumberingPolicy = {}
 function TestNodeNumberingPolicy:test_naming()
 	local mgr = require "openrtm.Manager"
-	mgr:init({"-o","corba.step.count:0","-o","exec_cxt.periodic.type:SimulatorExecutionContext"})
+	mgr:init({"-o","exec_cxt.periodic.type:SimulatorExecutionContext"})
 	mgr:activateManager()
 	mgr:setModuleInitProc(MyModuleInit)
 	mgr:runManager(true)

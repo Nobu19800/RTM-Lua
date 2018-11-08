@@ -13,7 +13,7 @@ TestRTObject = {}
 
 function TestRTObject:test_rtobj()
 	local mgr = require "openrtm.Manager"
-	mgr:init({"-o","corba.step.count:0"})--,"-o","logger.file_name: stdout"})
+	mgr:init({})--,"-o","logger.file_name: stdout"})
 	mgr:activateManager()
 	mgr:runManager(true)
 

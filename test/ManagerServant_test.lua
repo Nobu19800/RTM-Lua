@@ -49,7 +49,7 @@ end
 
 function TestManagerServant:test_servant()
 	local mgr = require "openrtm.Manager"
-	mgr:init({"-o","corba.step.count:0","-o","exec_cxt.periodic.type:SimulatorExecutionContext","-o"})--,"logger.file_name:stdout"})
+	mgr:init({"-o","exec_cxt.periodic.type:SimulatorExecutionContext","-o"})--,"logger.file_name:stdout"})
 	mgr:setModuleInitProc(MyModuleInit)
 	mgr:activateManager()
 	mgr:runManager(true)

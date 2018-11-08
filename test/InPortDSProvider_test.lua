@@ -36,7 +36,7 @@ end
 function TestInPortDSProvider:test_provider()
 
 	local mgr = require "openrtm.Manager"
-	mgr:init({"-o","corba.step.count:0"})
+	mgr:init({})
 	mgr:activateManager()
 	mgr:runManager(true)
 	local PortStatus = mgr:instance():getORB().types:lookup("::RTC::PortStatus").labelvalue

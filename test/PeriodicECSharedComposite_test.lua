@@ -63,8 +63,7 @@ end
 
 function TestPeriodicECSharedComposite:test_composite()
 	local mgr = require "openrtm.Manager"
-	mgr:init({"-o","corba.step.count:0",
-			"-o","exec_cxt.periodic.type:SimulatorExecutionContext"})--,"-o","logger.file_name: stdout"})
+	mgr:init({"-o","exec_cxt.periodic.type:SimulatorExecutionContext"})--,"-o","logger.file_name: stdout"})
 	mgr:activateManager()
 	mgr:setModuleInitProc(MyModuleInit)
 	mgr:runManager(true)

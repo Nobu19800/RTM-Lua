@@ -140,6 +140,7 @@ function love.load()
     
     local comp = mgr:getComponent("LOVESample0")
     comp:setObject(objects)
+end
 </pre>
 
 

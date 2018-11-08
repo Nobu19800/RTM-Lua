@@ -242,3 +242,15 @@ TkJoyStickコンポーネントを入手して、`TkJoyStickComp.exe`を実行�
 `All Activate`ボタンを押すと`TkJoyStick0`からデータが送信されるため操作ができるようになります。
 
 ![love2d-9](https://user-images.githubusercontent.com/6216077/45259761-fc493c80-b40e-11e8-8494-a4f592712476.png)
+
+
+## 注意事項
+今回はInPortのみを使用しましたが、OutPortを使用する場合についてはデータ転送の際に以下のように`oil.main`関数で実行する必要があります。
+また、サービスポートのプロバイダ側についても同じです。
+`oil.main`関数で実行する必要があるのは、今回のようにORBをステップ実行した時のみです。
+
+<pre>
+oil.main(function()
+	self._outOut:write()
+end)
+</pre>

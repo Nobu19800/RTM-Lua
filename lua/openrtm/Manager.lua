@@ -669,10 +669,14 @@ end
 -- ノンブロックモードの場合のみ有効
 function Manager:step()
 	if self.no_block then
-		oil.main(function()
-			while self._orb:pending() do
-				oil.newthread(self._orb.step, self._orb)
+		local stepfunc = function(orb)
+			while orb:pending() do
+				orb:step()
 			end
+		end
+
+		oil.main(function()
+			oil.newthread(stepfunc, self._orb)
 		end)
 	end
 end
@@ -689,7 +693,7 @@ function Manager:run_step(count)
 			for i=1,count do
 				orb:step()
 			end
-			while self._orb:pending() do
+			while orb:pending() do
 				orb:step()
 			end
 		end

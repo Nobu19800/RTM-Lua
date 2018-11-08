@@ -658,10 +658,22 @@ end
 
 -- CORBAの処理を1ステップ進める
 -- ノンブロックモードの場合のみ有効
-function Manager:step()
+function Manager:single_step()
 	if self.no_block then
 		oil.main(function()
 			if self._orb:pending() then
+				oil.newthread(self._orb.step, self._orb)
+			end
+		end)
+	end
+end
+
+-- CORBAの処理を全て進める
+-- ノンブロックモードの場合のみ有効
+function Manager:step()
+	if self.no_block then
+		oil.main(function()
+			while self._orb:pending() do
 				oil.newthread(self._orb.step, self._orb)
 			end
 		end)

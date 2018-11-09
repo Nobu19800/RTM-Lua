@@ -531,12 +531,15 @@ Python版のOpenRTM-aist 2.0(開発中)のインストール方法を説明し�
 
 * http://svn.openrtm.org/OpenRTM-aist-Python/trunk/OpenRTM-aist-Python/
 
+<!--
 setup.pyの以下の部分を変更します。
+
 
 <pre>
 #pkg_data_files_win32 = [("Scripts", ['OpenRTM_aist/utils/rtcd/rtcd_python.exe'])]
 pkg_data_files_win32 = []
 </pre>
+-->
 
 OpenRTM-aist Python版 2.0のソースコードのディレクトリに移動して以下のコマンドを実行すると、インストーラーでインストールしたOpenRTM-aistを上書きします。※パスに日本語が含まれている場合に失敗することがあります。その場合はディレクトリを変更してコマンドを実行してください。
 

@@ -556,6 +556,11 @@ python setup.py install
 
 * [MoonScriptの利用](MoonScript.md)
 
+## 応用例
+
+* [EV3での利用方法](EV3.md)
+* [Torchによる会話コンポーネント作成手順](Torch.md)
+
 ## 開発メモ
 
 * [開発メモ](memo.md)
@@ -580,7 +585,7 @@ python setup.py install
 * [OpenRTM-aist Python版](http://svn.openrtm.org/OpenRTM-aist-Python/)
 * [RTCBuilder](http://svn.openrtm.org/rtmtools/)
 
-## その他
 
-* [EV3での利用方法](EV3.md)
+
+
 

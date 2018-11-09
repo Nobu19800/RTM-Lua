@@ -23,3 +23,4 @@ OpenRTM-aistと比較して非常に軽量(ファイル一式で2MB程度)であ
 * https://www.youtube.com/watch?v=_-Kw8qv_keo
 * https://www.youtube.com/watch?v=4qxKCBcIIEE
 * https://www.youtube.com/watch?v=H0giknMJY48
+* https://www.youtube.com/watch?v=QrfeMUZl-Ro

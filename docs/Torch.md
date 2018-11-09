@@ -278,24 +278,60 @@ Torchで実行する場合にConversation.luaを直接実行したかの判別�
 `StringOut`、`StringIn`コンポーネントの実行にはOpenRTM-aist Python版のインストールが必要です。
 
 <pre>
-git clone https://github.com/Nobu19800/StringIO
+$ git clone https://github.com/Nobu19800/StringIO
 </pre>
 
 
 以下のコマンドで`StringOut`コンポーネントを起動してください。
 
 <pre>
-cd StringIO/StringIn
-python StringIn.py
+$ cd StringIO/StringIn
+$ python StringIn.py
 </pre>
 
 以下のコマンドで`StringIn`コンポーネントを起動してください。
 
 <pre>
-cd StringIO/StringOut
-python StringOut.py
+$ cd StringIO/StringOut
+$ python StringOut.py
 </pre>
 
 ### RTC起動
+以下のコマンドでRTCを起動します。
+
+<pre>
+$ th Conversation.lua -o DeepLarning.Conversation.conf.default.model_file:モデルファイル名
+</pre>
+
+モデルファイルには先ほどの学習で生成したファイル(`neuralconvo`以下の`data/model.t7`)を指定します。
+
 
 ### RTSystem作成
+まずRTCの起動に成功している場合は、以下のようにネームサービスビューにRTCが表示されます。
+
+![torch11](https://user-images.githubusercontent.com/6216077/48263800-b50d1580-e46a-11e8-8a0e-bc011235892e.png)
+
+`Open New System Editor`ボタンを押してシステムダイアグラムを表示してください。
+
+![torch12](https://user-images.githubusercontent.com/6216077/48263799-b50d1580-e46a-11e8-9d02-7d055382bcab.png)
+
+
+ネームサービスビューからシステムダイアグラムにRTCをドラックアンドドロップしてください。
+
+![torch13](https://user-images.githubusercontent.com/6216077/48263804-b5a5ac00-e46a-11e8-8e21-8475f2633e0c.png)
+
+`StringOut0`の`out`のOutPortを、`Conversation0`の`input_words`のInPortに、`Conversation0`の`output_words`のOutPortを、`StringIn0`の`in`のInPortにドラックアンドドロップしてください。
+
+
+![torch14](https://user-images.githubusercontent.com/6216077/48263803-b5a5ac00-e46a-11e8-94f8-69775942bb66.png)
+
+これで通信ができるようになります。
+
+`All Activate`ボタンを押すと会話を開始します。
+
+![torch15](https://user-images.githubusercontent.com/6216077/48263802-b5a5ac00-e46a-11e8-95b0-be249f03e5f5.png)
+
+`StringOut.py`を実行したターミナルから文章を入力すると、`StringIn.py`を実行したターミナルに返答が表示されます。
+
+![torch16](https://user-images.githubusercontent.com/6216077/48263801-b5a5ac00-e46a-11e8-93bf-95d0d6e7e616.png)
+

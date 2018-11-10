@@ -9,7 +9,9 @@ RTCにはコンポーネントの基本情報(コンポーネントプロファ�
 
 OpenRTM-aist付属のIDLファイルに定義されたインターフェースは以下のようになっています。
 
-![rtobject](https://user-images.githubusercontent.com/6216077/48302015-0932fb00-e53a-11e8-98de-9bedb0d19d9c.png)
+![rtobject](https://user-images.githubusercontent.com/6216077/48303258-6d11ef80-e54b-11e8-9fda-7f1d83377983.png)
+
+
 
 
 RTミドルウェアの規格はプラットフォーム独立モデルで定義されているため、上記のインターフェースが定義できればCORBA以外のRPCができる通信ライブラリでも実装できます。ただし既存のOpenRTM-aist等とは通信できなくなります。

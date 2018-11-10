@@ -210,7 +210,9 @@ RTSystemEditorで情報を取得するためにはコンポーネントプロフ
 |notify_disconnect|コネクタ切断を通知|
 
 RTSystemEditorで操作する際は上記のオペレーションはすべて実装が必須です。
-`PortService`ではデータを転送するインターフェースは定義されておらず、`notify_connect`内でコネクションを確立するための処理を行います。
+`PortService`ではデータを転送するインターフェースは`data_service`インターフェースのみが規格で定義されており、他にユーザーが独自に作成したインターフェース等も拡張可能です。
+
+`notify_connect`内でコネクションを確立するための処理を行います。
 
 RTSystemEditorからは`connect`オペレーションを呼び出します。
 その後は`PortService`の間で`notify_connect`を呼び出します。
@@ -243,6 +245,37 @@ OpenRTM-aistには`BasicDataType.idl`、`ExtendedDataTypes.idl`、`InterfaceData
 詳細は以下のページを参考にしてください。
 
 * [データ型マニュアル](https://nobu19800.github.io/DataTypeManual/docs/)
+
+##### 独自データ型
+データ型にはOpenRTM-aist標準のデータ型以外に、独自IDLファイルによる独自データ型が定義できます。
+以下はOpenRTM-aist 1.2での独自データ型作成手順です。
+
+
+まずはIDLファイル(今回はtest.idl)を作成します。
+
+OpenRTM-aist 1.2からは必ずデータ型にタイムスタンプが必要になったため、独自データ型作成の難易度が大幅に上がっています。
+`BasicDataType.idl`をインクルードして、データ型にタイムスタンプ(`RTC::Time tm;`)を追加してください。
+
+<pre>
+#include "BasicDataType.idl"
+
+module Sample {
+    struct SampleDataType
+    {
+        RTC::Time tm;
+        double data1;
+        short data2;
+    };
+};
+</pre>
+
+次にRTC Builderのデータポート設定画面でIDLファイルの横のBrowse...ボタンを押してIDLファイルを選択します。
+
+![rtcb1](https://user-images.githubusercontent.com/6216077/48300587-c9f9af80-e523-11e8-9e7a-ed7b8f182a24.png)
+
+するとデータ型一覧に独自データ型が追加されます。
+
+![rtcb2](https://user-images.githubusercontent.com/6216077/48300588-c9f9af80-e523-11e8-9967-cfd8bb88ca2c.png)
 
 
 #### インターフェース型
@@ -342,15 +375,76 @@ CORBA通信を行う場合には、CORBAオブジェクトリファレンス(InP
 データフロー型はデータを転送する際の流れを定義します。
 `Push`型は`OutPort`から`InPort`にデータを送る方式で、`Pull`型は`InPort`から`OutPort`のデータを取る方式です。
 
+現在はPush型、Pull型の2種類ですが、例えばメッセージブローカーを介して通信する場合はPush型やPull型に当てはまらない通信になります。
 
+現状、OpenRTM-aistではデータフロー型については拡張できるようになっていません。
 
 #### サブスクリプション型
+データフロー型がPush型の場合のみ、データの送信タイミングを`flush`、`new`、`perriodic`から選択できます。
 ##### flush
+OutPortの`write`関数を呼び出した時点で即座にデータを送信する方式です。
 ##### new
+OutPortの`write`関数を呼び出した時点ではリングバッファに格納しておいて、別スレッドでデータを送信する方式です。
+`write`関数を呼び出すとデータ送信処理を1回実行するようにデータ送信スレッドに指令します。
+既にデータ送信処理中に指令を送ってもさらに1回実行することはないため、データ送信処理中に`write`関数を呼び出すと、データが送信されない場合があります。
 ##### periodic
-#### 独自データ型
+OutPortの`write`関数を呼び出した時点ではリングバッファに格納しておいて、別スレッドでデータを送信する方式です。
+`new`型と違う点はデータ送信スレッドがデータ送信処理を周期的に実行している点です。
+`new`型のようにデータの欠損が発生することはありませんが、データがすぐに送信されない場合があります。
+
+
+
 ### サービスポート
+サービスポートはコマンドレベルの操作を提供する機能であり、単純なデータの転送だけではなく、特定の処理の呼び出し、処理結果の取得ということができます。
+データポートを使うべきか、サービスポートを使うべきかは場合によりますが、例えば以下のような場合に使われる事があります。
+
+* 1回しか呼び出さない処理(例：サーボの初期化)
+* 特定のタイミングでデータを取得したい場合(例：ロボットのパラメータの取得)
+* 特定のタイミングで処理をしたい(例：GUI上のボタンを押したタイミングで移動ロボットを特定の場所に移動させる)
+
+データポート、サービスポートにインターフェースの違いはなく、`get_port_profile`で取得できるポートプロファイルの内容が違うだけです。
+
+サービスポートの操作を呼び出す方法については特に規格では定義されておらず、OpenRTM-aistではCORBAによるリモート関数呼び出しで処理しています。
+
+サービスポートには関数の処理を実装した`プロバイダ`と、関数をリモート呼び出しする側の`コンシューマ`のインターフェースを保持しています。
+
+`connect`を呼び出すときのコネクタプロファイルを以下のように設定します。
+
+
+|名前|値|
+|---|---|
+|name|適当な名前|
+|connector_id|空白|
+|ports|{ServicePort1のオブジェクトリファレンス、ServicePort2のオブジェクトリファレンス}|
+|properties|{}|
+
+
+
+そして`ServicePort1`の`connect`を呼び出すと、以下の順序で接続処理を行います。
+
+
+![connect7](https://user-images.githubusercontent.com/6216077/48301010-f57f9880-e529-11e8-9a4d-b0da0cae0543.png)
+
+`ServicePort1`がプロバイダインターフェースを保持している場合、(2)以降は以下のようにコネクタプロファイルにオブジェクトリファレンスが設定されます。
+
+|名前|値|
+|---|---|
+|name|適当な名前|
+|connector_id|空白|
+|ports|{ServicePort1のオブジェクトリファレンス、ServicePort2のオブジェクトリファレンス}|
+|properties|{"MyServiceProvider0.port.MyService.provided.MyService.myservice0":"IOR文字列", "port.MyService.myservice0":"IOR文字列"}|
+
+`RTCのインスタンス名.port.型名.provided.インターフェースのインスタンス名`、もしくは`port.型名.インターフェースのインスタンス名`にオブジェクトのIOR文字列が格納されています。
+型名にはIDLファイルで定義したインターフェース名が格納されるため、型名が一致しないとポートの接続はできません。
+サービスポートは複数のインターフェースを持つことが可能ですが、インターフェース名が一致したプロバイダとコンシューマインターフェースを関連付けます。
+
+`ports`の順番を入れ替えると以下のような処理となります。
+
+![connect8](https://user-images.githubusercontent.com/6216077/48301011-f57f9880-e529-11e8-8aa1-39e4fd87a234.png)
+
 ### コンフィグレーションパラメータ
+コンフィギュレーションパラメータは
+
 ### ライフサイクル
 #### Inactivate
 #### Activate
@@ -374,6 +468,11 @@ CORBA通信を行う場合には、CORBAオブジェクトリファレンス(InP
 #### TAO
 #### ORBexpress
 #### OiL
+### オブジェクトリファレンス
+#### CDR
+#### IOR
+#### corbaloc
+#### corbaname
 ## ネームサーバー
 ## OpenRTM-aist
 ## rtc.conf

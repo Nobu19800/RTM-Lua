@@ -449,14 +449,79 @@ OutPortの`write`関数を呼び出した時点ではリングバッファに格
 ### ライフサイクル
 RTCの重要な要素としてライフサイクルがあります。
 RTCには`Created`、`Inactive`、`Activate`、`Error`の4種類の状態があります。
-ここで重要なのはRTCが個別に状態を持っているのではなく、
+
+![rtstatemachine](https://user-images.githubusercontent.com/6216077/48302715-7008e200-e543-11e8-801a-bee4de164c70.png)
+
+
+ここで重要なのはRTCが個別に状態を持っているのではなく、**RTCが関連付けしている実行コンテキストごとに状態を持っている**という点です。
+
+以下の例では、`実行コンテキストA`には`RTC1`を、`実行コンテキストB`には`RTC1`と`RTC2`を関連付けています。
+この場合、`RTC1`は`実行コンテキストA`での状態と`実行コンテキストB`での状態があることになります。
+`RTC1`は`実行コンテキストA`ではInactive状態、`実行コンテキストB`ではActive状態になっており、実行コンテキストごとに別々の状態になることがあります。
+
+![activity](https://user-images.githubusercontent.com/6216077/48302262-e276c380-e53d-11e8-8737-d14cb5793534.png)
 
 #### Inactivate
+`Inactive`状態(非アクティブ状態、非活性状態)は、RTCが処理を実行していない状態です。
+この状態では`on_execute`オペレーションも実行されず、またコンフィギュレーションパラメータの変更は(原則)反映されません。
+サービスポートも機能が停止するのが動作としては正しいのですが、使いづらくなるだけなのでOpenRTM-aist 1.2以降ではInactive状態でもサービスポートは機能するようになっています。
+
 #### Activate
+`Active`状態(アクティブ状態、活性状態)は、RTCが処理を実行している状態です。
+この状態では、実行コンテキストにより`on_execute`オペレーションが実行され、`on_state_update`オペレーションでコンフィギュレーションパラメータの更新が行われます。
+RTCの`onExecute`関数にはロボットを制御するなどのメインとなる処理を実装します。
+
+また`Active`状態遷移直後に`on_activated`、他の状態に遷移するときに`on_deactivated`を実行します。
+RTCの`onActivated`関数にはサーボをオンにするなどの初期化処理、`onDeactivated`関数にはサーボをオフにするなどの後処理を実装します。
+
 #### Error
+`Error`状態(エラー状態、異常状態)は、RTCに問題が発生した事を検知して処理を停止した状態です。
+この状態では、実行コンテキストにより`on_error`オペレーションが実行されます。
+RTCの`onError`関数にはロボットを安全に停止するなどの、エラーに対応した処理を実装します。
+
 ## 実行コンテキスト
+実行コンテキストはRTCの状態を管理する機能です。
+RTC単体では処理を実行することができず、実行コンテキストがRTCの操作を呼び出すことで処理を実行します。
+
+RTCと実行コンテキストを分離することによって、実行コンテキストの変更のみで通常の周期実行、リアルタイム処理、シミュレータからのトリガ駆動を使い分けることができます。
+
+実行コンテキストは`RTC.idl`、`OpenRTM.idl`で以下のようなインターフェースが定義されています。
+
+![executioncontext](https://user-images.githubusercontent.com/6216077/48303135-ddb80c80-e549-11e8-96cb-8db6547030af.png)
+
+RTSystemEditorで操作するためには実行コンテキストの情報を取得する`get_profile`オペレーションが必要なため、`ExecutionContextService`インターフェスの実装が必要になります。
+
+実行コンテキストのプロファイルの定義は以下のようになっています。
+
+<pre>
+  enum ExecutionKind
+  {
+    PERIODIC,
+    EVENT_DRIVEN,
+    OTHER
+  };
+  
+  typedef sequence<RTObject> RTCList;
+  
+  struct ExecutionContextProfile
+  {
+    ExecutionKind kind;
+    double rate;
+    RTObject owner;
+    RTCList participants;
+    NVList properties;
+  };
+</pre>
+
+イベント駆動の実行コンテキストには、実質的に`rate`の設定は意味がありません。
+
 ### PeriodicExecutionContext
+`PeriodicExecutionContext`は周期実行を行う実行コンテキストです。
+
+### ExtTrigExecutionContext
+### OpenHRPExecutionContext
 ### SimulatorExecutionContext
+### RTPreemptEC
 ## マネージャ
 ## RTシステム
 ## 複合コンポーネント

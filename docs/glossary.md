@@ -9,7 +9,8 @@ RTCにはコンポーネントの基本情報(コンポーネントプロファ�
 
 OpenRTM-aist付属のIDLファイルに定義されたインターフェースは以下のようになっています。
 
-![rtobject](https://user-images.githubusercontent.com/6216077/48066667-8fd19a80-e211-11e8-9357-0c2964a1cb04.png)
+![rtobject](https://user-images.githubusercontent.com/6216077/48302015-0932fb00-e53a-11e8-98de-9bedb0d19d9c.png)
+
 
 RTミドルウェアの規格はプラットフォーム独立モデルで定義されているため、上記のインターフェースが定義できればCORBA以外のRPCができる通信ライブラリでも実装できます。ただし既存のOpenRTM-aist等とは通信できなくなります。
 
@@ -195,7 +196,7 @@ RTSystemEditorで情報を取得するためにはコンポーネントプロフ
 インターフェースとしてはデータポート、サービスポートに違いはなく、以下の`PortService`インターフェースで定義されています。
 
 
-![portservice](https://user-images.githubusercontent.com/6216077/48066666-8f390400-e211-11e8-9df5-2e97a0be3db5.png)
+![portservice](https://user-images.githubusercontent.com/6216077/48302008-f15b7700-e539-11e8-9041-febfd5c16c54.png)
 
 
 |名前|意味|
@@ -287,18 +288,11 @@ OpenRTM-aistのRTCと通信するためには、`notify_connect`の中でこれ�
 `corba_cdr`はCORBA通信でデータを転送するインターフェース型です。
 `DataPort_OpenRTM.idl`ファイルで`InPortCdr`インターフェースと`OutPortCdr`インターフェースが定義されています。
 
-<pre>
-  interface InPortCdr
-  {
-    PortStatus put(in CdrData data);
-  };
-ports|{InPortOutPort}|
-|
-  interface OutPortCdr
-  {
-    PortStatus get(out CdrData data);
-  };
-</pre>
+![dataport1](https://user-images.githubusercontent.com/6216077/48302104-48158080-e53b-11e8-8a90-c91399dafe5e.png)
+
+![dataport2](https://user-images.githubusercontent.com/6216077/48302111-857a0e00-e53b-11e8-8d29-d7779354edae.png)
+
+
 
 `InPortCdr`の`put`オペレーションは`OutPort`から`InPort`にデータを渡す`Push`型の通信の場合に使用します。
 `OutPortCdr`の`put`オペレーションは`InPort`が`OutPort`からデータを取得する`Pull`型の通信の場合に使用します。
@@ -350,17 +344,9 @@ CORBA通信を行う場合には、CORBAオブジェクトリファレンス(InP
 `data_service`もCORBA通信のインターフェースですが、こちらは規格標準のインターフェースです。
 `DataPort.idl`で定義されています。
 
-<pre>
-    interface DataPushService
-    {
-        PortStatus push(in OctetSeq data);
-    };
+![dataport3](https://user-images.githubusercontent.com/6216077/48302195-95462200-e53c-11e8-8c76-70c8d65b3c53.png)
+![dataport4](https://user-images.githubusercontent.com/6216077/48302196-95462200-e53c-11e8-96c5-2069c55706b3.png)
 
-    interface DataPullService
-    {
-        PortStatus pull(out OctetSeq data);
-    };
-</pre>
 
 動作としては`corba_cdr`と同じです。
 
@@ -406,6 +392,8 @@ OutPortの`write`関数を呼び出した時点ではリングバッファに格
 
 サービスポートの操作を呼び出す方法については特に規格では定義されておらず、OpenRTM-aistではCORBAによるリモート関数呼び出しで処理しています。
 
+![rtse2](https://user-images.githubusercontent.com/6216077/48301754-341b5000-e536-11e8-8247-74a12582acab.png)
+
 サービスポートには関数の処理を実装した`プロバイダ`と、関数をリモート呼び出しする側の`コンシューマ`のインターフェースを保持しています。
 
 `connect`を呼び出すときのコネクタプロファイルを以下のように設定します。
@@ -443,9 +431,26 @@ OutPortの`write`関数を呼び出した時点ではリングバッファに格
 ![connect8](https://user-images.githubusercontent.com/6216077/48301011-f57f9880-e529-11e8-8aa1-39e4fd87a234.png)
 
 ### コンフィグレーションパラメータ
-コンフィギュレーションパラメータは
+コンフィギュレーションパラメータはRTC実行中に内部パラメータを外部から変更可能な機能です。
+
+![rtse1](https://user-images.githubusercontent.com/6216077/48301442-a5a4cf80-e531-11e8-80e3-a776f2cdda5d.png)
+
+データポートかサービスポートかコンフィギュレーションパラメータのどれを使うかは場合によって違います。
+
+データポートを使っても内部の処理を工夫すればパラメータを変更する事はできますが、1回変更すればいいところにデータポートを使うのは適切ではありません。
+
+パラメータの変更にサービスポートを使うのは一つの方法です。
+ただ、それも場合によります。他のRTCからパラメータを変更する必要があるときにはサービスポートを使うのが有効です。
+
+例えば、RTCがファイルをロードする必要がある場合に、そのファイルパスを設定したいとします。
+確かにサービスポートでも設定できるのですが、設定するためのRTCが別個必要になるため手軽ではありません。
+他のRTCから変更する必要がない場合は、コンフィギュレーションパラメータで設定することをお勧めします。
 
 ### ライフサイクル
+RTCの重要な要素としてライフサイクルがあります。
+RTCには`Created`、`Inactive`、`Activate`、`Error`の4種類の状態があります。
+ここで重要なのはRTCが個別に状態を持っているのではなく、
+
 #### Inactivate
 #### Activate
 #### Error

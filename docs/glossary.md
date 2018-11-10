@@ -187,6 +187,8 @@ RTSystemEditorでは`port_profiles`に格納したポートプロファイル一
 
 サービスポートの場合は、`interfaces`にインターフェースの情報を格納します。
 
+RTSystemEditorで情報を取得するためにはコンポーネントプロファイルを取得する機能を実装すれば充分であり、見た目上は既存のRTミドルウェアと変わらない動きをします。
+
 
 ### データポート
 データポートはデータを連続的に転送するためのポートです。
@@ -214,21 +216,134 @@ RTSystemEditorからは`connect`オペレーションを呼び出します。
 その後は`PortService`の間で`notify_connect`を呼び出します。
 ただし、`notify_connect`がどの順序で呼び出されるかは、`connect`の引数で渡したコネクタプロファイルに格納したポートの順番に依存します。
 
-![connect1](https://user-images.githubusercontent.com/6216077/48067382-80535100-e213-11e8-8126-14327d51291e.png)
-![connect2](https://user-images.githubusercontent.com/6216077/48067383-80535100-e213-11e8-8b16-9e45a2dd4ef6.png)
+![connect1](https://user-images.githubusercontent.com/6216077/48294687-28de0b00-e4c9-11e8-9fc9-c4886c6c1643.png)
+![connect2](https://user-images.githubusercontent.com/6216077/48294690-2c719200-e4c9-11e8-81ea-df6decbbadc9.png)
+
+`notify_connect`内でどのような処理をするかは規格では定義されていません。
+とりあえず、`notify_connect`処理後に`get_connector_profiles`で取得できるコネクタプロファイルが追加されていたら、RT System Editorからはポートが接続されているように見えます。
+
 
 
 #### InPort
+`InPort`は`OutPort`からデータを受信するポートです。
+前述の通り、InPort、OutPortにインターフェースの違いはなく、`get_port_profile`で取得できるポートプロファイルの内容が違うだけです。
+
 #### OutPort
+`OutPort`は`InPort`にデータを送信するポートです。
+`InPort`をデータが受信するポート、`OutPort`をデータを送信するポートにするためには、`notify_connect`内でコネクションを確立する処理をする必要があります。例えば、ソケット通信をする場合は`notify_connect`内でソケットの作成、接続を行い、`InPort`側ではrecv関数で待ち受け、`OutPort`側ではsend関数でデータ送信という事をします。
+
 #### データ型
+データ型には転送するデータの内容のことです。
+データ型はOMG IDL構文で定義されています。
+OpenRTM-aistには`BasicDataType.idl`、`ExtendedDataTypes.idl`、`InterfaceDataTypes.idl`のIDLファイルが付属しており、多数のデータ型が定義されています。
+`BasicDataType.idl`には単純なDouble型のデータの送信、配列のデータの送信など基本的なデータ型が定義されています。
+`ExtendedDataTypes.idl`には移動ロボットの速度指令など、拡張データ型が定義されています。
+`InterfaceDataTypes.idl`にはカメラ画像のデータなど、複雑なデータ型が定義されています。
+
+詳細は以下のページを参考にしてください。
+
+* [データ型マニュアル](https://nobu19800.github.io/DataTypeManual/docs/)
+
+
 #### インターフェース型
+インターフェース型はデータを転送する方法を定義しています。
+OpenRTM-aist 2.0では`corba_cdr`、`data_service`、`shared_memory`、`direct`の4種類のインターフェース型が利用できます。
+OpenRTM-aistのRTCと通信するためには、`notify_connect`の中でこれらのインターフェースのコネクションを確立するための処理をする必要があります。
+
 ##### corba_cdr
+`corba_cdr`はCORBA通信でデータを転送するインターフェース型です。
+`DataPort_OpenRTM.idl`ファイルで`InPortCdr`インターフェースと`OutPortCdr`インターフェースが定義されています。
+
+<pre>
+  interface InPortCdr
+  {
+    PortStatus put(in CdrData data);
+  };
+ports|{InPortOutPort}|
+|
+  interface OutPortCdr
+  {
+    PortStatus get(out CdrData data);
+  };
+</pre>
+
+`InPortCdr`の`put`オペレーションは`OutPort`から`InPort`にデータを渡す`Push`型の通信の場合に使用します。
+`OutPortCdr`の`put`オペレーションは`InPort`が`OutPort`からデータを取得する`Pull`型の通信の場合に使用します。
+
+
+CORBA通信を行う場合には、CORBAオブジェクトリファレンス(InPortCdr、OutPortCdr)をクライアント側に渡す必要があります。
+
+`connect`オペレーションはOutPort、InPortどちら側からも呼び出される可能性があります。
+
+例えば、`connect`の引数で渡すコネクタプロファイルを以下のように設定します。
+
+|名前|値|
+|---|---|
+|name|適当な名前|
+|connector_id|空白|
+|ports|{InPortのオブジェクトリファレンス、OutPortのオブジェクトリファレンス}|
+|properties|{"dataport.interface_type":"corba_cdr", "dataport.dataflow_type","push"}|
+
+
+この場合に`InPort`側の`connect`を呼び出すと以下のような処理になります。
+これは、コネクタプロファイルの`ports`にInPortのオブジェクトリファレンスを先に格納しているためです。
+
+![connect5](https://user-images.githubusercontent.com/6216077/48295494-a3aa2480-e4cf-11e8-87c6-3d5c1edc21d5.png)
+
+ここで、(1)と(2)ではコネクタプロファイルの内容が変わっています。
+
+|名前|値|
+|---|---|
+|name|適当な名前|
+|connector_id|空白|
+|ports|{InPortのオブジェクトリファレンス、OutPortのオブジェクトリファレンス}|
+|properties|{"dataport.interface_type":"corba_cdr", "dataport.dataflow_type","push", "dataport.corba_cdr.inport_ior":InPortCdrのIOR文字列, "dataport.corba_cdr.inport_ref":InPortCdrのオブジェクトリファレンス}|
+
+`Push`型のためInPort側に`InPortCdr`オブジェクトがあり、OutPort側で`InPortCdr`のオブジェクトリファレンスを取得して`put`関数をリモート呼び出しするということになります。
+
+このため、`InPort`から`OutPort`の`notify_connect`を呼び出す時に`InPortCdr`のオブジェクトリファレンスが取得できるようになっている必要があります。
+
+
+他に`OutPort`の`connect`を呼び出す場合、`ports`の順序で以下の処理順序があります。
+
+![connect6](https://user-images.githubusercontent.com/6216077/48295493-a3aa2480-e4cf-11e8-8d62-1ed4506798e9.png)
+![connect3](https://user-images.githubusercontent.com/6216077/48295495-a3aa2480-e4cf-11e8-98f3-5256a33dfa68.png)
+![connect4](https://user-images.githubusercontent.com/6216077/48295496-a3aa2480-e4cf-11e8-995d-cee2a540446c.png)
+
+
+
+
 ##### data_service
+`data_service`もCORBA通信のインターフェースですが、こちらは規格標準のインターフェースです。
+`DataPort.idl`で定義されています。
+
+<pre>
+    interface DataPushService
+    {
+        PortStatus push(in OctetSeq data);
+    };
+
+    interface DataPullService
+    {
+        PortStatus pull(out OctetSeq data);
+    };
+</pre>
+
+動作としては`corba_cdr`と同じです。
+
 ##### shared_memory
+`shared_memory`は共有メモリによるデータ転送を行うインターフェース型です。
+
+
 ##### direct
+`direct`は同一プロセス内で変数渡しによりデータの転送を行うインターフェース型です。
+
 #### データフロー型
-##### Push型
-##### Pull型
+データフロー型はデータを転送する際の流れを定義します。
+`Push`型は`OutPort`から`InPort`にデータを送る方式で、`Pull`型は`InPort`から`OutPort`のデータを取る方式です。
+
+
+
 #### サブスクリプション型
 ##### flush
 ##### new

@@ -10,7 +10,6 @@
             - [OutPort](#outport)
             - [データ型](#データ型)
                 - [独自データ型](#独自データ型)
-- [include "BasicDataType.idl"](#include-basicdatatypeidl)
             - [インターフェース型](#インターフェース型)
                 - [corba_cdr](#corba_cdr)
                 - [data_service](#data_service)

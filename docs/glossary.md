@@ -306,12 +306,12 @@ CORBA通信を行う場合には、CORBAオブジェクトリファレンス(InP
 
 例えば、`connect`の引数で渡すコネクタプロファイルを以下のように設定します。
 
-|名前|値|
-|---|---|
-|name|適当な名前|
-|connector_id|空白|
-|ports|{InPortのオブジェクトリファレンス、OutPortのオブジェクトリファレンス}|
-|properties|{"dataport.interface_type":"corba_cdr", "dataport.dataflow_type","push"}|
+|名前|型|値|
+|---|---|---|
+|name|string|適当な名前|
+|connector_id|UniqueIdentifier|空白|
+|ports|PortServiceList|{InPortのオブジェクトリファレンス、OutPortのオブジェクトリファレンス}|
+|properties|NVList|{"dataport.interface_type":"corba_cdr", "dataport.dataflow_type","push"}|
 
 
 この場合に`InPort`側の`connect`を呼び出すと以下のような処理になります。
@@ -321,12 +321,12 @@ CORBA通信を行う場合には、CORBAオブジェクトリファレンス(InP
 
 ここで、(1)と(2)ではコネクタプロファイルの内容が変わっています。
 
-|名前|値|
-|---|---|
+|名前|型|値|
+|---|---|---|
 |name|適当な名前|
-|connector_id|空白|
-|ports|{InPortのオブジェクトリファレンス、OutPortのオブジェクトリファレンス}|
-|properties|{"dataport.interface_type":"corba_cdr", "dataport.dataflow_type","push", "dataport.corba_cdr.inport_ior":InPortCdrのIOR文字列, "dataport.corba_cdr.inport_ref":InPortCdrのオブジェクトリファレンス}|
+|connector_id|string|空白|
+|ports|UniqueIdentifier|{InPortのオブジェクトリファレンス、OutPortのオブジェクトリファレンス}|
+|properties|PortServiceList|NVList|{"dataport.interface_type":"corba_cdr", "dataport.dataflow_type","push", "dataport.corba_cdr.inport_ior":InPortCdrのIOR文字列, "dataport.corba_cdr.inport_ref":InPortCdrのオブジェクトリファレンス}|
 
 `Push`型のためInPort側に`InPortCdr`オブジェクトがあり、OutPort側で`InPortCdr`のオブジェクトリファレンスを取得して`put`関数をリモート呼び出しするということになります。
 
@@ -401,12 +401,12 @@ OutPortの`write`関数を呼び出した時点ではリングバッファに格
 `connect`を呼び出すときのコネクタプロファイルを以下のように設定します。
 
 
-|名前|値|
-|---|---|
+|名前|型|値|
+|---|---|---|
 |name|適当な名前|
-|connector_id|空白|
-|ports|{ServicePort1のオブジェクトリファレンス、ServicePort2のオブジェクトリファレンス}|
-|properties|{}|
+|connector_id|string|空白|
+|ports|PortServiceList|{ServicePort1のオブジェクトリファレンス、ServicePort2のオブジェクトリファレンス}|
+|properties|NVList|{}|
 
 
 
@@ -417,12 +417,12 @@ OutPortの`write`関数を呼び出した時点ではリングバッファに格
 
 `ServicePort1`がプロバイダインターフェースを保持している場合、(2)以降は以下のようにコネクタプロファイルにオブジェクトリファレンスが設定されます。
 
-|名前|値|
-|---|---|
+|名前|型|値|
+|---|---|---|
 |name|適当な名前|
-|connector_id|空白|
-|ports|{ServicePort1のオブジェクトリファレンス、ServicePort2のオブジェクトリファレンス}|
-|properties|{"MyServiceProvider0.port.MyService.provided.MyService.myservice0":"IOR文字列", "port.MyService.myservice0":"IOR文字列"}|
+|connector_id|string|空白|
+|ports|PortServiceList|{ServicePort1のオブジェクトリファレンス、ServicePort2のオブジェクトリファレンス}|
+|properties|NVList|{"MyServiceProvider0.port.MyService.provided.MyService.myservice0":"IOR文字列", "port.MyService.myservice0":"IOR文字列"}|
 
 `RTCのインスタンス名.port.型名.provided.インターフェースのインスタンス名`、もしくは`port.型名.インターフェースのインスタンス名`にオブジェクトのIOR文字列が格納されています。
 型名にはIDLファイルで定義したインターフェース名が格納されるため、型名が一致しないとポートの接続はできません。
@@ -482,7 +482,7 @@ RTCの`onActivated`関数にはサーボをオンにするなどの初期化処�
 RTCの`onError`関数にはロボットを安全に停止するなどの、エラーに対応した処理を実装します。
 
 ## 実行コンテキスト
-実行コンテキストはRTCの状態を管理する機能です。
+実行コンテキスト(Execution Context、EC)はRTCの状態を管理する機能です。
 RTC単体では処理を実行することができず、実行コンテキストがRTCの操作を呼び出すことで処理を実行します。
 
 RTCと実行コンテキストを分離することによって、実行コンテキストの変更のみで通常の周期実行、リアルタイム処理、シミュレータからのトリガ駆動を使い分けることができます。
@@ -521,19 +521,130 @@ RTSystemEditorで操作するためには実行コンテキストの情報を取
 `PeriodicExecutionContext`は周期実行を行う実行コンテキストです。
 
 ### ExtTrigExecutionContext
+`ExtTrigExecutionContext`は外部からトリガ駆動で実行する実行コンテキストです。
+`tick`のオペレーションの実装が必要になるため、`ExtTrigExecutionContextService`インターフェースで実装する必要があります。
+
+`tick`を呼び出した時点では即座には実行されず、実行スレッドに指令して、RTCの処理は別スレッドで実行されます。
+このため、`tick`の処理が戻ってきてもRTCの処理は終了していません。
+
 ### OpenHRPExecutionContext
+`OpenHRPExecutionContext`は外部からトリガ駆動で実行する実行コンテキストです。
+`ExtTrigExecutionContext`と違い、`OpenHRPExecutionContext`は`tick`実行時にRTCの処理を実行するため、RTCの処理終了まで`tick`の処理は戻ってきません。
+
 ### SimulatorExecutionContext
+`SimulatorExecutionContext`は外部からトリガ駆動で実行する実行コンテキストです。
+`OpenHRPExecutionContext`は`activate_component`等のRTCを状態を遷移する操作を実行しても`tick`でRTCの処理を実行しない限り状態は遷移しません。
+
 ### RTPreemptEC
+`RTPreemptEC`は`PeriodicExecutionContext`と同じく周期実行の実行コンテキストですが、RT-Preemptパッチを適用したLinuxカーネルにより実時間処理を行うための実行コンテキストです。
+
 ## マネージャ
+マネージャはRTCを管理する仕組みです。
+モジュールのロード、RTCの生成、生存しているRTCの管理等を行います。
+
+インターフェースは`Manager.idl`で定義されています。RTM標準の規格ではなく、OpenRTM-aist固有のインターフェースです。
+
+![manager](https://user-images.githubusercontent.com/6216077/48308249-8d6d9880-e5a3-11e8-9039-b263d00aa815.png)
+
 ## RTシステム
+単一、もしくは複数のRTCのポートの接続などを行い、RT(ロボットテクノロジー)を活用した処理を実行するためのシステムのことを`RTシステム`と言います。
+
+![rtse4](https://user-images.githubusercontent.com/6216077/48308397-10dcb900-e5a7-11e8-8e42-795d72834365.png)
+
+
 ## 複合コンポーネント
+複合コンポーネントは複数のRTCを1つに複合する仕組みの事です。
+
+例えば、以下の例の場合`RTC1`と`RTC2`、`RTC2`と`RTC3`のポートは外に見せる必要がないということで隠蔽してあります。
+こうすることで、複雑なRTシステムが見た目上は単純になるため、システムの概要を理解しやすくなります。
+
+![rtse3](https://user-images.githubusercontent.com/6216077/48308343-cad32580-e5a5-11e8-8ce0-69cd86029276.png)
+
+また、`実行の同期`、`状態の同期`を行う場合があります。
+
+`実行の同期`を行う場合には、子コンポーネントを1つの実行コンテキストに関連付けて同期実行を行うようになっています。
+
+`状態の同期`はOpenRTM-aistでは実装されていません。
+
 ## IDLファイル
+`IDL`(Interface Description Language、インターフェース記述言語)は、ソフトウェアモジュールの間のやり取りを行うためのインターフェースを記述する言語です。
+
+
 ## SDOサービス
+SDOサービスは後述のコンポーネントオブザーバー等、RTCに機能を追加するための仕組みです。
+SDOサービスは片方にコンシューマ、片方にプロバイダとなる機能を実装する必要があります。
+
+SDOサービスを追加するためには、`Configuration`インターフェースの`add_service_profile`オペレーションを使う必要があります。
+
+`add_service_profile`で渡すサービスプロファイルには、例えば以下のような情報を渡します。
+
+
+|名前|型|値|
+|---|---|---|
+|id|string|適当な名前|
+|interface_type|string|空白|
+|properties|NVList|{}|
+|service|SDOService|SDOサービスのオブジェクトリファレンス|
+
+
+オブジェクトリファレンスは上記のservice変数に格納する必要があるため、`SDOService`インターフェースを継承して開発する必要があります。
+
+
+`add_service_profile`でSDOサービス登録後、RTCからオペレーションを呼び出します。
+
+![sdoservice](https://user-images.githubusercontent.com/6216077/48308635-ab8bc680-e5ac-11e8-9eb4-530a52d84726.png)
+
+
+
 ### コンポーネントオブザーバ
+コンポーネントオブザーバーはRTCからRTSystemEditor等のツールに状態変化、ハートビートなどを通知する機能です。
+`RTC::ComponentObserver`はFSM4RTC規格標準のインターフェースであり、`OpenRTM::ComponentObserver`はOpenRTM-aist独自のインターフェースです。
+
+![componentobserver](https://user-images.githubusercontent.com/6216077/48308716-37eab900-e5ae-11e8-839e-20c035e40957.png)
+
+`status_kind`に通知内容の種別を設定します。
+`RTC::StatusKind`には以下の値が列挙されています。
+
+|名前|意味|
+|---|---|
+|COMPONENT_PROFILE|コンポーネントプロファイルの変更を通知|
+|RTC_STATUS|RTCの状態変化を通知|
+|EC_STATUS|ECの状態変化を通知|
+|PORT_PROFILE|ポートプロファイルの変更を通知|
+|CONFIGURATION|コンフィギュレーションの変更を通知|
+|RTC_HEARTBEAT|定期的にRTCの生存確認を通知|
+|EC_HEARTBEAT|定期的にECの生存確認を通知|
+|FSM_PROFILE|FSMプロファイルの変更を通義|
+|FSM_STATUS|FSMステータスの変更を通知|
+|FSM_STRUCTURE|FSMストラクチャの変更を通知|
+|USER_DEFINED|上記以外|
+
 ## FSM4RTC
+FSM4RTC(Finite State Machine for RTC)は、有限状態機械の仕組みをRTCの導入するための規格です。
+
+OMG RTCの規格では、RTCにはInactive状態、Active状態、Error状態の3種類の状態がありましたが、例えば以下のようにイベントでロボットを制御する場合などは複雑な状態変化を設定できるようにする必要があります。
+
+![humanoid](https://user-images.githubusercontent.com/6216077/48308977-ee509d00-e5b2-11e8-99ce-1f9f7949ed1e.png)
+
+現状のOpenRTM-aistでこのような仕組みを実装するためには、独自にStateパターンやswitch文によりステートマシンを実装し、データポートやサービスポートの入力で状態を変化させるという仕組みが必要になるため、実装が簡単ではありません。
+FSM4RTCの仕組みを導入することで、FSMの実装が容易になります。
+
 ### CSP
+CSP(Communicating Sequential Processes)は、並列に動作するシステムを記述して検証するための形式手法の一つです。
+CSPで記述した並列システムは、`FDR4`等のツールでデッドロックが発生しないかなどの問題を検証することができます。
+
+FSM4RTCで実装したRTシステムをCSPで検証するという試みが行われています。
+
 ## ロガー
+RTC実行中のログをファイル、もしくは標準出力する機能です。特に規格では定義されていません。
+OpenRTM-aistにはFluent Bitでログを収集する機能もあります。
+
 ## ナンバリングポリシー
+例えば、OpenRTM-aistで`Sample`という名前のRTCを起動した場合、インスタンス名は`Sample0`となります。
+同一プロセスで`Sample`を複数起動した場合、`Sample0`、`Sample1`、`Sample2`と番号が増えていく仕組みになっています。
+
+ただしこれは同一プロセス内の話で、別プロセスで`Sample0`が起動している場合にもカウントを増やしてほしい場合は、デフォルト以外の設定が必要になります。
+
 ## CORBA
 ### CORBAの実装例
 #### omniORB

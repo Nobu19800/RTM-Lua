@@ -167,6 +167,14 @@ RTSystemEditorでは`port_profiles`に格納したポートプロファイル一
     NVList properties;
   };
   
+  typedef sequence<ConnectorProfile> ConnectorProfileList;
+  
+  enum PortInterfacePolarity
+  {
+    PROVIDED,
+    REQUIRED
+  };
+  
 
 
 </pre>

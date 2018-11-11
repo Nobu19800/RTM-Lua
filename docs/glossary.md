@@ -193,6 +193,7 @@ RTSystemEditorでは`port_profiles`に格納したポートプロファイル一
   };
   
   typedef sequence<PortProfile> PortProfileList;
+
 </pre>
 
 

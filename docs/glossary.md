@@ -540,11 +540,28 @@ RTSystemEditorで操作するためには実行コンテキストの情報を取
 
 ## マネージャ
 マネージャはRTCを管理する仕組みです。
-モジュールのロード、RTCの生成、生存しているRTCの管理等を行います。
+1プロセスで1つのマネージャが起動し、モジュールのロード、RTCの生成、生存しているRTCの管理等を行います。
+
+![rtse6](https://user-images.githubusercontent.com/6216077/48309973-4776fb80-e5c8-11e8-990a-887a4416724f.png)
 
 インターフェースは`Manager.idl`で定義されています。RTM標準の規格ではなく、OpenRTM-aist固有のインターフェースです。
 
 ![manager](https://user-images.githubusercontent.com/6216077/48308249-8d6d9880-e5a3-11e8-9039-b263d00aa815.png)
+
+### マスターマネージャ
+マネージャは`マスターマネージャ`と`スレーブマネージャ`に分類されます。
+マスターマネージャはスレーブマネージャを管理するマネージャです。
+通常、マスターマネージャはRTCを生成しません。
+またデフォルトでは`2810`のポート番号で起動するようになっており、RTSystemEditor等のツールからはそのポート番号にアクセスします。
+
+![rtse5](https://user-images.githubusercontent.com/6216077/48309958-d6cfdf00-e5c7-11e8-815d-421614a5198f.png)
+
+### スレーブマネージャ
+スレーブマネージャはマスターマネージャにぶら下がっているマネージャです。
+デフォルトで起動するマネージャはスレーブマネージャであり、RTCを生成することができます。
+通常、スレーブマネージャはRTSystemEditor等のツールから直接操作することができず、マスターマネージャを介して操作することになります。
+動的なRTCの生成、生成可能なモジュール名の取得などができます。
+
 
 ## RTシステム
 単一、もしくは複数のRTCのポートの接続などを行い、RT(ロボットテクノロジー)を活用した処理を実行するためのシステムのことを`RTシステム`と言います。
@@ -645,13 +662,69 @@ OpenRTM-aistにはFluent Bitでログを収集する機能もあります。
 
 ただしこれは同一プロセス内の話で、別プロセスで`Sample0`が起動している場合にもカウントを増やしてほしい場合は、デフォルト以外の設定が必要になります。
 
+### process_unique
+デフォルトの設定。上述の通りプロセス内でカウントする。
+
+### ns_unique
+ネームサーバーに登録されたRTC名が被らないように番号付けする。
+`rtc.conf`に以下のように記述することで利用できる。
+
+<pre>
+manager.components.naming_policy:ns_unique
+</pre>
+
+### node_unique
+同一ノード内でRTC名が被らないように番号付けする。
+マスターマネージャに登録されたスレーブマネージャで起動している全てのRTCを調べて番号付けをする。
+
+<pre>
+manager.components.naming_policy:node_unique
+</pre>
+
 ## CORBA
+CORBA(Common Object Request Broker Architecture)は分散環境で透過的にソフトウェアモジュールの相互利用を行うための標準規格です。
+IDLファイルで定義されたインターフェースでプログラミング言語を問わずに関数のリモート呼び出しができます。
+
+### ORB
+ORB(Object Request Broker)はネットワークを介してプログラムの呼び出しを行うためのミドルウェアのことです。
+CORBAもORBの一つです。
+
+### POA
+POA(Portable Object Adapter)はオブジェクトリファレンスとサービスの実体を関連付けて、リモート呼び出しに対して適切なサービスを呼び出すための仕組みです。
+
 ### CORBAの実装例
 #### omniORB
+OpenRTM-aistが利用しているCORBAの実装です。
+C++、Pythonの実装があります。
+
 #### TAO
+フリーCORBA御三家の一つ。残りはORBacusとMICO。C++による実装。
+UDPの通信、Real-Time CORBA等の機能が充実している。
+OpenRTM-aistがサポートしている実装の一つ。
+
 #### ORBexpress
+商用CORBAの1つ。軽量であり、様々な独自プロトコルを追加できる。
+OpenRTM-aistがサポートしている実装の一つ。
+
+#### RtORB
+RtORBはC言語で実装されているCORBA実装。
+OpenRTM-aistで使用していないAPIが省かれているため非常に軽量。
+
+#### IIOP.NET
+.NET系のプログラミング言語で使用可能なCORBA実装。
+OpenRTM.NETが使用している。
+
+#### OpenORB
+Javaで実装されたCORBA実装。
+OpenRTM-aist Java版が使用している。
+Java SE11からはCORBAのサポートがなくなる。
+
 #### OiL
+Luaで実装されたCORBA実装。
+OpenRTM Luaが使用している。
+
 ### オブジェクトリファレンス
+
 #### CDR
 #### IOR
 #### corbaloc

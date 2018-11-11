@@ -860,11 +860,12 @@ OpenRTM Luaが使用している。
 
 ### CDR
 CDR(Common Data Representation)は、CORBAで使用されているデータの表現方法の1つです。
+サーバー、クライアントで通信する場合にデータはCDR形式のバイト列に変換(マーシャリング、符号化)し送信、受信側でバイト列を元のデータに戻す(アンマーシャリング、復号化)することでデータの受け渡しを行います。
 
 
 ### IOR
 IOR(Interoperable Object Reference)はCORBAオブジェクトの情報を文字列で表現する形式です。
-`IOR:`から始まる文字列となっており、ホスト名、ポート番号等の情報が含まれている。
+`IOR:`から始まる文字列となっており、ホスト名、ポート番号等の情報が含まれています。
 
 ### GIOP
 GIOP(General Inter-ORB Protocol)はORBが通信するための通信プロトコル。

@@ -3,6 +3,21 @@
 ## RTミドルウェア
 ソフトウェアモジュールを組み合わせてロボット技術を用いたシステム(RTシステム)を構築するための標準規格。OMG RTC。
 詳細は[Wikipedia](https://ja.wikipedia.org/wiki/RT%E3%83%9F%E3%83%89%E3%83%AB%E3%82%A6%E3%82%A8%E3%82%A2)でも見てください。
+
+以下で説明しますが、主に以下の機能が定義されています。
+
+* RTコンポーネントの情報取得
+* 実行コンテキストによるRTコンポーネントの状態管理
+* ポートを接続するための機能
+* SDOコンフィギュレーション、SDOサービスに関連する機能
+* データを転送するためのインターフェース(FSM4RTC)
+* RTCの状態通知機能(FSM4RTC)
+* 有限状態機械のための仕組み(FSM4RTC)
+
+
+RTCの情報取得の機能が規格で定義されており、どのような機能、ポートのRTCなのか分かりやすいのは特徴の一つです。
+
+
 ## RTコンポーネント
 ロボット技術を用いたソフトウェアモジュールのことをRTコンポーネント( Robot Technology Component、RTC)といいます。
 RTCにはコンポーネントの基本情報(コンポーネントプロファイル)、他のRTCとやり取りするためのポート(データポート、サービスポート)、コンフィギュレーションパラメータ、ライフサイクルという要素から成り立っています。
@@ -491,7 +506,42 @@ RTCと実行コンテキストを分離することによって、実行コン�
 
 ![executioncontext](https://user-images.githubusercontent.com/6216077/48303135-ddb80c80-e549-11e8-96cb-8db6547030af.png)
 
+`ExecutionContext`で定義されたオペレーションは以下の通りです。
+
+|名前|意味|
+|---|---|
+|is_running|実行状態かを確認|
+|start|実行コンテキストの実行を開始する|
+|stop|実行コンテキストの実行を停止する|
+|get_rate|実行周期を取得する|
+|set_rate|実行周期を設定する|
+|add_component|RTCを関連付ける|
+|remove_component|RTCの関連付けを解除する|
+|activate_component|RTCをアクティブ化する|
+|deactivate_component|RTCを非アクティブ化する|
+|reset_component|RTCをリセットする|
+|get_component_state|RTCの状態を取得する|
+|get_kind|実行コンテキストの種類を取得する|
+
+
+
 RTSystemEditorで操作するためには実行コンテキストの情報を取得する`get_profile`オペレーションが必要なため、`ExecutionContextService`インターフェスの実装が必要になります。
+
+
+|名前|意味|
+|---|---|
+|get_profile|実行コンテキストのプロファイルを取得|
+
+
+`ExtTrigExecutionContextService`では以下のオペレーションが定義されています。
+規格標準ではなく、`OpenRTM.idl`で定義されたOpenRTM-aist独自のインターフェースです。
+
+|名前|意味|
+|---|---|
+|tick|RTCの処理を1回実行する|
+
+
+
 
 実行コンテキストのプロファイルの定義は以下のようになっています。
 

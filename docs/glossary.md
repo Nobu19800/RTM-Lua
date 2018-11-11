@@ -462,6 +462,14 @@ OutPortの`write`関数を呼び出した時点ではリングバッファに格
 確かにサービスポートでも設定できるのですが、設定するためのRTCが別個必要になるため手軽ではありません。
 他のRTCから変更する必要がない場合は、コンフィギュレーションパラメータで設定することをお勧めします。
 
+コンフィギュレーションの設定には、`get_configuration`オペレーションで`Configuration`オブジェクトを取得後に設定します。
+
+![configuration](https://user-images.githubusercontent.com/6216077/48313566-fb48ad00-e601-11e8-8313-53b8e400aad8.png)
+
+
+
+
+
 ### ライフサイクル
 RTCの重要な要素としてライフサイクルがあります。
 RTCには`Created`、`Inactive`、`Activate`、`Error`の4種類の状態があります。

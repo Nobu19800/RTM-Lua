@@ -167,7 +167,6 @@ RTSystemEditorでは`port_profiles`に格納したポートプロファイル一
     NVList properties;
   };
   
-  typedef sequence<ConnectorProfile> ConnectorProfileList;
   
   enum PortInterfacePolarity
   {
@@ -175,7 +174,24 @@ RTSystemEditorでは`port_profiles`に格納したポートプロファイル一
     REQUIRED
   };
   
-
+  struct PortInterfaceProfile
+  {
+    string instance_name;
+    string type_name;
+    PortInterfacePolarity polarity;
+  };
+  
+  
+  struct PortProfile
+  {
+    string name;
+    PortInterfaceProfileList interfaces;
+    PortService port_ref;
+    ConnectorProfileList connector_profiles;
+    RTObject owner;
+    NVList properties;
+  };
+  
 
 </pre>
 
@@ -536,7 +552,6 @@ RTSystemEditorで操作するためには実行コンテキストの情報を取
     OTHER
   };
   
-  typedef sequence<RTObject> RTCList;
   
   struct ExecutionContextProfile
   {

@@ -157,6 +157,19 @@ RT System EditorからRTCを操作するためには、最低でもコンポー�
 RTSystemEditorでは`port_profiles`に格納したポートプロファイル一覧を取得後、`PortProfile`からポートの種類、接続したコネクタ一覧の情報を取得しています。
 
 
+<pre>
+
+  struct ConnectorProfile
+  {
+    string name;
+    UniqueIdentifier connector_id;
+    PortServiceList ports;
+    NVList properties;
+  };
+  
+
+
+</pre>
 
 `PortProfile`の`properties`には以下の情報を格納します。
 

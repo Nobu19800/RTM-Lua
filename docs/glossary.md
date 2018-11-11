@@ -1,10 +1,10 @@
 # 用語集
 
 ## RTミドルウェア
-ソフトウェアモジュールを組み合わせてロボット技術を用いたシステム(RTシステム)を構築するための標準規格。
+ソフトウェアモジュールを組み合わせてロボット技術を用いたシステム(RTシステム)を構築するための標準規格。OMG RTC。
 詳細は[Wikipedia](https://ja.wikipedia.org/wiki/RT%E3%83%9F%E3%83%89%E3%83%AB%E3%82%A6%E3%82%A8%E3%82%A2)でも見てください。
 ## RTコンポーネント
-ロボット技術を用いたソフトウェアモジュールのことをRTコンポーネント(RTC)といいます。
+ロボット技術を用いたソフトウェアモジュールのことをRTコンポーネント( Robot Technology Component、RTC)といいます。
 RTCにはコンポーネントの基本情報(コンポーネントプロファイル)、他のRTCとやり取りするためのポート(データポート、サービスポート)、コンフィギュレーションパラメータ、ライフサイクルという要素から成り立っています。
 
 OpenRTM-aist付属のIDLファイルに定義されたインターフェースは以下のようになっています。
@@ -678,6 +678,7 @@ manager.components.naming_policy:ns_unique
 マスターマネージャに登録されたスレーブマネージャで起動している全てのRTCを調べて番号付けをする。
 
 <pre>
+naming.type:corba,manager
 manager.components.naming_policy:node_unique
 </pre>
 
@@ -724,11 +725,122 @@ Luaで実装されたCORBA実装。
 OpenRTM Luaが使用している。
 
 ### オブジェクトリファレンス
+クライアント側で使用するオブジェクトの参照。
+オブジェクトリファレンスによりリモートにCORBAオブジェクトの実体側の操作を呼び出せる。
+
+![corba1](https://user-images.githubusercontent.com/6216077/48311887-c3ce0680-e5e9-11e8-86b5-8d64d11d8e22.png)
+
 
 #### CDR
+CDR(Common Data Representation)は、CORBAで使用されているデータの表現方法の1つです。
+
+
 #### IOR
-#### corbaloc
-#### corbaname
+IOR(Interoperable Object Reference)はCORBAオブジェクトの情報を文字列で表現する形式です。
+`IOR:`から始まる文字列となっており、ホスト名、ポート番号等の情報が含まれている。
+
+#### GIOP
+GIOP(General Inter-ORB Protocol)はORBが通信するための通信プロトコル。
+GIOPという文字(4byte)、バージョン(2byte)、メッセージフラグ(1byte)、メッセージ型(1byte)、メッセージ本体のサイズ(4byte)の合計12byteのヘッダーの後ろにメッセージ本体を格納する。
+TCP/IP上のGIOPの実装を`IIOP`、UDP上のGIOPの実装を`DIOP`、共有メモリ上のGIOPの実装を`SHMIOP`、UNIXドメインソケット上のGIOPの実装を`UIOP`、IIOPでSSLによる暗号化を行う`SSLIOP`というプロトコルがあります。
+
+#### INS
+INS(Interoperable Naming Service)はCORBAオブジェクトを名前解決する機能。
+`coabeloc`、`corbaname`形式が利用できる。
+
+##### corbaloc
+`corbaloc`は指定アドレス、ポート番号で特定の名前に関連付けたCORBAオブジェクトの参照を取得する方式。
+
+<pre>
+corbaloc:iiop:localhost:2810/manager
+</pre>
+
+名前解決するCORBAオブジェクトは以下のように名前を関連付けておく必要がある。
+
+<pre>
+local manager = orb:newservant(mgr, id, "IDL:RTM/Manager:1.0")
+</pre>
+
+`corbaloc`で名前解決してオブジェクトリファレンスを取得するには以下のようなコードを記述する。
+
+<pre>
+local oil = require "oil"
+
+
+oil.main(function()
+    local orb = oil.init{ flavor = "cooperative;corba;intercepted;typed;base;"}
+
+
+    orb:loadidlfile("idl/CosNaming.idl")
+    orb:loadidlfile("idl/RTC.idl")
+    orb:loadidlfile("idl/OpenRTM.idl")
+    orb:loadidlfile("idl/Manager.idl")
+    
+     -- OiL 0.4
+    local manager = orb:newproxy("corbaloc:iiop:localhost:2810/manager","IDL:RTM/Manager:1.0")
+    -- OiL 0.5, 0,6
+    --local manager = orb:newproxy("corbaloc:iiop:localhost:2810/manager",nil,"IDL:RTM/Manager:1.0")
+
+    local profiles = manager:get_component_profiles()
+    for k,profile in ipairs(profiles) do
+        print(profile.instance_name)
+    end
+    
+    oil.newthread(orb.run, orb)
+end)
+</pre>
+
+##### corbaname
+`corbaname`はネームサーバーからオブジェクトリファレンスを名前解決して取得する方法です。
+
+<pre>
+corbaname:iiop:localhost:2809#ConsoleIn0.rtc\
+</pre>
+
+omniORBpyでは以下のようなコードを記述します。
+
+<pre>
+import sys
+from omniORB import CORBA
+import RTC
+
+orb = CORBA.ORB_init(sys.argv, CORBA.ORB_ID)
+obj = orb.string_to_object("corbaname:iiop:localhost:2809#ConsoleIn0.rtc")
+rtc = obj._narrow(RTC.RTObject)
+
+print(rtc.get_component_profile())
+</pre>
+
+
+OiLでは`corbaname`はサポートしていません。
+
 ## ネームサーバー
+ネームサーバー(もしくはネーミングサービス)はCORBAオブジェクトの参照を名前で登録して検索しやすくする仕組みです。
+
+![nameserver](https://user-images.githubusercontent.com/6216077/48312823-b3bd2380-e5f7-11e8-95dc-37f99738485e.png)
+
+
 ## OpenRTM-aist
+`OpenRTM-aist`は産業技術総合研究所が開発しているRTミドルウェアの実装です。
+C++版、Python版、Java版にRTSystemEditorやRTCBuilder等のツールが含まれています。
+
 ## rtc.conf
+`rtc.conf`はマネージャを起動する際に読み込む設定ファイルです。
+例えば、rtc.confに以下のように記述することでログレベルの設定ができます。
+
+<pre>
+`logger.log_level:Debug`
+</pre>
+
+何も指定しなければ実行したフォルダのrtc.confを読み込みますが、以下のように`-f`のコマンドラインオプションで設定ファイルの指定ができます。
+
+<pre>
+lua Sample.lua -f conf/rtc_test.conf
+</pre>
+
+また、このような設定は必ずしも`rtc.conf`に記述する必要はなく、`-o`のコマンドラインオプションで設定できます。
+`rtc.conf`と`-o`のコマンドラインオプションで同じ項目を設定している場合はコマンドラインオプションが優先されます。
+
+<pre>
+lua Sample.lua -o logger.log_level:Debug
+</pre>

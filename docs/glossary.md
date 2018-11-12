@@ -82,7 +82,7 @@
 * [RTC](https://www.omg.org/spec/RTC/About-RTC/)
 * [FSM4RTC](https://www.omg.org/spec/FSM4RTC/About-FSM4RTC/)
 
-以下で説明しますが、主に以下の機能が定義されています。
+主に以下の機能が定義されています。
 
 * RTコンポーネントの情報取得
 * 実行コンテキストによるRTコンポーネントの状態管理

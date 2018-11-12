@@ -10,16 +10,21 @@ local Arguments = require "loop.compiler.Arguments"
 local args = Arguments{
 	_optpat = "^%-%-(%w+)(=?)(.-)$",
 	port = 2809,
+	host = "",
 }
 
 local argidx, errmsg = args(...)
 
 oil.main(function()
 	local orb = nil
+	if args.host == "" then
+		args.host = nil
+	end
+	
 	if oil.VERSION == "OiL 0.6" then
-		orb = oil.init{flavor = "cooperative;corba;", port=args.port}
+		orb = oil.init{flavor = "cooperative;corba;", host=args.host, port=args.port}
 	else
-		orb = oil.init{flavor = "cooperative;corba;intercepted;typed;base;", port=args.port}
+		orb = oil.init{flavor = "cooperative;corba;intercepted;typed;base;", host=args.host, port=args.port}
 	end
 
 	assert.exception = function(args)

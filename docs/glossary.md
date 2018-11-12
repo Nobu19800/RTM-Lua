@@ -2,73 +2,74 @@
 
 <!-- TOC -->
 
-- [用語集](#用語集)
-    - [RTミドルウェア](#rtミドルウェア)
-    - [RTコンポーネント](#rtコンポーネント)
-        - [データポート](#データポート)
-            - [InPort](#inport)
-            - [OutPort](#outport)
-            - [データ型](#データ型)
-                - [独自データ型](#独自データ型)
-- [include "BasicDataType.idl"](#include-basicdatatypeidl)
-            - [インターフェース型](#インターフェース型)
-                - [corba_cdr](#corba_cdr)
-                - [data_service](#data_service)
-                - [shared_memory](#shared_memory)
-                - [direct](#direct)
-            - [データフロー型](#データフロー型)
-            - [サブスクリプション型](#サブスクリプション型)
-                - [flush](#flush)
-                - [new](#new)
-                - [periodic](#periodic)
-        - [サービスポート](#サービスポート)
-        - [コンフィグレーションパラメータ](#コンフィグレーションパラメータ)
-        - [ライフサイクル](#ライフサイクル)
-            - [Inactivate](#inactivate)
-            - [Activate](#activate)
-            - [Error](#error)
-    - [実行コンテキスト](#実行コンテキスト)
-        - [PeriodicExecutionContext](#periodicexecutioncontext)
-        - [ExtTrigExecutionContext](#exttrigexecutioncontext)
-        - [OpenHRPExecutionContext](#openhrpexecutioncontext)
-        - [SimulatorExecutionContext](#simulatorexecutioncontext)
-        - [RTPreemptEC](#rtpreemptec)
-    - [マネージャ](#マネージャ)
-        - [マスターマネージャ](#マスターマネージャ)
-        - [スレーブマネージャ](#スレーブマネージャ)
-    - [RTシステム](#rtシステム)
-    - [複合コンポーネント](#複合コンポーネント)
-    - [IDLファイル](#idlファイル)
-    - [SDOサービス](#sdoサービス)
-        - [コンポーネントオブザーバ](#コンポーネントオブザーバ)
-    - [FSM4RTC](#fsm4rtc)
-        - [CSP](#csp)
-    - [ロガー](#ロガー)
-    - [ナンバリングポリシー](#ナンバリングポリシー)
-        - [process_unique](#process_unique)
-        - [ns_unique](#ns_unique)
-        - [node_unique](#node_unique)
-    - [CORBA](#corba)
-        - [ORB](#orb)
-        - [POA](#poa)
-        - [CORBAの実装例](#corbaの実装例)
-            - [omniORB](#omniorb)
-            - [TAO](#tao)
-            - [ORBexpress](#orbexpress)
-            - [RtORB](#rtorb)
-            - [IIOP.NET](#iiopnet)
-            - [OpenORB](#openorb)
-            - [OiL](#oil)
-        - [オブジェクトリファレンス](#オブジェクトリファレンス)
-        - [CDR](#cdr)
-        - [IOR](#ior)
-        - [GIOP](#giop)
-        - [INS](#ins)
-            - [corbaloc](#corbaloc)
-            - [corbaname](#corbaname)
-    - [ネームサーバー](#ネームサーバー)
-    - [OpenRTM-aist](#openrtm-aist)
-    - [rtc.conf](#rtcconf)
+- [RTミドルウェア](#rtミドルウェア)
+- [RTコンポーネント](#rtコンポーネント)
+    - [データポート](#データポート)
+        - [InPort](#inport)
+        - [OutPort](#outport)
+        - [データ型](#データ型)
+            - [独自データ型](#独自データ型)
+        - [インターフェース型](#インターフェース型)
+            - [corba_cdr](#corba_cdr)
+            - [data_service](#data_service)
+            - [shared_memory](#shared_memory)
+            - [direct](#direct)
+        - [データフロー型](#データフロー型)
+        - [サブスクリプション型](#サブスクリプション型)
+            - [flush](#flush)
+            - [new](#new)
+            - [periodic](#periodic)
+    - [サービスポート](#サービスポート)
+    - [コンフィグレーションパラメータ](#コンフィグレーションパラメータ)
+    - [ライフサイクル](#ライフサイクル)
+        - [Inactivate](#inactivate)
+        - [Activate](#activate)
+        - [Error](#error)
+- [実行コンテキスト](#実行コンテキスト)
+    - [PeriodicExecutionContext](#periodicexecutioncontext)
+    - [ExtTrigExecutionContext](#exttrigexecutioncontext)
+    - [OpenHRPExecutionContext](#openhrpexecutioncontext)
+    - [SimulatorExecutionContext](#simulatorexecutioncontext)
+    - [RTPreemptEC](#rtpreemptec)
+- [マネージャ](#マネージャ)
+     - [マスターマネージャ](#マスターマネージャ)
+     - [スレーブマネージャ](#スレーブマネージャ)
+- [RTシステム](#rtシステム)
+- [複合コンポーネント](#複合コンポーネント)
+- [IDLファイル](#idlファイル)
+- [SDOサービス](#sdoサービス)
+    - [コンポーネントオブザーバ](#コンポーネントオブザーバ)
+- [FSM4RTC](#fsm4rtc)
+    - [CSP](#csp)
+- [ロガー](#ロガー)
+- [ナンバリングポリシー](#ナンバリングポリシー)
+    - [process_unique](#process_unique)
+    - [ns_unique](#ns_unique)
+    - [node_unique](#node_unique)
+- [CORBA](#corba)
+    - [ORB](#orb)
+    - [POA](#poa)
+    - [CORBAの実装例](#corbaの実装例)
+        - [omniORB](#omniorb)
+        - [TAO](#tao)
+        - [ORBexpress](#orbexpress)
+        - [RtORB](#rtorb)
+        - [IIOP.NET](#iiopnet)
+        - [OpenORB](#openorb)
+        - [OiL](#oil)
+    - [オブジェクトリファレンス](#オブジェクトリファレンス)
+    - [CDR](#cdr)
+    - [IOR](#ior)
+    - [GIOP](#giop)
+    - [INS](#ins)
+        - [corbaloc](#corbaloc)
+        - [corbaname](#corbaname)
+- [ネームサーバー](#ネームサーバー)
+- [OpenRTM-aist](#openrtm-aist)
+- [rtc.conf](#rtcconf)
+- [Lua](#Lua)
+    - [LuaJIT](#LuaJIT)
+    - [LuaRocks](#LuaRocks)
 
 <!-- /TOC -->
 
@@ -76,7 +77,12 @@
 ソフトウェアモジュールを組み合わせてロボット技術を用いたシステム(RTシステム)を構築するための標準規格。OMG RTC。
 詳細は[Wikipedia](https://ja.wikipedia.org/wiki/RT%E3%83%9F%E3%83%89%E3%83%AB%E3%82%A6%E3%82%A8%E3%82%A2)でも見てください。
 
-以下で説明しますが、主に以下の機能が定義されています。
+規格の詳細は以下のページから見れます。
+
+* [RTC](https://www.omg.org/spec/RTC/About-RTC/)
+* [FSM4RTC](https://www.omg.org/spec/FSM4RTC/About-FSM4RTC/)
+
+主に以下の機能が定義されています。
 
 * RTコンポーネントの情報取得
 * 実行コンテキストによるRTコンポーネントの状態管理
@@ -93,6 +99,9 @@ RTCの情報取得の機能が規格で定義されており、どのような�
 ## RTコンポーネント
 ロボット技術を用いたソフトウェアモジュールのことをRTコンポーネント( Robot Technology Component、RTC)といいます。
 RTCにはコンポーネントの基本情報(コンポーネントプロファイル)、他のRTCとやり取りするためのポート(データポート、サービスポート)、コンフィギュレーションパラメータ、ライフサイクルという要素から成り立っています。
+
+![rtc1](https://user-images.githubusercontent.com/6216077/48338091-17068e80-e6a8-11e8-8a4f-061587eaffc3.png)
+
 
 OpenRTM-aist付属のIDLファイルに定義されたインターフェースは以下のようになっています。
 
@@ -126,9 +135,9 @@ RT System EditorからRTCを操作するためには、最低でもコンポー�
 ![on_activated](https://user-images.githubusercontent.com/6216077/48067694-39b22680-e214-11e8-9442-fc8df7717f56.png)
 
 
-`on_initialize`、`on_finalize`はOpenRTM-aistでは内部からしか呼び出されるようになっていない。
+`on_initialize`、`on_finalize`はOpenRTM-aistでは内部からしか呼び出されない。
 
-機能として実行コンテキストが別のプロセス、マシン上のRTCを操作する機能を削る場合は、`ComponentAction`インターフェースのオペレーションはリモート呼び出しする必要がないためCORBAで実装する必要もありません。
+実行コンテキストが別のプロセス、別のマシン上のRTCを操作する機能を削る場合は、`ComponentAction`インターフェースのオペレーションはリモート呼び出しする必要がないためCORBAで実装する必要もありません。
 
 
 `RTC::LightweightRTObject`インターフェースで定義されたオペレーションは以下の通りです。
@@ -409,7 +418,7 @@ CORBA通信を行う場合には、CORBAオブジェクトリファレンス(InP
 
 |名前|型|値|
 |---|---|---|
-|name|適当な名前|
+|name|string|適当な名前|
 |connector_id|string|空白|
 |ports|UniqueIdentifier|{InPortのオブジェクトリファレンス、OutPortのオブジェクトリファレンス}|
 |properties|PortServiceList|NVList|{"dataport.interface_type":"corba_cdr", "dataport.dataflow_type","push", "dataport.corba_cdr.inport_ior":InPortCdrのIOR文字列, "dataport.corba_cdr.inport_ref":InPortCdrのオブジェクトリファレンス}|
@@ -449,7 +458,17 @@ CORBA通信を行う場合には、CORBAオブジェクトリファレンス(InP
 データフロー型はデータを転送する際の流れを定義します。
 `Push`型は`OutPort`から`InPort`にデータを送る方式で、`Pull`型は`InPort`から`OutPort`のデータを取る方式です。
 
+以下はPush型の通信です。
+
+![push](https://user-images.githubusercontent.com/6216077/48321007-7cd02780-e662-11e8-982f-1ad940ccd538.png)
+
+以下はPull型の通信です。
+
+![pull](https://user-images.githubusercontent.com/6216077/48321006-7cd02780-e662-11e8-9b4b-4ecb068ae3a2.png)
+
 現在はPush型、Pull型の2種類ですが、例えばメッセージブローカーを介して通信する場合はPush型やPull型に当てはまらない通信になります。
+
+![topic](https://user-images.githubusercontent.com/6216077/48321005-7cd02780-e662-11e8-818a-9e9086eeada5.png)
 
 現状、OpenRTM-aistではデータフロー型については拡張できるようになっていません。
 
@@ -489,7 +508,7 @@ OutPortの`write`関数を呼び出した時点ではリングバッファに格
 
 |名前|型|値|
 |---|---|---|
-|name|適当な名前|
+|name|string|適当な名前|
 |connector_id|string|空白|
 |ports|PortServiceList|{ServicePort1のオブジェクトリファレンス、ServicePort2のオブジェクトリファレンス}|
 |properties|NVList|{}|
@@ -505,7 +524,7 @@ OutPortの`write`関数を呼び出した時点ではリングバッファに格
 
 |名前|型|値|
 |---|---|---|
-|name|適当な名前|
+|name|string|適当な名前|
 |connector_id|string|空白|
 |ports|PortServiceList|{ServicePort1のオブジェクトリファレンス、ServicePort2のオブジェクトリファレンス}|
 |properties|NVList|{"MyServiceProvider0.port.MyService.provided.MyService.myservice0":"IOR文字列", "port.MyService.myservice0":"IOR文字列"}|
@@ -861,11 +880,12 @@ OpenRTM Luaが使用している。
 
 ### CDR
 CDR(Common Data Representation)は、CORBAで使用されているデータの表現方法の1つです。
+サーバー、クライアントで通信する場合にデータはCDR形式のバイト列に変換(マーシャリング、符号化)し送信、受信側でバイト列を元のデータに戻す(アンマーシャリング、復号化)することでデータの受け渡しを行います。
 
 
 ### IOR
 IOR(Interoperable Object Reference)はCORBAオブジェクトの情報を文字列で表現する形式です。
-`IOR:`から始まる文字列となっており、ホスト名、ポート番号等の情報が含まれている。
+`IOR:`から始まる文字列となっており、ホスト名、ポート番号等の情報が含まれています。
 
 ### GIOP
 GIOP(General Inter-ORB Protocol)はORBが通信するための通信プロトコル。
@@ -972,3 +992,22 @@ lua Sample.lua -f conf/rtc_test.conf
 <pre>
 lua Sample.lua -o logger.log_level:Debug
 </pre>
+
+## Lua
+リオデジャネイロ・カトリカ大学が開発しているスクリプト言語。
+軽量、高い移植性、スクリプト言語としては高速であることが特徴。
+
+* [he Programming Language Lua](https://www.lua.org/)
+
+### LuaJIT
+LuaのJITコンパイラ。Javaにも匹敵する非常に高速な処理が可能。
+
+* [The LuaJIT Project](http://luajit.org/)
+
+### LuaRocks
+Luaのパッケージ管理システムの1つ。
+以下のサイトで運営されている。
+2018年11月現在2400個のモジュールが登録されている。
+
+* [LuaRocks - The Lua package manager](https://luarocks.org/)
+

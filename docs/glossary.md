@@ -447,7 +447,17 @@ CORBA通信を行う場合には、CORBAオブジェクトリファレンス(InP
 データフロー型はデータを転送する際の流れを定義します。
 `Push`型は`OutPort`から`InPort`にデータを送る方式で、`Pull`型は`InPort`から`OutPort`のデータを取る方式です。
 
+以下はPush型の通信です。
+
+![push](https://user-images.githubusercontent.com/6216077/48321007-7cd02780-e662-11e8-982f-1ad940ccd538.png)
+
+以下はPull型の通信です。
+
+![pull](https://user-images.githubusercontent.com/6216077/48321006-7cd02780-e662-11e8-9b4b-4ecb068ae3a2.png)
+
 現在はPush型、Pull型の2種類ですが、例えばメッセージブローカーを介して通信する場合はPush型やPull型に当てはまらない通信になります。
+
+![topic](https://user-images.githubusercontent.com/6216077/48321005-7cd02780-e662-11e8-818a-9e9086eeada5.png)
 
 現状、OpenRTM-aistではデータフロー型については拡張できるようになっていません。
 

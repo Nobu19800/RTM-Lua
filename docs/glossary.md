@@ -418,7 +418,7 @@ CORBA通信を行う場合には、CORBAオブジェクトリファレンス(InP
 
 |名前|型|値|
 |---|---|---|
-|name|適当な名前|
+|name|string|適当な名前|
 |connector_id|string|空白|
 |ports|UniqueIdentifier|{InPortのオブジェクトリファレンス、OutPortのオブジェクトリファレンス}|
 |properties|PortServiceList|NVList|{"dataport.interface_type":"corba_cdr", "dataport.dataflow_type","push", "dataport.corba_cdr.inport_ior":InPortCdrのIOR文字列, "dataport.corba_cdr.inport_ref":InPortCdrのオブジェクトリファレンス}|
@@ -508,7 +508,7 @@ OutPortの`write`関数を呼び出した時点ではリングバッファに格
 
 |名前|型|値|
 |---|---|---|
-|name|適当な名前|
+|name|string|適当な名前|
 |connector_id|string|空白|
 |ports|PortServiceList|{ServicePort1のオブジェクトリファレンス、ServicePort2のオブジェクトリファレンス}|
 |properties|NVList|{}|
@@ -524,7 +524,7 @@ OutPortの`write`関数を呼び出した時点ではリングバッファに格
 
 |名前|型|値|
 |---|---|---|
-|name|適当な名前|
+|name|string|適当な名前|
 |connector_id|string|空白|
 |ports|PortServiceList|{ServicePort1のオブジェクトリファレンス、ServicePort2のオブジェクトリファレンス}|
 |properties|NVList|{"MyServiceProvider0.port.MyService.provided.MyService.myservice0":"IOR文字列", "port.MyService.myservice0":"IOR文字列"}|

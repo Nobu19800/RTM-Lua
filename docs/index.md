@@ -29,6 +29,7 @@
 - [単体テストの実行手順](#単体テストの実行手順)
 - [参考にしたソースコード](#参考にしたソースコード)
 - [用語集](#用語集)
+- [概要スライド](#概要スライド)
 
 <!-- /TOC -->
 
@@ -590,6 +591,10 @@ python setup.py install
 ## 用語集
 
 * [用語集](glossary.md)
+
+## 概要スライド
+
+* [概要スライド](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/rtmcontest2018_01.pdf)
 
 
 

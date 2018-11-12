@@ -134,7 +134,7 @@ RT System EditorからRTCを操作するためには、最低でもコンポー�
 
 `on_initialize`、`on_finalize`はOpenRTM-aistでは内部からしか呼び出されない。
 
-機能として実行コンテキストが別のプロセス、マシン上のRTCを操作する機能を削る場合は、`ComponentAction`インターフェースのオペレーションはリモート呼び出しする必要がないためCORBAで実装する必要もありません。
+実行コンテキストが別のプロセス、別のマシン上のRTCを操作する機能を削る場合は、`ComponentAction`インターフェースのオペレーションはリモート呼び出しする必要がないためCORBAで実装する必要もありません。
 
 
 `RTC::LightweightRTObject`インターフェースで定義されたオペレーションは以下の通りです。

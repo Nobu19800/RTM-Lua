@@ -67,12 +67,20 @@
 - [ネームサーバー](#ネームサーバー)
 - [OpenRTM-aist](#openrtm-aist)
 - [rtc.conf](#rtcconf)
+- [Lua](#Lua)
+    - [LuaJIT](#LuaJIT)
+    - [LuaRocks](#LuaRocks)
 
 <!-- /TOC -->
 
 ## RTミドルウェア
 ソフトウェアモジュールを組み合わせてロボット技術を用いたシステム(RTシステム)を構築するための標準規格。OMG RTC。
 詳細は[Wikipedia](https://ja.wikipedia.org/wiki/RT%E3%83%9F%E3%83%89%E3%83%AB%E3%82%A6%E3%82%A8%E3%82%A2)でも見てください。
+
+規格の詳細は以下のページから見れます。
+
+* [RTC](https://www.omg.org/spec/RTC/About-RTC/)
+* [FSM4RTC](https://www.omg.org/spec/FSM4RTC/About-FSM4RTC/)
 
 以下で説明しますが、主に以下の機能が定義されています。
 
@@ -981,3 +989,22 @@ lua Sample.lua -f conf/rtc_test.conf
 <pre>
 lua Sample.lua -o logger.log_level:Debug
 </pre>
+
+## Lua
+リオデジャネイロ・カトリカ大学が開発しているスクリプト言語。
+軽量、高い移植性、スクリプト言語としては高速であることが特徴。
+
+* [he Programming Language Lua](https://www.lua.org/)
+
+### LuaJIT
+LuaのJITコンパイラ。Javaにも匹敵する非常に高速な処理が可能。
+
+* [The LuaJIT Project](http://luajit.org/)
+
+### LuaRocks
+Luaのパッケージ管理システムの1つ。
+以下のサイトで運営されている。
+2018年11月現在2400個のモジュールが登録されている。
+
+* [LuaRocks - The Lua package manager](https://luarocks.org/)
+

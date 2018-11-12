@@ -155,12 +155,23 @@ $ /haiku/luarocks/bin/luarocks install openrtm
 
 
 サンプルは以下のように実行する。
-Windows以外のOSではエンドポイントが適切に設定されない場合があるので、`corba.endpoints`オプションを指定する。
-現状Haikuでネームサーバーを起動する方法がないため、Windows等ほかのネームサーバーにRTCを登録する。もしくは、ネームサーバーには登録せずにマネージャ経由でアクセスする。
 
+まずOpenRTM Luaのソースコードを入手します。
 <pre>
 $ git clone https://github.com/Nobu19800/RTM-Lua
-$ cd RTM-Lua/samples
+</pre>
 
-$ /haiku/lua/bin/lua ConfigSample.lua -o corba.endpoints:HaikuのIPアドレス -o corba.nameservers:Windows等のIPアドレス
+OiL用のネームサーバーを起動します。
+<pre>
+$ cd RTM-Lua/utils/rtm-naming
+$ /haiku/lua/bin/lua rtm-naming.lua --port=2809 --host=HaikuのIPアドレス
+</pre>
+
+
+Windows以外のOSではエンドポイントが適切に設定されない場合があるので、`corba.endpoints`オプションを指定する。
+またlocalhostでネームサーバーに接続できないことがあるようなので、ネームサーバーのIPアドレスを指定する。
+
+<pre>
+$ cd RTM-Lua/samples
+$ /haiku/lua/bin/lua ConfigSample.lua -o corba.endpoints:HaikuのIPアドレス -o corba.nameservers:HaikuのIPアドレス
 </pre>

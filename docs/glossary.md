@@ -100,7 +100,7 @@ RTCの情報取得の機能が規格で定義されており、どのような�
 ロボット技術を用いたソフトウェアモジュールのことをRTコンポーネント( Robot Technology Component、RTC)といいます。
 RTCにはコンポーネントの基本情報(コンポーネントプロファイル)、他のRTCとやり取りするためのポート(データポート、サービスポート)、コンフィギュレーションパラメータ、ライフサイクルという要素から成り立っています。
 
-![rtc1](https://user-images.githubusercontent.com/6216077/48337978-cdb63f00-e6a7-11e8-8ec6-84a013501009.png)
+![rtc1](https://user-images.githubusercontent.com/6216077/48338091-17068e80-e6a8-11e8-8a4f-061587eaffc3.png)
 
 
 OpenRTM-aist付属のIDLファイルに定義されたインターフェースは以下のようになっています。

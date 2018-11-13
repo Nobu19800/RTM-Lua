@@ -115,13 +115,6 @@ AviUtlやNScripter2上でもRTCを起動できますが、実用性は皆無で�
 * Celestia(3D天体シミュレータ)
 * OpenResty(WEBアプリサーバー), [動画1](https://www.youtube.com/watch?v=_-Kw8qv_keo), [動画2](https://www.youtube.com/watch?v=4qxKCBcIIEE)
 
-##### 利用手順
-
-* [V‐REP上で動作するRTCの作成方法](V-REP.md)
-* [BizHawk上で動作するRTCの作成方法](BizHawk.md)
-* [Laputan Blueprints上で動作するRTCの作成方法](LaputanBlueprints.md)
-* [OpenResty上で動作するRTCの作成方法](OpenResty.md)
-* [LÖVE上で動作するRTCの作成方法](love2d.md)
 
 
 #### 高速
@@ -564,6 +557,11 @@ python setup.py install
 
 ## 応用例
 
+* [V‐REP上で動作するRTCの作成方法](V-REP.md)
+* [BizHawk上で動作するRTCの作成方法](BizHawk.md)
+* [Laputan Blueprints上で動作するRTCの作成方法](LaputanBlueprints.md)
+* [OpenResty上で動作するRTCの作成方法](OpenResty.md)
+* [LÖVE上で動作するRTCの作成方法](love2d.md)
 * [EV3での利用方法](EV3.md)
 * [Torchによる会話コンポーネント作成手順](Torch.md)
 

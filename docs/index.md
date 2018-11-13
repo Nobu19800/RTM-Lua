@@ -7,6 +7,7 @@
 <!-- TOC -->
 
 - [ソースコード](#ソースコード)
+- [用語集](#用語集)
 - [概要](#概要)
     - [RTミドルウェアとは？](#rtミドルウェアとは)
     - [Luaとは？](#luaとは)
@@ -28,7 +29,6 @@
 - [次期リリースでの追加、修正項目](#次期リリースでの追加修正項目)
 - [単体テストの実行手順](#単体テストの実行手順)
 - [参考にしたソースコード](#参考にしたソースコード)
-- [用語集](#用語集)
 - [概要スライド](#概要スライド)
 
 <!-- /TOC -->
@@ -38,6 +38,10 @@
 * [サンプルコンポーネント](https://github.com/Nobu19800/RTM-Lua-Sample)
 * [計測用コンポーネント](https://github.com/Nobu19800/RTM-Lua-test)
 * [RTC Builder用プラグイン](https://github.com/Nobu19800/jp.go.aist.rtm.rtcbuilder.lua)
+
+## 用語集
+
+* [用語集](glossary.md)
 
 ## 概要
 このページではOpenRTM Lua版について説明します。
@@ -588,9 +592,7 @@ python setup.py install
 * [RTCBuilder](http://svn.openrtm.org/rtmtools/)
 
 
-## 用語集
 
-* [用語集](glossary.md)
 
 ## 概要スライド
 

@@ -6,7 +6,7 @@ OpenRTM-aist 1.0系付属のDataPort.idlはOiLでは読み込めないため、O
 
 corba_cdr対応版では他のIDLファイルを改変することでDataPort.idlの読み込みを可能にしていますが、通常版はOpenRTM-aist 1.2以前、およびOpenRTM.NETと通信することができません。
 
-ただ、開発中のOpenRTM-aist 2.0とは通信できるため、Python版のOpenRTM-aist 2.0(開発中)のインストール方法を説明します。
+ただ、開発中のOpenRTM-aist 2.0とは通信できるため、OpenRTM-aist 2.0(開発中)のインストール方法を説明します。
 
 ## omniORBの入手
 OpenRTM-aistを各自の環境でビルドする必要があります。
@@ -16,9 +16,11 @@ OpenRTM-aistを各自の環境でビルドする必要があります。
 
 ## OpenRTM-aistのビルド
 
-[TortoiseSVN](https://ja.osdn.net/projects/tortoisesvn/)等で以下からOpenRTM-aist Python版 2.0のソースコードを入手します。
+[TortoiseSVN](https://ja.osdn.net/projects/tortoisesvn/)等で以下からOpenRTM-aist 2.0のソースコードを入手します。
 
-以下のコマンドでビルドします。
+* [http://svn.openrtm.org/OpenRTM-aist/trunk/OpenRTM-aist/](http://svn.openrtm.org/OpenRTM-aist/trunk/OpenRTM-aist/)
+
+OpenRTM-aistのフォルダに移動して、以下のコマンドでビルドします。
 
 <pre>
 mkdir src\lib\coil\common\coil

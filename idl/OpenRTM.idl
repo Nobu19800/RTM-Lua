@@ -18,7 +18,7 @@
 
 #include "RTC.idl"
 
-
+#pragma prefix "openrtm.aist.go.jp"
 
 module OpenRTM
 {

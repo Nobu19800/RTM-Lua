@@ -135,7 +135,7 @@ InPortCorbaCdrConsumer.new = function()
 
 		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
-		local _obj = RTCUtil.newproxy(orb, ior,"IDL:OpenRTM/InPortCdr:1.0")
+		local _obj = RTCUtil.newproxy(orb, ior,"IDL:openrtm.aist.go.jp/OpenRTM/InPortCdr:1.0")
 
 
 
@@ -173,7 +173,7 @@ InPortCorbaCdrConsumer.new = function()
 		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
 
-		_obj = orb:narrow(_obj, "IDL:OpenRTM/InPortCdr:1.0")
+		_obj = orb:narrow(_obj, "IDL:openrtm.aist.go.jp/OpenRTM/InPortCdr:1.0")
 
 
 		if _obj == nil then
@@ -216,7 +216,7 @@ InPortCorbaCdrConsumer.new = function()
 
 		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
-		local var = RTCUtil.newproxy(orb, ior,"IDL:OpenRTM/InPortCdr:1.0")
+		local var = RTCUtil.newproxy(orb, ior,"IDL:openrtm.aist.go.jp/OpenRTM/InPortCdr:1.0")
 
 		if not NVUtil._is_equivalent(self:_ptr(true), var, self:_ptr(true).getObjRef, var.getObjRef) then
 			self._rtcout:RTC_ERROR("connector property inconsistency")

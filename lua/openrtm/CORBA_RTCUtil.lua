@@ -588,7 +588,7 @@ CORBA_RTCUtil.create_connector = function(name, prop_arg, port0, port1)
 
 
 	if tostring(prop:getProperty("dataport.interface_type")) == "" then
-		prop:setProperty("dataport.interface_type","corba_cdr")
+		prop:setProperty("dataport.interface_type","data_service")
 	end
 
 

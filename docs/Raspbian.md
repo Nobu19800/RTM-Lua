@@ -17,6 +17,8 @@ $ tar xf luamodule_raspbian.tar.gz
 $ cp -rf luamodule_raspbian/* openrtm-lua/clibs/
 </pre>
 
+※corba_cdr対応版を使用する場合は、ZIPファイル名に`openrtm-lua-0.4.1-cc-x86-lua5.2.zip`を使用してください。
+
 
 RTCの実行時には、以下のように環境変数`LUA_PATH`と`LUA_CPATH`を設定してください。
 

@@ -145,7 +145,7 @@ $ /haiku/luarocks/bin/luarocks make NETWORK_DIR=/boot/system/
 
 
 
-## 通常版をインストールする場合
+### 通常版をインストールする場合
 
 以下のようにluarocksでopenrtmをインストールしてください。
 
@@ -154,7 +154,7 @@ $ /haiku/luarocks/bin/luarocks install openrtm
 </pre>
 
 
-## corba_cdr対応版をインストールする場合
+### corba_cdr対応版をインストールする場合
 
 ソースコードからインストールしてください。
 
@@ -166,7 +166,7 @@ sh install.sh
 </pre>
 
 
-
+### サンプルの実行
 
 サンプルは以下のように実行する。
 

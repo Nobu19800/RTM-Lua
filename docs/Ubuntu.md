@@ -7,9 +7,10 @@ $ sudo apt-get install lua5.1
 $ sudo apt-get install luarocks
 </pre>
 
-
+<!-- 
 LuaSocket、LOOP、OiL、LuaLoggingをインストールしてください。
 OiLのインストールだけで、LuaSocketとLOOPは自動的にインストールされるかもしれません。
+
 
 <pre>
 $ sudo luarocks install luasocket
@@ -19,7 +20,7 @@ $ sudo luarocks install oil
 $ sudo luarocks install lualogging
 $ sudo luarocks install uuid
 </pre>
-
+ -->
 
 ## LuaRocksからインストール
 以下のコマンドを実行してください。
@@ -36,4 +37,14 @@ OpenRTM Lua版のインストールスクリプトを実行してください。
 $ git clone https://github.com/Nobu19800/RTM-Lua.git
 $ cd RTM-Lua
 $ sudo sh install.sh
+</pre>
+
+## corba_cdr対応版のインストール
+以下のコマンドでインストールしてください。
+
+<pre>
+$ git clone -b corba_cdr_support https://github.com/Nobu19800/RTM-Lua
+$ cd RTM-Lua
+$ cp spec/*.rockspec ./
+$ luarocks make
 </pre>

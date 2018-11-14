@@ -15,11 +15,24 @@ brew install luarocks
 </pre>
 
 
+## 通常版をインストールする場合
+
 luarocksによりopenrtmをインストールしてください。
 
 <pre>
 luarocks --lua-dir=/usr/local/opt/lua@5.1 install openrtm
 </pre>
+
+## corba_cdr対応版をインストールする場合
+
+ソースコードからインストールしてください。
+
+<pre>
+git clone -b corba_cdr_support https://github.com/Nobu19800/RTM-Lua
+cd RTM-Lua
+sh install.sh
+</pre>
+
 
 理由はよく分かりませんが、`--local`オプションを設定していないにもかかわらずローカルのディレクトリにインストールされるようなので、以下のコマンドの出力結果をコマンドで入力して実行してください。
 

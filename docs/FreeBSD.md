@@ -48,9 +48,9 @@ $ luarocks install openrtm
 ソースコードからインストールしてください。
 
 <pre>
-git clone -b corba_cdr_support https://github.com/Nobu19800/RTM-Lua
-cd RTM-Lua
-sh install.sh
+$ git clone -b corba_cdr_support https://github.com/Nobu19800/RTM-Lua
+$ cd RTM-Lua
+$ sh install.sh
 </pre>
 
 

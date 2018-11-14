@@ -30,7 +30,7 @@ mkdir build_omni
 cd build_omni
 cmake -DOMNI_VERSION=42  -DOMNI_MINOR=2 -DOMNITHREAD_VERSION=40 -DORB_ROOT=C:/workspace/omniORB-4.2.2-win64-vc141 -DCORBA=omniORB -G "Visual Studio 15 2017 Win64" -DCMAKE_INSTALL_PREFIX="C:/workspace/openrtm_install" ..
 cmake --build . --config Release
-cmake --build . --config Releas --target INSTALL
+cmake --build . --config Release --target INSTALL
 </pre>
 
 omniORBを配置したフォルダ、コンパイラの種類、インストールするフォルダは適宜編集してください。

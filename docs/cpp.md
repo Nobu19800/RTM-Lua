@@ -35,7 +35,7 @@ cmake --build . --config Release --target INSTALL
 
 omniORBを配置したフォルダ、コンパイラの種類、インストールするフォルダは適宜編集してください。
 
-環境変数`OpenRTM_DIR`に`C:/workspace/openrtm_install/2.0.0/cmake`を設定してください。
+環境変数`OpenRTM_DIR`に`C:\workspace\openrtm_install\2.0.0\cmake`を設定してください。
 インストールしたフォルダが違う場合は適宜変更してください。
 
 

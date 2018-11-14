@@ -1,4 +1,19 @@
 # 開発メモ
+## IDLファイルの読み込み失敗
+
+OiLではOpenRTM.idlとDataPort.idlを同時に使用することができない。
+OpenRTM.idlでは、以下のように接頭語が設定されていますが、DataPort.idlにはこれが記述されていません。
+意図が分からないので、OpenRTM-aist 1.0開発時にミスがあったのかもしれません。
+
+<pre>
+#include "RTC.idl"
+
+#pragma prefix "openrtm.aist.go.jp"
+
+module OpenRTM
+{
+</pre>
+
 ## コルーチン
 Luaはマルチスレッドで動作させることができません。
 そのためloopライブラリではコルーチンにより順番に処理を実行するようになっていますが、yieldによりコルーチンの動作を中断しないと他の処理が実行されないということになります。

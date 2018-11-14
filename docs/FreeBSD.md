@@ -35,10 +35,22 @@ $ luarocks path
 ただしexportコマンドがエラーになるようなので、`setenv`に置き換えてから入力する必要があります。
 
 ## OpenRTM Luaのインストール
+
+### 通常版をインストールする場合
 以下のコマンドでインストールしてください。
 
 <pre>
 $ luarocks install openrtm
+</pre>
+
+### corba_cdr対応版をインストールする場合
+
+ソースコードからインストールしてください。
+
+<pre>
+git clone -b corba_cdr_support https://github.com/Nobu19800/RTM-Lua
+cd RTM-Lua
+sh install.sh
 </pre>
 
 

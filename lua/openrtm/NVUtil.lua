@@ -172,6 +172,7 @@ NVUtil.appendStringValue = function(nv, _name, _value)
 		local values = StringUtil.split(tmp_str,",")
 		local find_flag = false
 		for i, val in ipairs(values) do
+			val = StringUtil.eraseBothEndsBlank(val)
 			if val == _value then
 				find_flag = true
 			end

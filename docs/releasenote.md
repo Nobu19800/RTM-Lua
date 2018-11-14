@@ -122,3 +122,6 @@ OiL 0.7のみサポートする。
 ## 0.4.1(2018年11月18日)
 
 * ステップ実行時の動作に不具合があったため修正
+
+* OpenRTM.idlの`#pragma prefix "openrtm.aist.go.jp"`を削除してDataPort.idlを読み込めるようにしたcorba_cdr対応版を配布
+corba_cdr対応版はOpenRTM-aist 1.2以前、OpenRTM.NETと通信できるようになったかわりにOpenRTM.idlで定義したインターフェースが使えないため、様々な何らかの問題が発生する可能性はある。少なくとも、複合コンポーネント、トリガ駆動の実行コンテキストを外部から利用するのは不可。OpenRTM Luaで使用する分には問題なし。

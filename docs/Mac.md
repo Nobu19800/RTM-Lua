@@ -3,15 +3,15 @@
 [Homebrew](https://brew.sh/index_ja)をインストールしてください。
 
 <pre>
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+$ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 </pre>
 
 
 Homebrewによりlua-5.1とluarocksをインストールしてください。
 
 <pre>
-brew install lua51
-brew install luarocks
+$ brew install lua51
+$ brew install luarocks
 </pre>
 
 
@@ -20,7 +20,7 @@ brew install luarocks
 luarocksによりopenrtmをインストールしてください。
 
 <pre>
-luarocks --lua-dir=/usr/local/opt/lua@5.1 install openrtm
+$ luarocks --lua-dir=/usr/local/opt/lua@5.1 install openrtm
 </pre>
 
 ## corba_cdr対応版をインストールする場合
@@ -28,10 +28,10 @@ luarocks --lua-dir=/usr/local/opt/lua@5.1 install openrtm
 ソースコードからインストールしてください。
 
 <pre>
-git clone -b corba_cdr_support https://github.com/Nobu19800/RTM-Lua
-cd RTM-Lua
-cp spec/*.rockspec ./
-luarocks --lua-dir=/usr/local/opt/lua@5.1 make
+$ git clone -b corba_cdr_support https://github.com/Nobu19800/RTM-Lua
+$ cd RTM-Lua
+$ cp spec/*.rockspec ./
+$ luarocks --lua-dir=/usr/local/opt/lua@5.1 make
 </pre>
 
 
@@ -40,14 +40,14 @@ luarocks --lua-dir=/usr/local/opt/lua@5.1 make
 理由はよく分かりませんが、`--local`オプションを設定していないにもかかわらずローカルのディレクトリにインストールされるようなので、以下のコマンドの出力結果をコマンドで入力して実行してください。
 
 <pre>
-luarocks --lua-dir=/usr/local/opt/lua@5.1 path
+$ luarocks --lua-dir=/usr/local/opt/lua@5.1 path
 </pre>
 
 これでインストール完了です。
 実行する場合は`lua-5.1`コマンドで実行してください。
 
 <pre>
-lua-5.1 ConsoleIn.lua
+$ lua-5.1 ConsoleIn.lua
 </pre>
 
 OpenRTM-aistのインストールなどは以下のページを参考にしてください。
@@ -60,6 +60,6 @@ OpenRTM-aistのインストールなどは以下のページを参考にして�
 単純にネームサーバーを起動したいだけであれば、omniORBをインストール後にomniNamesを実行するだけでも可能です。
 
 <pre>
-brew install omniorb
-omniNames -start 2809 -logdir $PWD
+$ brew install omniorb
+$ omniNames -start 2809 -logdir $PWD
 </pre>

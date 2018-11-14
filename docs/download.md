@@ -2,7 +2,7 @@
 ## OpenRTM Lua版
 
 
-### Ver.0.4.1(通常版)
+### Ver.0.4.1
 #### Lua 5.1
 * [OpenRTM Lua 0.4.1 Lua5.1 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-x86-lua5.1.zip)
 * [OpenRTM Lua 0.4.1 Lua5.1 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-x64-lua5.1.zip)

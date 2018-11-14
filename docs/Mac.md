@@ -30,7 +30,8 @@ luarocks --lua-dir=/usr/local/opt/lua@5.1 install openrtm
 <pre>
 git clone -b corba_cdr_support https://github.com/Nobu19800/RTM-Lua
 cd RTM-Lua
-sh install.sh
+cp spec/*.rockspec ./
+luarocks --lua-dir=/usr/local/opt/lua@5.1 make
 </pre>
 
 

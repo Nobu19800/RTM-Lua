@@ -22,7 +22,7 @@ $ sudo luarocks install uuid
 </pre>
  -->
 
-## LuaRocksからインストール
+## 通常版のインストール
 以下のコマンドを実行してください。
 
 <pre>

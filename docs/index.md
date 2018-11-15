@@ -522,10 +522,10 @@ LGPLライセンス
 
 
 ## 通常版を使用する場合について
-現在配布しているOpenRTM Luaには通常版とcorba_cdr対応版があります。
+現在配布しているOpenRTM Luaには**通常版**と**corba_cdr対応版**があります。
 これはOpenRTM-aist付属のIDLファイルの問題により、OpenRTM.idlとDataPort.idlをOiLで読み込むとエラーが発生する問題のため、DataPort.idlを読み込まずにFSM4RTC標準のインターフェースのみをサポートした通常版と、OpenRTM.idlを改変してDataPort.idlを読み込めるようにしたcorba_cdr対応版を用意してあります。
 
-通常版を使用する場合は、OpenRTM-aist 1.2以前、OpenRTM.NETとデータポートが接続ができません。
+通常版を使用する場合は、**OpenRTM-aist 1.2以前、OpenRTM.NETとデータポートが接続ができません。**
 このため、OpenRTM-aist 2.0のインストールが必要になります。
 
 以下のページにインストール手順が記載してあります。

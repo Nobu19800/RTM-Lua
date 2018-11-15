@@ -30,6 +30,7 @@ $ sudo luarocks install openrtm
 </pre>
 
 
+<!-- 
 ## ソースコードからインストール
 OpenRTM Lua版のインストールスクリプトを実行してください。
 
@@ -38,6 +39,7 @@ $ git clone https://github.com/Nobu19800/RTM-Lua.git
 $ cd RTM-Lua
 $ sudo sh install.sh
 </pre>
+ -->
 
 ## corba_cdr対応版のインストール
 以下のコマンドでインストールしてください。

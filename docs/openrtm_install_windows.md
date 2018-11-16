@@ -1,4 +1,4 @@
-# OpenRTM-aistのインストール手順
+# OpenRTM-aistのインストール手順(Windows)
 
 このページではWindowsでのOpenRTM-aistのインストール手順を説明します。
 

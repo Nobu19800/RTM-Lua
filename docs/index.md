@@ -170,6 +170,12 @@ RTSystemEditor、ネームサーバーはOpenRTM-aistのものを使用してく
 openrtm.orgが閉鎖している場合は以下のサイトから入手してください。
 * [openrtm.github.io](https://openrtm.github.io/)
 
+OpenRTM-aistのインストール手順は以下の通りです。
+
+* [Windows](openrtm_install_windows.md)
+* [Ubuntu](openrtm_install_ubuntu.md)
+
+
 以下の手順で簡単な動作確認ができます。
 
 * [チュートリアル](tutorial.md)

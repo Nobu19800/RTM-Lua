@@ -55,3 +55,10 @@ ARMアーキテクチャで動作させたときにFloat型、Double型のアン
 ## OiL 0.7の機能
 
 OiL 0.7では`pending`関数、`step`関数でタイムアウトを設定できる。
+
+## OpenRTM.NETとの通信について
+現在のところ、OpenRTM.NETのRTCと接続できません。
+ログを見る限り、OpenRTM.NETの`IDL:OpenRTM/IIOP/Adapter/IDataFlowComponentAdapter:1.0`や`IDL:OpenRTM/IIOP/InPortCdrAdapter:1.0`が何者か分からないらしい。
+OpenRTM.NETからOpenRTM Luaに通信できない理由は不明。
+
+

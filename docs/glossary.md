@@ -221,7 +221,8 @@ RT System EditorからRTCを操作するためには、最低でもコンポー�
 コンポーネントプロファイルは以下のような構造になっています。
 
 
-![profile](https://user-images.githubusercontent.com/6216077/48655215-889f5d80-ea57-11e8-87e1-3e1867dde68a.png)
+![profile](https://user-images.githubusercontent.com/6216077/48655243-e92e9a80-ea57-11e8-83d1-81c953477873.png)
+
 
 
 RTSystemEditorでは`port_profiles`に格納したポートプロファイル一覧を取得後、`PortProfile`からポートの種類、接続したコネクタ一覧の情報を取得しています。

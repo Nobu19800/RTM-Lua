@@ -220,61 +220,13 @@ RT System EditorからRTCを操作するためには、最低でもコンポー�
 
 コンポーネントプロファイルは以下のような構造になっています。
 
-<pre>  
-  struct ComponentProfile
-  {
-    string instance_name;
-    string type_name;
-    string description;
-    string version;
-    string vendor;
-    string category;
-    PortProfileList port_profiles;
-    RTObject parent;
-    NVList properties;
-  };
-</pre>
+
+![profile](https://user-images.githubusercontent.com/6216077/48655215-889f5d80-ea57-11e8-87e1-3e1867dde68a.png)
+
 
 RTSystemEditorでは`port_profiles`に格納したポートプロファイル一覧を取得後、`PortProfile`からポートの種類、接続したコネクタ一覧の情報を取得しています。
 
 
-<pre>
-
-  struct ConnectorProfile
-  {
-    string name;
-    UniqueIdentifier connector_id;
-    PortServiceList ports;
-    NVList properties;
-  };
-  
-  
-  enum PortInterfacePolarity
-  {
-    PROVIDED,
-    REQUIRED
-  };
-  
-  struct PortInterfaceProfile
-  {
-    string instance_name;
-    string type_name;
-    PortInterfacePolarity polarity;
-  };
-  
-  
-  struct PortProfile
-  {
-    string name;
-    PortInterfaceProfileList interfaces;
-    PortService port_ref;
-    ConnectorProfileList connector_profiles;
-    RTObject owner;
-    NVList properties;
-  };
-  
-
-</pre>
 
 `PortProfile`の`properties`には以下の情報を格納します。
 
@@ -555,7 +507,7 @@ OutPortの`write`関数を呼び出した時点ではリングバッファに格
 
 コンフィギュレーションの設定には、`get_configuration`オペレーションで`Configuration`オブジェクトを取得後に設定します。
 
-![configuration](https://user-images.githubusercontent.com/6216077/48313566-fb48ad00-e601-11e8-8313-53b8e400aad8.png)
+![configuration](https://user-images.githubusercontent.com/6216077/48655189-55f56500-ea57-11e8-9afc-2161a18f018f.png)
 
 
 
@@ -602,7 +554,7 @@ RTCと実行コンテキストを分離することによって、実行コン�
 
 実行コンテキストは`RTC.idl`、`OpenRTM.idl`で以下のようなインターフェースが定義されています。
 
-![executioncontext](https://user-images.githubusercontent.com/6216077/48303135-ddb80c80-e549-11e8-96cb-8db6547030af.png)
+![executioncontext](https://user-images.githubusercontent.com/6216077/48655114-930d2780-ea56-11e8-9013-36293b0b35fc.png)
 
 `ExecutionContext`で定義されたオペレーションは以下の通りです。
 
@@ -640,27 +592,6 @@ RTSystemEditorで操作するためには実行コンテキストの情報を取
 
 
 
-
-実行コンテキストのプロファイルの定義は以下のようになっています。
-
-<pre>
-  enum ExecutionKind
-  {
-    PERIODIC,
-    EVENT_DRIVEN,
-    OTHER
-  };
-  
-  
-  struct ExecutionContextProfile
-  {
-    ExecutionKind kind;
-    double rate;
-    RTObject owner;
-    RTCList participants;
-    NVList properties;
-  };
-</pre>
 
 イベント駆動の実行コンテキストには、実質的に`rate`の設定は意味がありません。
 

@@ -145,7 +145,7 @@ Luaスクリプト機能をサポートしているアプリケーションを�
 
 * [ダウンロード](download.md)
 
-※OpenRTM LuaはOpenRTM-aistで使用しているOpenRTM.idlとDataPort.idlを同時にロードできません。詳細は[ここ](memo.md#IDLファイルの読み込み失敗)に記載してあります。このためDataPort.idlを削除してFSM4RTC標準のインターフェースのみが使える通常版と、OpenRTM.idlを改変してDataPort.idlを使えるようにしたcorba_cdr対応版を用意してあります。**通常版はOpenRTM-aist 1.2以前、およびOpenRTM.NETのRTCとデータポートで接続ができません**。corba_cdr対応版はそれらの実装とデータポートで接続ができますが、OpenRTM.idlを改変しているため何らかの不具合が発生する可能性があります。
+※OpenRTM LuaはOpenRTM-aistで使用しているOpenRTM.idlとDataPort.idlを同時にロードできません。詳細は[ここ](memo.md#IDLファイルの読み込み失敗)に記載してあります。このためDataPort.idlを削除してFSM4RTC標準のインターフェースのみが使える通常版と、OpenRTM.idlを改変してDataPort.idlを使えるようにしたcorba_cdr対応版を用意してあります。**通常版はOpenRTM-aist 1.2以前のRTCとデータポートで接続ができません**。corba_cdr対応版はそれらの実装とデータポートで接続ができますが、OpenRTM.idlを改変しているため何らかの不具合が発生する可能性があります。
 
 ## 動作確認
 Windowsの場合はインストールしなくても動作を確認できます。
@@ -530,7 +530,7 @@ LGPLライセンス
 現在配布しているOpenRTM Luaには**通常版**と**corba_cdr対応版**があります。
 これはOpenRTM-aist付属のIDLファイルの問題により、OpenRTM.idlとDataPort.idlをOiLで読み込むとエラーが発生する問題のため、DataPort.idlを読み込まずにFSM4RTC標準のインターフェースのみをサポートした通常版と、OpenRTM.idlを改変してDataPort.idlを読み込めるようにしたcorba_cdr対応版を用意してあります。
 
-通常版を使用する場合は、**OpenRTM-aist 1.2以前、OpenRTM.NETとデータポートが接続ができません。**
+通常版を使用する場合は、**OpenRTM-aist 1.2以前のRTCとデータポートが接続ができません。**
 このため、OpenRTM-aist 2.0のインストールが必要になります。
 
 以下のページにインストール手順が記載してあります。

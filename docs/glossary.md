@@ -221,7 +221,7 @@ RT System EditorからRTCを操作するためには、最低でもコンポー�
 コンポーネントプロファイルは以下のような構造になっています。
 
 
-![profile](https://user-images.githubusercontent.com/6216077/48655243-e92e9a80-ea57-11e8-83d1-81c953477873.png)
+![profile](https://user-images.githubusercontent.com/6216077/48655712-ec2c8980-ea5d-11e8-85b7-4a9994a54c4f.png)
 
 
 
@@ -508,7 +508,7 @@ OutPortの`write`関数を呼び出した時点ではリングバッファに格
 
 コンフィギュレーションの設定には、`get_configuration`オペレーションで`Configuration`オブジェクトを取得後に設定します。
 
-![configuration](https://user-images.githubusercontent.com/6216077/48655189-55f56500-ea57-11e8-9afc-2161a18f018f.png)
+![configuration](https://user-images.githubusercontent.com/6216077/48655713-ecc52000-ea5d-11e8-9c68-88b90a60c68a.png)
 
 
 
@@ -555,7 +555,7 @@ RTCと実行コンテキストを分離することによって、実行コン�
 
 実行コンテキストは`RTC.idl`、`OpenRTM.idl`で以下のようなインターフェースが定義されています。
 
-![executioncontext](https://user-images.githubusercontent.com/6216077/48655114-930d2780-ea56-11e8-9013-36293b0b35fc.png)
+![executioncontext](https://user-images.githubusercontent.com/6216077/48655711-ec2c8980-ea5d-11e8-9ade-2a4e5a79e7b8.png)
 
 `ExecutionContext`で定義されたオペレーションは以下の通りです。
 

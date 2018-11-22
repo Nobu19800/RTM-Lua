@@ -874,7 +874,7 @@ end)
 `corbaname`はネームサーバーからオブジェクトリファレンスを名前解決して取得する方法です。
 
 <pre>
-corbaname:iiop:localhost:2809#ConsoleIn0.rtc\
+corbaname:iiop:localhost:2809#ConsoleIn0.rtc
 </pre>
 
 omniORBpyでは以下のようなコードを記述します。

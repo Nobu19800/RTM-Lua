@@ -61,6 +61,8 @@ OiL 0.7では`pending`関数、`step`関数でタイムアウトを設定でき�
 ログを見る限り、OpenRTM.NETの`IDL:OpenRTM/IIOP/Adapter/IDataFlowComponentAdapter:1.0`や`IDL:OpenRTM/IIOP/InPortCdrAdapter:1.0`が何者か分からないらしい。
 OpenRTM.NETからOpenRTM Luaに通信できない理由は不明。
 
+OiLとIIOP.NETの通信自体はできるようなので、OiL側で`IDL:OpenRTM/IIOP/InPortCdrAdapter:1.0`等を定義する必要があるのかもしれない。
+
 
 ## エンドポイントの設定
 Windows以外のOSではエンドポイントを明示的に設定しない場合に、エンドポイントに`127.0.0.1`が設定される場合がほとんどであるため実質的にエンドポイントの設定は必須。

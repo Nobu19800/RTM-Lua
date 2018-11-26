@@ -929,7 +929,7 @@ lua Sample.lua -o logger.log_level:Debug
 リオデジャネイロ・カトリカ大学が開発しているスクリプト言語。
 軽量、高い移植性、スクリプト言語としては高速であることが特徴。
 
-* [he Programming Language Lua](https://www.lua.org/)
+* [The Programming Language Lua](https://www.lua.org/)
 
 ### LuaJIT
 LuaのJITコンパイラ。Javaにも匹敵する非常に高速な処理が可能。

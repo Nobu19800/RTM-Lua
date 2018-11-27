@@ -21,6 +21,18 @@ $ sudo luarocks install lualogging
 $ sudo luarocks install uuid
 </pre>
  -->
+ 
+ 
+## corba_cdr対応版のインストール
+以下のコマンドでインストールしてください。
+
+<pre>
+$ git clone -b corba_cdr_support https://github.com/Nobu19800/RTM-Lua
+$ cd RTM-Lua
+$ cp spec/*.rockspec ./
+$ luarocks make
+</pre>
+
 
 ## 通常版のインストール
 以下のコマンドを実行してください。
@@ -40,13 +52,3 @@ $ cd RTM-Lua
 $ sudo sh install.sh
 </pre>
  -->
-
-## corba_cdr対応版のインストール
-以下のコマンドでインストールしてください。
-
-<pre>
-$ git clone -b corba_cdr_support https://github.com/Nobu19800/RTM-Lua
-$ cd RTM-Lua
-$ cp spec/*.rockspec ./
-$ luarocks make
-</pre>

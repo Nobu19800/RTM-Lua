@@ -2,7 +2,9 @@
 
 以下の結果についてはWindows 10、Ubuntu 14.04、ev3dev(jessie)で計測していますが、UbuntuについてはParallels仮想環境で実験しているため、実環境のUbuntuとは結果が異なる場合があります。
 
+実験に使用したソースコードは以下から入手できます。
 
+- [RTM-Lua-test](https://github.com/Nobu19800/RTM-Lua-test)
 
 
 ## RTC実行の時間

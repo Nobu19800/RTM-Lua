@@ -2,33 +2,42 @@
 ## OpenRTM Lua版
 
 
-### Ver.0.4.1
+### Ver.0.4.1(corba_cdr対応版)
 #### Lua 5.1
-* [OpenRTM Lua 0.4.1 通常版 Lua5.1 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-x86-lua5.1.zip)
-* [OpenRTM Lua 0.4.1 通常版 Lua5.1 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-x64-lua5.1.zip)
-* [OpenRTM Lua 0.4.1 通常版 Lua5.1 ARM](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-arm-lua5.1.zip)
-
 
 * [OpenRTM Lua 0.4.1 corba_cdr対応版 Lua5.1 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-cc-x86-lua5.1.zip)
 * [OpenRTM Lua 0.4.1 corba_cdr対応版 Lua5.1 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-cc-x64-lua5.1.zip)
 * [OpenRTM Lua 0.4.1 corba_cdr対応版 Lua5.1 ARM](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-cc-arm-lua5.1.zip)
 
 #### LuaJIT
-* [OpenRTM Lua 0.4.1 通常版 LuaJIT 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-x86-LuaJIT.zip)
-* [OpenRTM Lua 0.4.1 通常版 LuaJIT 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-x64-LuaJIT.zip)
+
 
 * [OpenRTM Lua 0.4.1 corba_cdr対応版 LuaJIT 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-cc-x86-LuaJIT.zip)
 * [OpenRTM Lua 0.4.1 corba_cdr対応版 LuaJIT 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-cc-x64-LuaJIT.zip)
 
 #### Lua 5.2
-* [OpenRTM Lua 0.4.1 通常版 Lua5.2 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-x86-lua5.2.zip)
-* [OpenRTM Lua 0.4.1 通常版 Lua5.2 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-x64-lua5.2.zip)
-* [OpenRTM Lua 0.4.1 通常版 Lua5.2 ARM](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-arm-lua5.2.zip)
 
 * [OpenRTM Lua 0.4.1 corba_cdr対応版 Lua5.2 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-cc-x86-lua5.2.zip)
 * [OpenRTM Lua 0.4.1 corba_cdr対応版 Lua5.2 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-cc-x64-lua5.2.zip)
 * [OpenRTM Lua 0.4.1 corba_cdr対応版 Lua5.2 ARM](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-cc-arm-lua5.2.zip)
 
+
+### Ver.0.4.1(通常版)
+#### Lua 5.1
+
+* [OpenRTM Lua 0.4.1 通常版 Lua5.1 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-x86-lua5.1.zip)
+* [OpenRTM Lua 0.4.1 通常版 Lua5.1 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-x64-lua5.1.zip)
+* [OpenRTM Lua 0.4.1 通常版 Lua5.1 ARM](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-arm-lua5.1.zip)
+
+#### LuaJIT
+
+* [OpenRTM Lua 0.4.1 通常版 LuaJIT 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-x86-LuaJIT.zip)
+* [OpenRTM Lua 0.4.1 通常版 LuaJIT 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-x64-LuaJIT.zip)
+
+#### Lua 5.2
+* [OpenRTM Lua 0.4.1 通常版 Lua5.2 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-x86-lua5.2.zip)
+* [OpenRTM Lua 0.4.1 通常版 Lua5.2 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-x64-lua5.2.zip)
+* [OpenRTM Lua 0.4.1 通常版 Lua5.2 ARM](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-arm-lua5.2.zip)
 
 
 ### Ver.0.4.0

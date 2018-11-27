@@ -61,12 +61,12 @@ Sample.new = function(manager)
 
 <pre>
 	function obj:onExecute(ec_id)
-    if self._inIn:isNew() then
+		if self._inIn:isNew() then
 			local data = self._inIn:read()
 			print(data.data1)
 			print(data.data2)
 		end
-    return self._ReturnCode_t.RTC_OK
+		return self._ReturnCode_t.RTC_OK
 	end
 </pre>
 

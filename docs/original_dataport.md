@@ -27,7 +27,8 @@ RTC Builderのデータポート設定画面でIDLファイルの横のBrowse…
 
 ![rtcb2](https://user-images.githubusercontent.com/6216077/48300588-c9f9af80-e523-11e8-9967-cfd8bb88ca2c.png)
 
-この後の手順は通常のRTCと同じです。
+この後の手順は通常のRTCと同じですが、現状では`BasicDataType.idl`がコピーされないため、プロジェクトのidlフォルダに`BasicDataType.idl`をコピーしてください。
+
 
 
 ## ソースコードを編集する場合

@@ -4,7 +4,7 @@
 
 実験に使用したソースコードは以下から入手できます。
 
-- [RTM-Lua-test](https://github.com/Nobu19800/RTM-Lua-test)
+* [計測用コンポーネント](https://github.com/Nobu19800/RTM-Lua-test)
 
 
 ## RTC実行の時間

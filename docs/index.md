@@ -538,6 +538,10 @@ LGPLライセンス
 * [C++版](cpp.md)
 * [Python版](python.md)
 
+または、以下のブリッジコンポーネントを使用する方法があります。
+
+* [ブリッジの使用方法](Bridge.md)
+
 ## LuaJITの利用
 
 * [LuaJITの利用](LuaJIT.md)
@@ -586,6 +590,10 @@ LGPLライセンス
 ## 概要スライド
 
 * [概要スライド](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/rtmcontest2018_01.pdf)
+
+## その他
+
+* [独自データ型の作成手順](original_dataport.md)
 
 
 

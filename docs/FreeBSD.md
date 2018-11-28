@@ -36,6 +36,14 @@ $ luarocks path
 
 ## OpenRTM Luaのインストール
 
+以下のコマンドでインストールしてください。
+
+<pre>
+$ luarocks install openrtm
+</pre>
+
+
+<!--
 ### 通常版をインストールする場合
 以下のコマンドでインストールしてください。
 
@@ -53,6 +61,7 @@ $ cd RTM-Lua
 $ sh install.sh
 </pre>
 
+-->
 
 ## omniORBのインストール
 FreeBSD上でネームサーバーを起動するためにomniORBをインストールします。

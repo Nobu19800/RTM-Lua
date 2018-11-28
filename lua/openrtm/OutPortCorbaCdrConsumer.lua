@@ -23,6 +23,10 @@ local Factory = require "openrtm.Factory"
 local OutPortConsumerFactory = OutPortConsumer.OutPortConsumerFactory
 local RTCUtil = require "openrtm.RTCUtil"
 
+local ConnectorListener = require "openrtm.ConnectorListener"
+local ConnectorListenerType = ConnectorListener.ConnectorListenerType
+local ConnectorDataListenerType = ConnectorListener.ConnectorDataListenerType
+
 -- CorbaCdrインターフェースのOutPortConsumerオブジェクト初期化
 -- @return CorbaCdrインターフェースのOutPortConsumerオブジェクト
 OutPortCorbaCdrConsumer.new = function()

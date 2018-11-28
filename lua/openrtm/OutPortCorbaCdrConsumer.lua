@@ -269,7 +269,7 @@ OutPortCorbaCdrConsumer.new = function()
 	-- 以下からリファレンスを取得
 	-- dataport.corba_cdr.outport_ref
 	-- @return true：設定解除成功、false：設定解除失敗
-	function obj:unsubscribeFromRef(self, properties)
+	function obj:unsubscribeFromRef(properties)
 		self._rtcout:RTC_TRACE("unsubscribeFromRef()")
 		local index = NVUtil.find_index(properties,
 										"dataport.corba_cdr.outport_ref")
@@ -360,21 +360,21 @@ OutPortCorbaCdrConsumer.new = function()
 	-- @param data データ
 	function obj:onSenderEmpty(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			self._listeners.connector_[ConnectorDataListenerType.ON_SENDER_EMPTY]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_SENDER_EMPTY]:notify(self._profile)
 		end
 	end
 	-- 送信データ時間切れ時のコールバック実行
 	-- @param data データ
 	function obj:onSenderTimeout(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			self._listeners.connector_[ConnectorDataListenerType.ON_SENDER_TIMEOUT]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_SENDER_TIMEOUT]:notify(self._profile)
 		end
 	end
 	-- 送信エラー時のコールバック実行
 	-- @param data データ
 	function obj:onSenderError(data)
 		if self._listeners ~= nil and self._profile ~= nil then
-			self._listeners.connector_[ConnectorDataListenerType.ON_SENDER_ERROR]:notify(self._profile)
+			self._listeners.connector_[ConnectorListenerType.ON_SENDER_ERROR]:notify(self._profile)
 		end
 	end
 

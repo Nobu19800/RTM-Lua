@@ -203,7 +203,7 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 									return {}
 								end
 
-								_obj = RTCUtil.newproxy(orb, _obj,"IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
+								_obj = RTCUtil.newproxy(orb, _obj,"IDL:omg.org/RTC/RTObject:1.0")
 
 
 								table.insert(rtc_list, _obj)
@@ -273,7 +273,7 @@ NamingManager.NamingOnManager.new = function(orb, mgr)
 
 
 				mgr = RTCUtil.newproxy(self._orb, mgrloc,"IDL:RTM/Manager:1.0")
-				--mgr = RTCUtil.newproxy(self._orb, mgrloc,"IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
+				--mgr = RTCUtil.newproxy(self._orb, mgrloc,"IDL:omg.org/RTC/RTObject:1.0")
 
 				--print(mgrloc)
 

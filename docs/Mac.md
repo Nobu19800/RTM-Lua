@@ -15,6 +15,16 @@ $ brew install luarocks
 </pre>
 
 
+luarocksによりopenrtmをインストールしてください。
+
+<pre>
+$ luarocks --lua-dir=/usr/local/opt/lua@5.1 install openrtm
+</pre>
+
+
+<!-- 
+
+
 ## 通常版をインストールする場合
 
 luarocksによりopenrtmをインストールしてください。
@@ -33,6 +43,8 @@ $ cd RTM-Lua
 $ cp spec/*.rockspec ./
 $ luarocks --lua-dir=/usr/local/opt/lua@5.1 make
 </pre>
+
+-->
 
 
 ## サンプルコンポーネントの実行

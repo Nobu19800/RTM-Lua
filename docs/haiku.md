@@ -144,7 +144,15 @@ $ /haiku/luarocks/bin/luarocks make NETWORK_DIR=/boot/system/
 
 
 
+以下のようにluarocksでopenrtmをインストールしてください。
 
+<pre>
+$ /haiku/luarocks/bin/luarocks install openrtm
+</pre>
+
+
+
+<!-- 
 ### 通常版をインストールする場合
 
 以下のようにluarocksでopenrtmをインストールしてください。
@@ -164,6 +172,8 @@ $ cd RTM-Lua
 $ cp spec/*.rockspec ./
 $ /haiku/luarocks/bin/luarocks make
 </pre>
+
+-->
 
 
 ### サンプルの実行

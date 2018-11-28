@@ -23,6 +23,15 @@ $ sudo luarocks install uuid
  -->
  
  
+以下のコマンドでOpenRTM Luaをインストールしてください。
+
+<pre>
+$ sudo luarocks install openrtm
+</pre>
+ 
+ 
+ <!--
+ 
 ## corba_cdr対応版のインストール
 以下のコマンドでインストールしてください。
 
@@ -40,6 +49,8 @@ $ luarocks make
 <pre>
 $ sudo luarocks install openrtm
 </pre>
+
+-->
 
 
 <!-- 

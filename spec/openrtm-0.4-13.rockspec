@@ -1,5 +1,5 @@
 package = "openrtm"
-version = "0.4-11"
+version = "0.4-13"
 source = {
    url = "git://github.com/Nobu19800/RTM-Lua"
 }
@@ -159,6 +159,7 @@ build = {
          ["idl.CosNotification"] = "idl/CosNotification.idl",
          ["idl.CosNotifyComm"] = "idl/CosNotifyComm.idl",
          ["idl.DataPort"] = "idl/DataPort.idl",
+         ["idl.DataPort_OpenRTM"] = "idl/DataPort_OpenRTM.idl",
          ["idl.ExtendedDataTypes"] = "idl/ExtendedDataTypes.idl",
          ["idl.InterfaceDataTypes"] = "idl/InterfaceDataTypes.idl",
          ["idl.Manager"] = "idl/Manager.idl",

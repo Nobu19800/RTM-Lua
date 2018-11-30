@@ -9,15 +9,14 @@ $ sudo apt-get install lua5.2
 以下のコマンドで、コマンドを実行したディレクトリにOpenRTM-Luaがインストールされます。
 
 <pre>
-$ wget https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-x86-lua5.2.zip
-$ unzip openrtm-lua-0.4.1-x86-lua5.2.zip
-$ mv openrtm-lua-0.4.1-x86-lua5.2 openrtm-lua
+$ wget https://github.com/Nobu19800/RTM-Lua/releases/download/v0.4.1/openrtm-lua-0.4.1-cc-x86-lua5.2.zip
+$ unzip openrtm-lua-0.4.1-cc-x86-lua5.2.zip
+$ mv openrtm-lua-0.4.1-cc-x86-lua5.2 openrtm-lua
 $ wget https://github.com/Nobu19800/RTM-Lua/releases/download/v0.3.1/luamodule_raspbian.tar.gz
 $ tar xf luamodule_raspbian.tar.gz
 $ cp -rf luamodule_raspbian/* openrtm-lua/clibs/
 </pre>
 
-※corba_cdr対応版を使用する場合は、`openrtm-lua-0.4.1-cc-x86-lua5.2.zip`を使用してください。
 
 
 RTCの実行時には、以下のように環境変数`LUA_PATH`と`LUA_CPATH`を設定してください。

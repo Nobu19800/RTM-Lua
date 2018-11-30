@@ -55,7 +55,9 @@
         - [ORBexpress](#orbexpress)
         - [RtORB](#rtorb)
         - [IIOP.NET](#iiopnet)
+<!--
         - [OpenORB](#openorb)
+-->
         - [OiL](#oil)
     - [オブジェクトリファレンス](#オブジェクトリファレンス)
     - [CDR](#cdr)
@@ -794,10 +796,12 @@ OpenRTM-aistで使用していないAPIが省かれているため非常に軽�
 .NET系のプログラミング言語で使用可能なCORBA実装。
 OpenRTM.NETが使用している。
 
+<!--
 #### OpenORB
 Javaで実装されたCORBA実装。
 OpenRTM-aist Java版が使用している。
 Java SE11からはCORBAのサポートがなくなる。
+-->
 
 #### OiL
 Luaで実装されたCORBA実装。

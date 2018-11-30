@@ -21,7 +21,7 @@ rockspecファイルはモジュールの仕様、依存関係、インストー
 [OpenRTM Lua](https://github.com/Nobu19800/RTM-Lua)に付属している`rtcd.lua`を使用してインストールしたRTCを起動することができます。
 
 まずOpenRTM-aistやOpenRTM Luaの基本的な仕組みとして、まずRTCを管理するマネージャが起動して、マネージャがRTCを単一、もしくは複数起動するということになっています。
-詳しくは[このページ](https://nobu19800.github.io/RTM-Lua/docs/glossary.html#%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%A3)に記載してあります。
+詳しくは[このページ](glossary.html#マネージャ)に記載してあります。
 
 
 つまりRTC Builderで生成したLuaファイルマネージャの起動とRTCの起動を行っているということになります。
@@ -29,7 +29,7 @@ rockspecファイルはモジュールの仕様、依存関係、インストー
 対して`rtcd.lua`は何も設定しなければマネージャの起動しか実行しません。
 RTCを起動する場合は、RTCのLuaファイルをロードする必要があります。
 
-[rtc.conf](https://nobu19800.github.io/RTM-Lua/docs/glossary.html#rtcconf)に以下のように記述してください。
+[rtc.conf](glossary.html#rtcconf)に以下のように記述してください。
 RTCの名前は適宜変更してください。
 
 <pre>

@@ -55,9 +55,6 @@
         - [ORBexpress](#orbexpress)
         - [RtORB](#rtorb)
         - [IIOP.NET](#iiopnet)
-<!--
-        - [OpenORB](#openorb)
--->
         - [OiL](#oil)
     - [オブジェクトリファレンス](#オブジェクトリファレンス)
     - [CDR](#cdr)

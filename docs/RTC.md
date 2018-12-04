@@ -184,7 +184,7 @@ test_lua.luaのnew関数内に以下の変数が定義されています。
 
 onExecute関数を以下のように編集してください。
 
-<pre>
+```Lua
 	function obj:onExecute(ec_id)
 		if self._inIn:isNew() then
 			local data = self._inIn:read()
@@ -194,7 +194,7 @@ onExecute関数を以下のように編集してください。
 
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 ## 動作確認
 ### RT System Editor起動

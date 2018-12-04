@@ -306,7 +306,7 @@ OpenRTM-aistには`BasicDataType.idl`、`ExtendedDataTypes.idl`、`InterfaceData
 OpenRTM-aist 1.2からは必ずデータ型にタイムスタンプが必要になったため、独自データ型作成の難易度が大幅に上がっています。
 `BasicDataType.idl`をインクルードして、データ型にタイムスタンプ(`RTC::Time tm;`)を追加してください。
 
-<pre>
+```IDL
 #include "BasicDataType.idl"
 
 module Sample {
@@ -317,7 +317,7 @@ module Sample {
         short data2;
     };
 };
-</pre>
+```
 
 次にRTC Builderのデータポート設定画面でIDLファイルの横のBrowse...ボタンを押してIDLファイルを選択します。
 
@@ -838,13 +838,13 @@ corbaloc:iiop:localhost:2810/manager
 
 名前解決するCORBAオブジェクトは以下のように名前を関連付けておく必要がある。
 
-<pre>
+```Lua
 local manager = orb:newservant(mgr, id, "IDL:RTM/Manager:1.0")
-</pre>
+```
 
 `corbaloc`で名前解決してオブジェクトリファレンスを取得するには以下のようなコードを記述する。
 
-<pre>
+```Lua
 local oil = require "oil"
 
 
@@ -869,7 +869,7 @@ oil.main(function()
     
     oil.newthread(orb.run, orb)
 end)
-</pre>
+```
 
 #### corbaname
 `corbaname`はネームサーバーからオブジェクトリファレンスを名前解決して取得する方法です。
@@ -880,7 +880,7 @@ corbaname:iiop:localhost:2809#ConsoleIn0.rtc
 
 omniORBpyでは以下のようなコードを記述します。
 
-<pre>
+```Python
 import sys
 from omniORB import CORBA
 import RTC
@@ -890,7 +890,7 @@ obj = orb.string_to_object("corbaname:iiop:localhost:2809#ConsoleIn0.rtc")
 rtc = obj._narrow(RTC.RTObject)
 
 print(rtc.get_component_profile())
-</pre>
+```
 
 
 OiLでは`corbaname`はサポートしていません。

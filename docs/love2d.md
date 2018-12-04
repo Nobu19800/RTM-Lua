@@ -63,18 +63,18 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 
 `LOVESample.lua`に物理オブジェクトを設定するためのsetObject関数を追加します。
 
-<pre>
+```Lua
 LOVESample.new = function(manager)
 	local obj = {}
   (省略)
 	function obj:setObject(objects)
 		self._objects = objects
 	end
-</pre>
+```
 
 `LOVESample.lua`のonExecute関数を編集します。
 
-<pre>
+```Lua
 	function obj:onExecute(ec_id)
 		if self._inIn:isNew() then
 			local data = self._inIn:read()
@@ -86,7 +86,7 @@ LOVESample.new = function(manager)
 		end
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 InPortのデータを読み込んで、左右の操作でボールに力を加える。
 上に動かした場合はボールの位置、速度を初期化する。
@@ -110,7 +110,7 @@ InPortのデータを読み込んで、左右の操作でボールに力を加�
 
 LÖVEは内部でLuaSocketをロードするため、全て無効化します。
 
-<pre>
+```Lua
 function love.load()
     package.preload["mime.core"] = nil
     package.preload["socket.ftp"] = nil
@@ -141,7 +141,7 @@ function love.load()
     local comp = mgr:getComponent("LOVESample0")
     comp:setObject(objects)
 end
-</pre>
+```
 
 
 
@@ -183,7 +183,7 @@ preconnect等で外部のRTCと接続する場合に必要です。
 
 `love.update`関数は以下のように編集します。
 
-<pre>
+```Lua
 function love.update(dt)
     world:update(dt)
     
@@ -195,7 +195,7 @@ function love.update(dt)
     local ec = comp:get_owned_contexts()[1]
     ec:tick()
 end
-</pre>
+```
 
 
 
@@ -258,8 +258,8 @@ TkJoyStickコンポーネントを入手して、`TkJoyStickComp.exe`を実行�
 また、サービスポートのプロバイダ側についても同じです。
 `oil.main`関数で実行する必要があるのは、今回のようにORBをステップ実行した時のみです。
 
-<pre>
+```Lua
 oil.main(function()
 	self._outOut:write()
 end)
-</pre>
+```

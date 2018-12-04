@@ -74,12 +74,12 @@ rockspecファイルにGitHub等のリポジトリを指定する必要がある
 リポジトリは適宜変更してください。GitHubのリポジトリの場合は最初に`git://`と記述します。
 ZIPファイルなどの場所を指定する場合は`http://`からはじめてください。
 
-<pre>
+```Lua
 source = {
    url = "git://github.com/UserName/Sample_RTComponent",
    dir = "",
 }
-</pre>
+```
 
 
 

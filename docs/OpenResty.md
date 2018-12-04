@@ -160,9 +160,9 @@ OpenRTM Lua版からOpenRestyにファイルをコピーします。
 Visual Stduio 2017の場合はビルド時にエラーが出ます。
 CMakeLists.txtの以下の部分を削除してからビルドしてください。
 
-<pre>
+```CMake
 add_definitions(-Dsnprintf=_snprintf)
-</pre>
+```
 
 
 
@@ -198,7 +198,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 
 データを格納する変数、取得する関数を定義します。
 
-<pre>
+```Lua
 OpenRestySample.new = function(manager)
 	local obj = {}
         (省略)
@@ -206,14 +206,14 @@ OpenRestySample.new = function(manager)
 	function obj:getData()
 		return self.input_data
 	end
-</pre>
+```
 
 
 `OpenRestySample.lua`の`onExecute`関数を以下のように編集してください。
 
 
 
-<pre>
+```Lua
 	function obj:onExecute(ec_id)
 		if self._inIn:isNew() then
 			local data = self._inIn:read()
@@ -222,7 +222,7 @@ OpenRestySample.new = function(manager)
 		end
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 入力データは`getData`関数で取得できます。
 
@@ -236,7 +236,7 @@ OpenRestySample.new = function(manager)
 
 `image.lua`に以下のように記述してください。
 
-<pre>
+```Lua
 package.path = package.path..";./lua/?.lua"
 package.cpath = package.cpath..";./clibs/?.dll"
 local oil  = require "oil"
@@ -286,7 +286,7 @@ elseif command == "update" then
 	ngx.say(cjson.encode({x=x,y=y}))
 end
 
-</pre>
+```
 
 
 クエリパラメータ`command`が`start`の場合はRTCを起動します。
@@ -319,7 +319,7 @@ TkJoyStickコンポーネントを入手して、`TkJoyStickComp.exe`を実行�
 `rtc-server`の上のディレクトリで以下のコマンドを実行するとWEBサーバーが起動します。
 
 <pre>
-nginx.exe  -p ./
+> nginx.exe  -p ./
 </pre>
 
 ### RTCの起動
@@ -359,9 +359,9 @@ Google Chrome等のWEBブラウザから`http://localhost:1080/index.html?comman
 
 `imahe.lua`の`manager:init`関数の引数を以下のように変更してください。
 
-<pre>
+```Lua
 manager:init({"-o","logger.enable:NO","-o","exec_cxt.periodic.type:OpenHRPExecutionContext", "-o", "manager.components.preconnect:OpenRestySample0.in?port=rtcname://localhost/TkJoyStick0.pos", "-o", "manager.components.preactivation:OpenRestySample0,rtcname://localhost/TkJoyStick0","-o","corba.step.count:4"})
-</pre>
+```
 
 `-o`オプションでパラメータの設定ができます。
 
@@ -387,8 +387,8 @@ preconnect等で外部のRTCと接続する場合に必要です。
 また、サービスポートのプロバイダ側についても同じです。
 `oil.main`関数で実行する必要があるのは、今回のようにORBをステップ実行した時のみです。
 
-<pre>
+```Lua
 oil.main(function()
 	self._outOut:write()
 end)
-</pre>
+```

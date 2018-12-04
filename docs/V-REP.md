@@ -78,13 +78,13 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 ソースコードの先頭付近に以下の行を追加して、シミュレーションのスレッドと自動的に切り替える機能をオフにしてください。
 機能をオフにした場合、`simSwitchThread`関数によりシミュレーションを進める必要があります。
 
-<pre>
+```Lua
 simSetThreadAutomaticSwitch(false)
-</pre>
+```
 
 `onExecute`関数を以下のように編集してください。
 
-<pre>
+```Lua
 	function obj:onExecute(ec_id)
             simSwitchThread()
             if self._inIn:isNew() then
@@ -101,7 +101,7 @@ simSetThreadAutomaticSwitch(false)
             end
             return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 `simSwitchThread`関数によりシミュレーションを1ステップ進めています。
 
@@ -167,9 +167,9 @@ V-REP上で以下のボタンを押すとシミュレーションが開始して
 
 VRepSample.luaのmanager:init関数の引数を以下のように変更してください。
 
-<pre>
+```Lua
 manager:init({"-o", "manager.components.preconnect:VRepSample0.in?port=rtcname://localhost/TkJoyStick0.pos", "-o", "manager.components.preactivation:VRepSample0,rtcname://localhost/TkJoyStick0"})
-</pre>
+```
 
 `-o`オプションでパラメータの設定ができます。
 

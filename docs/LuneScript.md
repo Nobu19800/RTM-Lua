@@ -4,7 +4,7 @@
 
 * [LuneScript](https://ifritjp.github.io/doc/lua/transcompiler.html)
 
-MoonScriptと同じくLuaトランスレータ言語です。新しい言語なので情報は少ないです。
+MoonScriptと同じくLuaのトランスコンパイラです。新しい言語なので情報は少ないです。
 
 Luaの言語仕様が小さい故の欠点を解消するために様々な機能が追加されています。
 

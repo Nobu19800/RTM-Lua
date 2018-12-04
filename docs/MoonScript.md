@@ -117,7 +117,7 @@ consolein_spec = {
   ["type_name"]:"ConsoleIn",
   ["description"]:"Console input component",
   ["version"]:"1.0",
-  ["vendor"]:"Nobuhiko Miyamoto",
+  ["vendor"]:"Sample",
   ["category"]:"example",
   ["activity_type"]:"DataFlowComponent",
   ["max_instance"]:"10",

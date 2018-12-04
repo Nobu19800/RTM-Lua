@@ -9,7 +9,7 @@ Luaは言語仕様が小さいため非常に軽量に動作するという特�
 
 MoonScriptは以下のように、他のオブジェクト指向言語と近い形式でクラスや継承を記述できます。
 
-<pre>
+```MoonScript
 class BaseClass
     new: (v1) =>
         self.v1 = v1
@@ -35,7 +35,7 @@ test_func(obj)
 test_func(obj)
 test_func(obj)
 
-</pre>
+```
 
 
 見た目はLuaとだいぶ違いますが、このコードをLuaに変換して実行しています。
@@ -102,16 +102,16 @@ $ moon test.lua
 ### モジュールロード
 以下のようにモジュールのロードを行います。
 
-<pre>
+```MoonScript
 openrtm_ms = require "openrtm_ms"
-</pre>
+```
 
 
 ### RTCの仕様を定義
 
 以下のようにRTCの仕様を定義したテーブルを作成します。
 
-<pre>
+```MoonScript
 consolein_spec = {
   ["implementation_id"]:"ConsoleIn",
   ["type_name"]:"ConsoleIn",
@@ -123,14 +123,14 @@ consolein_spec = {
   ["max_instance"]:"10",
   ["language"]:"MoonScript",
   ["lang_type"]:"script"}
-</pre>
+```
 
 
 ### RTCのテーブル作成
 
 RTCをクラスで定義します。
 
-<pre>
+```MoonScript
 class ConsoleIn extends openrtm_ms.RTObject
 	-- コンストラクタ
 	-- @param manager マネージャ
@@ -149,7 +149,7 @@ class ConsoleIn extends openrtm_ms.RTObject
 	-- @return リターンコード
 	onExecute: (ec_id) =>
 		(省略)
-</pre>
+```
 
 
 ### データポート
@@ -157,7 +157,7 @@ class ConsoleIn extends openrtm_ms.RTObject
 
 #### アウトポート
 
-<pre>
+```MoonScript
 	new: (manager) =>
 		super manager
 		-- データ格納変数
@@ -172,23 +172,23 @@ class ConsoleIn extends openrtm_ms.RTObject
 		@addOutPort("out",self._outOut)
 
 		return self._ReturnCode_t.RTC_OK
-</pre>
+```
 
 
 データの出力を行う場合は、`self._d_out`に送信データを格納後、`self._outOut`のwrite関数を実行します。
 
 
-<pre>
+```MoonScript
 -- 出力データ格納
 self._d_out.data = 1
 -- データ書き込み
 self._outOut\write()
-</pre>
+```
 
 
 #### インポート
 
-<pre>
+```MoonScript
 	new: (manager) =>
 		super manager
 		-- データ格納変数
@@ -204,7 +204,7 @@ self._outOut\write()
 		@addInPort("in",self._inIn)
 
 		return self._ReturnCode_t.RTC_OK
-</pre>
+```
 
 `openrtm_ms.RTCUtil.instantiateDataType`関数により、データを格納する変数を初期化できます。
 
@@ -213,14 +213,14 @@ self._outOut\write()
 入力データを読み込む場合は、`self._inIn`の`read`関数を使用します。
 
 
-<pre>
+```MoonScript
 -- バッファに新規データがあるかを確認
 if self._inIn\isNew()
 	-- データ読み込み
 	data = self._inIn\read()
 	print("Received: ", data)
 	print("Received: ", data.data)
-</pre>
+```
 
 
 ### サービスポート
@@ -229,7 +229,7 @@ if self._inIn\isNew()
 
 プロバイダ側のサービスポートを生成するためには、まずプロバイダのクラスを定義します。
 
-<pre>
+```MoonScript
 class MyServiceSVC_impl
 	-- コンストラクタ
 	new: () =>
@@ -249,12 +249,12 @@ class MyServiceSVC_impl
     
 	get_value_history: () =>
 		(省略)
-</pre>
+```
 
 
 onInitialize関数内でポートの生成、登録を行います。
 
-<pre>
+```MoonScript
 	new: (manager) =>
 		super manager
 		-- サービスポート生成
@@ -271,7 +271,7 @@ onInitialize関数内でポートの生成、登録を行います。
 		@addPort(self._myServicePort)
 
 		return self._ReturnCode_t.RTC_OK
-</pre>
+```
 
 `self._myServicePort\registerProvider("myservice0", "MyService", self._myservice0, "../idl/MyService.idl", "IDL:SimpleService/MyService:1.0")`のように、IDLファイル名、インターフェース名を文字列で指定する必要があります。
 
@@ -284,7 +284,7 @@ onInitialize関数内でポートの生成、登録を行います。
 コンシューマ側のサービスポートを追加するには、以下のようにonInitialize関数内でポートの生成、追加を行います。 `self._myServicePort\registerConsumer("myservice0", "MyService", self._myservice0, "../idl/MyService.idl")`のようにIDLファイル名を文字列で指定する必要があります。
 
 
-<pre>
+```MoonScript
 	new: (manager) =>
 		super manager
 		-- サービスポート生成
@@ -303,14 +303,14 @@ onInitialize関数内でポートの生成、登録を行います。
 		@addPort(self._myServicePort)
 
 		return self._ReturnCode_t.RTC_OK
-</pre>
+```
 
 オペレーションを呼び出す場合は、CorbaConsumerの`_ptr`関数でオブジェクトリファレンスを取得して関数を呼び出します。
 
 
-<pre>
+```MoonScript
 self._myservice0\_ptr()\set_value(val)
-</pre>
+```
 
 
 ### コンフィギュレーションパラメータ設定
@@ -318,7 +318,7 @@ self._myservice0\_ptr()\set_value(val)
 コンフィグレーションパラメータの設定には、まずRTCの仕様にコンフィグレーションパラメータを追加します。
 
 
-<pre>
+```MoonScript
 configsample_spec = {
   (省略)
   ["conf.default.int_param0"]:"0",
@@ -328,11 +328,11 @@ configsample_spec = {
   ["conf.default.str_param0"]:"hoge",
   ["conf.default.str_param1"]:"dara",
   ["conf.default.vector_param0"]:"0.0,1.0,2.0,3.0,4.0"}
-</pre>
+```
 
 onInitialize関数で変数をバインドします。 値は`_value`というキーに格納されます。
 
-<pre>
+```MoonScript
 	new: (manager) =>
 		super manager
 		self._int_param0 = {_value:0}
@@ -358,14 +358,14 @@ onInitialize関数で変数をバインドします。 値は`_value`という�
 
 		print("\n Please change configuration values from RTSystemEditor")
 		return self._ReturnCode_t.RTC_OK
-</pre>
+```
 
 
 ### コールバック定義
 
 onExecuteコールバックなどを定義する場合についても、関数を定義して処理を記述します。
 
-<pre>
+```MoonScript
 	onExecute: (ec_id) =>
 		io.write("Please input number: ")
 		data = tonumber(io.read())
@@ -376,14 +376,14 @@ onExecuteコールバックなどを定義する場合についても、関数�
 		-- データ書き込み
 		self._outOut\write()
 		return self._ReturnCode_t.RTC_OK
-</pre>
+```
 
 
 ### RTC起動の関数定義
 
 以下のようにRTCの登録、生成関数を定義します。
 
-<pre>
+```MoonScript
 -- ConsoleInコンポーネントの生成ファクトリ登録関数
 -- @param manager マネージャ
 ConsoleInInit = (manager) -> 
@@ -396,15 +396,15 @@ ConsoleInInit = (manager) ->
 MyModuleInit = (manager) -> 
 	ConsoleInInit(manager)
 	comp = manager\createComponent("ConsoleIn")
-</pre>
+```
 
 
 ### マネージャ起動
 
-<pre>
+```MoonScript
 manager = openrtm_ms.Manager
 manager\init(arg)
 manager\setModuleInitProc(MyModuleInit)
 manager\activateManager()
 manager\runManager()
-</pre>
+```

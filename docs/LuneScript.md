@@ -10,7 +10,7 @@ Luaの言語仕様が小さい故の欠点を解消するために様々な機�
 
 LuneScriptは以下のようにクラスや継承を利用できます。
 
-"""
+```
 class BaseClass
 {
     let mut v1 :int;
@@ -47,7 +47,7 @@ let mut obj = new SubClass(1,2);
 obj.print_func();
 obj.print_func();
 obj.print_func();
-"""
+```
 
 
 Luaとは以下のような違いがあります。
@@ -74,14 +74,14 @@ MoonScriptはLuaに機能を追加、記述方法の変更をしたという感�
 ### モジュールロード
 以下のようにモジュールのロードを行います。
 
-"""
+```
 import openrtm_lns;
-"""
+```
 
 ### RTCの仕様を定義
 以下のようにRTCの仕様を定義したテーブルを作成します。
 
-"""
+```
 let consolein_spec = {
 	 "implementation_id":"ConsoleIn",
 	 "type_name":"ConsoleIn",
@@ -93,12 +93,12 @@ let consolein_spec = {
 	 "max_instance":"10",
 	 "language":"LuneScript",
 	 "lang_type":"script"};
-"""
+```
 
 ### RTCのテーブル作成
 RTCをクラスで定義します。
 
-"""
+```
 class ConsoleIn extend openrtm_lns.RTObjectBase {
     (省略)
     // コンストラクタ
@@ -120,14 +120,14 @@ class ConsoleIn extend openrtm_lns.RTObjectBase {
         (省略)
     }
 }
-"""
+```
 
 
 ### データポート
 アウトポート、インポート、サービスポートをonInitialize関数で追加します。
 
 #### アウトポート
-"""
+```
 class ConsoleIn extend openrtm_lns.RTObjectBase {
     let mut _d_out:Map<str,stem>;
     let mut _outOut:openrtm_lns.OutPort_lns;
@@ -140,24 +140,24 @@ class ConsoleIn extend openrtm_lns.RTObjectBase {
         self.addOutPort("out",self._outOut);
         return openrtm_lns.ReturnCode_t.RTC_OK;
     }
-"""
+```
 
 データの出力を行う場合は、`self._d_out`に送信データを格納後、`self._outOut`のwrite関数を実行します。
 
-"""
+```
         self._d_out.data = 1;
         self._outOut.write();
-"""
+```
 
 この時`self._d_out`がimmutableな変数の場合に値を代入できません。
 その場合はwrite関数の引数として渡すこともできます。
 
-"""
+```
         self._outOut.write({"tm":{"sec":0,"nsec":0},"data":1});
-"""
+```
 
 #### インポート
-"""
+```
 class ConsoleOut extend openrtm_lns.RTObjectBase {
    let mut _d_in:Map<str,stem>;
    let mut _inIn:openrtm_lns.InPort_lns;
@@ -170,6 +170,6 @@ class ConsoleOut extend openrtm_lns.RTObjectBase {
         self.addInPort("in",self._inIn);
         return openrtm_lns.ReturnCode_t.RTC_OK;
     }
-"""
+```
 
 

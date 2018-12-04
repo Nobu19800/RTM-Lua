@@ -58,7 +58,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 
 `BizHawkSample.lua`の`onExecute`関数を以下のように編集してください。
 
-<pre>
+```Lua
 	function obj:onExecute(ec_id)
 		if self._inIn:isNew() then
 			local data = self._inIn:read()
@@ -76,7 +76,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 		emu.frameadvance()
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 InPortの入力データを、コントローラーの入力に設定しています。
 `emu.frameadvance()`でフレームを更新しています。
@@ -167,9 +167,9 @@ TkJoyStickコンポーネントを入手して、`TkJoyStickComp.exe`を実行�
 
 `BizHawkSample.lua`の`manager:init`関数の引数を以下のように変更してください。
 
-<pre>
+```Lua
 manager:init({"-o", "manager.components.preconnect:BizHawkSample0.in?port=rtcname://localhost/TkJoyStick0.pos", "-o", "manager.components.preactivation:BizHawkSample0,rtcname://localhost/TkJoyStick0"})
-</pre>
+```
 
 `-o`オプションでパラメータの設定ができます。
 

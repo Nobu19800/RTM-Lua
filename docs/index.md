@@ -211,14 +211,14 @@ OpenRTM Luaは世界で初めてHaiku OSに対応したロボット用ミドル�
 ### モジュールロード
 以下のようにモジュールのロードを行います。
 
-<pre>
+```Lua
 local openrtm  = require "openrtm"
-</pre>
+```
 
 ### RTCの仕様を定義
 以下のようにRTCの仕様を定義したテーブルを作成します。
 
-<pre>
+```Lua
 local consolein_spec = {
   ["implementation_id"]="ConsoleIn",
   ["type_name"]="ConsoleIn",
@@ -230,12 +230,12 @@ local consolein_spec = {
   ["max_instance"]="10",
   ["language"]="Lua",
   ["lang_type"]="script"}
-</pre>
+```
 
 ### RTCのテーブル作成
 RTCのテーブルを作成する関数を定義します。
 
-<pre>
+```Lua
 local ConsoleIn = {}
 ConsoleIn.new = function(manager)
 	local obj = {}
@@ -252,13 +252,13 @@ ConsoleIn.new = function(manager)
 
 	return obj
 end
-</pre>
+```
 
 ### データポート
 アウトポート、インポート、サービスポートをonInitialize関数で追加します。
 
 #### アウトポート
-<pre>
+```Lua
 ConsoleIn.new = function(manager)
 	(省略)
 	-- データ格納変数
@@ -272,19 +272,19 @@ ConsoleIn.new = function(manager)
 
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 データの出力を行う場合は、`self._d_out`に送信データを格納後、`self._outOut`のwrite関数を実行します。
 
-<pre>
+```Lua
 -- 出力データ格納
 self._d_out.data = 1
 -- データ書き込み
 self._outOut:write()
-</pre>
+```
 
 #### インポート
-<pre>
+```Lua
 ConsoleOut.new = function(manager)
 	(省略)
 	-- データ格納変数
@@ -298,7 +298,7 @@ ConsoleOut.new = function(manager)
 
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 `openrtm.RTCUtil.instantiateDataType`関数により、データを格納する変数を初期化できます。
 
@@ -308,14 +308,14 @@ ConsoleOut.new = function(manager)
 入力データを読み込む場合は、`self._inIn`のread関数を使用します。
 
 
-<pre>
+```Lua
 -- バッファに新規データがあるかを確認
 if self._inIn:isNew() then
 	-- データ読み込み
 	local data = self._inIn:read()
 	print("Received: ", data.data)
 end
-</pre>
+```
 
 `isNew`関数で新規データの有無を確認できます。
 
@@ -325,7 +325,7 @@ end
 
 プロバイダ側のサービスポートを生成するためには、まずプロバイダのテーブルを作成します。
 
-<pre>
+```Lua
 local MyServiceSVC_impl = {}
 MyServiceSVC_impl.new = function()
 	local obj = {}
@@ -348,11 +348,11 @@ MyServiceSVC_impl.new = function()
 
 	return obj
 end
-</pre>
+```
 
 onInitialize関数内でポートの生成、登録を行います。
 
-<pre>
+```Lua
 MyServiceProvider.new = function(manager)
 	(省略)
 	-- サービスポート生成
@@ -368,7 +368,7 @@ MyServiceProvider.new = function(manager)
 
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 `self._myServicePort:registerProvider("myservice0", "MyService", self._myservice0, "../idl/MyService.idl", "IDL:SimpleService/MyService:1.0")`のように、IDLファイル名、インターフェース名を文字列で指定する必要があります。
 
@@ -379,7 +379,7 @@ MyServiceProvider.new = function(manager)
 コンシューマ側のサービスポートを追加するには、以下のようにonInitialize関数内でポートの生成、追加を行います。
 `self._myServicePort:registerConsumer("myservice0", "MyService", self._myservice0, "../idl/MyService.idl")`のようにIDLファイル名を文字列で指定する必要があります。
 
-<pre>
+```Lua
 MyServiceConsumer.new = function(manager)
 	(省略)
 	-- サービスポート生成
@@ -395,18 +395,18 @@ MyServiceConsumer.new = function(manager)
 
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 オペレーションを呼び出す場合は、CorbaConsumerの_ptr関数でオブジェクトリファレンスを取得して関数を呼び出します。
 
-<pre>
+```Lua
 self._myservice0:_ptr():set_value(val)
-</pre>
+```
 
 ### コンフィギュレーションパラメータ設定
 コンフィグレーションパラメータの設定には、まずRTCの仕様定義にコンフィグレーションパラメータを追加します。
 
-<pre>
+```Lua
 local configsample_spec = {
   (省略)
   ["conf.default.int_param0"]="0",
@@ -416,12 +416,12 @@ local configsample_spec = {
   ["conf.default.str_param0"]="hoge",
   ["conf.default.str_param1"]="dara",
   ["conf.default.vector_param0"]="0.0,1.0,2.0,3.0,4.0"}
-</pre>
+```
 
 onInitialize関数で変数をバインドします。
 値は`_value`というキーに格納されます。
 
-<pre>
+```Lua
 ConfigSample.new = function(manager)
 	(省略)
 	-- コンフィギュレーションパラメータをバインドする変数
@@ -437,13 +437,13 @@ ConfigSample.new = function(manager)
 		(書略)
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 
 ### コールバック定義
 onExecuteコールバックなどを定義する場合についても、関数を定義して処理を記述します。
 
-<pre>
+```Lua
 	function obj:onExecute(ec_id)
 		io.write("Please input number: ")
 		local data = tonumber(io.read())
@@ -452,7 +452,7 @@ onExecuteコールバックなどを定義する場合についても、関数�
 		self._outOut:write()
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 
 
@@ -461,7 +461,7 @@ onExecuteコールバックなどを定義する場合についても、関数�
 
 以下のようにRTCの登録、生成関数を定義します。
 
-<pre>
+```Lua
 ConsoleIn.Init = function(manager)
 	local prof = openrtm.Properties.new({defaults_map=consolein_spec})
 	manager:registerFactory(prof, ConsoleIn.new, openrtm.Factory.Delete)
@@ -471,18 +471,18 @@ local MyModuleInit = function(manager)
 	ConsoleIn.Init(manager)
 	local comp = manager:createComponent("ConsoleIn")
 end
-</pre>
+```
 
 ### マネージャ起動
 以下のようにRTC生成関数を設定してマネージャを起動します。
 
-<pre>
+```Lua
 local manager = openrtm.Manager
 manager:init(arg)
 manager:setModuleInitProc(MyModuleInit)
 manager:activateManager()
 manager:runManager()
-</pre>
+```
 
 
 ## ライセンス

@@ -76,7 +76,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 
 `LBSample.lua`のonExecute関数を編集します。
 
-<pre>
+```Lua
 	function obj:onExecute(ec_id)
 		if self._inIn:isNew() then
 			local data = self._inIn:read()
@@ -85,7 +85,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 		end
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 InPortのデータを読み込んで、車のアクセル、ステアリングに入力しています。
 
@@ -113,7 +113,7 @@ Laputan Blueprintsのサンプル`car.lbd`を編集します。
 
 以下のコードを上書きしてください。
 
-<pre>
+```Lua
 function OnFrame()
 	lb.drawtext(32,32,"Welcome Laputan Blueprints world!")
 	lb.drawtext(32,52,string.format("FPS=%.2f",lb.getfps()))
@@ -143,7 +143,7 @@ function OnReset()
 	mgr:unload("LBSample")
 	mgr:unregisterFactory("LBSample")
 end
-</pre>
+```
 
 
 基本は上記のコードの`LBSample`の部分を変更すると、他のRTCにも適用できるようになります。
@@ -248,8 +248,8 @@ LB上で`Experiment/Design`ボタンを押すとシミュレーションを開�
 また、サービスポートのプロバイダ側についても同じです。
 `oil.main`関数で実行する必要があるのは、今回のようにORBをステップ実行した時のみです。
 
-<pre>
+```Lua
 oil.main(function()
 	self._outOut:write()
 end)
-</pre>
+```

@@ -34,7 +34,7 @@ class ConsoleIn extend openrtm_lns.RTObjectBase {
     // @param manager マネージャ
     pub fn __init( manager: openrtm_lns.Manager ) {
         super( manager );
-        self._d_out = {"tm":{"sec":0,"nsec":0},"data":0};
+        self._d_out = openrtm_lns.RTCUtil.instantiateDataType("::RTC::TimedLong");
         self._outOut = unwrap openrtm_lns.OutPort.new("out",self._d_out,"::RTC::TimedLong");
     }
     // 初期化時のコールバック関数
@@ -49,7 +49,7 @@ class ConsoleIn extend openrtm_lns.RTObjectBase {
     // @return リターンコード
     pub override fn onExecute(ec_id:int) mut : openrtm_lns.ReturnCode_t {
         print("Please input number: ");
-        //openrtm_lns.OutPort.setTimestamp(self._d_out);
+        openrtm_lns.OutPort.setTimestamp(self._d_out);
         self._d_out.data = 123;
         self._outOut.write();
         return openrtm_lns.ReturnCode_t.RTC_OK;

@@ -33,7 +33,7 @@ class ConsoleOut extend openrtm_lns.RTObjectBase {
     // @param manager マネージャ
     pub fn __init( manager: openrtm_lns.Manager ) {
         super( manager );
-        self._d_in = {"tm":{"sec":0,"nsec":0},"data":0};
+        self._d_in = openrtm_lns.RTCUtil.instantiateDataType("::RTC::TimedLong");
         self._inIn = unwrap openrtm_lns.InPort.new("in",self._d_in,"::RTC::TimedLong");
     }
 

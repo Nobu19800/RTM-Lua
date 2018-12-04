@@ -3,7 +3,7 @@ pub module Factory require 'openrtm.Factory' {
 }
 
 pub module RTCUtil require 'openrtm.RTCUtil' {
-    pub static fn instantiateDataType( data_type:str ): stem!;
+    pub static fn instantiateDataType( data_type:str ): Map<str,stem>;
 }
 
 

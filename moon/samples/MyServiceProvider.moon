@@ -54,7 +54,6 @@ class MyServiceSVC_impl
 	echo: (msg) =>
 		table.insert(self._echoList, msg)
 		print("MyService::echo() was called.")
-		oil = require "oil"
 		for i =1,10
 			print("Message: ", msg)
 			openrtm_ms.Timer.sleep(0.1)

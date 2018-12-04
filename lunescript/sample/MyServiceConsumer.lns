@@ -1,0 +1,102 @@
+/*
+ @file MyServiceConsumer.moon
+ @brief サービスポート(コンシューマ側)のRTCサンプル
+*/
+
+
+import openrtm_lns;
+
+
+// RTCの仕様をテーブルで定義する
+let myserviceconsumer_spec = {
+	 "implementation_id":"MyServiceConsumer",
+	 "type_name":"MyServiceConsumer",
+	 "description":"MyService Consumer Sample component",
+	 "version":"1.0",
+	 "vendor":"Nobuhiko Miyamoto",
+	 "category":"example",
+	 "activity_type":"DataFlowComponent",
+	 "max_instance":"10",
+	 "language":"LuneScript",
+	 "lang_type":"script"};
+
+
+
+
+interface SimpleService {
+   pub fn echo(msg:str):str;
+   pub fn get_echo_history():str[];
+   pub fn set_value(value:real):nil;
+   pub fn get_value():real;
+   pub fn get_value_history():real[];
+}
+
+interface CorbaConsumer_SimpleService extend (openrtm_lns.CorbaConsumer_lns) {
+   pub fn _ptr() : SimpleService;
+}
+
+module CorbaConsumer require 'openrtm.CorbaConsumer' {
+   pub static fn new( interfaceType:str, consumer:stem! ): CorbaConsumer_SimpleService;
+}
+
+
+// @class MyServiceConsumer
+class MyServiceConsumer extend openrtm_lns.RTObjectBase {
+   let mut _myServicePort:openrtm_lns.CorbaPort_lns;
+   let mut _myservice0:CorbaConsumer_SimpleService;
+    // コンストラクタ
+    // @param manager マネージャ
+    pub fn __init( manager: openrtm_lns.Manager ) {
+        super( manager );
+        // サービスポート生成
+        self._myServicePort = unwrap openrtm_lns.CorbaPort.new("MyService");
+        // コンシューマオブジェクト生成
+        self._myservice0 = unwrap CorbaConsumer.new("IDL:SimpleService/MyService:1.0");
+    }
+    // 初期化時のコールバック関数
+    // @return リターンコード
+    pub override fn onInitialize() mut : openrtm_lns.ReturnCode_t {
+        // サービスポートにコンシューマオブジェクトを登録
+        self._myServicePort.registerConsumer("myservice0", "MyService", self._myservice0, "idl/MyService.idl");
+        // ポート追加
+        self.addPort(self._myServicePort);
+        return openrtm_lns.ReturnCode_t.RTC_OK;
+    }
+
+    // アクティブ状態の時の実行関数
+    // @param ec_id 実行コンテキストのID
+    // @return リターンコード
+    pub override fn onExecute(ec_id:int) mut : openrtm_lns.ReturnCode_t {
+       let service:SimpleService = unwrap self._myservice0._ptr();
+       print(service.echo("test"));
+       return openrtm_lns.ReturnCode_t.RTC_OK;
+    }
+
+}
+
+
+
+
+
+fn MyServiceConsumerCreate( manager:openrtm_lns.Manager ) : &openrtm_lns.RTObject_lns {
+    let mut rtobj = new MyServiceConsumer(manager);
+    return rtobj.getComp();
+}
+
+
+pub fn MyServiceConsumerInit( manager: openrtm_lns.Manager ) {
+    let prof = openrtm_lns.Properties.new(myserviceconsumer_spec);
+    manager.registerFactory(prof, MyServiceConsumerCreate, openrtm_lns.Factory.Delete);
+}
+
+fn MyModuleInit( manager:openrtm_lns.Manager ) {
+    MyServiceConsumerInit(manager);
+    let comp = manager.createComponent("MyServiceConsumer");
+}
+
+
+
+openrtm_lns.Manager.init([]);
+openrtm_lns.Manager.setModuleInitProc(MyModuleInit);
+openrtm_lns.Manager.activateManager();
+openrtm_lns.Manager.runManager();

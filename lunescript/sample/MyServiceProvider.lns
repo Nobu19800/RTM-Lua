@@ -1,0 +1,137 @@
+/*
+ @file MyServiceProvider.lns
+ @brief サービスポート(コンシューマ側)のRTCサンプル
+*/
+
+
+
+
+
+
+import openrtm_lns;
+
+
+
+// RTCの仕様をテーブルで定義する
+let myserviceprovider_spec = {
+	 "implementation_id":"MyServiceProvider",
+	 "type_name":"MyServiceProvider",
+	 "description":"MyService Provider Sample component",
+	 "version":"1.0",
+	 "vendor":"Nobuhiko Miyamoto",
+	 "category":"example",
+	 "activity_type":"DataFlowComponent",
+	 "max_instance":"10",
+	 "language":"LuneScript",
+	 "lang_type":"script"};
+
+// @class MyServiceSVC_impl
+// サービスプロバイダ
+class MyServiceSVC_impl extend (openrtm_lns.CorbaProvider_lns) {
+    let mut _echoList :str[];
+    let mut _valueList :real[];
+    let mut _value :real;
+
+    // コンストラクタ
+    pub fn __init( ) {
+         self._echoList = [];
+         self._valueList = [];
+         self._value = 0.0;
+    }
+
+    // echoオペレーション
+    // @param msg 入力文字列
+    // @return msgと同じ文字列
+    pub fn echo( msg:str ) mut :str {
+        self._echoList.insert(msg);
+        print("MyService::echo() was called.");
+        for i = 1, 10 {
+            print("Message: ", msg);
+            //openrtm_lns.Timer.sleep(0.1);
+            print("MyService::echo() was finished.");
+        }
+        return msg;
+    }
+
+    // get_echo_historyオペレーション
+    // @return echoリスト
+    pub fn get_echo_history( ) mut :&str[] {
+        print("MyService::get_echo_history() was called.");
+        //openrtm_lns.CORBA_SeqUtil.for_each(self._echoList, seq_print());
+        return self._echoList;
+    }
+
+    // set_valueオペレーション
+    // @param value 設定値
+    pub fn set_value( value:real ) mut {
+        self._valueList.insert(value);
+        self._value = value;
+        print("MyService::set_value() was called.");
+        print("Current value: ", self._value);
+    }
+
+    // get_valueオペレーション
+    // @return 現在の設定値
+    pub fn get_value( ) :real {
+        print("MyService::get_value() was called.");
+        print("Current value: ", self._value);
+        return self._value;
+    }
+
+    // get_value_historyオペレーション
+    // @return 値リスト
+    pub fn get_value_history( ) :&real[] {
+        print("MyService::get_value_history() was called.");
+        //openrtm_lns.CORBA_SeqUtil.for_each(self._valueList, seq_print);
+        return self._valueList;
+    }
+}
+
+
+// @class MyServiceProvider
+class MyServiceProvider extend openrtm_lns.RTObjectBase {
+   let mut _myServicePort:openrtm_lns.CorbaPort_lns;
+   let mut _myservice0:MyServiceSVC_impl;
+    // コンストラクタ
+    // @param manager マネージャ
+    pub fn __init( manager: openrtm_lns.Manager ) {
+        super( manager );
+        self._myServicePort = unwrap openrtm_lns.CorbaPort.new("MyService");
+        self._myservice0 = new MyServiceSVC_impl();
+    }
+
+    // 初期化時のコールバック関数
+    // @return リターンコード
+    pub override fn onInitialize() mut : openrtm_lns.ReturnCode_t {
+        self._myServicePort.registerProvider("myservice0", "MyService", self._myservice0, "idl/MyService.idl", "IDL:SimpleService/MyService:1.0");
+        self.addPort(self._myServicePort);
+        return openrtm_lns.ReturnCode_t.RTC_OK;
+    }
+
+
+}
+
+
+
+fn MyServiceProviderCreate( manager:openrtm_lns.Manager ) : &openrtm_lns.RTObject_lns {
+    let mut rtobj = new MyServiceProvider(manager);
+    return rtobj.getComp();
+}
+
+
+pub fn MyServiceProviderInit( manager: openrtm_lns.Manager ) {
+    let prof = openrtm_lns.Properties.new(myserviceprovider_spec);
+    manager.registerFactory(prof, MyServiceProviderCreate, openrtm_lns.Factory.Delete);
+}
+
+fn MyModuleInit( manager:openrtm_lns.Manager ) {
+    MyServiceProviderInit(manager);
+    let comp = manager.createComponent("MyServiceProvider");
+}
+
+
+
+openrtm_lns.Manager.init([]);
+openrtm_lns.Manager.setModuleInitProc(MyModuleInit);
+openrtm_lns.Manager.activateManager();
+openrtm_lns.Manager.runManager();

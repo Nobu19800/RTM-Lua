@@ -5,14 +5,14 @@ OiLではOpenRTM.idlとDataPort.idlを同時に使用することができない
 OpenRTM.idlでは、以下のように接頭語が設定されていますが、DataPort.idlにはこれが記述されていません。
 意図が分からないので、OpenRTM-aist 1.0開発時にミスがあったのかもしれません。
 
-<pre>
+```IDL
 #include "RTC.idl"
 
 #pragma prefix "openrtm.aist.go.jp"
 
 module OpenRTM
 {
-</pre>
+```
 
 ## コルーチン
 Luaはマルチスレッドで動作させることができません。
@@ -42,11 +42,11 @@ OiL 0.7は何故かoil.VERSIONで取得できるバージョンが0.6になっ�
 
 また、Codec.luaのstruct関数455目に以下を追加しないと落ちることがある。
 
-<pre>
+```Lua
 if field.name == "port" then
 	val = tonumber(val)
 end
-</pre>
+```
 
 ## ARMの問題
 ARMアーキテクチャで動作させたときにFloat型、Double型のアンマーシャリングが失敗する。Raspbian、ev3devでは発生するが、Windows 10 IoTでは発生しない。これだからLinuxは困る。

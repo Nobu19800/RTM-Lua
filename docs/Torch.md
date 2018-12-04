@@ -98,7 +98,7 @@ $ cd ..
 学習を開始する前に、`seq2seq.lua`の`float`関数を編集してください。
 この変更がない場合、学習時にエラーが発生します。
 
-<pre>
+```Lua
 function Seq2Seq:float()
   self.encoder:double()
   self.decoder:double()
@@ -107,7 +107,7 @@ function Seq2Seq:float()
     self.criterion:double()
   end
 end
-</pre>
+```
 
 
 学習を開始します。
@@ -134,10 +134,10 @@ $ cp -rf luamodule_ubuntu_lua51/* openrtm-lua/clibs/
 
 OpenRTM Luaを使用する場合は、以下のようにLuaコード内でモジュール探索パスの設定をします。
 
-<pre>
+```Lua
 package.path="./lua/?.lua;"..package.path
 package.cpath="./clibs/?.so;"..package.cpath
-</pre>
+```
 
 
 ## RTC作成
@@ -180,7 +180,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 ### Conversation.luaの編集
 まずは、先頭付近でモジュール探索パスの設定、必要なモジュールをロードを行います。
 
-<pre>
+```Lua
 package.path="./lua/?.lua;"..package.path
 package.cpath="./clibs/?.so;"..package.cpath
 -- Import RTM module
@@ -188,12 +188,12 @@ local openrtm  = require "openrtm"
 require 'neuralconvo'
 local tokenizer = require "tokenizer"
 local list = require "pl.List"
-</pre>
+```
 
 `onActivated`関数を以下のように編集してください。
 データセットの初期化、学習モデルのロードを実行します。
 
-<pre>
+```Lua
 	function obj:onActivated(ec_id)
 		-- データセット初期化
 		if self.dataset == nil then
@@ -207,11 +207,11 @@ local list = require "pl.List"
 
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 次に`onExecute`関数を以下のように編集してください。
 
-<pre>
+```Lua
 	function obj:onExecute(ec_id)
 		-- InPortに入力があったかを確認
 		if self._input_wordsIn:isNew() then
@@ -226,11 +226,11 @@ local list = require "pl.List"
 		end
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 以下の`pred2sent`関数、`say`関数を追加します。
 
-<pre>
+```Lua
 	function obj:pred2sent(wordIds)
 		local words = {}
 	  
@@ -255,11 +255,11 @@ local list = require "pl.List"
 
 		return self:pred2sent(wordIds)
 	end
-</pre>
+```
 
 Torchで実行する場合にConversation.luaを直接実行したかの判別ができないため、以下の部分を編集します。
 
-<pre>
+```Lua
 --if openrtm.Manager.is_main() then
 	local manager = openrtm.Manager
 	manager:init(arg)
@@ -269,7 +269,7 @@ Torchで実行する場合にConversation.luaを直接実行したかの判別�
 --else
 --	return Conversation
 --end
-</pre>
+```
 
 ## 動作確認
 

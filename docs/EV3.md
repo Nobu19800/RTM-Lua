@@ -25,13 +25,13 @@ $ git clone -b master https://github.com/Nobu19800/ev3dev-lang
 
 `test_ev3.lua`に以下のように記述することでev3devモジュールをロードしてください。
 
-<pre>
+```Lua
 require 'ev3dev'
-</pre>
+```
 
 ### タッチセンサでオンオフを検出
 
-<pre>
+```Lua
 -- タッチセンサ初期化
 s = TouchSensor()
 -- ポートを指定する場合は、引数でポートを指定する。
@@ -40,51 +40,51 @@ s = TouchSensor()
 print(s:connected())
 -- オンオフの確認
 print(s:pressed())
-</pre>
+```
 
 
 ### ジャイロセンサで角度を検出
 
-<pre>
+```Lua
 -- ジャイロセンサ初期化
 g = GyroSensor()
 -- 接続したか確認
 print(g:connected())
 -- 角度の確認
 print(g:value())
-</pre>
+```
 
 ### 超音波センサで距離を検出
 
-<pre>
+```Lua
 -- 超音波センサ初期化
 u = UltrasonicSensor()
 -- 接続したか確認
 print(u:connected())
 -- 距離の確認
 print(u:value())
-</pre>
+```
 
 ### カラーセンサで反射光の強さを検出
 
-<pre>
+```Lua
 -- カラーセンサ初期化
 c = ColorSensor()
 -- 接続したか確認
 print(c:connected())
 -- 反射光の強さの確認
 print(c:value())
-</pre>
+```
 
 ### バッテリーの電圧を確認
 
-<pre>
+```Lua
 print(Battery:voltageVolts())
-</pre>
+```
 
 ### Lモーター、Mモーターの位置制御
 
-<pre>
+```Lua
 -- Lモーター初期化
 l = LargeMotor()
 -- 以下はMモーターの場合
@@ -110,11 +110,11 @@ pos = 180
 l:setPositionSP(math.floor(pos/360*l:countPerRot()))
 -- 位置制御開始
 l:setCommand("run-to-abs-pos")
-</pre>
+```
 
 ### Lモーター、Mモーターの速度制御
 
-<pre>
+```Lua
 -- Lモーター初期化
 l = LargeMotor()
 -- 以下はMモーターの場合
@@ -140,7 +140,7 @@ l:setCommand("run-forever")
 io.read()
 -- 停止
 l:setCommand("stop")
-</pre>
+```
 
 
 ## RTC作成
@@ -182,14 +182,14 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 先頭付近で`ev3dev`のモジュールのロードを行ってください。
 `ev3dev.lua`はEV3Sample.luaと同じディレクトリに配置してください。
 
-<pre>
+```Lua
 require 'ev3dev'
-</pre>
+```
 
 `onActivated`関数を以下のように編集してください。
 タッチセンサ、Lモーターの初期化を行います。
 
-<pre>
+```Lua
 	function obj:onActivated(ec_id)
 		-- ポート1に接続したタッチセンサの初期化
 		self._touchsensor1 = TouchSensor("in1")
@@ -237,13 +237,13 @@ require 'ev3dev'
 		
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 
 `onDeactivated`関数を以下のように編集してください。
 Lモーターを停止する処理を書きます。
 
-<pre>
+```Lua
 	function obj:onDeactivated(ec_id)
 		-- ポートAのLモーターを停止
 		if self._lmotor1 ~= nil then
@@ -255,13 +255,13 @@ Lモーターを停止する処理を書きます。
 		end
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 
 `onExecute`関数を以下のように編集してください。
 タッチセンサの値をOutPortから送信、InPortから受信した速度指令からLモーターの回転速度を計算して駆動する処理を書きます。
 
-<pre>
+```Lua
 	function obj:onExecute(ec_id)
 		-- 車輪の半径
 		local wheelRadius = 0.028
@@ -307,7 +307,7 @@ Lモーターを停止する処理を書きます。
 
 		return self._ReturnCode_t.RTC_OK
 	end
-</pre>
+```
 
 
 ## 動作確認

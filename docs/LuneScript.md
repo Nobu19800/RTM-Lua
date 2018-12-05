@@ -70,7 +70,7 @@ MoonScriptはLuaに機能を追加、記述方法の変更をしたという感�
 ## インストール
 Lua 5.2が必要です。
 ### Windows
-[ダウンロード][download.md]のページからLua 5.2用のOpenRTM Luaをダウンロードしてください。
+[ダウンロード](download.md)のページからLua 5.2用のOpenRTM Luaをダウンロードしてください。
 
 [LuneScript](https://github.com/ifritJP/LuneScript)のソースコードをダウンロードして以下のように配置します。
 

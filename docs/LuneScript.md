@@ -6,6 +6,9 @@
 
 MoonScriptと同じくLuaのトランスコンパイラです。新しい言語なので情報は少ないです。
 
+ちなみに[Google翻訳でLuneScriptを翻訳すると淫語という意味になる](https://qiita.com/dwarfJP/items/98ffacbb32b1a4d5f63e#%E3%81%A1%E3%82%87%E3%81%A3)らしいです。
+独特のネーミングセンスをしています。
+
 Luaの言語仕様が小さい故の欠点を解消するために様々な機能が追加されています。
 
 LuneScriptは以下のようにクラスや継承を利用できます。
@@ -65,7 +68,38 @@ Luaとは以下のような違いがあります。
 MoonScriptはLuaに機能を追加、記述方法の変更をしたという感じでしたが、LuneScriptはそれに加えて制約が強い印象です。
 
 ## インストール
+Lua 5.2が必要です。
 ### Windows
+[ダウンロード][download.md]のページからLua 5.2用のOpenRTM Luaをダウンロードしてください。
+
+[LuneScript](https://github.com/ifritJP/LuneScript)のソースコードをダウンロードして以下のように配置します。
+
+<pre>
+openrtm-lua-*.*.*-cc-***-lua5.2
+   |- lune
+        |- bin
+	|   |- lnsc
+	|
+	|- lua
+	    |- lune
+	    |     |- base
+	    |       |- (省略)
+	    |- openrtm_lns.lns
+	    |- openrtm_lns
+	          |- (省略)
+</pre>
+
+`lnsc`というスクリプトファイル、`lune`というフォルダをLuneScriptからコピーしてください。
+
+`lune`フォルダを配置したパスを環境変数`LUA_PATH`に設定します。
+
+<pre>
+set LUA_PATH=..\\..\\lua\\?.lua;..\\lua\\?.lua;.\\?.lua;
+set LUA_CPATH=..\\..\\clibs\\?.dll;
+</pre>
+
+またカレントディレクトリ(`.\\?.lua`)をモジュール探索パスに設定しておく必要があります。
+
 ### Ubuntu
 
 ## RTCの作成

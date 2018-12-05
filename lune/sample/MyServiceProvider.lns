@@ -96,14 +96,18 @@ class MyServiceProvider extend openrtm_lns.RTObjectBase {
     // @param manager マネージャ
     pub fn __init( manager: openrtm_lns.Manager ) {
         super( manager );
+	// サービスポート生成
         self._myServicePort = unwrap openrtm_lns.CorbaPort.new("MyService");
+	// プロバイダオブジェクト生成
         self._myservice0 = new MyServiceSVC_impl();
     }
 
     // 初期化時のコールバック関数
     // @return リターンコード
     pub override fn onInitialize() mut : openrtm_lns.ReturnCode_t {
+        // サービスポートにプロバイダオブジェクトを登録
         self._myServicePort.registerProvider("myservice0", "MyService", self._myservice0, "idl/MyService.idl", "IDL:SimpleService/MyService:1.0");
+	// ポート追加
         self.addPort(self._myServicePort);
         return openrtm_lns.ReturnCode_t.RTC_OK;
     }

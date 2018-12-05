@@ -51,9 +51,10 @@ class ConsoleIn extend openrtm_lns.RTObjectBase {
     // @return リターンコード
     pub override fn onExecute(ec_id:int) mut : openrtm_lns.ReturnCode_t {
         print("Please input number: ");
-        openrtm_lns.OutPort.setTimestamp(self._d_out);
         // 出力データ格納
         self._d_out.data = 123;
+        // 出力データにタイムスタンプ設定
+        openrtm_lns.OutPort.setTimestamp(self._d_out);
         // データ書き込み
         self._outOut.write();
         return openrtm_lns.ReturnCode_t.RTC_OK;

@@ -59,6 +59,7 @@ class ConfigSample extend openrtm_lns.RTObjectBase {
     // 初期化時のコールバック関数
     // @return リターンコード
     pub override fn onInitialize() mut : openrtm_lns.ReturnCode_t {
+        // コンフィギュレーションパラメータを変数にバインドする
         self.bindParameter_int("int_param0", self._int_param0, "0");
         self.bindParameter_int("int_param1", self._int_param1, "1");
         self.bindParameter_real("double_param0", self._double_param0, "0.11");

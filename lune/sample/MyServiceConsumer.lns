@@ -1,5 +1,5 @@
 /*
- @file MyServiceConsumer.moon
+ @file MyServiceConsumer.lns
  @brief サービスポート(コンシューマ側)のRTCサンプル
 */
 

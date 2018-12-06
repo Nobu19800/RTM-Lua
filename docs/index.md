@@ -67,7 +67,7 @@
 |OPRoS|ETRI|||よく知りません|
 |GostaiRTC|GOSTAI、THALES|C++||よく知りません|
 |[ReactiveRTM](https://github.com/zoetrope/ReactiveRTM)||.NET|Windows？|使ったことないです。|
-|OpenRTM Lua||Lua|Windows、Haiku、Mac OSX、Ubuntu、Debian、FreeBSD|このページで説明します。|
+|OpenRTM Lua||Lua|Windows、Haiku、macOS、Ubuntu、Debian、FreeBSD|このページで説明します。|
 
 ### Luaとは？
 [Lua](http://lua.org/)はリオデジャネイロ・カトリック大学で開発されているスクリプト言語です。
@@ -190,7 +190,7 @@ OpenRTM Luaは世界で初めてHaiku OSに対応したロボット用ミドル�
 * [Windows](Windows.md)
 * [Windows 10 IoT](windows10iot.md)
 * [Haiku](haiku.md)
-* [Mac OSX](Mac.md)
+* [macOS](Mac.md)
 * [Ubuntu](Ubuntu.md)
 * [Raspbian](Raspbian.md)
 * [ev3dev](ev3dev.md)

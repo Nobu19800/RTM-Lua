@@ -52,6 +52,7 @@ pub module Manager require 'openrtm.Manager' {
     pub fn runManager( ): nil;
     pub fn registerFactory( profile:stem!, new_func:stem, delete_func:stem ): stem!;
     pub fn createComponent( comp_args:str ): stem!;
+    pub fn loadIdLFile( name:str ): nil;
 }
 
 

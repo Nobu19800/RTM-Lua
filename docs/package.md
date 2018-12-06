@@ -82,9 +82,17 @@ source = {
 
 
 
+### モジュールの登録
+
+LuaRocksのアップロードコマンドを実行するためには`dkjson`のインストールが必要になります。
+以下のコマンドでインストールしてください。
+
+<pre>
+$ sudo luarocks install dkjson
+</pre>
+
 RTC Builderで作成したRTCのフォルダに移動して以下のコマンドを実行します。rockspecファイルの名前は適宜変更してください。
 何故かWindowsでは失敗することがあるようです。その場合はLuaRocksの管理画面から登録してください。
-
 <pre>
 $ luarocks upload sample_rtcomponent-1.0.0-1.rockspec --api-key=*******
 </pre>

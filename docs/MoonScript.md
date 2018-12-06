@@ -54,6 +54,7 @@ test_func(obj)
 
 
 ## インストール
+OpenRTM LuaのMoonScript用ラッパーライブラリを使用します。
 ### Windows
 
 OpenRTM Lua版にMoonScriptの実行環境も含めてあります。

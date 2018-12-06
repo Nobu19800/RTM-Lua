@@ -1,4 +1,4 @@
-# Mac OSXへのインストール手順
+# macOSへのインストール手順
 
 [Homebrew](https://brew.sh/index_ja)をインストールしてください。
 

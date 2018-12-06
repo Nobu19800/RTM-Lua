@@ -58,7 +58,6 @@ MyServiceSVC_impl.new = function()
 	function obj:echo(msg)
 		table.insert(self._echoList, msg)
 		print("MyService::echo() was called.")
-		local oil = require "oil"
 		for i =1,10 do
 			print("Message: ", msg)
 			openrtm.Timer.sleep(0.1)

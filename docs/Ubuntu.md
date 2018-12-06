@@ -30,7 +30,7 @@ $ sudo luarocks install openrtm
 </pre>
  
  
- <!--
+<!--
  
 ## corba_cdr対応版のインストール
 以下のコマンドでインストールしてください。

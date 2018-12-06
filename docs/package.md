@@ -60,7 +60,7 @@ manager.components.precreate: Sample_RTComponent
 
 ### LuaRocksへの登録、キーの取得
 
-次に(LuaRocks)[https://luarocks.org/login]にログインしてください。
+次に[LuaRocks](https://luarocks.org/login)にログインしてください。
 GitHubのアカウントでログインできますが、持っていない場合は[ユーザー登録](https://luarocks.org/register)をしてください。
 
 ログイン後、`Settings`->`API kays`のページを開いて新規にキーを作成します。

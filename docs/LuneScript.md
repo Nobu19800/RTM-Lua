@@ -68,6 +68,7 @@ Luaとは以下のような違いがあります。
 MoonScriptはLuaに機能を追加、記述方法の変更をしたという感じでしたが、LuneScriptはそれに加えて制約が強い印象です。
 
 ## インストール
+OpenRTM LuaのLuneScript用ラッパーライブラリを使用します。
 Lua 5.2が必要です。
 ### Windows
 [ダウンロード](download.md)のページからLua 5.2用のOpenRTM Luaをダウンロードしてください。

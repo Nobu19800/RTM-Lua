@@ -76,8 +76,7 @@ ZIPファイルなどの場所を指定する場合は`http://`からはじめ�
 
 ```Lua
 source = {
-   url = "git://github.com/UserName/Sample_RTComponent",
-   dir = "",
+   url = "git://github.com/UserName/Sample_RTComponent"
 }
 ```
 

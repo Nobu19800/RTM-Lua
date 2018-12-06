@@ -20,8 +20,7 @@ luarocks install openrtm 0.4-12
 
 ソースコードを以下から入手してください。
 
-* [通常版](https://github.com/Nobu19800/RTM-Lua/archive/master.zip)
-* [corba_cdr対応版](https://github.com/Nobu19800/RTM-Lua/archive/corba_cdr_support.zip)
+* [ソースコード](https://github.com/Nobu19800/RTM-Lua/archive/master.zip)
 
 ファイルを展開して、**install.bat**を**管理者権限**で実行してください。
 

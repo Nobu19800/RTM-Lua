@@ -11,7 +11,7 @@
 - [概要](#概要)
     - [RTミドルウェアとは？](#rtミドルウェアとは)
     - [Luaとは？](#luaとは)
-    - [OpenRTM Lua版の特徴](#openrtm-lua版の特徴)
+    - [OpenRTM Lua版](#openrtm-lua版)
     - [OpenRTM Lua版を使う事による、RTMユーザーにとってのメリット](#openrtm-lua版を使う事によるrtmユーザーにとってのメリット)
     - [OpenRTM Lua版を使う事による、非RTMユーザーにとってのメリット](#openrtm-lua版を使う事による非rtmユーザーにとってのメリット)
 - [ダウンロード](#ダウンロード)
@@ -78,9 +78,10 @@ Pythonと同じくスクリプト言語であるためコードを書いてす�
 
 
 
-### OpenRTM Lua版の特徴
+### OpenRTM Lua版
+OpenRTM LuaはLuaによるRTミドルウェアの実装です。
 
-OpenRTM Lua版を使用することにより、Luaスクリプティング機能を有するアプリケーション上でRTCを起動してC++やPythonのRTCと接続したり、Luaのライブラリを活用したRTCを作成するという事ができます。
+OpenRTM Luaを使用することにより、Luaスクリプティング機能を有するアプリケーション上でRTCを起動してC++やPythonのRTCと接続したり、Luaのライブラリを活用したRTCを作成するという事ができます。
 
 
 OpenRTM Lua版には以下の3つの特徴があります。

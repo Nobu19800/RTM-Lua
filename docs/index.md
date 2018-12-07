@@ -79,7 +79,7 @@ Pythonと同じくスクリプト言語であるためコードを書いてす�
 
 
 ### OpenRTM Lua版
-OpenRTM LuaはLuaによるRTミドルウェアの実装です。
+OpenRTM Luaはプログラミング言語LuaによるRTミドルウェアの実装です。
 
 OpenRTM Luaを使用することにより、Luaスクリプティング機能を有するアプリケーション上でRTCを起動してC++やPythonのRTCと接続したり、Luaのライブラリを活用したRTCを作成するという事ができます。
 

@@ -60,10 +60,10 @@
 |:---|:---|:---|:---|:---|
 |[OpenRTM-aist](http://www.openrtm.org/openrtm/ja)|産総研|C++、Java、Python|Windows、Ubuntu、Debian、Fedora、VxWorks、QNX。Macは公式ではサポートしていない。|もっとも使われているRTM実装(広く使われているとは言っていない)。OpenRTM-aistにはキラーアプリケーションと呼べるものが何もないため今一つ流行っていない。|
 |[OpenRTM.NET](http://www.sec.co.jp/robot/openrtmnet/introduction.html)|SEC|.NET(C#、Visual Basic.NET等)|Windows|.NET版RTミドルウェア。更新の頻度が少なく、最近はあまり使っていない。GUI等、上位のアプリケーション向け。|
-|[RTM on Android](http://www.sec.co.jp/robot/rtm_on_android/introduction.html)|SEC|Java|Android|Android版RTミドルウェア。使っていない。|
+|[RTM on Android](http://www.sec.co.jp/robot/rtm_on_android/introduction.html)|SEC|Java|Android|Android版RTミドルウェア。|
 |HRTM|本田R&D|C++|Windows、Ubuntu、VxWorks|FSM4RTCのサポート等。オープンソースではないため外部では使われていない。|
 |[OpenRTM-erlang](https://github.com/gbiggs/openrtm-erl)|産総研|Erlang|Linux？|Erlangはあまり使ったことが無いのでよく分かりません。RTCが落ちてもすぐに再起動するのは見ていて面白い。|
-|RTMSafety|SEC|C言語|QNX、TOPPERS、ETAS RTA-OS、OSなし|機能安全の認証対応のRTミドルウェア。使ったことない。|
+|RTMSafety|SEC|C言語|QNX、TOPPERS、ETAS RTA-OS、OSなし|機能安全の認証対応のRTミドルウェア。|
 |OPRoS|ETRI|||よく知りません|
 |GostaiRTC|GOSTAI、THALES|C++||よく知りません|
 |[ReactiveRTM](https://github.com/zoetrope/ReactiveRTM)||.NET|Windows？|使ったことないです。|
@@ -88,7 +88,7 @@ OpenRTM Lua版には以下の3つの特徴があります。
 #### 軽量
 ソフトウェア一式で2MB程度と、他のRTミドルウェアの実装に比べて非常に軽量です。
 
-Lua(1.84MB)>LuaJIT(2.14MB)>>>>Python(7.65MB)>=C++(8.05MB)>>>Java(笑)
+Lua(1.84MB)>LuaJIT(2.14MB)>>>>Python(7.65MB)>=C++(8.05MB)>>>Java
 
 <!-- 
 動作中のメモリ使用量もPython版と比較して小さくなっています。

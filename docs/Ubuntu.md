@@ -50,6 +50,13 @@ $ luarocks make
 $ sudo luarocks install openrtm
 </pre>
 
+
+何故かOiL等を自動でインストールしてくれない場合があるようなので、エラーが出た場合は以下のコマンドでOiLをインストールしてください。
+
+<pre>
+$ sudo luarocks install oil
+</pre>
+
 -->
 
 

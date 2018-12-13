@@ -83,3 +83,7 @@ RTCには`Inactive`、`Active`、`Error`という状態があります。
 入力した数値は`ConsoleOut.bat`のウィンドウで表示されます。
 
 ![tutorial13](https://user-images.githubusercontent.com/6216077/47963220-3845fa00-e06c-11e8-9113-eb065b47888a.png)
+
+
+※RTSystemEditor上でRTCの表示が非アクティブ状態(青)からアクティブ状態(緑)に変化しないことがありますが、これはLuaがマルチスレッドをサポートしておらず標準入力でブロックしてしまうとすべての処理がブロックされるため、ConsoleInの状態を取得することもできなくなります。
+`ConsoleIn.bat`のウィンドウに何回か数値を入力すると正常に表示されるようになります。

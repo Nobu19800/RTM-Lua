@@ -22,6 +22,8 @@ $ luarocks --lua-dir=/usr/local/opt/lua@5.1 install openrtm
 </pre>
 
 
+
+
 <!-- 
 
 
@@ -62,6 +64,17 @@ $ luarocks --lua-dir=/usr/local/opt/lua@5.1 path
 $ lua-5.1 ConsoleIn.lua
 </pre>
 
+### エンドポイントの設定について
+
+RTC起動時にエンドポイントが適切に設定されず他のRTCと通信できない場合があります。
+その場合は以下のようにエンドポイントを指定して起動してください。
+
+<pre>
+$ lua-5.1 ConsoleIn.lua -o corba.endpoints:MacのIPアドレス
+</pre>
+
+
+## その他
 OpenRTM-aistのインストールなどは以下のページを参考にしてください。
 
 * [Mac OSX + OpenRTM-aistパッケージ](http://sugarsweetrobotics.com/?page_id=111)

@@ -35,6 +35,17 @@ $ sudo luarocks install openrtm
 <pre>
 $ sudo luarocks install oil
 </pre>
+
+
+## RTC起動について
+### エンドポイントの設定について
+
+RTC起動時にエンドポイントが適切に設定されず他のRTCと通信できない場合があります。
+その場合は以下のようにエンドポイントを指定して起動してください。
+
+<pre>
+$ lua ConsoleIn.lua -o corba.endpoints:MacのIPアドレス
+</pre>
  
  
 <!--

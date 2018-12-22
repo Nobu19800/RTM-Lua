@@ -910,7 +910,7 @@ C++版、Python版、Java版にRTSystemEditorやRTCBuilder等のツールが含�
 例えば、rtc.confに以下のように記述することでログレベルの設定ができます。
 
 <pre>
-`logger.log_level:Debug`
+logger.log_level:Debug
 </pre>
 
 何も指定しなければ実行したフォルダのrtc.confを読み込みますが、以下のように`-f`のコマンドラインオプションで設定ファイルの指定ができます。

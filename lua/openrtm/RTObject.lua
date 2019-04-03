@@ -1101,6 +1101,8 @@ RTObject.new = function(manager)
 
 		port:init(self._properties:getNode(propkey))
 		port:setOwner(self)
+		port:setPortConnectListenerHolder(self._portconnListeners)
+		self:onAddPort(port:getPortProfile())
 
 
 		return self._portAdmin:addPort(port)

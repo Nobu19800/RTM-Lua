@@ -24,7 +24,7 @@ Ubuntuの場合は任意ディレクトリの`V-REP_PRO_EDU_V3_5_0_Linux`以下�
 ![openrtmlua340](https://user-images.githubusercontent.com/6216077/37710309-97ec79f4-2d50-11e8-9f3c-3efd55eac308.png)
 
 
-**※CoppeliaSim、もしくはV-REPの新しいバージョンの場合はidlフォルダを一階層上のディレクトリにコピーする必要があります。**
+**※CoppeliaSim、もしくはV-REPの新しいバージョンの場合はidlフォルダを一階層上のディレクトリ(`C:\Program Files\V-REP3\V-REP_PRO_EDU`、もしくは`V-REP_PRO_EDU_V3_5_0_Linux`)にコピーする必要があります。**
 
 ![luaopenrtm1](https://user-images.githubusercontent.com/6216077/70972534-f0a2f600-20e6-11ea-99ad-a2069fb66cfa.png)
 

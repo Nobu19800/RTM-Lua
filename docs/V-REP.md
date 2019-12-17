@@ -24,6 +24,12 @@ Ubuntuの場合は任意ディレクトリの`V-REP_PRO_EDU_V3_5_0_Linux`以下�
 ![openrtmlua340](https://user-images.githubusercontent.com/6216077/37710309-97ec79f4-2d50-11e8-9f3c-3efd55eac308.png)
 
 
+**※CoppeliaSimの場合はidlフォルダを一階層上のディレクトリにコピーする必要があります。**
+
+![luaopenrtm1](https://user-images.githubusercontent.com/6216077/70972534-f0a2f600-20e6-11ea-99ad-a2069fb66cfa.png)
+
+
+
 以下、WindowsとUbuntuでコピーするファイルが違います。Ubuntuで使いたいという奇特な人は注意してください。
 
 ### Windowsの場合
@@ -32,7 +38,6 @@ Ubuntuの場合は任意ディレクトリの`V-REP_PRO_EDU_V3_5_0_Linux`以下�
 
 
 ![openrtmlua360](https://user-images.githubusercontent.com/6216077/37710315-9af9581a-2d50-11e8-803d-560ab910f990.png)
-
 
 ### Ubuntuの場合
 
@@ -183,3 +188,6 @@ manager:init({"-o", "manager.components.preconnect:VRepSample0.in?port=rtcname:/
 
 
 起動時にアクティブ化するRTCを指定します。
+
+### rtc.confのパス
+`coppeliaSim.exe`、もしくは`vrep.exe`と同じフォルダのrtc.confを読み込みます。

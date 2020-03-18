@@ -40,7 +40,7 @@ OiLもlualoggingもLua for Windowsに最初から入っているものを使え�
 
 OiL 0.7は何故かoil.VERSIONで取得できるバージョンが0.6になっている。
 
-また、Codec.luaのstruct関数455目に以下を追加しないと落ちることがある。
+また、Codec.luaのstruct関数455行目に以下を追加しないと落ちることがある。
 
 ```Lua
 if field.name == "port" then
@@ -78,7 +78,7 @@ giop:tcp::8087
 この場合については問題はない。
 
 <pre>
-giop:tcp:localost:8087
+giop:tcp:localhost:8087
 </pre>
 
 この場合はOiL側からの通信が失敗する。原因は不明。

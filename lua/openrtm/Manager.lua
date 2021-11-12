@@ -658,7 +658,11 @@ end
 function Manager:single_step()
 	if self.no_block then
 		oil.main(function()
-			if self._orb:pending() then
+			local timeout = nil
+			if oil.VERSION == "OiL 0.6" then
+				timeout = 0
+			end
+			if self._orb:pending(timeout) then
 				oil.newthread(self._orb.step, self._orb)
 			end
 		end)
@@ -670,7 +674,11 @@ end
 function Manager:step()
 	if self.no_block then
 		local stepfunc = function(orb)
-			while orb:pending() do
+			local timeout = nil
+			if oil.VERSION == "OiL 0.6" then
+				timeout = 0
+			end
+			while orb:pending(timeout) do
 				orb:step()
 			end
 		end
@@ -693,7 +701,11 @@ function Manager:run_step(count)
 			for i=1,count do
 				orb:step()
 			end
-			while orb:pending() do
+			local timeout = nil
+			if oil.VERSION == "OiL 0.6" then
+				timeout = 0
+			end
+			while orb:pending(timeout) do
 				orb:step()
 			end
 		end
@@ -1248,10 +1260,12 @@ function Manager:initORB()
 			if StringUtil.toBool(self._config:getProperty("corba.ssl.enable"), "YES", "NO", false) then
 				local key_file = self._config:getProperty("corba.ssl.key_file")
 				local ca_file = self._config:getProperty("corba.ssl.certificate_authority_file")
-				
-				
+				local flavor = "cooperative;corba;corba.ssl;kernel.ssl"
+				if self.no_block then
+					flavor = "corba;corba.ssl;kernel.ssl"
+				end
 				self._orb = oil.init{
-					flavor = "cooperative;corba;corba.ssl;kernel.ssl",
+					flavor = flavor,
 					host=host,
 					port=port,
 					options = {
@@ -1265,7 +1279,11 @@ function Manager:initORB()
 					},
 				}
 			else
-				self._orb = oil.init{ flavor = "cooperative;corba;", host=host, port=port }
+				if self.no_block then
+					self._orb = oil.init{ flavor = "corba;", host=host, port=port }
+				else
+					self._orb = oil.init{ flavor = "cooperative;corba;", host=host, port=port }
+				end
 			end
 			
 		else

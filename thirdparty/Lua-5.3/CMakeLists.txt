@@ -1,5 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
 
+option(VERSION_OMIT  "Omit the version name from the library file name"  No)
+
 set(target lua53)
 project (${target})
 
@@ -78,11 +80,14 @@ else(WIN32)
 	ADD_DEFINITIONS(-DLUA_USE_POSIX -DLUA_USE_DLOPEN)
 endif(WIN32)
 
-ADD_DEFINITIONS(-DLUA_COMPAT_MODULE)
+ADD_DEFINITIONS(-DLUA_COMPAT_MODULE -DLUA_COMPAT_APIINTCASTS)
 
 
 
-add_library (${target} SHARED  ${srcs} ${headers}  src/luac.c)
+add_library (${target} SHARED ${srcs} ${headers} src/luac.c)
+if(VERSION_OMIT)
+	set_target_properties(${target} PROPERTIES RUNTIME_OUTPUT_NAME "lua")
+endif(VERSION_OMIT)
 add_executable (lua  src/lua.c)
 add_executable (luac src/luac.c ${srcs})
 

@@ -1,31 +1,18 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8.13)
 
 project (ssl)
 
-set(LUA_ROOT ${LUA_ROOT} CACHE PATH "set LUA_ROOT")
-set(LUA_VERSION ${LUA_VERSION} CACHE STRING "set LUA_VERSION")
-set(OPENSSL_ROOT ${OPENSSL_ROOT} CACHE PATH "set OPENSSL_ROOT")
+find_package(Lua REQUIRED)
+find_package(OpenSSL REQUIRED)
 
-
-if(MSVC)
-	if(NOT LUA_ROOT)
-		message(FATAL_ERROR "Please set LUA_ROOT.")
+if(NOT CMAKE_VERSION VERSION_LESS 3.7.0)
+	if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+		if(EXISTS $ENV{LUA_DIR})
+			set(CMAKE_INSTALL_PREFIX "$ENV{LUA_DIR}" CACHE PATH "Install path prefix, prepended onto install directories." FORCE)
+		endif()
 	endif()
+endif()
 
-	if(NOT LUA_VERSION)
-		message(FATAL_ERROR "Please set LUA_VERSION.")
-	endif()
-
-	
-	if(NOT OPENSSL_ROOT)
-		message(FATAL_ERROR "Please set OPENSSL_ROOT.")
-	endif()
-
-else(MSVC)
-	if(NOT LUA_VERSION)
-		set(LUA_VERSION 5.1)
-	endif()
-endif(MSVC)
 
 
 set(srcs
@@ -50,34 +37,10 @@ else(MSVC)
 	)
 endif(MSVC)
 
-
-
-
-if(MSVC)
-else(MSVC)
-	if(LUA_ROOT)
-	else(LUA_ROOT)
-		include_directories(/usr/include/lua${LUA_VERSION})
-	endif(LUA_ROOT)
-endif(MSVC)
-
-if(LUA_ROOT)
-	include_directories(${LUA_ROOT}/include)
-	link_directories(${LUA_ROOT}/lib)
-endif(LUA_ROOT)
-
-if(OPENSSL_ROOT)
-	include_directories(${OPENSSL_ROOT}/include)
-	link_directories(${OPENSSL_ROOT}/lib)
-endif(OPENSSL_ROOT)
-
+include_directories(${LUA_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR})
 
 
 add_library (luasocket STATIC ${srcs})
-
-
-
-
 
 
 
@@ -104,15 +67,14 @@ set(srcs
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
-set(SSL_LIBRARIES libssl libcrypto)
-
 
 add_library (ssl SHARED ${srcs})
 
+
 if(MSVC)
-	target_link_libraries(ssl lua${LUA_VERSION} ws2_32 luasocket ${SSL_LIBRARIES})
+	target_link_libraries(ssl ${LUA_LIBRARIES} ws2_32 luasocket ${OPENSSL_LIBRARIES})
 else(MSVC)
-	target_link_libraries(ssl lua${LUA_VERSION} luasocket ${SSL_LIBRARIES})
+	target_link_libraries(ssl ${LUA_LIBRARIES} luasocket ${OPENSSL_LIBRARIES})
 	set_target_properties (ssl
                        PROPERTIES PREFIX
                        "")
@@ -120,9 +82,9 @@ endif(MSVC)
 
 
 if(MSVC)
-	install(TARGETS ssl RUNTIME DESTINATION ${LUA_ROOT}/clibs)
+	install(TARGETS ssl RUNTIME DESTINATION clibs)
 else(MSVC)
-	install(TARGETS ssl LIBRARY DESTINATION ${LUA_ROOT}/clibs)
+	install(TARGETS ssl LIBRARY DESTINATION clibs)
 endif(MSVC)
 
-install(FILES src/https.lua src/ssl.lua DESTINATION ${LUA_ROOT}/lua)
+install(FILES src/https.lua src/ssl.lua DESTINATION lua)

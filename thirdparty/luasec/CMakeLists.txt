@@ -52,6 +52,7 @@ set(srcs
 	src/ec.c
 	src/ec.h
 	src/options.h
+	src/options.c
 	src/ssl.c
 	src/ssl.h
 	src/x509.c

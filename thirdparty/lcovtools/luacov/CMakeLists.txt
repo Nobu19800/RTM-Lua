@@ -1,23 +1,17 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8.13)
 
 project (lcovtools)
 
-set(LUA_ROOT ${LUA_ROOT} CACHE PATH "set LUA_ROOT")
-set(LUA_VERSION ${LUA_VERSION} CACHE STRING "set LUA_VERSION")
+find_package(Lua REQUIRED)
 
-if(MSVC)
-	if(NOT LUA_ROOT)
-		message(FATAL_ERROR "Please set LUA_ROOT.")
-	endif()
 
-	if(NOT LUA_VERSION)
-		message(FATAL_ERROR "Please set LUA_VERSION.")
+if(NOT CMAKE_VERSION VERSION_LESS 3.7.0)
+	if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+		if(EXISTS $ENV{LUA_DIR})
+			set(CMAKE_INSTALL_PREFIX "$ENV{LUA_DIR}" CACHE PATH "Install path prefix, prepended onto install directories." FORCE)
+		endif()
 	endif()
-else(MSVC)
-	if(NOT LUA_VERSION)
-		set(LUA_VERSION 5.1)
-	endif()
-endif(MSVC)
+endif()
 
 set(srcs
 	luacov.cpp
@@ -27,32 +21,18 @@ if(MSVC)
 	ADD_DEFINITIONS("-DLUACOVTOOLS_API=__declspec(dllexport)")
 endif(MSVC)
 
-if(MSVC)
-else(MSVC)
-	if(LUA_ROOT)
-	else(LUA_ROOT)
-		include_directories(/usr/include/lua${LUA_VERSION})
-	endif(LUA_ROOT)
-endif(MSVC)
-
-if(LUA_ROOT)
-	include_directories(${LUA_ROOT}/include)
-	link_directories(${LUA_ROOT}/lib)
-endif(LUA_ROOT)
+include_directories(${LUA_INCLUDE_DIR})
 
 
 add_library (lcovtools SHARED  ${srcs})
 
+target_link_libraries(lcovtools ${LUA_LIBRARIES})
 if(MSVC)
-	target_link_libraries(lcovtools lua${LUA_VERSION} ws2_32)
 else(MSVC)
-	target_link_libraries(lcovtools lua${LUA_VERSION})
 	set_target_properties (lcovtools
                        PROPERTIES PREFIX
                        "")
 endif(MSVC)
 
 
-
-
-install(TARGETS lcovtools RUNTIME DESTINATION ${LUA_ROOT}/clibs)
+install(TARGETS lcovtools RUNTIME DESTINATION clibs)

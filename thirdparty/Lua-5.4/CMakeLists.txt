@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.8.13)
 
 option(VERSION_OMIT  "Omit the version name from the library file name"  No)
 
-set(target lua53)
+set(target lua54)
 project (${target})
 
 
@@ -10,7 +10,6 @@ set(srcs
 	src/lapi.c
 	src/lauxlib.c
 	src/lbaselib.c
-	src/lbitlib.c
 	src/lcode.c
 	src/lcorolib.c
 	src/lctype.c

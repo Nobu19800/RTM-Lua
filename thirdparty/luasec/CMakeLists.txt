@@ -89,3 +89,13 @@ else(MSVC)
 endif(MSVC)
 
 install(FILES src/https.lua src/ssl.lua src/options.lua DESTINATION lua)
+
+if(WIN32)
+	if(OPENSSL_ROOT_DIR)
+		file(GLOB OPENSSL_DLLS1 "${OPENSSL_ROOT_DIR}/bin/libcrypto*.dll")
+		file(GLOB OPENSSL_DLLS2 "${OPENSSL_ROOT_DIR}/bin/libssl*.dll")
+	endif(OPENSSL_ROOT_DIR)
+	foreach(library ${OPENSSL_DLLS1};${OPENSSL_DLLS2})
+		install(PROGRAMS ${library} DESTINATION bin)
+	endforeach()
+endif(WIN32)

@@ -1,21 +1,16 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8.13)
 
 project (socket)
 
-if(MSVC)
-	if(NOT LUA_ROOT)
-		message(FATAL_ERROR "Please set LUA_ROOT.")
-	endif()
-	set(LUA_VERSION ${LUA_VERSION} CACHE PATH "set LUA_VERSION")
+find_package(Lua REQUIRED)
 
-	if(NOT LUA_VERSION)
-		message(FATAL_ERROR "Please set LUA_VERSION.")
+if(NOT CMAKE_VERSION VERSION_LESS 3.7.0)
+	if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+		if(EXISTS $ENV{LUA_DIR})
+			set(CMAKE_INSTALL_PREFIX "$ENV{LUA_DIR}" CACHE PATH "Install path prefix, prepended onto install directories." FORCE)
+		endif()
 	endif()
-else(MSVC)
-	if(NOT LUA_VERSION)
-		set(LUA_VERSION 5.1)
-	endif()
-endif(MSVC)
+endif()
 
 set(srcs
 	src/auxiliar.c
@@ -58,25 +53,13 @@ if(MSVC)
 endif(MSVC)
 
 
-if(MSVC)
-else(MSVC)
-	if(LUA_ROOT)
-	else(LUA_ROOT)
-		include_directories(/usr/include/lua${LUA_VERSION})
-	endif(LUA_ROOT)
-endif(MSVC)
+include_directories(${LUA_INCLUDE_DIR})
 
-if(LUA_ROOT)
-	include_directories(${LUA_ROOT}/include)
-	link_directories(${LUA_ROOT}/lib)
-endif(LUA_ROOT)
-
-add_library (luasoket SHARED ${srcs})
 
 if(MSVC)
-	target_link_libraries(luasoket lua${LUA_VERSION} ws2_32)
+	target_link_libraries(luasoket ${LUA_LIBRARIES} ws2_32)
 else(MSVC)
-	target_link_libraries(luasoket lua${LUA_VERSION})
+	target_link_libraries(luasoket ${LUA_LIBRARIES})
 	set_target_properties (luasoket
                        PROPERTIES PREFIX
                        "")
@@ -98,14 +81,17 @@ endif(MSVC)
 
 add_library (mine SHARED  src/mime.c src/mime.h src/compat.c src/compat.h)
 
+
+
 if(MSVC)
-	target_link_libraries(mine lua${LUA_VERSION} ws2_32)
+	target_link_libraries(mine ${LUA_LIBRARIES} ws2_32)
 else(MSVC)
-	target_link_libraries(mine lua${LUA_VERSION})
+	target_link_libraries(mine ${LUA_LIBRARIES})
 	set_target_properties (mine
                        PROPERTIES PREFIX
                        "")
 endif(MSVC)
+
 
 SET_TARGET_PROPERTIES(mine PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/mine)
 SET_TARGET_PROPERTIES(mine PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/mine)
@@ -125,11 +111,11 @@ set(lua_files
 	src/url.lua
 )
 if(MSVC)
-	install(TARGETS luasoket RUNTIME DESTINATION ${LUA_ROOT}/clibs/socket)
-	install(TARGETS mine RUNTIME DESTINATION ${LUA_ROOT}/clibs/mine)
+	install(TARGETS luasoket RUNTIME DESTINATION clibs/socket)
+	install(TARGETS mine RUNTIME DESTINATION clibs/mine)
 else(MSVC)
-	install(TARGETS luasoket LIBRARY DESTINATION ${LUA_ROOT}/clibs/socket)
-	install(TARGETS mine LIBRARY DESTINATION ${LUA_ROOT}/clibs/mine)
+	install(TARGETS luasoket LIBRARY DESTINATION clibs/socket)
+	install(TARGETS mine LIBRARY DESTINATION clibs/mine)
 endif(MSVC)
-install(FILES ${lua_files} DESTINATION ${LUA_ROOT}/lua/socket)
-install(FILES src/socket.lua DESTINATION ${LUA_ROOT}/lua)
+install(FILES ${lua_files} DESTINATION lua/socket)
+install(FILES src/socket.lua DESTINATION lua)

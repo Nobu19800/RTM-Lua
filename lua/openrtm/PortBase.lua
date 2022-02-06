@@ -232,8 +232,8 @@ PortBase.new = function(name)
 				end
 			end)
 		if not success then
-			--print(exception)
-			self._rtcout:RTC_ERROR(exception)
+			print(exception)
+			--self._rtcout:RTC_ERROR(exception)
 			return self._ReturnCode_t.BAD_PARAMETER, connector_profile
 		end
 		--print(retval)

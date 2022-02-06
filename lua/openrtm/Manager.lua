@@ -222,7 +222,7 @@ if ORB_Dummy_ENABLE then
 
 
 
-	function ORB_Dummy:newproxy(ref, proxy,idl)
+	function ORB_Dummy:newproxy(ref, proxy, idl)
 		local ret = ref
 		if oil.VERSION == "OiL 0.4 beta" then
 			idl = proxy
@@ -532,14 +532,15 @@ function Manager:runManager(no_block)
 		no_block = false
 	end
 	self.no_block = no_block
-	oil.main(function()
+	
+	main_function = function()
 
 		self:initORB()
 
 		if no_block then
 			--oil.newthread(self._orb.step, self._orb)
 			local count = tonumber(self._config:getProperty("corba.step.count"))
-			if count ~= nil then
+			if count ~= nil and oil.VERSION ~= "OiL 0.6" then
 				self:run_step(count)
 			end
 		else
@@ -650,7 +651,18 @@ function Manager:runManager(no_block)
 		--local ret = mgrs:getParameterByModulename("manager",module_name)
 		--print(ret, module_name[1])
 		--self._orb:run()
-	end)
+	end
+	local log_level = tonumber(self._config:getProperty("corba.logger.log_level"))
+	if log_level ~= nil and log_level > 0 then
+		oil.verbose:level(log_level)
+	end
+	if no_block and oil.VERSION == "OiL 0.6" then
+		main_function()
+	else
+		oil.main(
+			main_function
+		)
+	end
 end
 
 -- CORBAの処理を1ステップ進める
@@ -1258,29 +1270,72 @@ function Manager:initORB()
 		
 		if oil.VERSION == "OiL 0.6" then
 			if StringUtil.toBool(self._config:getProperty("corba.ssl.enable"), "YES", "NO", false) then
-				local key_file = self._config:getProperty("corba.ssl.key_file")
-				local ca_file = self._config:getProperty("corba.ssl.certificate_authority_file")
+				local key = self._config:getProperty("corba.ssl.key_file")
+				local certificate = self._config:getProperty("corba.ssl.certificate")
+				local cafile = self._config:getProperty("corba.ssl.cafile")
+				local capath = self._config:getProperty("corba.ssl.capath")
+				if capath == "" then
+					capath = nil
+				end
+				local protocol = self._config:getProperty("corba.ssl.protocol", "tlsv1_2")
+				local verify_str = self._config:getProperty("corba.ssl.verify", "peer, fail_if_no_peer_cert")
+				local verify = StringUtil.split(verify_str, ",")
+
+				--local ciphers = self._config:getProperty("corba.ssl.ciphers")
+				--local ciphersuites = self._config:getProperty("corba.ssl.ciphersuites")
+				--local depth = self._config:getProperty("corba.ssl.depth")
+				--local dhparam = self._config:getProperty("corba.ssl.dhparam")
+				--local curve = self._config:getProperty("corba.ssl.curve")
+				--local verifyext = self._config:getProperty("corba.ssl.verifyext")
+				--local setverifyext = self._config:getProperty("corba.ssl.setverifyext")
+				--local mode = self._config:getProperty("corba.ssl.mode")
+				--local alpn = self._config:getProperty("corba.ssl.alpn")
+				--local dane = self._config:getProperty("corba.ssl.dane")
+
 				local flavor = "cooperative;corba;corba.ssl;kernel.ssl"
 				if self.no_block then
-					flavor = "corba;corba.ssl;kernel.ssl"
+					flavor = "lua;corba;corba.ssl;kernel.ssl"
 				end
 				self._orb = oil.init{
 					flavor = flavor,
 					host=host,
 					port=port,
 					options = {
-						client = {
-							security = "required",
-							ssl = {
-								key = key_file,
-								certificate = ca_file
-							},
+						security = "required",
+						ssl = {
+							key = key,
+							certificate = certificate,
+							cafile = cafile,
+							capath = capath,
+							--protocol = "sslv23",
+							--protocol = "tlsv1",
+							--protocol = "tlsv1_1",
+							--protocol = "tlsv1_2",
+							protocol = protocol,
+							--verify = {"none"},
+							--verify = {"client_once"},
+							--verify = {"peer", "fail_if_no_peer_cert"},
+							verify = verify,
+							--ciphers = ciphers,
+							--ciphersuites = ciphersuites,
+							--depth = depth,
+							--dhparam = dhparam,
+							--curve = curve,
+							--verifyext = verifyext,
+							--setverifyext = setverifyext,
+							--mode = mode,
+							--alpn = alpn,
+							--dane = dane,
 						},
+						--server = {
+						--}
+						--client = {
+						--}
 					},
 				}
 			else
 				if self.no_block then
-					self._orb = oil.init{ flavor = "corba;", host=host, port=port }
+					self._orb = oil.init{ flavor = "lua;corba;", host=host, port=port }
 				else
 					self._orb = oil.init{ flavor = "cooperative;corba;", host=host, port=port }
 				end
@@ -1911,7 +1966,7 @@ end
 -- rtc.confに以下のように記述
 -- manager.components.preconnect: ConsoleIn0.out?port=ConsoleOut0.in&dataflow_type=pull
 function Manager:initPreConnection()
-	self._rtcout:RTC_TRACE("Connection pre-creation: "..tostring(self._config:getProperty("manager.components.preconnect")))
+	self._rtcout:RTC_TRACE("Connection pre-connection: "..tostring(self._config:getProperty("manager.components.preconnect")))
 	local connectors = StringUtil.split(tostring(self._config:getProperty("manager.components.preconnect")), ",")
 
 	for k,c in ipairs(connectors) do

@@ -88,4 +88,4 @@ else(MSVC)
 	install(TARGETS ssl LIBRARY DESTINATION clibs)
 endif(MSVC)
 
-install(FILES src/https.lua src/ssl.lua DESTINATION lua)
+install(FILES src/https.lua src/ssl.lua src/options.lua DESTINATION lua)

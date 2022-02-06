@@ -36,7 +36,7 @@ include_directories(${LUA_INCLUDE_DIR})
 add_library (lpeg SHARED ${srcs})
 
 
-target_link_libraries(lcovtools ${LUA_LIBRARIES})
+target_link_libraries(lpeg ${LUA_LIBRARIES})
 if(MSVC)
 else(MSVC)
 	set_target_properties (lpeg

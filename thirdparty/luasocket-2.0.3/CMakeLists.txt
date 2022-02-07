@@ -49,6 +49,8 @@ if(MSVC)
 	ADD_DEFINITIONS("-DLUASOCKET_API=__declspec(dllexport)")
 endif(MSVC)
 
+ADD_DEFINITIONS(-DLUA_COMPAT_MODULE -DLUA_COMPAT_APIINTCASTS)
+
 
 include_directories(${LUA_INCLUDE_DIR})
 

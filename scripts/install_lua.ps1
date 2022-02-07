@@ -16,9 +16,11 @@ if($VERSION_OMIT -eq $null)
 }
 
 $LUA_INSTASLL_DIR_NAME = "openrtm-lua-${OPENRTMLUA_VERSION}-${ARCH}-lua${LUA_SHORTVERSION}"
+$LUA_INSTASLL_CC_DIR_NAME = "openrtm-lua-${OPENRTMLUA_VERSION}-cc-${ARCH}-lua${LUA_SHORTVERSION}"
 if($VERSION_OMIT -eq "ON")
 {
   $LUA_INSTASLL_DIR_NAME = "${LUA_INSTASLL_DIR_NAME}-versionomit"
+  $LUA_INSTASLL_DIR_NAME = "${LUA_INSTASLL_CC_DIR_NAME}-versionomit"
 }
 
 $env:LUA_DIR = "${WORKSPACE}\install\${LUA_INSTASLL_DIR_NAME}"
@@ -48,6 +50,9 @@ if((Test-Path $STRUCT_BUILD_DIR) -eq $true){
 }
 if((Test-Path $LPEG_BUILD_DIR) -eq $true){
   Remove-Item $LPEG_BUILD_DIR -Recurse
+}
+if((Test-Path $env:LUA_DIR) -eq $true){
+  Remove-Item $env:LUA_DIR -Recurse
 }
 
 
@@ -81,18 +86,22 @@ if((Test-Path $LUASEC_SOURCE_DIR) -eq $false){
 }
 
 
-Invoke-WebRequest "https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/thirdparty/luasec/CMakeLists.txt" -OutFile "${LUASEC_SOURCE_DIR}\CMakeLists.txt"
+if(($ARCH -eq "Win32") -Or ($ARCH -eq "x64"))
+{
 
-if($env:OPENSSL_ROOT_DIR -eq $null)
-{
-  cmake "$LUASEC_SOURCE_DIR" -DCMAKE_INSTALL_PREFIX="$env:LUA_DIR" -B "$LUASEC_BUILD_DIR" -A $ARCH
+  Invoke-WebRequest "https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/thirdparty/luasec/CMakeLists.txt" -OutFile "${LUASEC_SOURCE_DIR}\CMakeLists.txt"
+
+  if($env:OPENSSL_ROOT_DIR -eq $null)
+  {
+    cmake "$LUASEC_SOURCE_DIR" -DCMAKE_INSTALL_PREFIX="$env:LUA_DIR" -B "$LUASEC_BUILD_DIR" -A $ARCH
+  }
+  else
+  {
+    cmake "$LUASEC_SOURCE_DIR" -DCMAKE_INSTALL_PREFIX="$env:LUA_DIR" -DOPENSSL_ROOT_DIR="$env:OPENSSL_ROOT_DIR" -B "$LUASEC_BUILD_DIR" -A $ARCH
+  }
+  cmake --build "$LUASEC_BUILD_DIR" --config Release
+  cmake --build "$LUASEC_BUILD_DIR" --config Release --target install
 }
-else
-{
-  cmake "$LUASEC_SOURCE_DIR" -DCMAKE_INSTALL_PREFIX="$env:LUA_DIR" -DOPENSSL_ROOT_DIR="$env:OPENSSL_ROOT_DIR" -B "$LUASEC_BUILD_DIR" -A $ARCH
-}
-cmake --build "$LUASEC_BUILD_DIR" --config Release
-cmake --build "$LUASEC_BUILD_DIR" --config Release --target install
 
 
 if((Test-Path $STRUCT_SOURCE_DIR) -eq $false){
@@ -125,5 +134,12 @@ cmake --build "$LPEG_BUILD_DIR" --config Release --target install
 
 
 
+$LUA_INSTASLL_CC_DIR = "${WORKSPACE}\install\${LUA_INSTASLL_CC_DIR_NAME}"
+if((Test-Path $LUA_INSTASLL_CC_DIR) -eq $true){
+  Remove-Item $LUA_INSTASLL_CC_DIR -Recurse
+}
+Copy-Item "$env:LUA_DIR" -destination "$LUA_INSTASLL_CC_DIR" -recurse
+
 
 Compress-Archive -Path "$env:LUA_DIR" -DestinationPath "${WORKSPACE}\install\${LUA_INSTASLL_DIR_NAME}.zip" -Force
+Compress-Archive -Path "$LUA_INSTASLL_CC_DIR" -DestinationPath "${WORKSPACE}\install\${LUA_INSTASLL_CC_DIR_NAME}.zip" -Force

@@ -21,6 +21,11 @@ if(MSVC)
 	ADD_DEFINITIONS("-DLUACOVTOOLS_API=__declspec(dllexport)")
 endif(MSVC)
 
+if(${LUA_VERSION_MINOR} GREATER 2)
+	ADD_DEFINITIONS(-DLUA_COMPAT_MODULE -DLUA_COMPAT_APIINTCASTS)
+endif()
+
+
 include_directories(${LUA_INCLUDE_DIR})
 
 

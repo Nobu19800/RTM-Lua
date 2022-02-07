@@ -39,6 +39,11 @@ endif(MSVC)
 
 include_directories(${LUA_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR})
 
+if(${LUA_VERSION_MINOR} GREATER 2)
+	ADD_DEFINITIONS(-DLUA_COMPAT_MODULE -DLUA_COMPAT_APIINTCASTS)
+endif()
+
+
 
 add_library (luasocket STATIC ${srcs})
 

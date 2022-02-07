@@ -86,22 +86,20 @@ if((Test-Path $LUASEC_SOURCE_DIR) -eq $false){
 }
 
 
-if(($ARCH -eq "Win32") -Or ($ARCH -eq "x64"))
+
+Invoke-WebRequest "https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/thirdparty/luasec/CMakeLists.txt" -OutFile "${LUASEC_SOURCE_DIR}\CMakeLists.txt"
+
+if($env:OPENSSL_ROOT_DIR -eq $null)
 {
-
-  Invoke-WebRequest "https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/thirdparty/luasec/CMakeLists.txt" -OutFile "${LUASEC_SOURCE_DIR}\CMakeLists.txt"
-
-  if($env:OPENSSL_ROOT_DIR -eq $null)
-  {
-    cmake "$LUASEC_SOURCE_DIR" -DCMAKE_INSTALL_PREFIX="$env:LUA_DIR" -B "$LUASEC_BUILD_DIR" -A $ARCH
-  }
-  else
-  {
-    cmake "$LUASEC_SOURCE_DIR" -DCMAKE_INSTALL_PREFIX="$env:LUA_DIR" -DOPENSSL_ROOT_DIR="$env:OPENSSL_ROOT_DIR" -B "$LUASEC_BUILD_DIR" -A $ARCH
-  }
-  cmake --build "$LUASEC_BUILD_DIR" --config Release
-  cmake --build "$LUASEC_BUILD_DIR" --config Release --target install
+  cmake "$LUASEC_SOURCE_DIR" -DCMAKE_INSTALL_PREFIX="$env:LUA_DIR" -B "$LUASEC_BUILD_DIR" -A $ARCH
 }
+else
+{
+  cmake "$LUASEC_SOURCE_DIR" -DCMAKE_INSTALL_PREFIX="$env:LUA_DIR" -DOPENSSL_ROOT_DIR="$env:OPENSSL_ROOT_DIR" -B "$LUASEC_BUILD_DIR" -A $ARCH
+}
+cmake --build "$LUASEC_BUILD_DIR" --config Release
+cmake --build "$LUASEC_BUILD_DIR" --config Release --target install
+
 
 
 if((Test-Path $STRUCT_SOURCE_DIR) -eq $false){

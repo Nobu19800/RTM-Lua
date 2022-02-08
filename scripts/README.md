@@ -51,6 +51,14 @@ openssl x509 -req -in dummy.csr -out dh.crt -force_pubkey dh.pub -CAkey ca.key -
 openssl ecparam -name prime256v1 > ecdsaparam
 openssl req -nodes -x509 -days 3650 -newkey ec:ecdsaparam -keyout mainexamplecakey.pem -out mainexamplecacert.pem -config maincaconf.cnf
 
-openssl ecparam -name prime256v1 > ecdsaparam
+
 openssl req -nodes -new -newkey ec:ecdsaparam -config appconf.cnf -keyout appexamplekey.pem -out appexamplereq.pem
 openssl ca -batch -create_serial -config maincaconf.cnf -days 3650 -in appexamplereq.pem -out appexamplecert.pem
+
+
+maincaconf.cnf変更点
+以下のファイル名は適宜変更。
+private_key = $dir/mainexamplecakey.pem
+certificate = $dir/maincacert.pem
+
+index.txtを作成

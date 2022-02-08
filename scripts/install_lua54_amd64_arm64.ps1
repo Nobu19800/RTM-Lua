@@ -2,7 +2,7 @@ $LUA_SHORTVERSION = "5.4"
 $LUA_VERSION = "${LUA_SHORTVERSION}.4"
 if($env:OPENSSL_ROOT_DIR -eq $null)
 {
-  $env:OPENSSL_ROOT_DIR = "C:\workspace\openssl\amd64_arm"
+  $env:OPENSSL_ROOT_DIR = "C:\workspace\openssl\amd64_arm64"
 }
 $LUASOCKET_VERSION = "2.0.3"
 $LUASEC_VERSION = "1.0.2"

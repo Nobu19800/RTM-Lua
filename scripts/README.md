@@ -18,13 +18,39 @@ $env:OPENSSL_ROOT_DIR = "C:\workspace\openssl\x64"
 set OPENSSL_INSTALL_DIR=C:/workspace/openssl/x64
 set OPENSSL_INSTALL_DIR=C:/workspace/openssl/x86
 set OPENSSL_INSTALL_DIR=C:/workspace/openssl/x86_arm
-set OPENSSL_INSTALL_DIR=C:/workspace/openssl/amd64_arm
+set OPENSSL_INSTALL_DIR=C:/workspace/openssl/amd64_arm64
 call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
 call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
 call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_arm
-call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64_arm
+call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64_arm64
 perl Configure VC-WIN64A --prefix=%OPENSSL_INSTALL_DIR% no-asm shared
 perl Configure VC-WIN32 --prefix=%OPENSSL_INSTALL_DIR% no-asm shared
 perl Configure VC-WIN32-ARM --prefix=%OPENSSL_INSTALL_DIR% no-asm shared
 perl Configure VC-WIN64-ARM --prefix=%OPENSSL_INSTALL_DIR% no-asm shared
 nmake install
+
+
+
+set OPENSSL_INSTALL_DIR=C:/workspace/openssl-openssl-3.0.1/amd64_arm64
+
+
+
+openssl req -new -newkey rsa:1024 -nodes -keyout ca.key -out ca.csr -config C:\workspace\openssl-openssl-3.0.1\apps\openssl.cnf
+openssl x509 -signkey ca.key -days 10 -req -in ca.csr -out ca.crt -sha1 -extensions v3_ca -extfile C:\workspace\openssl-openssl-3.0.1\apps\openssl.cnf
+openssl x509 -serial -noout -in ca.crt
+
+openssl dhparam -out dh.prm 1024
+openssl genpkey -paramfile dh.prm -out dh.key
+openssl pkey -in dh.key -pubout -out dh.pub
+openssl req -new -newkey rsa:512 -nodes -out dummy.csr -config C:\workspace\openssl-openssl-3.0.1\apps\openssl.cnf
+openssl x509 -req -in dummy.csr -out dh.crt -force_pubkey dh.pub -CAkey ca.key -CA ca.crt -days 5 -sha1 -CAserial ca.srl -extfile test.cnf -extensions test_cert
+
+
+
+
+openssl ecparam -name prime256v1 > ecdsaparam
+openssl req -nodes -x509 -days 3650 -newkey ec:ecdsaparam -keyout mainexamplecakey.pem -out mainexamplecacert.pem -config maincaconf.cnf
+
+openssl ecparam -name prime256v1 > ecdsaparam
+openssl req -nodes -new -newkey ec:ecdsaparam -config appconf.cnf -keyout appexamplekey.pem -out appexamplereq.pem
+openssl ca -batch -create_serial -config maincaconf.cnf -days 3650 -in appexamplereq.pem -out appexamplecert.pem

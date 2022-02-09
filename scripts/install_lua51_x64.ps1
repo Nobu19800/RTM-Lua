@@ -1,0 +1,8 @@
+$LUA_SHORTVERSION = "5.1"
+$LUA_VERSION = "${LUA_SHORTVERSION}.5"
+
+$OIL_VERSION = "0.5"
+#$ARCH = "x64"
+#$VERSION_OMIT = "OFF"
+
+& ${PSScriptRoot}\install_lua51.ps1

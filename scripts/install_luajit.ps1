@@ -10,32 +10,23 @@ if($ARCH -eq $null)
   $ARCH = "x64"
 }
 
-if($VERSION_OMIT -eq $null)
+if($VCVARSALLBAT -eq $null)
 {
-  $VERSION_OMIT = "OFF"
+  $VCVARSALL_BAT = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat"
 }
 
-$LUA_INSTASLL_DIR_NAME = "openrtm-lua-${OPENRTMLUA_VERSION}-${ARCH}-lua${LUA_SHORTVERSION}"
-$LUA_INSTASLL_CC_DIR_NAME = "openrtm-lua-${OPENRTMLUA_VERSION}-cc-${ARCH}-lua${LUA_SHORTVERSION}"
-if($VERSION_OMIT -eq "ON")
-{
-  $LUA_INSTASLL_DIR_NAME = "${LUA_INSTASLL_DIR_NAME}-versionomit"
-  $LUA_INSTASLL_CC_DIR_NAME = "${LUA_INSTASLL_CC_DIR_NAME}-versionomit"
-}
+$LUA_INSTASLL_DIR_NAME = "openrtm-lua-${OPENRTMLUA_VERSION}-${ARCH}-LuaJIT${LUAJIT_VERSION}"
+$LUA_INSTASLL_CC_DIR_NAME = "openrtm-lua-${OPENRTMLUA_VERSION}-cc-${ARCH}-LuaJIT${LUAJIT_VERSION}"
 
 $env:LUA_DIR = "${WORKSPACE}\install\${LUA_INSTASLL_DIR_NAME}"
 
-$LUA_SOURCE_DIR = "${WORKSPACE}\lua-${LUA_VERSION}"
-$LUA_BUILD_DIR = "${WORKSPACE}\build_lua"
+$LUA_SOURCE_DIR = "${WORKSPACE}\LuaJIT-${LUAJIT_VERSION}"
 $OIL_SOURCE_DIR = "${WORKSPACE}\oil-${OIL_VERSION}"
 $OIL_BUILD_DIR = "${WORKSPACE}\build_oil"
 $LPEG_SOURCE_DIR = "${WORKSPACE}\lpeg-${LPEG_VERSION}"
 $LPEG_BUILD_DIR = "${WORKSPACE}\build_lpeg"
 
 
-if((Test-Path $LUA_BUILD_DIR) -eq $true){
-  Remove-Item $LUA_BUILD_DIR -Recurse
-}
 if((Test-Path $OIL_BUILD_DIR) -eq $true){
   Remove-Item $OIL_BUILD_DIR -Recurse
 }
@@ -48,16 +39,38 @@ if((Test-Path $env:LUA_DIR) -eq $true){
 
 
 if((Test-Path $LUA_SOURCE_DIR) -eq $false){
-  Invoke-WebRequest "https://www.lua.org/ftp/lua-${LUA_VERSION}.tar.gz" -OutFile "${WORKSPACE}\lua-${LUA_VERSION}.tar.gz"
-  tar -xf "${WORKSPACE}\lua-${LUA_VERSION}.tar.gz"
+  Invoke-WebRequest "https://luajit.org/download/LuaJIT-${LUAJIT_VERSION}.zip" -OutFile "${WORKSPACE}\LuaJIT-${LUAJIT_VERSION}.zip"
+  Expand-Archive -Path "${WORKSPACE}\LuaJIT-${LUAJIT_VERSION}.zip" -DestinationPath "${WORKSPACE}" -Force
 }
 
-Invoke-WebRequest "https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/thirdparty/Lua-${LUA_SHORTVERSION}/CMakeLists.txt" -OutFile "${LUA_SOURCE_DIR}\CMakeLists.txt"
+Set-Location -Path ${LUA_SOURCE_DIR}\src
+
+if($ARCH -eq "x64")
+{
+  cmd /c ${PSScriptRoot}\luajitBuild.bat "$VCVARSALL_BAT" "amd64"
+}
+elseif($ARCH -eq "Win32")
+{
+  cmd /c ${PSScriptRoot}\luajitBuild.bat "$VCVARSALL_BAT" "x86"
+}
 
 
-cmake "$LUA_SOURCE_DIR" -DCMAKE_INSTALL_PREFIX="$env:LUA_DIR" -B "$LUA_BUILD_DIR" -A $ARCH -DVERSION_OMIT=$VERSION_OMIT
-cmake --build "$LUA_BUILD_DIR" --config Release
-cmake --build "$LUA_BUILD_DIR" --config Release --target install
+Set-Location -Path ${WORKSPACE}
+
+
+New-Item "${env:LUA_DIR}" -ItemType Directory -Force
+New-Item "${env:LUA_DIR}\bin" -ItemType Directory -Force
+New-Item "${env:LUA_DIR}\include" -ItemType Directory -Force
+New-Item "${env:LUA_DIR}\lib" -ItemType Directory -Force
+
+
+
+Copy-Item "${LUA_SOURCE_DIR}\src\luajit.exe" -destination "${env:LUA_DIR}\bin\"
+Copy-Item "${LUA_SOURCE_DIR}\src\lua51.dll" -destination "${env:LUA_DIR}\bin\"
+Copy-Item "${LUA_SOURCE_DIR}\src\lua51.lib" -destination "${env:LUA_DIR}\lib\"
+Copy-Item "${LUA_SOURCE_DIR}\src\luajit.lib" -destination "${env:LUA_DIR}\lib\"
+Copy-Item "${LUA_SOURCE_DIR}\src\*.h" -destination "${env:LUA_DIR}\include\"
+Copy-Item "${LUA_SOURCE_DIR}\src\lua.hpp" -destination "${env:LUA_DIR}\include\"
 
 
 if((Test-Path $OIL_SOURCE_DIR) -eq $false){

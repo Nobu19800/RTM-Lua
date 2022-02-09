@@ -11,7 +11,7 @@ tar xf ../struct-0.3.tar.gz
 wget https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/thirdparty/struct/CMakeLists.txt
 mkdir build
 cd build
-cmake .. -DLUA_VERSION=5.2
+cmake .
 make
 
 cd ../..
@@ -25,7 +25,7 @@ cd luasocket-2.0.3
 wget https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/thirdparty/luasocket-2.0.3/CMakeLists.txt
 mkdir build
 cd build
-cmake .. -DLUA_VERSION=5.2
+cmake .. 
 make
 
 cd ../..

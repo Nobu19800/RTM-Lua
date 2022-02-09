@@ -20,7 +20,7 @@ $LUA_INSTASLL_CC_DIR_NAME = "openrtm-lua-${OPENRTMLUA_VERSION}-cc-${ARCH}-lua${L
 if($VERSION_OMIT -eq "ON")
 {
   $LUA_INSTASLL_DIR_NAME = "${LUA_INSTASLL_DIR_NAME}-versionomit"
-  $LUA_INSTASLL_DIR_NAME = "${LUA_INSTASLL_CC_DIR_NAME}-versionomit"
+  $LUA_INSTASLL_CC_DIR_NAME = "${LUA_INSTASLL_CC_DIR_NAME}-versionomit"
 }
 
 $env:LUA_DIR = "${WORKSPACE}\install\${LUA_INSTASLL_DIR_NAME}"
@@ -126,10 +126,14 @@ Invoke-WebRequest "https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/th
 #Invoke-WebRequest "https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/thirdparty/lpeg/lptree.c" -OutFile "${LPEG_SOURCE_DIR}\lptree.c"
 $(Get-Content "${LPEG_SOURCE_DIR}\lptree.c") -replace "int luaopen_lpeg \(lua_State \*L\);","__declspec(dllexport) int luaopen_lpeg (lua_State *L);" > "${LPEG_SOURCE_DIR}\lptree_tmp.c"
 Move-Item "${LPEG_SOURCE_DIR}\lptree_tmp.c" "${LPEG_SOURCE_DIR}\lptree.c" -force
-cmake "$LPEG_SOURCE_DIR" -DCMAKE_INSTALL_PREFIX="$env:LUA_DIR" -B "$LPEG_BUILD_DIR" -A $ARCH
+cmake "$LPEG_SOURCE_DIR" -DCMAKE_INSTALL_PREFIX="${env:LUA_DIR}\moon" -B "$LPEG_BUILD_DIR" -A $ARCH
 cmake --build "$LPEG_BUILD_DIR" --config Release
 cmake --build "$LPEG_BUILD_DIR" --config Release --target install
 
+
+
+Remove-Item ${env:LUA_DIR}\include -Recurse -Force
+Remove-Item ${env:LUA_DIR}\lib -Recurse -Force
 
 
 $LUA_INSTASLL_CC_DIR = "${WORKSPACE}\install\${LUA_INSTASLL_CC_DIR_NAME}"

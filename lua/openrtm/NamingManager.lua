@@ -17,6 +17,7 @@ local StringUtil = require "openrtm.StringUtil"
 local RTCUtil = require "openrtm.RTCUtil"
 local NVUtil = require "openrtm.NVUtil"
 local CorbaConsumer = require "openrtm.CorbaConsumer"
+local CORBA_RTCUtil = require "openrtm.CORBA_RTCUtil"
 
 
 NamingManager.NamingBase = {}
@@ -157,69 +158,60 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 	function obj:string_to_component(name)
 
 		local rtc_list = {}
-		local tmp = StringUtil.split(name, "://")
-		if #tmp > 1 then
-			--print(tmp[1])
-			if tmp[1] == "rtcname" then
-				local url = tmp[2]
-				local r = StringUtil.split(url, "/")
+		local rtcuri = CORBA_RTCUtil.RTCURIObject.new(name, true, false)
 
-				if #r > 1 then
-					local host = r[1]
-					local rtc_name = string.sub(url, #host+2)
-					--print(rtc_name)
+		if not rtcuri:isRTCNameURI() or rtcuri:getRTCName() == nil then
+			self._rtcout:RTC_WARN("syntax error: "..name)
+			return rtc_list
+		else
+			self._rtcout:RTC_INFO("URI: "..name.." Address: "..
+								rtcuri:getAddress()..", Name: "..
+								rtcuri:getRTCName())
+			local success, exception = oil.pcall(
+				function()
+					local host = rtcuri:getAddress()
+					local cns = nil
+					if host == "*" then
+						cns = self._cosnaming
+					else
+						local orb = Manager:instance():getORB()
+						cns = CorbaNaming.new(orb,host)
+					end
 
+					local rtcname = rtcuri:getRTCName()
 
-					local success, exception = oil.pcall(
-						function()
+					local context, comp = rtcname:match("^(%w+).(.+)$")
 
-							local cns = nil
-							if host == "*" then
-								cns = self._cosnaming
-							else
-								local orb = Manager:instance():getORB()
-								cns = CorbaNaming.new(orb,host)
+					if context == "*" then
+						local root_cxt = cns:getRootContext()
 
-							end
+						self:getComponentByName(root_cxt, comp, rtc_list)
+						return rtc_list
+					else
+						rtc_name = rtc_name..".rtc"
 
-							local names = StringUtil.split(rtc_name, "/")
+						local _obj = cns:resolveStr(rtc_name)
 
+						if _obj == oil.corba.idl.null then
+							return rtc_list
+						end
+						if NVUtil._non_existent(_obj) then
+							return rtc_list
+						end
 
-							if #names == 2 and names[1] == "*" then
-
-								local root_cxt = cns:getRootContext()
-
-								self:getComponentByName(root_cxt, names[2], rtc_list)
-								return rtc_list
-							else
-								rtc_name = rtc_name..".rtc"
-
-								local _obj = cns:resolveStr(rtc_name)
-
-								if _obj == oil.corba.idl.null then
-									return {}
-								end
-								if NVUtil._non_existent(_obj) then
-									return {}
-								end
-
-								_obj = RTCUtil.newproxy(orb, _obj,"IDL:omg.org/RTC/RTObject:1.0")
+						_obj = RTCUtil.newproxy(orb, _obj,"IDL:omg.org/RTC/RTObject:1.0")
 
 
-								table.insert(rtc_list, _obj)
-								return rtc_list
-							end
-					end)
-					if not success then
-						return {}
+						table.insert(rtc_list, _obj)
+						return rtc_list
 					end
 				end
+			)
+			if not success then
+				return rtc_list
 			end
 		end
-
-		return rtc_list
 	end
-
 
 	return obj
 end
@@ -263,12 +255,9 @@ NamingManager.NamingOnManager.new = function(orb, mgr)
 		end
 		local success, exception = oil.pcall(
 			function()
-				local mgrloc = "corbaloc:iiop:"
 				local prop = self._mgr:getConfig()
 				local manager_name = prop:getProperty("manager.name")
-				mgrloc = mgrloc..name
-				mgrloc = mgrloc.."/"..manager_name
-
+				local mgrloc = CORBA_RTCUtil.CorbaURI.new(name, manager_name):toString()
 
 
 
@@ -299,46 +288,34 @@ NamingManager.NamingOnManager.new = function(orb, mgr)
 	function obj:string_to_component(name)
 		--print(name)
 		local rtc_list = {}
-		local tmp = StringUtil.split(name, "://")
+		local rtcuri = CORBA_RTCUtil.RTCURIObject.new(name, false, true)
 		--print(#tmp)
 
-		if #tmp > 1 then
-
-			if tmp[1] == "rtcloc" then
-
-				local url = tmp[2]
-				local r = StringUtil.split(url, "/")
-				if #r > 1 then
-					local host = r[1]
-					local rtc_name = string.sub(url, #host+2)
-
-
-					local mgr = self:getManager(host)
-
-					if mgr ~= oil.corba.idl.null then
-						--print("test1")
-						--print(mgr:get_master_managers())
-						rtc_list = mgr:get_components_by_name(rtc_name)
-						--print("test2")
-
-						local slaves = mgr:get_slave_managers()
-
-						for k,slave in ipairs(slaves) do
-							local success, exception = oil.pcall(
-								function()
-									rtc_list.extend(slave:get_components_by_name(rtc_name))
-							end)
-							if not success then
-								self._rtcout:RTC_DEBUG(exception)
-								mgr:remove_slave_manager(slave)
-							end
-						end
+		if not rtcuri:isRTCLocURI() or rtcuri:getRTCName() == nil then
+			self._rtcout:RTC_WARN("syntax error: "..name)
+			return rtc_list
+		else
+			self._rtcout:RTC_INFO("URI: "..name.." Address: "..
+								rtcuri:getAddress()..", Name: "..
+								rtcuri:getRTCName())
+			local mgr = self:getManager(rtcuri:getAddress())
+			local rtc_name = rtcuri:getRTCName()
+			if mgr ~= oil.corba.idl.null then
+				rtc_list = mgr:get_components_by_name(rtc_name)
+				local slaves = mgr:get_slave_managers()
+				for k,slave in ipairs(slaves) do
+					local success, exception = oil.pcall(
+						function()
+							rtc_list.extend(slave:get_components_by_name(rtc_name))
+					end)
+					if not success then
+						self._rtcout:RTC_DEBUG(exception)
+						mgr:remove_slave_manager(slave)
 					end
 				end
-				return rtc_list
 			end
+			return rtc_list
 		end
-		return rtc_list
 	end
 
 	return obj

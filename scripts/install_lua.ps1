@@ -36,6 +36,7 @@ $STRUCT_BUILD_DIR = "${WORKSPACE}\build_struct"
 $LPEG_SOURCE_DIR = "${WORKSPACE}\lpeg-${LPEG_VERSION}"
 $LPEG_BUILD_DIR = "${WORKSPACE}\build_lpeg"
 
+
 if((Test-Path $LUA_BUILD_DIR) -eq $true){
   Remove-Item $LUA_BUILD_DIR -Recurse
 }
@@ -129,6 +130,7 @@ Move-Item "${LPEG_SOURCE_DIR}\lptree_tmp.c" "${LPEG_SOURCE_DIR}\lptree.c" -force
 cmake "$LPEG_SOURCE_DIR" -DCMAKE_INSTALL_PREFIX="${env:LUA_DIR}\moon" -B "$LPEG_BUILD_DIR" -A $ARCH
 cmake --build "$LPEG_BUILD_DIR" --config Release
 cmake --build "$LPEG_BUILD_DIR" --config Release --target install
+
 
 
 

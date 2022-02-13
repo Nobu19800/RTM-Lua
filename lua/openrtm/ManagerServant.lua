@@ -17,6 +17,8 @@ local RTCUtil = require "openrtm.RTCUtil"
 local Properties = require "openrtm.Properties"
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 local Timer = require "openrtm.Timer"
+local CORBA_RTCUtil = require "openrtm.CORBA_RTCUtil"
+
 
 
 
@@ -150,9 +152,7 @@ ManagerServant.new = function()
 		local success, exception = oil.pcall(
 			function()
 				local config = self._mgr:getConfig()
-				local mgrloc = "corbaloc:iiop:"
-				mgrloc = mgrloc..host_port
-				mgrloc = mgrloc.."/"..config:getProperty("manager.name")
+				local mgrloc = CORBA_RTCUtil.CorbaURI.new(host_port, config:getProperty("manager.name")):toString()
 
 				self._rtcout:RTC_DEBUG("corbaloc: "..mgrloc)
 

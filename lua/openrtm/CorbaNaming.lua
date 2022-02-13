@@ -13,6 +13,7 @@ local CorbaNaming= {}
 local oil = require "oil"
 local StringUtil = require "openrtm.StringUtil"
 local RTCUtil = require "openrtm.RTCUtil"
+local CORBA_RTCUtil = require "openrtm.CORBA_RTCUtil"
 
 
 -- ネームサーバーヘルパオブジェクト初期化
@@ -27,8 +28,12 @@ CorbaNaming.new = function(orb, name_server)
     obj._blLength = 100
 
 	if name_server ~= nil then
-		obj._nameServer = "corbaloc:iiop:"..name_server.."/NameService"
+		obj._nameServer = CORBA_RTCUtil.CorbaURI.new(name_server, "NameService"):toString()
+		
+		--obj._nameServer = "corbaloc:iiop:"..name_server.."/NameService"
+		--obj._nameServer = "corbaloc:ssliop:1.2@localhost:2809/NameService"
 		--print(obj._nameServer)
+		--obj._nameServer = "IOR:010000002b00000049444c3a6f6d672e6f72672f436f734e616d696e672f4e616d696e67436f6e746578744578743a312e300000010000000000000078000000010102000f0000003139322e3136382e34332e3137370000000000000e000000fe716a026200001dd8000000000000000300000000000000080000000100000000545441010000001c000000010000000100010001000000010001050901010001000000090101001400000008000000010066006600f90a"
 		local success, exception = oil.pcall(
 			function()
 				obj._rootContext = RTCUtil.newproxy(obj._orb, obj._nameServer,"IDL:omg.org/CosNaming/NamingContext:1.0")
@@ -69,6 +74,7 @@ CorbaNaming.new = function(orb, name_server)
 				--error("")
 				self._rootContext:rebind(name_list, obj)
 			end)
+		
 		if not success then
 			--print(exception)
 			if force then

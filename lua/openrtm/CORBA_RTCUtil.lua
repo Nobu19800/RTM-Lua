@@ -629,6 +629,7 @@ CORBA_RTCUtil.connect = function(name, prop, port0, port1)
 	if port0 == oil.corba.idl.null then
 		return ReturnCode_t.BAD_PARAMETER
 	end
+	
 	if port1 ~= oil.corba.idl.null then
 		if NVUtil._is_equivalent(port0, port1, port0.getPortRef, port1.getPortRef) then
 			return ReturnCode_t.BAD_PARAMETER
@@ -636,7 +637,6 @@ CORBA_RTCUtil.connect = function(name, prop, port0, port1)
 	end
 
 	local cprof = CORBA_RTCUtil.create_connector(name, prop, port0, port1)
-	
 	local ret, prof = port0:connect(cprof)
 	ret = NVUtil.getReturnCode(ret)
 	
@@ -1028,6 +1028,178 @@ CORBA_RTCUtil.set_configuration_parameter = function(conf, confset, value_name, 
 	confset.configuration_data = confData
 	conf:set_configuration_set_values(confset)
 	return true
+end
+
+CORBA_RTCUtil.CorbaURI = {}
+
+-- 指定のCORBAオブジェクト参照用URLから参照形式、ホスト名、ポート番号、
+-- パス、オブジェクトキーを取得する機能を提供するオブジェクトの初期化
+-- @param uri CORBAオブジェクト参照用URL
+-- @param objkey オブジェクト名
+-- @return CorbaURIオブジェクト
+CORBA_RTCUtil.CorbaURI.new = function(uri, objkey)
+	local obj = {}
+
+	local corbaloc, stream = uri:match("^(%w+):(.+)$")
+	if corbaloc == "corbaloc" then
+		uri = stream
+	end
+	local protocol, stream = uri:match("^(%w+):(.+)$")
+	if protocol == "iiop" then
+		obj._protocol = protocol
+		uri = stream
+	elseif protocol == "ssliop" then
+		obj._protocol = protocol
+		uri = stream
+	else
+		obj._protocol = "iiop"
+	end
+	local host, port = uri:match("^(.+):(.+)$")
+	if host ~= nil and port ~= nil then
+		obj._host = host
+		obj._port = port
+	else
+		obj._host = uri
+	end
+
+	local port = uri:match("^:(.+)$")
+
+	obj._uri = "corbaloc:"..obj._protocol..":"
+
+	if obj._host ~= nil then
+		if obj._protocol == "ssliop" and obj._host:find("@") == nil then
+			obj._uri = obj._uri.."1.2@"
+		end
+		obj._uri = obj._uri..obj._host
+	end
+
+	if obj._port ~= nil then
+		obj._uri = obj._uri..":"..obj._port
+	end
+
+	if objkey ~= nil then
+		obj._uri = obj._uri.."/"..objkey
+	end
+	
+	-- CORBAオブジェクト参照用URLを取得する
+	-- @return CORBAオブジェクト参照用URL
+	function obj:toString()
+		return self._uri
+	end
+	-- 参照形式を取得する
+	-- @return 参照形式
+	function obj:getProtocol()
+		return self._protocol
+	end
+	-- ホスト名を取得する
+	-- @return ホスト名
+	function obj:getHost()
+		return self._host
+	end
+	-- ポート番号を取得する
+	-- @return ポート番号
+	function obj:getPort()
+		return self._port
+	end
+
+	return obj
+end
+
+CORBA_RTCUtil.RTCURIObject = {}
+
+-- rtcname形式、rtcloc形式のURIから通信先のアドレス、RTC名等を
+-- 取得する機能を提供するオブジェクトの初期化
+-- @param uri rtcname形式、もしくはrtcloc形式のURI
+-- @param isrtcname rtcname形式を指定する場合はtrue、それ以外はfalse
+-- @param isrtcloc rtcloc形式を指定する場合はtrue、それ以外はfalse
+-- @return RTCURIObjectオブジェクト
+CORBA_RTCUtil.RTCURIObject.new = function(uri, isrtcname, isrtcloc)
+	local obj = {}
+	
+	-- RTCURIObjectオブジェクトの初期設定関数
+	-- @param uri rtcname形式、もしくはrtcloc形式のURI
+	-- @param isrtcname rtcname形式を指定する場合はtrue、それ以外はfalse
+	-- @param isrtcloc rtcloc形式を指定する場合はtrue、それ以外はfalse
+	function obj:init(uri, isrtcname, isrtcloc)
+		if isrtcname == nil then
+			isrtcname = false
+		end
+		if isrtcloc == nil then
+			isrtcloc = false
+		end
+		self._is_rtcname = false
+		self._is_rtcloc = false
+		local protocol = "iiop"
+		local method, addrname = uri:match("^(.+)://(.+)$")
+		if method == "rtcname" then
+			self._is_rtcname = true
+		elseif method == "rtcloc" then
+			self._is_rtcloc = true
+		else
+			if method ~= nil then
+				method, protocol = method:match("^(%w+).(%w+)$")
+				if method == "rtcname" then
+					self._is_rtcname = true
+				elseif method == "rtcloc" then
+					self._is_rtcloc = true
+				end
+			end
+		end
+	
+		if isrtcname then
+			if not self._is_rtcname then
+				return
+			end
+		end
+	
+		if isrtcloc then
+			if not self._is_rtcloc then
+				return
+			end
+		end
+	
+		local hostport, objectkey = addrname:match("^(.+)://(.+)$")
+		if hostport ~= nil and objectkey ~= nil then
+			self._rtcpath = objectkey
+		end
+	
+		self._address = "corbaloc:"
+		self._address = self._address..protocol
+		self._address = self._address..":"
+		if protocol == "ssliop" and hostport:find("@") == nil then
+			self._address = self._address.."1.2@"
+		end
+		self._address = self._address..hostport
+	end
+
+	obj:init(uri, isrtcname, isrtcloc)
+
+	-- RTC名を取得する
+	-- @return RTC名
+	function obj:getRTCName()
+		return self._rtcpath
+	end
+
+	-- 通信先のアドレスを取得する
+	-- @return 通信先のアドレス
+	function obj:getAddress()
+		return self._address
+	end
+
+	-- URIがrtcname形式かを判定する
+	-- @return true：rtcname形式、false：それ以外
+	function obj:isRTCNameURI()
+		return self._is_rtcname
+	end
+
+	-- URIがrtcname形式かを判定する
+	-- @return true：rtcname形式、false：それ以外
+	function obj:isRTCLocURI()
+		return self._is_rtcloc
+	end
+
+
+	return obj
 end
 
 

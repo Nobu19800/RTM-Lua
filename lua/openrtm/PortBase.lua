@@ -218,11 +218,9 @@ PortBase.new = function(name)
 			end
 		end
 
-
 		local retval = self._ReturnCode_t.BAD_PARAMETER
 		local success, exception = oil.pcall(
 			function()
-				--print(#connector_profile.ports)
 				retval,connector_profile = connector_profile.ports[1]:notify_connect(connector_profile)
 				--print(retval)
 				retval = NVUtil.getReturnCode(retval)

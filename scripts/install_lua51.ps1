@@ -31,6 +31,8 @@ $OIL_SOURCE_DIR = "${WORKSPACE}\oil-${OIL_VERSION}"
 $OIL_BUILD_DIR = "${WORKSPACE}\build_oil"
 $LPEG_SOURCE_DIR = "${WORKSPACE}\lpeg-${LPEG_VERSION}"
 $LPEG_BUILD_DIR = "${WORKSPACE}\build_lpeg"
+$LCOVTOOLS_SOURCE_DIR = "${WORKSPACE}\lcovtools"
+$LCOVTOOLS_BUILD_DIR = "${WORKSPACE}\build_lcovtools"
 
 
 if((Test-Path $LUA_BUILD_DIR) -eq $true){
@@ -41,6 +43,9 @@ if((Test-Path $OIL_BUILD_DIR) -eq $true){
 }
 if((Test-Path $LPEG_BUILD_DIR) -eq $true){
   Remove-Item $LPEG_BUILD_DIR -Recurse
+}
+if((Test-Path $LCOVTOOLS_BUILD_DIR) -eq $true){
+  Remove-Item $LCOVTOOLS_BUILD_DIR -Recurse
 }
 if((Test-Path $env:LUA_DIR) -eq $true){
   Remove-Item $env:LUA_DIR -Recurse
@@ -82,6 +87,19 @@ Move-Item "${LPEG_SOURCE_DIR}\lptree_tmp.c" "${LPEG_SOURCE_DIR}\lptree.c" -force
 cmake "$LPEG_SOURCE_DIR" -DCMAKE_INSTALL_PREFIX="${env:LUA_DIR}\moon" -B "$LPEG_BUILD_DIR" -A $ARCH
 cmake --build "$LPEG_BUILD_DIR" --config Release
 cmake --build "$LPEG_BUILD_DIR" --config Release --target install
+
+
+if((Test-Path $LCOVTOOLS_SOURCE_DIR) -eq $false){
+  New-Item "${LCOVTOOLS_SOURCE_DIR}" -ItemType Directory
+}
+Invoke-WebRequest "https://raw.githubusercontent.com/nmcveity/lcovtools/master/luacov/luacov.cpp" -OutFile "${LCOVTOOLS_SOURCE_DIR}\luacov.cpp"
+Invoke-WebRequest "https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/thirdparty/lcovtools/luacov/CMakeLists.txt" -OutFile "${LCOVTOOLS_SOURCE_DIR}\CMakeLists.txt"
+$(Get-Content "${LCOVTOOLS_SOURCE_DIR}\luacov.cpp") -replace "lua_Hook lcov_gethookfunc\(\)","__declspec(dllexport) lua_Hook lcov_gethookfunc()" > "${LCOVTOOLS_SOURCE_DIR}\luacov_tmp.cpp"
+$(Get-Content "${LCOVTOOLS_SOURCE_DIR}\luacov_tmp.cpp") -replace "int luaopen_lcovtools\(lua_State \*L\)","__declspec(dllexport) int luaopen_lcovtools(lua_State *L)" > "${LCOVTOOLS_SOURCE_DIR}\luacov_tmp2.cpp"
+Move-Item "${LCOVTOOLS_SOURCE_DIR}\luacov_tmp2.cpp" "${LCOVTOOLS_SOURCE_DIR}\luacov.cpp" -force
+cmake "$LCOVTOOLS_SOURCE_DIR" -DCMAKE_INSTALL_PREFIX="${env:LUA_DIR}" -B "$LCOVTOOLS_BUILD_DIR" -A $ARCH
+cmake --build "$LCOVTOOLS_BUILD_DIR" --config Release
+cmake --build "$LCOVTOOLS_BUILD_DIR" --config Release --target install
 
 
 Remove-Item ${env:LUA_DIR}\include -Recurse -Force

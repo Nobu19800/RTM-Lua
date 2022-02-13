@@ -1,3 +1,4 @@
+local oil = require "oil"
 
 local ORB_Dummy_test = function()
     package.loaded["openrtm.Manager"] = nil

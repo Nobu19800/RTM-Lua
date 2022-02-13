@@ -59,6 +59,10 @@ if ORB_Dummy_ENABLE then
 	oil.newthread = function(obj)
 	--obj()
 	end
+
+	if oil.VERSION == "OiL 0.6" then
+		oil.tasks = {}
+	end
 	function oil.tasks:suspend(t)
 
 	end
@@ -560,6 +564,13 @@ function Manager:runManager(no_block)
 		end
 
 
+		--cothread = require "cothread"
+
+		--cothread.schedule(coroutine.create(function()
+		--	self:initPreCreation()
+		--	self:initPreConnection()
+		--	self:initPreActivation()
+		--end))
 
 		self:initPreCreation()
 		self:initPreConnection()
@@ -657,6 +668,13 @@ function Manager:runManager(no_block)
 		oil.verbose:level(log_level)
 	end
 	if no_block and oil.VERSION == "OiL 0.6" then
+		--cothread = require "cothread"
+
+		--cothread.schedule(
+		--	self:initPreCreation()
+		--	self:initPreConnection()
+		--	self:initPreActivation()
+		--end))
 		main_function()
 	else
 		oil.main(
@@ -1254,15 +1272,27 @@ function Manager:initORB()
 		self._orb = ORB_Dummy
 	else
 		local endpoints = self:createORBEndpoints()
+		local sslport = nil
 		local port = nil
 		local host = nil
 
 
 		if #endpoints > 0 then
-			local endpoint = endpoints[1]
-			local tmp = StringUtil.split(endpoint, ":")
-			host = tmp[1]
-			port = tmp[2]
+			for k,endpoint in ipairs(endpoints) do
+				local uriobj = CORBA_RTCUtil.CorbaURI.new(endpoint)
+				local uriport = uriobj.getPort()
+				if uriport ~= nil then
+					if uriobj:getProtocol() == "iiop" and port == nil then
+						port = uriport
+					elseif uriobj:getProtocol() == "ssliop" and sslport == nil then
+						sslport = uriport
+					end
+				end
+				local urihost = uriobj:getHost()
+				if urihost ~= nil and host == nil then
+					host = urihost
+				end
+			end
 		end
 		
 		
@@ -1270,6 +1300,7 @@ function Manager:initORB()
 		
 		if oil.VERSION == "OiL 0.6" then
 			if StringUtil.toBool(self._config:getProperty("corba.ssl.enable"), "YES", "NO", false) then
+				local security = self._config:getProperty("corba.security", "required")
 				local key = self._config:getProperty("corba.ssl.key_file")
 				local certificate = self._config:getProperty("corba.ssl.certificate")
 				local cafile = self._config:getProperty("corba.ssl.cafile")
@@ -1296,12 +1327,16 @@ function Manager:initORB()
 				if self.no_block then
 					flavor = "lua;corba;corba.ssl;kernel.ssl"
 				end
+				
 				self._orb = oil.init{
 					flavor = flavor,
 					host=host,
 					port=port,
+					sslport=sslport,
 					options = {
-						security = "required",
+						security = security,
+						--security = "required",
+						--security = "preferred",
 						ssl = {
 							key = key,
 							certificate = certificate,
@@ -1333,6 +1368,13 @@ function Manager:initORB()
 						--}
 					},
 				}
+				local SSLIOPProfilerFactory = require "openrtm.ssliop.Profiler"
+				local SSLIOPProfiler = SSLIOPProfilerFactory.new(self._orb)
+
+				self._orb.ObjectReferrer.profiler[SSLIOPProfiler.tag] = SSLIOPProfiler
+				self._orb.ObjectReferrer.profiler.ssliop = SSLIOPProfiler
+				SSLIOPProfiler.components[self._orb.SSLIOPComponentCodec.tag] = self._orb.SSLIOPComponentCodec.compcodec
+		
 			else
 				if self.no_block then
 					self._orb = oil.init{ flavor = "lua;corba;", host=host, port=port }
@@ -1344,6 +1386,7 @@ function Manager:initORB()
 		else
 			self._orb = oil.init{ flavor = "cooperative;corba;intercepted;typed;base;", host=host, port=port }
 		end
+		
 
 		if oil.VERSION == "OiL 0.5" then
 			oil.corba.idl.null = nil
@@ -1404,14 +1447,8 @@ function Manager:createORBEndpoints()
 	
 	if StringUtil.toBool(self._config:getProperty("manager.is_master"), "YES", "NO", false) then
 		local mm = self._config:getProperty("corba.master_manager", ":2810")
-		local mmm = StringUtil.split(mm, ":")
-		local master = ""
-		if #mmm == 2 then
-			master = ":"..mmm[2]
-		else
-			master = ":2810"
-		end
-		table.insert(endpoints, master)
+		
+		table.insert(endpoints, mm)
 	elseif prop == "" then
 		return endpoints
 	end
@@ -2041,7 +2078,7 @@ function Manager:initPreConnection()
 			end
 
 			local port0_var = CORBA_RTCUtil.get_port_by_name(comp0_ref, port0_name)
-
+			
 
 			if port0_var == oil.corba.idl.null then
 				self._rtcout:RTC_DEBUG("port "..port0_str.." found: ")
@@ -2105,10 +2142,11 @@ function Manager:initPreConnection()
 							--print(prop)
 							--print(port0_var)
 							--print(port_var)
-
+							
 							if self._ReturnCode_t.RTC_OK ~= CORBA_RTCUtil.connect(c, prop, port0_var, port_var) then
 								self._rtcout.RTC_ERROR("Connection error: "..c)
 							end
+							
 							--end
 						end
 					end
@@ -2365,6 +2403,10 @@ function Manager:createShutdownThread(sleep_time)
 		end
 		if not self.no_block then
 			Task.start(terminate_Task.new(self, sleep_time))
+		elseif oil.VERSION == "OiL 0.6" then
+			oil.main(function()
+				self:shutdown()
+			end)
 		else
 			oil.main(function()
 				oil.newthread(self._orb.run, self._orb)

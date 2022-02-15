@@ -1,19 +1,19 @@
-# ƒrƒ‹ƒhè‡
+# ãƒ“ãƒ«ãƒ‰æ‰‹é †
 
-powershell‚Å`install_lua_all.ps1`‚ğÀs‚·‚éB
+powershellã§`install_lua_all.ps1`ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
 
 ```
 .\install_lua_all.ps1
 ```
 
-•K—v‚É‰‚¶‚ÄOpenSSL‚ÌƒpƒX‚ğİ’è‚·‚éB
+å¿…è¦ã«å¿œã˜ã¦OpenSSLã®ãƒ‘ã‚¹ã‚’è¨­å®šã™ã‚‹ã€‚
 
 ```
 $env:OPENSSL_ROOT_DIR = "C:\workspace\openssl\x64"
 ```
 
 
-## OpenSSL‚Ìƒrƒ‹ƒh
+## OpenSSLã®ãƒ“ãƒ«ãƒ‰
 
 set OPENSSL_INSTALL_DIR=C:/workspace/openssl/x64
 set OPENSSL_INSTALL_DIR=C:/workspace/openssl/x86
@@ -56,9 +56,9 @@ openssl req -nodes -new -newkey ec:ecdsaparam -config appconf.cnf -keyout appexa
 openssl ca -batch -create_serial -config maincaconf.cnf -days 3650 -in appexamplereq.pem -out appexamplecert.pem
 
 
-maincaconf.cnf•ÏX“_
-ˆÈ‰º‚Ìƒtƒ@ƒCƒ‹–¼‚Í“K‹X•ÏXB
+maincaconf.cnfå¤‰æ›´ç‚¹
+ä»¥ä¸‹ã®ãƒ•ã‚¡ã‚¤ãƒ«åã¯é©å®œå¤‰æ›´ã€‚
 private_key = $dir/mainexamplecakey.pem
 certificate = $dir/maincacert.pem
 
-index.txt‚ğì¬
+index.txtã‚’ä½œæˆ

@@ -9,9 +9,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set image name
-        run: export OPENRTMLUA_IMAGE=openrtm-lua:${{matrix.os}}-$(date +%s)
       - name: Set up Lua 5.3
-        run: docker build .. --file scripts/${{matrix.os}}/Dockerfile --tag $OPENRTMLUA_IMAGE
-      - name: test
-        run: docker run $OPENRTMLUA_IMAGE
+        run:  | 
+                export OPENRTMLUA_IMAGE=openrtm-lua:${{matrix.os}}-$(date +%s)
+                docker build .. --file scripts/${{matrix.os}}/Dockerfile --tag $OPENRTMLUA_IMAGE
+                docker run $OPENRTMLUA_IMAGE
+                

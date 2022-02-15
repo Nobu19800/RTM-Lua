@@ -12,6 +12,7 @@ RUN apt update\
  cmake\
  wget
 
+RUN luarocks install openrtm
 
 CMD touch /root/share/test.txt
 

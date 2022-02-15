@@ -12,4 +12,4 @@ jobs:
       - name: Set up Lua 5.3
         run: docker build .. --file scripts/${{matrix.os}}/Dockerfile --tag openrtm-lua:${{matrix.os}}-$(date +%s)
       - name: test
-        run: ls
+        run: docker run openrtm-lua:${{matrix.os}}-$(date +%s)

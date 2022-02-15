@@ -9,3 +9,4 @@ RUN apt update\
  cmake\
  wget
 RUN touch test.txt
+RUN ls

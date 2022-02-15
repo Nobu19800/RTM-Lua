@@ -14,4 +14,5 @@ jobs:
                 export OPENRTMLUA_IMAGE=openrtm-lua:${{matrix.os}}-$(date +%s)
                 docker build .. --file scripts/${{matrix.os}}/Dockerfile --tag $OPENRTMLUA_IMAGE
                 docker run $OPENRTMLUA_IMAGE
+                echo ${PWD}
                 

@@ -12,7 +12,6 @@ RUN apt update\
  cmake\
  wget
 
-RUN ls /root
 
-CMD ls /root
+CMD touch /root/share/test.txt
 

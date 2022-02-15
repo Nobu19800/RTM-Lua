@@ -11,7 +11,7 @@ RUN apt update\
  make\
  cmake\
  wget
-RUN touch test.txt
+
 RUN ls
 
-CMD ls /root/RTM-Lua
+RUN touch /root/share/test.txt

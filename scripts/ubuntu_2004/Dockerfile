@@ -10,3 +10,5 @@ RUN apt update\
  wget
 RUN touch test.txt
 RUN ls
+
+CMD ls ~/share

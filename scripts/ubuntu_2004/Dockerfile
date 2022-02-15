@@ -14,3 +14,5 @@ RUN apt update\
 
 RUN ls /root
 
+CMD ls /root
+

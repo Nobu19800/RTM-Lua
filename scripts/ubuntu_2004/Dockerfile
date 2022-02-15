@@ -8,3 +8,4 @@ RUN apt update\
  make\
  cmake\
  wget
+RUN touch test.txt

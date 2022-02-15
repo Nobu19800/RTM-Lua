@@ -11,4 +11,4 @@ RUN apt update\
 RUN touch test.txt
 RUN ls
 
-CMD ls
+CMD ls /root

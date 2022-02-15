@@ -14,4 +14,4 @@ RUN apt update\
 RUN touch test.txt
 RUN ls
 
-CMD ls /mnt
+CMD ls /root/RTM-Lua

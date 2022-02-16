@@ -21,13 +21,13 @@ RUN mkdir /root/cothread
 RUN wget -O - https://github.com/renatomaia/cothread/archive/refs/tags/v0.1.1.tar.gz\
  | tar xfz - -C /root/cothread --strip-components 1\
  && cd /root/cothread\
- && luarocks make /root/cothread/etc/cothread-0.1-1.rockspec
+ && luarocks make etc/cothread-0.1-1.rockspec
  
 RUN mkdir /root/luatuple
 RUN wget -O - https://github.com/renatomaia/luatuple/archive/refs/tags/v1.0beta2.tar.gz\
  | tar xfz - -C /root/luatuple --strip-components 1\
  && cd /root/luatuple\
- && luarocks make /root/luatuple/etc/tuple-1.0beta-1.rockspec
+ && luarocks make etc/tuple-1.0beta-1.rockspec
  
 RUN luarocks install loopparsing
 RUN luarocks install loopserializing
@@ -37,13 +37,11 @@ RUN luarocks install luasec
 RUN mkdir /root/struct
 RUN wget -O - http://www.inf.puc-rio.br/~roberto/struct/struct-0.3.tar.gz\
  | tar xfz - -C /root/struct\
- && wget -O /root/struct/CMakeLists.txt https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/thirdparty/struct/CMakeLists.txt\
- && ls /root/struct/\
- && ls /root\
- && ls /\
- && cmake /root/struct -DCMAKE_INSTALL_PREFIX=$TEST_DIR -B /tmp/struct/build\
- && cmake --build /tmp/struct/build --config Release\
- && cmake --build /tmp/struct/build --config Release --target install
+ && wget -O /root/struct/struct-1.4-1.rockspec https://luarocks.org/manifests/luarocks/struct-1.4-1.rockspec\
+ && sed  -i -e 's/lua >= 5.1, < 5.3/lua >= 5.1, <= 5.4/g' /root/struct/struct-1.4-1.rockspec\
+ && cd /root/struct\
+ && luarocks make struct-1.4-1.rockspec
+
 
 
 CMD touch /root/share/test.txt

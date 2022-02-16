@@ -12,8 +12,9 @@ RUN apt update\
  make\
  cmake\
  git\
- wget\
- && git clone https://github.com/renatomaia/cothread\
+ wget
+
+RUN git clone https://github.com/renatomaia/cothread\
  && cd cothread\
  && luarocks make etc/cothread-0.1-1.rockspec
 

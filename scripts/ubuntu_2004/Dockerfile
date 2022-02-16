@@ -20,11 +20,17 @@ RUN wget -O - https://github.com/renatomaia/cothread/archive/refs/tags/v0.1.1.ta
  && cd /root/cothread\
  && luarocks make /root/cothread/etc/cothread-0.1-1.rockspec
  
+RUN mkdir /root/luatuple
+
+RUN wget -O - https://github.com/renatomaia/luatuple/archive/refs/tags/v1.0beta2.tar.gz\
+ | tar xfz - -C /root/luatuple --strip-components 1\
+ && cd /root/luatuple\
+ && luarocks make /root/luatuple/etc/tuple-1.0beta-1.rockspec
+ 
 RUN luarocks install loopparsing
 RUN luarocks install loopserializing
 RUN luarocks install loopcomp
-RUN luarocks install luasocket
-RUN luarocks install Tuple
+RUN luarocks install luasec
 
 
 

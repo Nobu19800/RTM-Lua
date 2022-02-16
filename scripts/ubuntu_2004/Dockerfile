@@ -20,7 +20,7 @@ RUN wget -O - https://github.com/renatomaia/cothread/archive/refs/tags/v0.1.1.ta
  && cd /root/cothread\
  && luarocks make /root/cothread/etc/cothread-0.1-1.rockspec
  
-RUN luarocks install struct
+RUN luarocks install struct 1.4-1
 
 
 CMD touch /root/share/test.txt

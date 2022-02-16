@@ -46,7 +46,8 @@ RUN mkdir /root/oil
 RUN wget -O - https://github.com/renatomaia/oil/archive/refs/tags/OIL_0_7_0.tar.gz\
  | tar xfz - -C /root/oil --strip-components 1\
  && cd /root/oil\
- && luarocks make etc/oil-0.6.rockspec
+ && cp etc/oil-0.6.rockspec etc/oil-0.6-1.rockspec\
+ && luarocks make etc/oil-0.6-1.rockspec
 
 
 CMD touch /root/share/test.txt

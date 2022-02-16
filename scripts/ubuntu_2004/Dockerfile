@@ -11,14 +11,13 @@ RUN apt update\
  g++\
  make\
  cmake\
+ ca-certificates\
  wget
 
-RUN wget --no-check-certificate https://github.com/renatomaia/cothread/archive/refs/tags/v0.1.1.tar.gz\
- && tar xf v0.1.1.tar.gz\
- && cd cothread-0.1.1\
- && luarocks make etc/cothread-0.1-1.rockspec
+RUN wget -O - https://github.com/renatomaia/cothread/archive/refs/tags/v0.1.1.tar.gz\
+ | tar xfz - -C /root/cothread --strip-components 1\
+ && luarocks make /root/cothread/etc/cothread-0.1-1.rockspec
 
-RUN echo $PWD
 
 CMD touch /root/share/test.txt
 

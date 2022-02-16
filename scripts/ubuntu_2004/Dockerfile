@@ -36,8 +36,11 @@ RUN luarocks install luasec
 
 RUN mkdir /root/struct
 RUN wget -O - http://www.inf.puc-rio.br/~roberto/struct/struct-0.3.tar.gz\
- | tar xf - -C /root/struct --strip-components 1\
+ | tar xfz - -C /root/struct --strip-components 1\
  && wget -O /root/struct/CMakeLists.txt https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/thirdparty/struct/CMakeLists.txt\
+ && ls /root/struct/
+ && ls /root
+ && ls /
  && cmake /root/struct -DCMAKE_INSTALL_PREFIX=$TEST_DIR -B /tmp/struct/build\
  && cmake --build /tmp/struct/build --config Release\
  && cmake --build /tmp/struct/build --config Release --target install

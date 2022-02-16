@@ -18,6 +18,7 @@ RUN wget --no-check-certificate https://github.com/renatomaia/cothread/archive/r
  && cd cothread-0.1.1\
  && luarocks make etc/cothread-0.1-1.rockspec
 
+RUN echo $PWD
 
 CMD touch /root/share/test.txt
 

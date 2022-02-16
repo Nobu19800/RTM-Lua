@@ -12,7 +12,8 @@ RUN apt update\
  make\
  cmake\
  ca-certificates\
- wget
+ wget\
+ libssl-dev
 
 RUN mkdir /root/cothread
 RUN wget -O - https://github.com/renatomaia/cothread/archive/refs/tags/v0.1.1.tar.gz\

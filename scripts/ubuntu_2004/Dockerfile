@@ -11,9 +11,12 @@ RUN apt update\
  g++\
  make\
  cmake\
- wget
+ git\
+ wget\
+ && git clone https://github.com/renatomaia/cothread
+ && cd cothread
+ && luarocks make etc/cothread-0.1-1.rockspec
 
-RUN luarocks install openrtm
 
 CMD touch /root/share/test.txt
 

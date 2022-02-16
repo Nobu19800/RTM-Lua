@@ -46,6 +46,7 @@ RUN mkdir /root/oil
 RUN wget -O - https://github.com/renatomaia/oil/archive/refs/tags/OIL_0_7_0.tar.gz\
  | tar xfz - -C /root/oil --strip-components 1\
  && sed  -i -e 's/version = "0.6"/version = "0.6-1"/g' /root/oil/etc/oil-0.6.rockspec\
+ && sed  -i -e 's/"looplib >= 2.0beta",//g' /root/oil/etc/oil-0.6.rockspec\
  && cp /root/oil/etc/oil-0.6.rockspec /root/oil/etc/oil-0.6-1.rockspec\
  && cd /root/oil\
  && luarocks make etc/oil-0.6-1.rockspec

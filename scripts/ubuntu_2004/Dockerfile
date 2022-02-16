@@ -42,6 +42,11 @@ RUN wget -O - http://www.inf.puc-rio.br/~roberto/struct/struct-0.3.tar.gz\
  && cd /root/struct\
  && luarocks make struct-1.4-1.rockspec
 
+RUN mkdir /root/oil
+RUN wget -O - https://github.com/renatomaia/oil/archive/refs/tags/OIL_0_7_0.tar.gz\
+ | tar xfz - -C /root/oil --strip-components 1\
+ && cd /root/oil\
+ && luarocks make oil-0.6.rockspec
 
 
 CMD touch /root/share/test.txt

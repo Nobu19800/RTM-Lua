@@ -14,6 +14,7 @@ RUN apt update\
  ca-certificates\
  wget
 
+RUN mkdir /root/cothread
 RUN wget -O - https://github.com/renatomaia/cothread/archive/refs/tags/v0.1.1.tar.gz\
  | tar xfz - -C /root/cothread --strip-components 1\
  && luarocks make /root/cothread/etc/cothread-0.1-1.rockspec

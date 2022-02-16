@@ -17,7 +17,10 @@ RUN apt update\
 RUN mkdir /root/cothread
 RUN wget -O - https://github.com/renatomaia/cothread/archive/refs/tags/v0.1.1.tar.gz\
  | tar xfz - -C /root/cothread --strip-components 1\
+ && cd /root/cothread\
  && luarocks make /root/cothread/etc/cothread-0.1-1.rockspec
+ 
+RUN luarocks install struct
 
 
 CMD touch /root/share/test.txt

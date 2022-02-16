@@ -11,7 +11,6 @@ RUN apt update\
  g++\
  make\
  cmake\
- git\
  wget
 
 RUN git clone https://github.com/renatomaia/cothread\

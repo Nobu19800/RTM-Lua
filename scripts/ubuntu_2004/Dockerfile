@@ -45,9 +45,9 @@ RUN wget -O - http://www.inf.puc-rio.br/~roberto/struct/struct-0.3.tar.gz\
 RUN mkdir /root/oil
 RUN wget -O - https://github.com/renatomaia/oil/archive/refs/tags/OIL_0_7_0.tar.gz\
  | tar xfz - -C /root/oil --strip-components 1\
+ && sed  -i -e 's/version = "0.6"/version = "0.6-1"/g' /root/oil/etc/oil-0.6.rockspec\
  && cd /root/oil\
- && cp etc/oil-0.6.rockspec etc/oil-0.6-1.rockspec\
- && luarocks make etc/oil-0.6-1.rockspec
+ && luarocks make etc/oil-0.6.rockspec
 
 
 CMD touch /root/share/test.txt

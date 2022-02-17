@@ -13,9 +13,12 @@ RUN apt update\
  cmake\
  ca-certificates\
  wget\
- libssl-dev
+ libssl-dev\
+ omniorb-nameserver
  
 ENV TEST_DIR=/root/test
+ENV PORT=2809
+ENV LOGDIR=/root/test/namelog
 
 RUN mkdir /root/cothread
 RUN wget -O - https://github.com/renatomaia/cothread/archive/refs/tags/v0.1.1.tar.gz\
@@ -33,6 +36,8 @@ RUN luarocks install loopparsing
 RUN luarocks install loopserializing
 RUN luarocks install loopcomp
 RUN luarocks install luasec
+RUN luarocks install luaunit
+RUN luarocks install luacov
 
 RUN mkdir /root/struct
 RUN wget -O - http://www.inf.puc-rio.br/~roberto/struct/struct-0.3.tar.gz\
@@ -50,6 +55,10 @@ RUN wget -O - https://github.com/renatomaia/oil/archive/refs/tags/OIL_0_7_0.tar.
  && cp /root/oil/etc/oil-0.6.rockspec /root/oil/etc/oil-0.6-1.rockspec\
  && cd /root/oil\
  && luarocks make etc/oil-0.6-1.rockspec
+
+RUN cd $TEST_DIR/
+    && rm $LOGDIR/*
+    && omniNames -start $PORT -logdir $LOGDIR &
 
 
 CMD touch /root/share/test.txt

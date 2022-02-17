@@ -12,6 +12,7 @@ local LogstreamFactory = LogstreamBase.LogstreamFactory
 local Factory = require "openrtm.Factory"
 local StringUtil = require "openrtm.StringUtil"
 local Logger = require "openrtm.SystemLogger"
+local logging = require "logging"
 
 
 
@@ -72,11 +73,11 @@ LogstreamFile.new = function()
 		end
 		
 		if fname == "stdout" then
-			require "logging.console"
+			logging.console = require "logging.console"
 			self.handlers[fname] = logging.console()
 			return true
 		else
-			require "logging.file"
+			logging.file = require "logging.file"
 			self.handlers[fname] = logging.file(fname)
 			return true
 		end

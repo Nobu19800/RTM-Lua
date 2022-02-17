@@ -1,4 +1,5 @@
 local luaunit = require "luaunit"
+local oil = require "oil"
 local NamingManager = require "openrtm.NamingManager"
 local Properties = require "openrtm.Properties"
 local NamingOnCorba = NamingManager.NamingOnCorba

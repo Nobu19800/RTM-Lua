@@ -1,4 +1,5 @@
 local luaunit = require "luaunit"
+local oil = require "oil"
 local ModuleManager = require "openrtm.ModuleManager"
 local Properties = require "openrtm.Properties"
 

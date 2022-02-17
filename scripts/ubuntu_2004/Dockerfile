@@ -20,6 +20,22 @@ ENV TEST_DIR=/root/test
 ENV PORT=2809
 ENV LOGDIR=/root/test/namelog
 
+
+RUN luarocks install loopparsing
+RUN luarocks install loopserializing
+RUN luarocks install loopcomp
+RUN luarocks install uuid
+RUN luarocks install luasocket
+RUN luarocks install loop
+RUN luarocks install loopcollections
+RUN luarocks install loopcomp
+RUN luarocks install loopdebugging
+RUN luarocks install loopobjects
+RUN luarocks install lualogging
+RUN luarocks install luasec
+RUN luarocks install luaunit
+RUN luarocks install luacov
+
 RUN mkdir /root/cothread
 RUN wget -O - https://github.com/renatomaia/cothread/archive/refs/tags/v0.1.1.tar.gz\
  | tar xfz - -C /root/cothread --strip-components 1\
@@ -32,12 +48,6 @@ RUN wget -O - https://github.com/renatomaia/luatuple/archive/refs/tags/v1.0beta2
  && cd /root/luatuple\
  && luarocks make etc/tuple-1.0beta-1.rockspec
  
-RUN luarocks install loopparsing
-RUN luarocks install loopserializing
-RUN luarocks install loopcomp
-RUN luarocks install luasec
-RUN luarocks install luaunit
-RUN luarocks install luacov
 
 RUN mkdir /root/struct
 RUN wget -O - http://www.inf.puc-rio.br/~roberto/struct/struct-0.3.tar.gz\
@@ -58,10 +68,9 @@ RUN wget -O - https://github.com/renatomaia/oil/archive/refs/tags/OIL_0_7_0.tar.
 
 RUN mkdir $TEST_DIR\
  && cd $TEST_DIR/\
- && mkdir $LOGDIR\
- && omniNames -start $PORT -logdir $LOGDIR & \
- && sleep 1\
- && export LUA_PATH=/root/RTM-Lua/lua/?.lua:/root/RTM-Lua/test/?.lua:\
+ && sh /root/RTM-Lua/scripts/rtm-naming.sh\
+ && cp /root/RTM-Lua/.luacov $TEST_DIR/.luacov\
+ && export LUA_PATH=";;/root/RTM-Lua/lua/?.lua;/root/RTM-Lua/test/?.lua;/root/oil/lua/?.lua;$LUA_PATH"\
  && lua -lluacov /root/RTM-Lua/test/all_test.lua -v
 
 

@@ -56,8 +56,8 @@ RUN wget -O - https://github.com/renatomaia/oil/archive/refs/tags/OIL_0_7_0.tar.
  && cd /root/oil\
  && luarocks make etc/oil-0.6-1.rockspec
 
-RUN cd $TEST_DIR/
-    && rm $LOGDIR/*
+RUN cd $TEST_DIR/\
+    && rm $LOGDIR/*\
     && omniNames -start $PORT -logdir $LOGDIR &
 
 

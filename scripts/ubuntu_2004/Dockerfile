@@ -60,7 +60,6 @@ RUN mkdir $TEST_DIR\
  && cd $TEST_DIR/\
  && sh /root/RTM-Lua/scripts/rtm-naming.sh\
  && cp /root/RTM-Lua/.luacov $TEST_DIR/.luacov\
- && export LUA_PATH=/root/RTM-Lua/lua/?.lua:/root/RTM-Lua/test/?.lua:\
  && lua -lluacov /root/RTM-Lua/test/all_test.lua -v
 
 

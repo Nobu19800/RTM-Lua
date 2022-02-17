@@ -24,13 +24,13 @@ RUN mkdir /root/cothread
 RUN wget -O - https://github.com/renatomaia/cothread/archive/refs/tags/v0.1.1.tar.gz\
  | tar xfz - -C /root/cothread --strip-components 1\
  && cd /root/cothread\
- && luarocks make etc/cothread-0.1-1.rockspec
+ && luarocks install etc/cothread-0.1-1.rockspec
  
 RUN mkdir /root/luatuple
 RUN wget -O - https://github.com/renatomaia/luatuple/archive/refs/tags/v1.0beta2.tar.gz\
  | tar xfz - -C /root/luatuple --strip-components 1\
  && cd /root/luatuple\
- && luarocks make etc/tuple-1.0beta-1.rockspec
+ && luarocks install etc/tuple-1.0beta-1.rockspec
  
 RUN luarocks install loopparsing
 RUN luarocks install loopserializing
@@ -45,7 +45,7 @@ RUN wget -O - http://www.inf.puc-rio.br/~roberto/struct/struct-0.3.tar.gz\
  && wget -O /root/struct/struct-1.4-1.rockspec https://luarocks.org/manifests/luarocks/struct-1.4-1.rockspec\
  && sed  -i -e 's/lua >= 5.1, < 5.3/lua >= 5.1, <= 5.4/g' /root/struct/struct-1.4-1.rockspec\
  && cd /root/struct\
- && luarocks make struct-1.4-1.rockspec
+ && luarocks install struct-1.4-1.rockspec
 
 RUN mkdir /root/oil
 RUN wget -O - https://github.com/renatomaia/oil/archive/refs/tags/OIL_0_7_0.tar.gz\
@@ -54,7 +54,7 @@ RUN wget -O - https://github.com/renatomaia/oil/archive/refs/tags/OIL_0_7_0.tar.
  && sed  -i -e 's/"looplib >= 2.0beta",//g' /root/oil/etc/oil-0.6.rockspec\
  && cp /root/oil/etc/oil-0.6.rockspec /root/oil/etc/oil-0.6-1.rockspec\
  && cd /root/oil\
- && luarocks make etc/oil-0.6-1.rockspec
+ && luarocks install etc/oil-0.6-1.rockspec
 
 RUN mkdir $TEST_DIR\
  && cd $TEST_DIR/\

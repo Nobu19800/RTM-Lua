@@ -180,7 +180,14 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 
 					local rtcname = rtcuri:getRTCName()
 
-					local context, comp = rtcname:match("^(%w+).(.+)$")
+					local spos = rtcname:find("/")
+					local context = ""
+					local comp = ""
+					if spos ~= nil then
+						context = rtcname:sub(1, spos-1)
+						comp = rtcname:sub(spos+1, #rtcname)
+					end
+
 
 					if context == "*" then
 						local root_cxt = cns:getRootContext()
@@ -188,9 +195,9 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 						self:getComponentByName(root_cxt, comp, rtc_list)
 						return rtc_list
 					else
-						rtc_name = rtc_name..".rtc"
+						rtcname = rtcname..".rtc"
 
-						local _obj = cns:resolveStr(rtc_name)
+						local _obj = cns:resolveStr(rtcname)
 
 						if _obj == oil.corba.idl.null then
 							return rtc_list
@@ -211,6 +218,7 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 				return rtc_list
 			end
 		end
+		return rtc_list
 	end
 
 	return obj
@@ -299,14 +307,14 @@ NamingManager.NamingOnManager.new = function(orb, mgr)
 								rtcuri:getAddress()..", Name: "..
 								rtcuri:getRTCName())
 			local mgr = self:getManager(rtcuri:getAddress())
-			local rtc_name = rtcuri:getRTCName()
+			local rtcname = rtcuri:getRTCName()
 			if mgr ~= oil.corba.idl.null then
-				rtc_list = mgr:get_components_by_name(rtc_name)
+				rtc_list = mgr:get_components_by_name(rtcname)
 				local slaves = mgr:get_slave_managers()
 				for k,slave in ipairs(slaves) do
 					local success, exception = oil.pcall(
 						function()
-							rtc_list.extend(slave:get_components_by_name(rtc_name))
+							rtc_list.extend(slave:get_components_by_name(rtcname))
 					end)
 					if not success then
 						self._rtcout:RTC_DEBUG(exception)

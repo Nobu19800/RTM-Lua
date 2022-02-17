@@ -1137,7 +1137,7 @@ CORBA_RTCUtil.RTCURIObject.new = function(uri, isrtcname, isrtcloc)
 			self._is_rtcloc = true
 		else
 			if method ~= nil then
-				method, protocol = method:match("^(%w+).(%w+)$")
+				method, protocol = method:match("^(%w+)%.(%w+)$")
 				if method == "rtcname" then
 					self._is_rtcname = true
 				elseif method == "rtcloc" then
@@ -1158,20 +1158,31 @@ CORBA_RTCUtil.RTCURIObject.new = function(uri, isrtcname, isrtcloc)
 			end
 		end
 	
-		local hostport, objectkey = addrname:match("^(.+)://(.+)$")
-		if hostport ~= nil and objectkey ~= nil then
-			self._rtcpath = objectkey
+		local spos = addrname:find("/")
+		
+		local hostport = ""
+		
+		if spos ~= nil then
+			hostport = addrname:sub(1, spos-1)
+			self._rtcpath = addrname:sub(spos+1, #addrname)
+		else
+			hostport = addrname
 		end
 	
-		self._address = "corbaloc:"
-		self._address = self._address..protocol
-		self._address = self._address..":"
-		if protocol == "ssliop" and hostport:find("@") == nil then
-			self._address = self._address.."1.2@"
+		if hostport ~= "*" then
+			self._address = "corbaloc:"
+			self._address = self._address..protocol
+			self._address = self._address..":"
+			if protocol == "ssliop" and hostport:find("@") == nil then
+				self._address = self._address.."1.2@"
+			end
+			self._address = self._address..hostport
+		else
+			self._address = hostport
 		end
-		self._address = self._address..hostport
-	end
 
+	end
+	
 	obj:init(uri, isrtcname, isrtcloc)
 
 	-- RTC名を取得する

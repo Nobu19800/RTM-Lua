@@ -58,9 +58,8 @@ RUN wget -O - https://github.com/renatomaia/oil/archive/refs/tags/OIL_0_7_0.tar.
 
 RUN mkdir $TEST_DIR\
  && cd $TEST_DIR/\
- && mkdir $LOGDIR\
- && omniNames -start $PORT -logdir $LOGDIR & \
- && sleep 1\
+ && sh /root/RTM-Lua/scripts/rtm-naming.sh\
+ && cp /root/RTM-Lua/.luacov $TEST_DIR/.luacov\
  && export LUA_PATH=/root/RTM-Lua/lua/?.lua:/root/RTM-Lua/test/?.lua:\
  && lua -lluacov /root/RTM-Lua/test/all_test.lua -v
 

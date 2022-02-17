@@ -31,6 +31,7 @@ RUN luarocks install loopcollections
 RUN luarocks install loopcomp
 RUN luarocks install loopdebugging
 RUN luarocks install loopobjects
+RUN luarocks install lualogging
 RUN luarocks install luasec
 RUN luarocks install luaunit
 RUN luarocks install luacov

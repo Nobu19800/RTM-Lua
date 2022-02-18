@@ -74,7 +74,9 @@ require "TimeValue_test"
 
 local ORB_Dummy_test = require "ORB_Dummy_test"
 --ORB_Dummy_test()
-luaunit.LuaUnit.run()
+local results = luaunit.LuaUnit.run()
+
+os.exit(results)
 
 
 

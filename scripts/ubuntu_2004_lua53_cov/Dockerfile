@@ -5,8 +5,8 @@ COPY RTM-Lua /root/RTM-Lua
 
 RUN apt update\
  && apt install -y --no-install-recommends\
- lua5.2\
- liblua5.2-dev\
+ lua5.3\
+ liblua5.3-dev\
  luarocks\
  g++\
  make\
@@ -17,7 +17,7 @@ RUN apt update\
  libssl-dev\
  omniorb-nameserver
  
-ENV TEST_DIR=/root/test
+ENV TEST_DIR=/root/share
 ENV PORT=2809
 ENV LOGDIR=/root/namelog
 
@@ -42,7 +42,8 @@ RUN luarocks install loopparsing\
  && luarocks install loopobjects\
  && luarocks install lualogging\
  && luarocks install luasec\
- && luarocks install luaunit
+ && luarocks install luaunit\
+ && luarocks install luacov
 
 RUN mkdir /root/cothread\
  && wget -O - https://github.com/renatomaia/cothread/archive/refs/tags/v0.1.1.tar.gz\
@@ -61,6 +62,7 @@ RUN mkdir /root/struct\
  && wget -O - http://www.inf.puc-rio.br/~roberto/struct/struct-0.3.tar.gz\
  | tar xfz - -C /root/struct\
  && wget -O /root/struct/struct-1.4-1.rockspec https://luarocks.org/manifests/luarocks/struct-1.4-1.rockspec\
+ && sed  -i -e 's/lua >= 5.1, < 5.3/lua >= 5.1, <= 5.4/g' /root/struct/struct-1.4-1.rockspec\
  && cd /root/struct\
  && luarocks make struct-1.4-1.rockspec
 
@@ -74,12 +76,12 @@ RUN mkdir /root/oil\
  && cd /root/oil\
  && luarocks make etc/oil-0.6-1.rockspec
 
-CMD mkdir $TEST_DIR\
- && cd $TEST_DIR/\
+CMD cd $TEST_DIR/\
  && sh /root/RTM-Lua/scripts/rtm-naming.sh\
+ && cp /root/RTM-Lua/.luacov $TEST_DIR/.luacov\
  && cp -r /root/RTM-Lua/idl /root/RTM-Lua/lua/idl\
  && cp /root/RTM-Lua/test/MyService.idl $TEST_DIR/MyService.idl\
  && export LUA_PATH=";;/root/RTM-Lua/lua/?.lua;/root/RTM-Lua/test/?.lua;/root/oil/lua/?.lua;$LUA_PATH"\
- && lua5.2 /root/RTM-Lua/test/all_test.lua -v
+ && lua5.3 -lluacov /root/RTM-Lua/test/all_test.lua -v
 
 

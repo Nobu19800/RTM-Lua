@@ -1,15 +1,15 @@
-name: Workflow for Codecov openrtm-lua unit-test
+name: Workflow for openrtm-lua code coverage analysis
 on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu_2004_lua52, ubuntu_2004_lua53]
+        os: [ubuntu_2004_lua53_cov]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set up Lua 5.3
+      - name: run unittest
         run:  | 
                 export OPENRTMLUA_IMAGE=openrtm-lua:${{matrix.os}}-$(date +%s)
                 docker build .. --file scripts/${{matrix.os}}/Dockerfile --tag $OPENRTMLUA_IMAGE
@@ -17,4 +17,3 @@ jobs:
                 curl -Os https://uploader.codecov.io/latest/linux/codecov
                 chmod +x codecov
                 ./codecov
-                ls share

@@ -1,0 +1,16 @@
+name: Workflow for openrtm-lua unit-test
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu_2004_lua52, ubuntu_2004_lua53]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: run unittest
+        run:  | 
+                export OPENRTMLUA_IMAGE=openrtm-lua:${{matrix.os}}-$(date +%s)
+                docker build .. --file scripts/${{matrix.os}}/Dockerfile --tag $OPENRTMLUA_IMAGE
+                docker run $OPENRTMLUA_IMAGE

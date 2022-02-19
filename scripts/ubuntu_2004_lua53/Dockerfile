@@ -17,7 +17,7 @@ RUN apt update\
  libssl-dev\
  omniorb-nameserver
  
-ENV TEST_DIR=/root/share
+ENV TEST_DIR=/root/test
 ENV PORT=2809
 ENV LOGDIR=/root/namelog
 
@@ -42,8 +42,7 @@ RUN luarocks install loopparsing\
  && luarocks install loopobjects\
  && luarocks install lualogging\
  && luarocks install luasec\
- && luarocks install luaunit\
- && luarocks install luacov
+ && luarocks install luaunit
 
 RUN mkdir /root/cothread\
  && wget -O - https://github.com/renatomaia/cothread/archive/refs/tags/v0.1.1.tar.gz\
@@ -76,12 +75,12 @@ RUN mkdir /root/oil\
  && cd /root/oil\
  && luarocks make etc/oil-0.6-1.rockspec
 
-CMD cd $TEST_DIR/\
+CMD mkdir $TEST_DIR\
+ && cd $TEST_DIR/\
  && sh /root/RTM-Lua/scripts/rtm-naming.sh\
- && cp /root/RTM-Lua/.luacov $TEST_DIR/.luacov\
  && cp -r /root/RTM-Lua/idl /root/RTM-Lua/lua/idl\
  && cp /root/RTM-Lua/test/MyService.idl $TEST_DIR/MyService.idl\
  && export LUA_PATH=";;/root/RTM-Lua/lua/?.lua;/root/RTM-Lua/test/?.lua;/root/oil/lua/?.lua;$LUA_PATH"\
- && lua5.3 -lluacov /root/RTM-Lua/test/all_test.lua -v
+ && lua5.3 /root/RTM-Lua/test/all_test.lua -v
 
 

@@ -81,7 +81,7 @@ RUN mkdir $TEST_DIR\
  && cp /root/RTM-Lua/.luacov $TEST_DIR/.luacov\
  && cp -r /root/RTM-Lua/idl /root/RTM-Lua/lua/idl\
  && export LUA_PATH=";;/root/RTM-Lua/lua/?.lua;/root/RTM-Lua/test/?.lua;/root/oil/lua/?.lua;$LUA_PATH"\
- && lua -lluacov /root/RTM-Lua/test/all_test.lua -v
+ && lua5.3 -lluacov /root/RTM-Lua/test/all_test.lua -v
 
 
 CMD touch /root/share/test.txt

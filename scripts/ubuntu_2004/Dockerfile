@@ -27,7 +27,7 @@ RUN wget -O - https://github.com/renatomaia/luasocket/archive/refs/tags/v2.0.3.t
  | tar xfz - -C /root/luasocket --strip-components 1\
  && wget -O /root/luasocket/luasocket-scm-0.rockspec https://raw.githubusercontent.com/Nobu19800/RTM-Lua/master/thirdparty/luasocket-2.0.3/luasocket-scm-0.rockspec\
  && cd /root/luasocket\
- && luarocks make etc/luasocket-scm-0.rockspec
+ && luarocks make luasocket-scm-0.rockspec
 
 
 RUN luarocks install loopparsing

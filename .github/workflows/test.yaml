@@ -14,4 +14,7 @@ jobs:
                 export OPENRTMLUA_IMAGE=openrtm-lua:${{matrix.os}}-$(date +%s)
                 docker build .. --file scripts/${{matrix.os}}/Dockerfile --tag $OPENRTMLUA_IMAGE
                 docker run -v /home/runner/work/RTM-Lua/RTM-Lua/share:/root/share $OPENRTMLUA_IMAGE
+                curl -Os https://uploader.codecov.io/latest/linux/codecov
+                chmod +x codecov
+                ./codecov
                 ls share

@@ -76,8 +76,7 @@ RUN mkdir /root/oil\
  && cd /root/oil\
  && luarocks make etc/oil-0.6-1.rockspec
 
-RUN mkdir $TEST_DIR\
- && cd $TEST_DIR/\
+RUN cd $TEST_DIR/\
  && sh /root/RTM-Lua/scripts/rtm-naming.sh\
  && cp /root/RTM-Lua/.luacov $TEST_DIR/.luacov\
  && cp -r /root/RTM-Lua/idl /root/RTM-Lua/lua/idl\

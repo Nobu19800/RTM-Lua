@@ -17,7 +17,7 @@ RUN apt update\
  libssl-dev\
  omniorb-nameserver
  
-ENV TEST_DIR=/root/test
+ENV TEST_DIR=/root/share
 ENV PORT=2809
 ENV LOGDIR=/root/test/namelog
 
@@ -84,6 +84,4 @@ RUN mkdir $TEST_DIR\
  && export LUA_PATH=";;/root/RTM-Lua/lua/?.lua;/root/RTM-Lua/test/?.lua;/root/oil/lua/?.lua;$LUA_PATH"\
  && lua5.3 -lluacov /root/RTM-Lua/test/all_test.lua -v
 
-
-CMD touch /root/share/test.txt
 

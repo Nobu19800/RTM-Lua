@@ -13,7 +13,6 @@ RUN apt update\
  cmake\
  ca-certificates\
  wget\
- curl\
  libssl-dev\
  omniorb-nameserver
  

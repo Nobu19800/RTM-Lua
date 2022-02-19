@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu_2004_lua52, ubuntu_2004_lua53]
+        os: [ubuntu_2004_lua51, ubuntu_2004_lua52, ubuntu_2004_lua53]
     steps:
       - name: Checkout
         uses: actions/checkout@v2

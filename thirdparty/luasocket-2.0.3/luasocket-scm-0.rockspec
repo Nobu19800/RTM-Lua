@@ -23,12 +23,14 @@ local function make_plat(plat)
 	local defines = {
 	  unix = {
 		 "LUASOCKET_DEBUG",
+		 "LUA_COMPAT_APIINTCASTS",
 		 "LUASOCKET_API=__attribute__((visibility(\"default\")))",
 		 "UNIX_API=__attribute__((visibility(\"default\")))",
 		 "MIME_API=__attribute__((visibility(\"default\")))"
 	  },
 	  macosx = {
 		 "LUASOCKET_DEBUG",
+		 "LUA_COMPAT_APIINTCASTS",
 		 "UNIX_HAS_SUN_LEN",
 		 "LUASOCKET_API=__attribute__((visibility(\"default\")))",
 		 "UNIX_API=__attribute__((visibility(\"default\")))",
@@ -36,6 +38,7 @@ local function make_plat(plat)
 	  },
 	  win32 = {
 		 "LUASOCKET_DEBUG",
+		 "LUA_COMPAT_APIINTCASTS",
 		 "NDEBUG",
 		 "LUASOCKET_API=__declspec(dllexport)",
 		 "MIME_API=__declspec(dllexport)"
@@ -43,6 +46,7 @@ local function make_plat(plat)
 	  mingw32 = {
 		 "LUASOCKET_DEBUG",
 		 "LUASOCKET_INET_PTON",
+		 "LUA_COMPAT_APIINTCASTS",
 		 "WINVER=0x0501",
 		 "LUASOCKET_API=__declspec(dllexport)",
 		 "MIME_API=__declspec(dllexport)"

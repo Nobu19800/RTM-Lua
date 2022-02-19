@@ -9,7 +9,7 @@ require "ConnectorListener_test"
 require "CORBA_RTCUtil_test"
 require "CORBA_SeqUtil_test"
 require "CorbaConsumer_test"
---require "CorbaNaming_test"
+require "CorbaNaming_test"
 require "CorbaPort_test"
 require "DataPortStatus_test"
 require "ECFactory_test"
@@ -33,8 +33,8 @@ require "ManagerActionListener_test"
 require "ManagerConfig_test"
 require "ManagerServant_test"
 require "ModuleManager_test"
---require "NamingManager_test"
---require "NamingServiceNumberingPolicy_test"
+require "NamingManager_test"
+require "NamingServiceNumberingPolicy_test"
 require "NodeNumberingPolicy_test"
 require "NumberingPolicy_test"
 require "NVUtil_test"
@@ -71,4 +71,6 @@ require "TimeValue_test"
 
 local ORB_Dummy_test = require "ORB_Dummy_test"
 ORB_Dummy_test()
-luaunit.LuaUnit.run()
+local results = luaunit.LuaUnit.run()
+
+os.exit(results)

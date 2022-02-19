@@ -35,6 +35,6 @@ CMD mkdir $TEST_DIR\
  && cp -r /root/RTM-Lua/idl /root/RTM-Lua/lua/idl\
  && cp /root/RTM-Lua/test/MyService.idl $TEST_DIR/MyService.idl\
  && export LUA_PATH=";;/root/RTM-Lua/lua/?.lua;/root/RTM-Lua/test/?.lua;$LUA_PATH"\
- && lua5.1 /root/RTM-Lua/test/all_test.lua -v
+ && lua5.1 /root/RTM-Lua/test/all_test51.lua -v
 
 

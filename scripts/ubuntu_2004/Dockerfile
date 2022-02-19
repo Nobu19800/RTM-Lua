@@ -83,5 +83,7 @@ RUN mkdir $TEST_DIR\
  && cp -r /root/RTM-Lua/idl /root/RTM-Lua/lua/idl\
  && export LUA_PATH=";;/root/RTM-Lua/lua/?.lua;/root/RTM-Lua/test/?.lua;/root/oil/lua/?.lua;$LUA_PATH"\
  && lua5.3 -lluacov /root/RTM-Lua/test/all_test.lua -v
+ 
+RUN ls $TEST_DIR
 
 

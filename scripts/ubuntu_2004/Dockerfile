@@ -85,7 +85,7 @@ RUN mkdir $TEST_DIR\
  && lua5.3 -lluacov /root/RTM-Lua/test/all_test.lua -v
 
 RUN curl -Os https://uploader.codecov.io/latest/linux/codecov\
- && chmod +x codecov
+ && chmod +x codecov\
  && ./codecov
 
 CMD touch /root/share/test.txt

@@ -19,7 +19,7 @@ RUN apt update\
  
 ENV TEST_DIR=/root/share
 ENV PORT=2809
-ENV LOGDIR=/root/test/namelog
+ENV LOGDIR=/root/namelog
 
 
 

@@ -76,13 +76,11 @@ RUN mkdir /root/oil\
  && cd /root/oil\
  && luarocks make etc/oil-0.6-1.rockspec
 
-RUN cd $TEST_DIR/\
+CMD cd $TEST_DIR/\
  && sh /root/RTM-Lua/scripts/rtm-naming.sh\
  && cp /root/RTM-Lua/.luacov $TEST_DIR/.luacov\
  && cp -r /root/RTM-Lua/idl /root/RTM-Lua/lua/idl\
  && export LUA_PATH=";;/root/RTM-Lua/lua/?.lua;/root/RTM-Lua/test/?.lua;/root/oil/lua/?.lua;$LUA_PATH"\
  && lua5.3 -lluacov /root/RTM-Lua/test/all_test.lua -v
- 
-RUN ls $TEST_DIR
 
 

@@ -13,6 +13,7 @@ RUN apt update\
  cmake\
  ca-certificates\
  wget\
+ curl\
  libssl-dev\
  omniorb-nameserver
  
@@ -83,6 +84,9 @@ RUN mkdir $TEST_DIR\
  && export LUA_PATH=";;/root/RTM-Lua/lua/?.lua;/root/RTM-Lua/test/?.lua;/root/oil/lua/?.lua;$LUA_PATH"\
  && lua5.3 -lluacov /root/RTM-Lua/test/all_test.lua -v
 
+RUN curl -Os https://uploader.codecov.io/latest/linux/codecov\
+ && chmod +x codecov
+ && ./codecov
 
 CMD touch /root/share/test.txt
 

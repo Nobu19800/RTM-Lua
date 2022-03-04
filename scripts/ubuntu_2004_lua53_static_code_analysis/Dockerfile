@@ -8,6 +8,9 @@ RUN apt update\
  lua5.3\
  liblua5.3-dev\
  luarocks\
+ g++\
+ make\
+ cmake\
  ca-certificates\
  wget
  

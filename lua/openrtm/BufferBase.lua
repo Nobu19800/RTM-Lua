@@ -68,7 +68,6 @@ BufferBase.new = function()
 	function obj:full()
 		return true
     end
-    
     -- 指定位置まで読み込みポインタを進めた場合のバッファ取得
 	-- @param n ポインタの位置
 	-- @return 現在の位置のバッファ

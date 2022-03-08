@@ -56,7 +56,7 @@ GlobalFactory.Factory.new = function()
 			return true
 		end
 	end
-	
+
 	-- 登録ファクトリのID一覧を取得
 	-- @return ID一覧
 	function obj:getIdentifiers()
@@ -124,33 +124,32 @@ GlobalFactory.Factory.new = function()
 	end
 
 	-- 指定オブジェクトを削除
-	-- @param obj オブジェクト
+	-- @param fobj オブジェクト
 	-- @param id 識別子
 	-- @return リターンコード
 	-- FACTORY_OK：正常に削除
 	-- NOT_FOUND：オブジェクトがない
-	function obj:deleteObject(obj, id)
+	function obj:deleteObject(fobj, id)
 
 		if id ~= nil then
 			if self._creators[id] == nil then
-				self._creators[id].destructor_(obj)
+				self._creators[id].destructor_(fobj)
 				self._creators[id] = nil
 				return GlobalFactory.Factory.FACTORY_OK
 			end
 		end
 
-		if self._objects[obj] == nil then
+		if self._objects[fobj] == nil then
 			return GlobalFactory.Factory.NOT_FOUND
 		end
 
-		tmp = obj
-		self._objects[obj].destructor_(obj)
+		self._objects[fobj].destructor_(fobj)
 		--print(#self._objects)
 
 		--for k,v in pairs(self._objects) do
 		--	print(k,v)
 		--end
-		self._objects[obj] = nil
+		self._objects[fobj] = nil
 		--print(#self._objects)
 		return GlobalFactory.Factory.FACTORY_OK
 	end
@@ -159,7 +158,7 @@ GlobalFactory.Factory.new = function()
 	-- @return 作成済みオブジェクト一覧
 	function obj:createdObjects()
 
-		objects_ = {}
+		local objects_ = {}
 		for i, ver in pairs(self._objects) do
 			table.insert(objects_, ver)
 		end
@@ -168,10 +167,11 @@ GlobalFactory.Factory.new = function()
 
 
 	-- 指定オブジェクトの存在確認
-	-- true：存在する、false：存在しない
-	function obj:isProducerOf(obj)
+	-- @param fobj オブジェクト
+	-- @return true：存在する、false：存在しない
+	function obj:isProducerOf(fobj)
 
-		if self._objects[obj] ~= nil then
+		if self._objects[fobj] ~= nil then
 			return true
 		else
 			return false
@@ -180,35 +180,35 @@ GlobalFactory.Factory.new = function()
 	end
 
 	-- 指定オブジェクトのID取得
-	-- @param obj オブジェクト
+	-- @param fobj オブジェクト
 	-- @return ID、リターンコード
-	function obj:objectToIdentifier(obj)
+	function obj:objectToIdentifier(fobj)
 
-		if self._objects[obj] == nil then
+		if self._objects[fobj] == nil then
 			return -1, GlobalFactory.Factory.NOT_FOUND
 		end
-		local id = self._objects[obj].id_
+		local id = self._objects[fobj].id_
 		return id, GlobalFactory.Factory.FACTORY_OK
 	end
 
 	-- 指定オブジェクトの生成関数を取得
-	-- @param obj オブジェクト
+	-- @param fobj オブジェクト
 	-- @return 生成関数
-	function obj:objectToCreator(obj)
-		if not self:isProducerOf(obj) then
+	function obj:objectToCreator(fobj)
+		if not self:isProducerOf(fobj) then
 			return nil
 		end
-		return self._objects[obj].creator_
+		return self._objects[fobj].creator_
 	end
 
 	-- 指定オブジェクトの削除関数を取得
 	-- @param obj オブジェクト
 	-- @return 削除関数
-	function obj:objectToDestructor(obj)
-		if not self:isProducerOf(obj) then
+	function obj:objectToDestructor(fobj)
+		if not self:isProducerOf(fobj) then
 			return nil
 		end
-		return self._objects[obj].destructor_
+		return self._objects[fobj].destructor_
 	end
 	return obj
 end

@@ -60,7 +60,7 @@ Config.new = function(name, var, def_val, trans)
 		if self.string_value == val then
 			return true
 		end
-		
+
 		self.string_value = val
 
 
@@ -70,8 +70,8 @@ Config.new = function(name, var, def_val, trans)
 			self:notifyUpdate(self.name, val)
 			return true
 		end
-		local ret, value = self._trans(self._var._value, self.default_value)
-		self._var._value = value
+		local retd, valued = self._trans(self._var._value, self.default_value)
+		self._var._value = valued
 		self:notifyUpdate(self.name, val)
 		return false
 	end
@@ -113,7 +113,7 @@ ConfigAdmin.new = function(configsets)
 		if self:isExist(param_name) then
 			return false
 		end
-		
+
 		local ret, value = trans(var._value, def_val)
 		--if type(value) == "table" then
 		--	print(#value)
@@ -136,11 +136,11 @@ ConfigAdmin.new = function(configsets)
 	-- @param param_name パラメータ名
 	-- @return true：削除成功、false：削除失敗
 	function obj:unbindParameter(param_name)
-		local ret_param = nil
+		--local ret_param = nil
 		local ret_index = -1
 		for find_idx, param in ipairs(self._params) do
 			if param.name == param_name then
-				ret_param = param
+				--ret_param = param
 				ret_index = find_idx
 			end
 		end
@@ -377,7 +377,7 @@ ConfigAdmin.new = function(configsets)
 			return false
 		end
 
-		local find_flg = false
+		--local find_flg = false
 
 		local ret_idx = -1
 		for idx, conf in ipairs(self._newConfig) do
@@ -446,7 +446,7 @@ ConfigAdmin.new = function(configsets)
 	function obj:setOnRemoveConfigurationSet(cb)
 		print("setOnRemoveConfigurationSet function is obsolete.")
 		print("Use addConfigurationSetNameListener instead.")
-		self._listeners.configsetname_[ConfigurationSetNameListenerType.ON_REMOVE_CONFIG_SET]:addListener(cb, False)
+		self._listeners.configsetname_[ConfigurationSetNameListenerType.ON_REMOVE_CONFIG_SET]:addListener(cb, false)
     end
 
 	-- アクティブなコンフィギュレーションセット設定時コールバック設定
@@ -549,7 +549,6 @@ ConfigAdmin.new = function(configsets)
     end
 
 
-	
 	return obj
 end
 

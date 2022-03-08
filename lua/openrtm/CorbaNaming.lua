@@ -29,7 +29,7 @@ CorbaNaming.new = function(orb, name_server)
 
 	if name_server ~= nil then
 		obj._nameServer = CORBA_RTCUtil.CorbaURI.new(name_server, "NameService"):toString()
-		
+
 		--obj._nameServer = "corbaloc:iiop:"..name_server.."/NameService"
 		--obj._nameServer = "corbaloc:ssliop:1.2@localhost:2809/NameService"
 		--print(obj._nameServer)
@@ -50,36 +50,36 @@ CorbaNaming.new = function(orb, name_server)
 	-- 登録パスは以下のように設定する
 	-- test1.host_cxt/test2.rtc
 	-- @param string_name 登録パス(文字列)
-	-- @param obj オブジェクトリファレンス
+	-- @param cobj オブジェクトリファレンス
 	-- @param force trueの場合には同じパスに登録済みの場合でも強制的に上書きする
-	function obj:rebindByString(string_name, obj, force)
+	function obj:rebindByString(string_name, cobj, force)
 		if force == nil then
 			force = true
 		end
 		--print(self:toName(string_name))
-		self:rebind(self:toName(string_name), obj, force)
+		self:rebind(self:toName(string_name), cobj, force)
 	end
 	-- ネームサーバーにオブジェクトを登録
 	-- Nameリストは以下のように指定
 	-- {{id="id1",kind="kind1"},...}
 	-- @param name_list 登録パス(Nameリスト)
-	-- @param obj オブジェクトリファレンス
+	-- @param cobj オブジェクトリファレンス
 	-- @param force trueの場合には同じパスに登録済みの場合でも強制的に上書きする
-	function obj:rebind(name_list, obj, force)
+	function obj:rebind(name_list, cobj, force)
 		if force == nil then
 			force = true
 		end
 		local success, exception = oil.pcall(
 			function()
 				--error("")
-				self._rootContext:rebind(name_list, obj)
+				self._rootContext:rebind(name_list, cobj)
 			end)
-		
+
 		if not success then
 			--print(exception)
 			if force then
 				--print("test1")
-				self:rebindRecursive(self._rootContext, name_list, obj)
+				self:rebindRecursive(self._rootContext, name_list, cobj)
 				--print("test2")
 			else
 				print(exception)
@@ -121,7 +121,7 @@ CorbaNaming.new = function(orb, name_server)
 	-- オブジェクトがコンテキストかを判定
 	-- 未実装
 	-- @return true：オブジェクトはコンテキスト、false：それ以外
-	function obj:objIsNamingContext(obj)
+	function obj:objIsNamingContext(cobj)
 		return true
 	end
 
@@ -137,9 +137,9 @@ CorbaNaming.new = function(orb, name_server)
 			error("CosNaming.NamingContext.InvalidName")
 		end
 		local string_name = sname
-		local name_comps = {}
+		--local name_comps = {}
 		--print(string_name)
-		name_comps = StringUtil.split(string_name,"/")
+		local name_comps = StringUtil.split(string_name,"/")
 		local name_list = {}
 		for i, comp in ipairs(name_comps) do
 			local s = StringUtil.split(comp,"%.")
@@ -149,9 +149,9 @@ CorbaNaming.new = function(orb, name_server)
 				name_list[i].kind = ""
 			else
 				local n = ""
-				for i=1,#s-1 do
-					n = n..s[i]
-					if i ~= #s-1 then
+				for j=1,#s-1 do
+					n = n..s[j]
+					if j ~= #s-1 then
 						n = n.."."
 					end
 				end
@@ -172,7 +172,7 @@ CorbaNaming.new = function(orb, name_server)
 		if _end == nil  or _end < 1 then
 			_end = #name_list
 		end
-		sub_name = {}
+		local sub_name = {}
 		for i =begin,_end do
 			table.insert(sub_name, name_list[i])
 		end

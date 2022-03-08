@@ -45,11 +45,11 @@ ConnectorListener.ConnectorDataListener.toString = function(_type)
 						"ON_BUFFER_FULL",
 						"ON_BUFFER_WRITE_TIMEOUT",
 						"ON_BUFFER_OVERWRITE",
-						"ON_BUFFER_READ", 
-						"ON_SEND", 
+						"ON_BUFFER_READ",
+						"ON_SEND",
 						"ON_RECEIVED",
-						"ON_RECEIVER_FULL", 
-						"ON_RECEIVER_TIMEOUT", 
+						"ON_RECEIVER_FULL",
+						"ON_RECEIVER_TIMEOUT",
 						"ON_RECEIVER_ERROR",
 						"CONNECTOR_DATA_LISTENER_NUM"}
 
@@ -63,7 +63,6 @@ end
 ConnectorListener.ConnectorDataListener.new = function()
 	local obj = {}
 	function obj:call(info, data)
-		
 	end
 
 	function obj:__call__(info, cdrdata, dataType)
@@ -100,13 +99,13 @@ end
 
 ConnectorListener.ConnectorListenerType = {
 	ON_BUFFER_EMPTY        = 1,
-  	ON_BUFFER_READ_TIMEOUT = 2,
-  	ON_SENDER_EMPTY        = 3,
-  	ON_SENDER_TIMEOUT      = 4,
-  	ON_SENDER_ERROR        = 5,
-  	ON_CONNECT             = 6,
-  	ON_DISCONNECT          = 7,
-  	CONNECTOR_LISTENER_NUM = 8
+	ON_BUFFER_READ_TIMEOUT = 2,
+	ON_SENDER_EMPTY        = 3,
+	ON_SENDER_TIMEOUT      = 4,
+	ON_SENDER_ERROR        = 5,
+	ON_CONNECT             = 6,
+	ON_DISCONNECT          = 7,
+	CONNECTOR_LISTENER_NUM = 8
 }
 
 
@@ -119,9 +118,9 @@ ConnectorListener.ConnectorListener = {}
 ConnectorListener.ConnectorListener.toString = function(_type)
 	local typeString = {"ON_BUFFER_EMPTY",
 						"ON_BUFFER_READ_TIMEOUT",
-						"ON_SENDER_EMPTY", 
-						"ON_SENDER_TIMEOUT", 
-						"ON_SENDER_ERROR", 
+						"ON_SENDER_EMPTY",
+						"ON_SENDER_TIMEOUT",
+						"ON_SENDER_ERROR",
 						"ON_CONNECT",
 						"ON_DISCONNECT",
 						"CONNECTOR_LISTENER_NUM"}
@@ -136,7 +135,6 @@ end
 ConnectorListener.ConnectorListener.new = function()
 	local obj = {}
 	function obj:call(info)
-		
 	end
 	local call_func = function(self, info)
 		self:call(info)

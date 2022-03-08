@@ -13,7 +13,7 @@ local CorbaPort= {}
 local oil = require "oil"
 local PortBase = require "openrtm.PortBase"
 local Properties = require "openrtm.Properties"
-local StringUtil = require "openrtm.StringUtil"
+--local StringUtil = require "openrtm.StringUtil"
 local NVUtil = require "openrtm.NVUtil"
 local CORBA_SeqUtil = require "openrtm.CORBA_SeqUtil"
 
@@ -175,7 +175,6 @@ CorbaPort.new = function(name)
 	function obj:registerProvider(instance_name, type_name, provider, idl_file, interface_type)
 		self._rtcout:RTC_TRACE("registerProvider(instance="..instance_name..", type_name="..type_name..")")
 		if interface_type ~= nil and idl_file ~= nil then
-			local Manager = require "openrtm.Manager"
 			Manager:instance():getORB():loadidlfile(idl_file)
 			provider = Manager:instance():getORB():newservant(provider, nil, interface_type)
 		end
@@ -207,7 +206,6 @@ CorbaPort.new = function(name)
 	function obj:registerConsumer(instance_name, type_name, consumer, idl_file)
 		self._rtcout:RTC_TRACE("registerConsumer()")
 		if idl_file ~= nil then
-			local Manager = require "openrtm.Manager"
 			Manager:instance():getORB():loadidlfile(idl_file)
 		end
 		if not self:appendInterface(instance_name, type_name, self._PortInterfacePolarity.REQUIRED) then
@@ -335,7 +333,7 @@ CorbaPort.new = function(name)
 	-- RTC名.port.ポート名
 	-- port.型名.インスタンス名
 	-- @param connector_profile コネクタプロファイル
- 	function obj:unsubscribeInterfaces(connector_profile)
+	function obj:unsubscribeInterfaces(connector_profile)
 		self._rtcout:RTC_TRACE("unsubscribeInterfaces()")
 		local nv = connector_profile.properties
 
@@ -363,13 +361,12 @@ CorbaPort.new = function(name)
 	-- @param cons コンシューマ保持オブジェクト
 	-- @param iorstr IOR文字列リスト
 	-- @return true：取得成功、false：取得失敗
- 	function obj:findProvider(nv, cons, iorstr)
+	function obj:findProvider(nv, cons, iorstr)
 
 		local newdesc = string.sub(self._profile.name,1,#self._ownerInstanceName)..
 			".port"..string.sub(self._profile.name,#self._ownerInstanceName+1)
 		newdesc = newdesc..".required."..cons:descriptor()
 		--print(newdesc)
-		
 
 
 		local cons_index = NVUtil.find_index(nv, newdesc)
@@ -383,7 +380,7 @@ CorbaPort.new = function(name)
 		end
 
 		local provider = NVUtil.any_from_any(nv[cons_index].value)
-		
+
 		if provider == "" then
 			self._rtcout:RTC_WARN("Cannot extract Provider interface descriptor")
 			return false

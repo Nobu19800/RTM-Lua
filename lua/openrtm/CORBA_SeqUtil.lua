@@ -31,7 +31,7 @@ end
 -- @return IRO文字列のリスト
 CORBA_SeqUtil.refToVstring = function(objlist)
 	local iorlist = {}
-	local Manager = require "openrtm.Manager"
+	--local Manager = require "openrtm.Manager"
 	--local orb = Manager:instance():getORB()
 	for i, obj in ipairs(objlist) do
 		table.insert(iorlist, obj)

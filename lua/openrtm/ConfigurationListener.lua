@@ -35,7 +35,6 @@ end
 ConfigurationListener.ConfigurationParamListener.new = function()
 	local obj = {}
 	function obj:call(config_set_name, config_param_name)
-		
 	end
 
 
@@ -77,7 +76,6 @@ end
 ConfigurationListener.ConfigurationSetListener.new = function()
 	local obj = {}
 	function obj:call(config_set)
-		
 	end
 
 
@@ -121,7 +119,6 @@ end
 ConfigurationListener.ConfigurationSetNameListener.new = function()
 	local obj = {}
 	function obj:call(config_set_name)
-		
 	end
 
 
@@ -164,7 +161,6 @@ ConfigurationListener.ConfigurationParamListenerHolder.new = function()
 		for i, listener in ipairs(self._listeners) do
 			listener.listener:call(config_set_name, config_param_name)
 		end
-		
 	end
 	return obj
 end
@@ -191,9 +187,7 @@ ConfigurationListener.ConfigurationSetListenerHolder.new = function()
 		for i, listener in ipairs(self._listeners) do
 			listener.listener:call(config_set)
 		end
-		
 	end
-	
 	return obj
 end
 
@@ -220,9 +214,7 @@ ConfigurationListener.ConfigurationSetNameListenerHolder.new = function()
 		for i, listener in ipairs(self._listeners) do
 			listener.listener:call(config_set_name)
 		end
-		
 	end
-	
 	return obj
 end
 

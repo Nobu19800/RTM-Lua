@@ -28,7 +28,7 @@ CorbaConsumer.CorbaConsumerBase.new = function(consumer)
 	else
 		obj._objref = oil.corba.idl.null
 	end
-	
+
 	-- オブジェクトリファレンス設定
 	-- @param _obj オブジェクトリファレンス
 	-- @return true：設定成功、false：設定失敗
@@ -45,7 +45,7 @@ CorbaConsumer.CorbaConsumerBase.new = function(consumer)
 		end
 
 		self._objref = _obj
-		
+
 		return true
 	end
 
@@ -97,9 +97,9 @@ CorbaConsumer.new = function(interfaceType, consumer)
 	-- @param get_ref trueの場合にはサーバント取得可能でもオブジェクトリファレンスを取得
 	-- @return オブジェクトリファレンス、もしくはサーバント
 	function obj:_ptr(get_ref)
-		if get_ref == nil then
-			get_ref = false
-		end
+		--if get_ref == nil then
+		--	get_ref = false
+		--end
 		return self._var
 	end
 	-- IOR文字列からオブジェクトリファレンスを設定

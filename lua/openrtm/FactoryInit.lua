@@ -52,7 +52,7 @@ local FactoryInit= function()
 	NodeNumberingPolicy.Init()
 
 	PublisherFlush.Init()
-	
+
 	LogstreamFile.Init()
 end
 

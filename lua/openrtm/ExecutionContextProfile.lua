@@ -23,8 +23,8 @@ local find_participant = function(comp)
 	local obj = {}
 	obj._comp = comp
 
-	local call_func = function(self, comp)
-		return NVUtil._is_equivalent(comp, self._comp, comp.getObjRef, self._comp.getObjRef)
+	local call_func = function(self, compf)
+		return NVUtil._is_equivalent(compf, self._comp, compf.getObjRef, self._comp.getObjRef)
 	end
 	setmetatable(obj, {__call=call_func})
 	return obj
@@ -47,7 +47,7 @@ ExecutionContextProfile.new = function(kind)
     obj._rtcout:RTC_TRACE("ExecutionContextProfile.__init__()")
     obj._rtcout:RTC_DEBUG("Actual rate: "..obj._period:sec().." [sec], "..obj._period:usec().." [usec]")
     obj._ref = oil.corba.idl.null
-    obj._profile = {kind=obj._ExecutionKind.PERIODIC,
+    obj._profile = {kind=kind,
 					rate=1.0/obj._period:toDouble(),
 					owner=oil.corba.idl.null, participants={},
 					properties={}}
@@ -94,35 +94,35 @@ ExecutionContextProfile.new = function(kind)
 		return self._ref
 	end
 	-- 種別設定
-	-- @param kind 種別
+	-- @param kindec 種別
 	-- @return リターンコード
 	-- RTC_OK：正常に設定
     -- BAD_PARAMETER：RTC::ExecutionKindに定義のない値
-	function obj:setKind(kind)
-		if kind < self._ExecutionKind.PERIODIC or kind > self._ExecutionKind.OTHER then
-			self._rtcout:RTC_ERROR("Invalid kind is given. "..kind)
+	function obj:setKind(kindec)
+		if kindec < self._ExecutionKind.PERIODIC or kindec > self._ExecutionKind.OTHER then
+			self._rtcout:RTC_ERROR("Invalid kind is given. "..kindec)
 			return self._ReturnCode_t.BAD_PARAMETER
 		end
 
-		self._rtcout:RTC_TRACE("setKind("..self:getKindString(kind)..")")
+		self._rtcout:RTC_TRACE("setKind("..self:getKindString(kindec)..")")
 		--print(self:getKindString(kind))
-		self._profile.kind = kind
+		self._profile.kind = kindec
 		return self._ReturnCode_t.RTC_OK
 	end
 	function obj:getKind()
 		self._rtcout:RTC_TRACE("%s = getKind()", self:getKindString(self._profile.kind))
-    	return self._profile.kind
+		return self._profile.kind
 	end
 	-- 実行コンテキストの種別を文字列に変換
 	-- @param kind 種別
 	-- @return 文字列に変換した種別
-	function obj:getKindString(kind)
+	function obj:getKindString(kindec)
 		local kinds_ = {"PERIODIC", "EVENT_DRIVEN", "OTHER"}
-		local kind_ = kind
+		local kind_ = kindec
 		if kind_ == nil then
 			kind_ = self._profile.kind
 		else
-			kind_ = kind
+			kind_ = kindec
 		end
 
 		if kind_ < self._ExecutionKind.PERIODIC or kind_ > self._ExecutionKind.OTHER then
@@ -137,20 +137,20 @@ ExecutionContextProfile.new = function(kind)
 	-- RTC_OK：設定成功
 	function obj:setOwner(comp)
 		self._rtcout:RTC_TRACE("setOwner()")
-    	if comp == oil.corba.idl.null then
+		if comp == oil.corba.idl.null then
 			return self._ReturnCode_t.BAD_PARAMETER
 		end
 		--[[
 		local rtobj_ = RTCUtil.newproxy(orb, sdo,"IDL:omg.org/RTC/RTObject:1.0")
-    	if rtobj_ == oil.corba.idl.null then
-      		self._rtcout:RTC_ERROR("Narrowing failed.")
+		if rtobj_ == oil.corba.idl.null then
+			self._rtcout:RTC_ERROR("Narrowing failed.")
 			return self._ReturnCode_t.RTC_ERROR
 		end
 
 		self._profile.owner = rtobj_
 		]]
 		self._profile.owner = comp
-    	return self._ReturnCode_t.RTC_OK
+		return self._ReturnCode_t.RTC_OK
 	end
 
 	-- オーナーRTC取得
@@ -181,18 +181,18 @@ ExecutionContextProfile.new = function(kind)
 		self._rtcout:RTC_TRACE("addComponent()")
 		if comp == oil.corba.idl.null then
 			self._rtcout:RTC_ERROR("A nil reference was given.")
-    		return self._ReturnCode_t.BAD_PARAMETER
+			return self._ReturnCode_t.BAD_PARAMETER
 		end
    		local rtobj_ = comp
-    	--[[
+		--[[
 		if rtobj_ == oil.corba.idl.null then
-      		self._rtcout:RTC_ERROR("Narrowing was failed.")
-    		return self._ReturnCode_t.RTC_ERROR
+			self._rtcout:RTC_ERROR("Narrowing was failed.")
+			return self._ReturnCode_t.RTC_ERROR
 		end
 		--]]
 		table.insert(self._profile.participants, rtobj_)
-        
-    	return self._ReturnCode_t.RTC_OK
+
+		return self._ReturnCode_t.RTC_OK
 	end
 
 
@@ -211,7 +211,6 @@ ExecutionContextProfile.new = function(kind)
 		end
 		--]]
 
-		
 		local index_ = CORBA_SeqUtil.find(self._profile.participants,
 										find_participant(rtobj_))
 		if index_ < 0 then

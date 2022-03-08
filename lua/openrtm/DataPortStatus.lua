@@ -21,10 +21,9 @@
 Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
-local DataPortStatus= {}
 --_G["openrtm.DataPortStatus"] = DataPortStatus
 
-DataPortStatus = {PORT_OK            = 0,
+local DataPortStatus = {PORT_OK      = 0,
 				PORT_ERROR           = 1,
 				BUFFER_ERROR         = 2,
 				BUFFER_FULL          = 3,
@@ -43,7 +42,7 @@ DataPortStatus = {PORT_OK            = 0,
 -- @param status データポートステータス
 -- @return 文字列
 DataPortStatus.toString = function(status)
-	str = {"PORT_OK",
+	local str = {"PORT_OK",
            "PORT_ERROR",
            "BUFFER_ERROR",
            "BUFFER_FULL",

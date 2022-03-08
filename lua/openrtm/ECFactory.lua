@@ -53,7 +53,7 @@ ECFactory.ECFactoryLua.new = function(name, new_func, delete_func)
 	obj._name   = name
     obj._New    = new_func
     obj._Delete = delete_func
-   	-- 実行コンテキスト名取得
+	-- 実行コンテキスト名取得
 	-- @return 実行コンテキスト名
 	function obj:name()
 		return self._name

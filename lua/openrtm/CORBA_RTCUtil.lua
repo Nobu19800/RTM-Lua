@@ -486,8 +486,8 @@ CORBA_RTCUtil.get_port_by_name = function(rtc, port_name)
 	end
 	local ports = rtc:get_ports()
 	for k,p in ipairs(ports) do
-		pp = p:get_port_profile()
-		s = pp.name
+		local pp = p:get_port_profile()
+		local s = pp.name
 
 		if port_name == s then
 			return p
@@ -604,8 +604,8 @@ end
 -- @return true：接続済み
 CORBA_RTCUtil.already_connected = function(localport, otherport)
 	local conprof = localport:get_connector_profiles()
-	for k,c in ipairs(conprof) do
-		for k,p in ipairs(c.ports) do
+	for i,c in ipairs(conprof) do
+		for j,p in ipairs(c.ports) do
 			if NVUtil._is_equivalent(p, otherport, p.getPortRef, otherport.getPortRef) then
 				return true
 			end
@@ -629,7 +629,7 @@ CORBA_RTCUtil.connect = function(name, prop, port0, port1)
 	if port0 == oil.corba.idl.null then
 		return ReturnCode_t.BAD_PARAMETER
 	end
-	
+
 	if port1 ~= oil.corba.idl.null then
 		if NVUtil._is_equivalent(port0, port1, port0.getPortRef, port1.getPortRef) then
 			return ReturnCode_t.BAD_PARAMETER
@@ -639,7 +639,7 @@ CORBA_RTCUtil.connect = function(name, prop, port0, port1)
 	local cprof = CORBA_RTCUtil.create_connector(name, prop, port0, port1)
 	local ret, prof = port0:connect(cprof)
 	ret = NVUtil.getReturnCode(ret)
-	
+
 	--print(ret)
 	return ret
 end
@@ -735,7 +735,7 @@ CORBA_RTCUtil.connect_by_name = function(name, prop, rtc0, port_name0, rtc1, por
 	if port1 == oil.corba.idl.null then
 		return ReturnCode_t.BAD_PARAMETER
 	end
-	
+
 	return CORBA_RTCUtil.connect(name, prop, port0, port1)
 end
 
@@ -905,7 +905,6 @@ CORBA_RTCUtil.disconnect_by_port_name = function(localport, othername)
 	end
 	local prof = localport:get_port_profile()
 	if prof.name == othername then
-		
 		return ReturnCode_t.BAD_PARAMETER
 	end
 
@@ -1040,17 +1039,17 @@ CORBA_RTCUtil.CorbaURI = {}
 CORBA_RTCUtil.CorbaURI.new = function(uri, objkey)
 	local obj = {}
 
-	local corbaloc, stream = uri:match("^(%w+):(.+)$")
+	local corbaloc, streamc = uri:match("^(%w+):(.+)$")
 	if corbaloc == "corbaloc" then
-		uri = stream
+		uri = streamc
 	end
-	local protocol, stream = uri:match("^(%w+):(.+)$")
+	local protocol, streamp = uri:match("^(%w+):(.+)$")
 	if protocol == "iiop" then
 		obj._protocol = protocol
-		uri = stream
+		uri = streamp
 	elseif protocol == "ssliop" then
 		obj._protocol = protocol
-		uri = stream
+		uri = streamp
 	else
 		obj._protocol = "iiop"
 	end
@@ -1062,7 +1061,7 @@ CORBA_RTCUtil.CorbaURI.new = function(uri, objkey)
 		obj._host = uri
 	end
 
-	local port = uri:match("^:(.+)$")
+	port = uri:match("^:(.+)$")
 
 	obj._uri = "corbaloc:"..obj._protocol..":"
 
@@ -1080,7 +1079,7 @@ CORBA_RTCUtil.CorbaURI.new = function(uri, objkey)
 	if objkey ~= nil then
 		obj._uri = obj._uri.."/"..objkey
 	end
-	
+
 	-- CORBAオブジェクト参照用URLを取得する
 	-- @return CORBAオブジェクト参照用URL
 	function obj:toString()
@@ -1115,22 +1114,22 @@ CORBA_RTCUtil.RTCURIObject = {}
 -- @return RTCURIObjectオブジェクト
 CORBA_RTCUtil.RTCURIObject.new = function(uri, isrtcname, isrtcloc)
 	local obj = {}
-	
+
 	-- RTCURIObjectオブジェクトの初期設定関数
-	-- @param uri rtcname形式、もしくはrtcloc形式のURI
-	-- @param isrtcname rtcname形式を指定する場合はtrue、それ以外はfalse
-	-- @param isrtcloc rtcloc形式を指定する場合はtrue、それ以外はfalse
-	function obj:init(uri, isrtcname, isrtcloc)
-		if isrtcname == nil then
-			isrtcname = false
+	-- @param uric rtcname形式、もしくはrtcloc形式のURI
+	-- @param isrtcnamec rtcname形式を指定する場合はtrue、それ以外はfalse
+	-- @param isrtclocc rtcloc形式を指定する場合はtrue、それ以外はfalse
+	function obj:init(uric, isrtcnamec, isrtclocc)
+		if isrtcnamec == nil then
+			isrtcnamec = false
 		end
-		if isrtcloc == nil then
-			isrtcloc = false
+		if isrtclocc == nil then
+			isrtclocc = false
 		end
 		self._is_rtcname = false
 		self._is_rtcloc = false
 		local protocol = "iiop"
-		local method, addrname = uri:match("^(.+)://(.+)$")
+		local method, addrname = uric:match("^(.+)://(.+)$")
 		if method == "rtcname" then
 			self._is_rtcname = true
 		elseif method == "rtcloc" then
@@ -1145,30 +1144,30 @@ CORBA_RTCUtil.RTCURIObject.new = function(uri, isrtcname, isrtcloc)
 				end
 			end
 		end
-	
-		if isrtcname then
+
+		if isrtcnamec then
 			if not self._is_rtcname then
 				return
 			end
 		end
-	
-		if isrtcloc then
+
+		if isrtclocc then
 			if not self._is_rtcloc then
 				return
 			end
 		end
-	
+
 		local spos = addrname:find("/")
-		
+
 		local hostport = ""
-		
+
 		if spos ~= nil then
 			hostport = addrname:sub(1, spos-1)
 			self._rtcpath = addrname:sub(spos+1, #addrname)
 		else
 			hostport = addrname
 		end
-	
+
 		if hostport ~= "*" then
 			self._address = "corbaloc:"
 			self._address = self._address..protocol
@@ -1182,7 +1181,7 @@ CORBA_RTCUtil.RTCURIObject.new = function(uri, isrtcname, isrtcloc)
 		end
 
 	end
-	
+
 	obj:init(uri, isrtcname, isrtcloc)
 
 	-- RTC名を取得する

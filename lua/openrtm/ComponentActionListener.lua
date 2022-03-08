@@ -57,7 +57,6 @@ end
 ComponentActionListener.PreComponentActionListener.new = function()
 	local obj = {}
 	function obj:call(ec_id)
-		
 	end
 	local call_func = function(self, ec_id)
 		self:call(ec_id)
@@ -117,7 +116,6 @@ end
 ComponentActionListener.PostComponentActionListener.new = function()
 	local obj = {}
 	function obj:call(ec_id, ret)
-		
 	end
 	local call_func = function(self, ec_id, ret)
 		self:call(ec_id, ret)
@@ -154,7 +152,6 @@ end
 ComponentActionListener.PortActionListener.new = function()
 	local obj = {}
 	function obj:call(pprof)
-		
 	end
 	local call_func = function(self, pprof)
 		self:call(pprof)
@@ -191,7 +188,6 @@ end
 ComponentActionListener.ExecutionContextActionListener.new = function()
 	local obj = {}
 	function obj:call(ec_id)
-		
 	end
 	local call_func = function(self, ec_id)
 		self:call(ec_id)
@@ -334,7 +330,7 @@ ComponentActionListener.ComponentActionListeners.new = function()
 	for i = 1,obj.ecaction_num do
 		table.insert(obj.ecaction_, ComponentActionListener.ExecutionContextActionListenerHolder.new())
 	end
-    
+
 	return obj
 end
 

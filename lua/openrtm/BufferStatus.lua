@@ -26,14 +26,14 @@ local BufferStatus = {
 				TIMEOUT = 5,
 				PRECONDITION_NOT_MET = 6
 				}
-				
+			
 --_G["openrtm.BufferStatus"] = BufferStatus
 
 -- バッファステータスを文字に変換
 -- @param status バッファステータス
 -- @return 文字列化したバッファステータス
 BufferStatus.toString = function(status)
-	str = {"BUFFER_OK",
+	local str = {"BUFFER_OK",
            "BUFFER_ERROR",
            "BUFFER_FULL",
            "BUFFER_EMPTY",

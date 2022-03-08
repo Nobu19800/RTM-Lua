@@ -20,7 +20,7 @@ local NVUtil = require "openrtm.NVUtil"
 local Properties = require "openrtm.Properties"
 
 
-local DEFAULT_EXECUTION_RATE = 1000
+--local DEFAULT_EXECUTION_RATE = 1000
 
 -- 実行コンテキスト基底オブジェクト初期化関数
 -- @param name 名前
@@ -534,10 +534,10 @@ ExecutionContextBase.new = function(name)
 	end
 	function obj:getKind()
 		local kind_ = self._profile:getKind()
-    	self._rtcout:RTC_TRACE("getKind() = %s", self:getKindString(kind_))
-    	kind_ = self:onGetKind(kind_)
-    	self._rtcout:RTC_DEBUG("onGetKind() returns %s", self:getKindString(kind_))
-    	return kind_
+		self._rtcout:RTC_TRACE("getKind() = %s", self:getKindString(kind_))
+		kind_ = self:onGetKind(kind_)
+		self._rtcout:RTC_DEBUG("onGetKind() returns %s", self:getKindString(kind_))
+		return kind_
 	end
 	-- RTCの追加
 	-- @param comp RTC
@@ -549,19 +549,19 @@ ExecutionContextBase.new = function(name)
 			self._rtcout:RTC_ERROR("Error: onAddingComponent(). RTC is not attached.")
 			return ret_
 		end
-		
+
 		ret_ = self._worker:addComponent(comp)
 		if ret_ ~= self._ReturnCode_t.RTC_OK then
-		  	self._rtcout:RTC_ERROR("Error: ECWorker addComponent() faild.")
+			self._rtcout:RTC_ERROR("Error: ECWorker addComponent() faild.")
 			return ret_
 		end
-		
+
 		ret_ = self._profile:addComponent(comp)
 		if ret_ ~= self._ReturnCode_t.RTC_OK then
 			self._rtcout:RTC_ERROR("Error: ECProfile addComponent() faild.")
 			return ret_
 		end
-		
+
 		ret_ = self:onAddedComponent(comp)
 		if ret_ ~= self._ReturnCode_t.RTC_OK then
 			self._rtcout:RTC_ERROR("Error: onAddedComponent() faild.")
@@ -570,7 +570,7 @@ ExecutionContextBase.new = function(name)
 			self._profile:removeComponent(comp)
 			return ret_
 		end
-	
+
 		self._rtcout:RTC_INFO("Component has been added to this EC.")
 		return self._ReturnCode_t.RTC_OK
 	end
@@ -590,19 +590,19 @@ ExecutionContextBase.new = function(name)
 			self._rtcout:RTC_ERROR("Error: onRemovingComponent(). RTC will not not attached.")
 			return ret_
 		end
-	
+
 		ret_ = self._worker:removeComponent(comp)
 		if ret_ ~= self._ReturnCode_t.RTC_OK then
 			self._rtcout:RTC_ERROR("Error: ECWorker removeComponent() faild.")
 			return ret_
 		end
-	
+
 		ret_ = self._profile:removeComponent(comp)
 		if ret_ ~= self._ReturnCode_t.RTC_OK then
 			self._rtcout:RTC_ERROR("Error: ECProfile removeComponent() faild.")
 			return ret_
 		end
-	
+
 		ret_ = self:onRemovedComponent(comp)
 		if ret_ ~= self._ReturnCode_t.RTC_OK then
 			self._rtcout:RTC_ERROR("Error: onRemovedComponent() faild.")
@@ -611,7 +611,7 @@ ExecutionContextBase.new = function(name)
 			self._profile:removeComponent(comp)
 			return ret_
 		end
-	
+
 		self._rtcout:RTC_INFO("Component has been removeed to this EC.")
 		return self._ReturnCode_t.RTC_OK
 	end

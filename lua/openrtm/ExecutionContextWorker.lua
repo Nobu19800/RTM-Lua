@@ -45,7 +45,7 @@ ExecutionContextWorker.new = function()
 		self._rtcout:RTC_TRACE("rateChanged()")
 		local ret = self._ReturnCode_t.RTC_OK
 		for i,comp in ipairs(self._comps) do
-			tmp = comp:onRateChanged()
+			local tmp = comp:onRateChanged()
 			if tmp ~= self._ReturnCode_t.RTC_OK then
 				ret = tmp
 			end
@@ -268,21 +268,19 @@ ExecutionContextWorker.new = function()
 		end
 
 		self._addedComps = {}
-		
-	
-		
+
 		for k, comp in ipairs(self._removedComps) do
 			local lwrtobj_ = comp:getRTObject()
 			lwrtobj_:detach_context(comp:getExecutionContextHandle())
 
 			local idx_ = StringUtil.table_index(self._comps, comp)
-	
+
 			if idx_ > 0 then
 				table.remove(self._comps, idx_)
 				self._rtcout:RTC_TRACE("Component deleted.")
 			end
 		end
-	
+
 		self._removedComps = {}
 	end
 
@@ -329,26 +327,24 @@ ExecutionContextWorker.new = function()
 
 
 	function obj:addComponent(comp)
-    	self._rtcout:RTC_TRACE("addComponent()")
-    	if comp == oil.corba.idl.null then
-    		self._rtcout:RTC_ERROR("nil reference is given.")
-    		return self._ReturnCode_t.BAD_PARAMETER
+		self._rtcout:RTC_TRACE("addComponent()")
+		if comp == oil.corba.idl.null then
+			self._rtcout:RTC_ERROR("nil reference is given.")
+			return self._ReturnCode_t.BAD_PARAMETER
 		end
 		local success, exception = oil.pcall(
 		function()
 			local ec_ = self:getECRef()
 			local id_ = comp:attach_context(ec_)
-			
-    		table.insert(self._addedComps, RTObjectStateMachine.new(id_, comp))
+			table.insert(self._addedComps, RTObjectStateMachine.new(id_, comp))
 		end)
 		if not success then
 			self._rtcout:RTC_ERROR("addComponent() failed.")
-    		return self._ReturnCode_t.RTC_ERROR
+			return self._ReturnCode_t.RTC_ERROR
 		end
-    
 
-    	self._rtcout:RTC_DEBUG("addComponent() succeeded.")
-    	--if self._running == false then
+		self._rtcout:RTC_DEBUG("addComponent() succeeded.")
+		--if self._running == false then
 		--	self.updateComponentList()
 		--end
 		self:updateComponentList()
@@ -357,16 +353,16 @@ ExecutionContextWorker.new = function()
 
 	function obj:removeComponent(comp)
 		self._rtcout:RTC_TRACE("removeComponent()")
-    	if comp == oil.corba.idl.null then
-    		self._rtcout:RTC_ERROR("nil reference is given.")
-    		return self._ReturnCode_t.BAD_PARAMETER
+		if comp == oil.corba.idl.null then
+			self._rtcout:RTC_ERROR("nil reference is given.")
+			return self._ReturnCode_t.BAD_PARAMETER
 		end
 
         local rtobj_ = self:findComponent(comp)
 
    		if rtobj_ == nil then
-    		self._rtcout:RTC_ERROR("no RTC found in this context.")
-    		return self._ReturnCode_t.BAD_PARAMETER
+			self._rtcout:RTC_ERROR("no RTC found in this context.")
+			return self._ReturnCode_t.BAD_PARAMETER
 		end
 
         table.insert(self._removedComps, rtobj_)
@@ -375,7 +371,7 @@ ExecutionContextWorker.new = function()
 		--	self:updateComponentList()
 		--end
 		self:updateComponentList()
-    	return self._ReturnCode_t.RTC_OK
+		return self._ReturnCode_t.RTC_OK
 	end
 
 

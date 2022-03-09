@@ -58,7 +58,7 @@ InPortCorbaCdrConsumer.new = function()
 				if inportcdr ~= oil.corba.idl.null then
 					ret = NVUtil.getPortStatus(inportcdr:put(data))
 					ret = self:convertReturnCode(ret)
-					
+
 					return
 				end
 				ret = DataPortStatus.CONNECTION_LOST
@@ -133,7 +133,6 @@ InPortCorbaCdrConsumer.new = function()
 			return false
 		end
 
-		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
 		local _obj = RTCUtil.newproxy(orb, ior,"IDL:OpenRTM/InPortCdr:1.0")
 
@@ -170,7 +169,6 @@ InPortCorbaCdrConsumer.new = function()
 
 		local _obj = NVUtil.any_from_any(properties[index].value)
 
-		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
 
 		_obj = orb:narrow(_obj, "IDL:OpenRTM/InPortCdr:1.0")
@@ -206,7 +204,7 @@ InPortCorbaCdrConsumer.new = function()
 		end
 
 
-		ior = NVUtil.any_from_any(properties[index].value)
+		local ior = NVUtil.any_from_any(properties[index].value)
 
 
 		if ior == "" then
@@ -214,7 +212,6 @@ InPortCorbaCdrConsumer.new = function()
 			return false
 		end
 
-		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
 		local var = RTCUtil.newproxy(orb, ior,"IDL:OpenRTM/InPortCdr:1.0")
 
@@ -245,13 +242,13 @@ InPortCorbaCdrConsumer.new = function()
 		local _obj = NVUtil.any_from_any(properties[index].value)
 
 
-		if obj == nil then
+		if _obj == nil then
 			return false
 		end
 
 		local obj_ptr = self:_ptr(true)
 
-		if obj_ptr == nil or not NVUtil._is_equivalent(obj_ptr, obj, obj_ptr.getObjRef, obj.getObjRef) then
+		if obj_ptr == nil or not NVUtil._is_equivalent(obj_ptr, _obj, obj_ptr.getObjRef, _obj.getObjRef) then
 			return false
 		end
 

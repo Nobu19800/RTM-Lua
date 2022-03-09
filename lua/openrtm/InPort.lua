@@ -38,19 +38,19 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 	if write_timeout == nil then
 		write_timeout = 0
 	end
-	
+
 	local obj = {}
-	
+
 	--print(data_type)
 	setmetatable(obj, {__index=InPortBase.new(name, data_type)})
 	obj._name           = name
     obj._value          = value
     obj._OnRead         = nil
 	obj._OnReadConvert  = nil
-	
+
 	obj._directNewData = false
 
-    
+
 
 	-- ポート名取得
 	-- ※プロファイルのポート名ではない
@@ -93,7 +93,7 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 		if self._directNewData then
 			return false
 		end
-	  
+
 		if #self._connectors == 0 then
 			self._rtcout:RTC_DEBUG("no connectors")
 			return true
@@ -132,7 +132,7 @@ InPort.new = function(name, value, data_type, buffer, read_block, write_block, r
 			return self._value
 		end
 
-		
+
 
 		if #self._connectors == 0 then
 			self._rtcout:RTC_DEBUG("no connectors")

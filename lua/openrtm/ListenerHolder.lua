@@ -38,7 +38,6 @@ ListenerHolder.new = function()
 		for i, listener in ipairs(self._listeners) do
 			listener.listener[func](listener.listener, ...)
 		end
-		
 	end
 	return obj
 end

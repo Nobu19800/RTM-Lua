@@ -39,21 +39,21 @@ LogstreamFile.new = function()
 		--if LogstreamFile.s_logger == nil then
 		--	LogstreamFile.s_logger = self
 		--end
-		
-		
+
+
 		local files = StringUtil.split(prop:getProperty("file_name"), ",")
 		for k,v in pairs(files) do
 			self:addHandler(StringUtil.eraseBothEndsBlank(v))
 		end
-		
-		
+
+
 		if StringUtil.getKeyCount(self.handlers) == 0 then
 			return false
 		end
 		
 		return true
 	end
-	
+
 	-- ロガーの登録
 	-- @param f ファイル名
 	-- 「stdout」の場合は標準出力
@@ -71,7 +71,7 @@ LogstreamFile.new = function()
 		if fname == "" then
 			return false
 		end
-		
+
 		if fname == "stdout" then
 			logging.console = require "logging.console"
 			self.handlers[fname] = logging.console()
@@ -126,7 +126,7 @@ LogstreamFile.new = function()
 		end
 		return true
 	end
-	
+
 	-- ログレベル設定
 	-- @param level ログレベル
 	function obj:setLogLevel(level)
@@ -172,14 +172,14 @@ LogstreamFile.new = function()
 			end
 		end
 	end
-	
+
 	-- ロガー終了
 	-- @return true；成功、false：失敗
 	function obj:shutdown()
 		self.handlers = {}
 		return true
 	end
-	
+
 	--function obj:getLogger(name)
 	--	if name ~= nil then
 	--		logging.getLogger("file."+name)
@@ -187,8 +187,6 @@ LogstreamFile.new = function()
 	--		logging.getLogger("file."+name)
 	--	end
 	--end
-	
-	
 	return obj
 end
 

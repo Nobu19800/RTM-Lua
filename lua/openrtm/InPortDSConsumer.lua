@@ -130,9 +130,8 @@ InPortDSConsumer.new = function()
 			return false
 		end
 
-		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
-		
+
 		local _obj = RTCUtil.newproxy(orb, ior,"IDL:omg.org/RTC/DataPushService:1.0")
 
 
@@ -140,7 +139,7 @@ InPortDSConsumer.new = function()
 			self._rtcout:RTC_ERROR("invalid IOR string has been passed")
 			return false
 		end
-		
+
 		if not self:setObject(_obj) then
 			self._rtcout:RTC_WARN("Setting object to consumer failed.")
 			return false
@@ -167,7 +166,6 @@ InPortDSConsumer.new = function()
 
 		local _obj = NVUtil.any_from_any(properties[index].value)
 
-		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
 
 		_obj = orb:narrow(_obj, "IDL:omg.org/RTC/DataPushService:1.0")
@@ -179,7 +177,7 @@ InPortDSConsumer.new = function()
 		end
 
 
-		if not self:setObject(obj) then
+		if not self:setObject(_obj) then
 			self._rtcout:RTC_ERROR("Setting object to consumer failed.")
 			return false
 		end
@@ -203,7 +201,7 @@ InPortDSConsumer.new = function()
 		end
 
 
-		ior = NVUtil.any_from_any(properties[index].value)
+		local ior = NVUtil.any_from_any(properties[index].value)
 
 
 		if ior == "" then
@@ -211,7 +209,6 @@ InPortDSConsumer.new = function()
 			return false
 		end
 
-		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
 		local var = RTCUtil.newproxy(orb, ior,"IDL:omg.org/RTC/DataPushService:1.0")
 		if not NVUtil._is_equivalent(self:_ptr(true), var, self:_ptr(true).getObjRef, var.getObjRef) then
@@ -241,13 +238,13 @@ InPortDSConsumer.new = function()
 		local _obj = NVUtil.any_from_any(properties[index].value)
 
 
-		if obj == nil then
+		if _obj == nil then
 			return false
 		end
 
 		local obj_ptr = self:_ptr(true)
 
-		if obj_ptr == nil or not NVUtil._is_equivalent(obj_ptr, obj, obj_ptr.getObjRef, obj.getObjRef) then
+		if obj_ptr == nil or not NVUtil._is_equivalent(obj_ptr, _obj, obj_ptr.getObjRef, _obj.getObjRef) then
 			return false
 		end
 
@@ -257,7 +254,7 @@ InPortDSConsumer.new = function()
 
 	-- RTC::PortStatusをデータポートステータスに変換
 	function obj:convertReturnCode(ret)
-		
+
 		if ret == self._PortStatus.PORT_OK then
 			return DataPortStatus.PORT_OK
 

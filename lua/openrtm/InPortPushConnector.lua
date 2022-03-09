@@ -45,13 +45,12 @@ InPortPushConnector.new = function(info, provider, listeners, buffer)
 	function obj:read(data)
 		self._rtcout:RTC_TRACE("read()")
 
-		local ret = BufferStatus.BUFFER_OK
 		if self._buffer == nil then
 			return DataPortStatus.PRECONDITION_NOT_MET
 		end
 		local cdr = {_data=""}
-		ret = self._buffer:read(cdr)
-		
+		local ret = self._buffer:read(cdr)
+
 		if self._dataType == nil then
 			return BufferStatus.PRECONDITION_NOT_MET
 		end
@@ -115,7 +114,7 @@ InPortPushConnector.new = function(info, provider, listeners, buffer)
 	-- @param profile コネクタプロファイル
 	-- @return バッファ
 	function obj:createBuffer(profile)
-		buf_type = profile.properties:getProperty("buffer_type","ring_buffer")
+		local buf_type = profile.properties:getProperty("buffer_type","ring_buffer")
 		return CdrBufferFactory:instance():createObject(buf_type)
     end
 	-- データ書き込み
@@ -144,20 +143,20 @@ InPortPushConnector.new = function(info, provider, listeners, buffer)
 			self._listeners.connector_[ConnectorListenerType.ON_DISCONNECT]:notify(self._profile)
 		end
 	end
-	
+
 	function obj:onBufferRead(data)
-		
+
 		if self._listeners and self._profile then
 			self._listeners.connectorData_[ConnectorDataListenerType.ON_BUFFER_READ]:notify(self._profile, data)
 		end
 	end
-	
+
 	function obj:onBufferEmpty()
 		if self._listeners and self._profile then
 			self._listeners.connector_[ConnectorListenerType.ON_BUFFER_EMPTY]:notify(self._profile)
 		end
 	end
-	
+
 	function obj:onBufferReadTimeout()
 		if self._listeners and self._profile then
 			self._listeners.connector_[ConnectorListenerType.ON_BUFFER_READ_TIMEOUT]:notify(self._profile)
@@ -183,7 +182,7 @@ InPortPushConnector.new = function(info, provider, listeners, buffer)
     if obj._buffer == nil or obj._provider == nil then
 		error("")
 	end
-	
+
     obj._buffer:init(info.properties:getNode("buffer"))
     obj._provider:init(info.properties)
     obj._provider:setBuffer(obj._buffer)

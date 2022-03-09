@@ -101,7 +101,7 @@ InPortDirectProvider.new = function()
 			self._listeners.connectorData_[ConnectorDataListenerType.ON_RECEIVER_ERROR]:notify(self._profile, data)
 		end
 	end
-    
+
     return obj
 end
 

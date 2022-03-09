@@ -11,8 +11,8 @@ local InPortConnector= {}
 --_G["openrtm.InPortConnectorBase"] = InPortConnector
 
 local ConnectorBase = require "openrtm.ConnectorBase"
+local DataPortStatus = require "openrtm.DataPortStatus"
 
-InPortConnector = {}
 
 -- InPortコネクタ基底オブジェクト初期化
 -- @param info プロファイル

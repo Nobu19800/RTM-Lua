@@ -75,7 +75,7 @@ if ORB_Dummy_ENABLE then
 	oil.main = function(func)
 		func()
 	end
-	
+
 	function ORB_Dummy:loadidlfile(name)
 	end
 
@@ -130,12 +130,12 @@ if ORB_Dummy_ENABLE then
 	function ORB_Dummy:newencoder()
 		local encoder = {}
 		encoder.data = 0
-		function encoder:put(data, data_type)
-			self.data = data
+		function encoder.put(self_, data, data_type)
+			self_.data = data
 		end
-		function encoder:getdata()
+		function encoder.getdata(self_)
 
-			return self.data
+			return self_.data
 		end
 
 
@@ -146,8 +146,8 @@ if ORB_Dummy_ENABLE then
 		local decoder = {}
 		decoder.cdr = cdr
 
-		function decoder:get(data_type)
-			return self.cdr
+		function decoder.get(self_, data_type)
+			return self_.cdr
 		end
 
 		return decoder
@@ -162,7 +162,7 @@ if ORB_Dummy_ENABLE then
 
 	Dummy_NameServer.new = function()
 		local obj = {}
-		function obj:rebind(name_list, obj)
+		function obj:rebind(name_list, cobj)
 			print("rebind:")
 			for i, name in ipairs(name_list) do
 				print(name.id, name.kind)
@@ -242,21 +242,20 @@ if ORB_Dummy_ENABLE then
 			ret = Dummy_OutPortCDR.new()
 		elseif idl == "IDL:omg.org/RTC/DataPullService:1.0" and ref == "IOR:Dummy" then
 			ret = Dummy_OutPortCDR.new()
-		else
 		end
-		ret._non_existent = function(self)
+		ret._non_existent = function(self_)
 			return false
 		end
-		ret._is_equivalent = function(self, other)
+		ret._is_equivalent = function(self_, other)
 			--print(self, other)
-			if self._profile ~= nil then
-				if self._profile.name ~= nil then
-					if self._profile.name == other._profile.name then
+			if self_._profile ~= nil then
+				if self_._profile.name ~= nil then
+					if self_._profile.name == other._profile.name then
 						return true
 					end
 				end
 			end
-			return (self == other)
+			return (self_ == other)
 		end
 		--print("test2:",ret,ref)
 		return ret
@@ -374,17 +373,17 @@ local ModulePredicate = function(prop)
 	-- @param self 自身のオブジェクト
 	-- @param prop プロパティ
 	-- @return true：一致、false：不一致
-	local call_func = function(self, prop)
-		if self._prop:getProperty("implementation_id") ~= prop:getProperty("implementation_id") then
+	local call_func = function(self, prop_)
+		if self._prop:getProperty("implementation_id") ~= prop_:getProperty("implementation_id") then
 			return false
 		end
-		if self._prop:getProperty("vendor") ~= "" and self._prop:getProperty("vendor") ~= prop:getProperty("vendor") then
+		if self._prop:getProperty("vendor") ~= "" and self._prop:getProperty("vendor") ~= prop_:getProperty("vendor") then
 			return false
 		end
-		if self._prop:getProperty("category") ~= "" and self._prop:getProperty("category") ~= prop:getProperty("category") then
+		if self._prop:getProperty("category") ~= "" and self._prop:getProperty("category") ~= prop_:getProperty("category") then
 			return false
 		end
-		if self._prop:getProperty("version") ~= "" and self._prop:getProperty("version") ~= prop:getProperty("version") then
+		if self._prop:getProperty("version") ~= "" and self._prop:getProperty("version") ~= prop_:getProperty("version") then
 			return false
 		end
 		return true
@@ -423,7 +422,7 @@ function Manager:init(argv)
 		argv = {}
 	end
 
-	
+
 	self._initProc = nil
 	self._ecs = {}
 	if self._orb ~= nil then
@@ -498,13 +497,13 @@ end
 -- マネージャアクティブ化
 function Manager:activateManager()
 	local mods = StringUtil.strip(StringUtil.split(self._config:getProperty("manager.modules.preload"), ","))
-	
+
 	for k,mod in ipairs(mods) do
 		if mod == nil or mod == "" then
 		else
 			--local basename = StringUtil.split(StringUtil.basename(mod),"%.")[1]
 			--basename = basename.."Init"
-			
+
 			local success, exception = oil.pcall(
 				function()
 					--print(mod, "Init")
@@ -536,8 +535,8 @@ function Manager:runManager(no_block)
 		no_block = false
 	end
 	self.no_block = no_block
-	
-	main_function = function()
+
+	local main_function = function()
 
 		self:initORB()
 
@@ -842,7 +841,7 @@ function Manager:createComponent(comp_args)
 		return nil
 	end
 	if comp_prop:getProperty("instance_name") ~= nil then
-		comp = self:getComponent(comp_prop:getProperty("instance_name"))
+		local comp = self:getComponent(comp_prop:getProperty("instance_name"))
 		if comp ~= nil then
 			return comp
 		end
@@ -893,38 +892,38 @@ function Manager:createComponent(comp_args)
 	local prop = factory:profile()
 	local inherit_prop = {"config.version",
 					"openrtm.name",
-                    "openrtm.version",
-                    "os.name",
-                    "os.release",
-                    "os.version",
-                    "os.arch",
-                    "os.hostname",
-                    "corba.endpoints",
-                    "corba.endpoints_ipv4",
-                    "corba.endpoints_ipv6",
-                    "corba.id",
-                    "exec_cxt.periodic.type",
-                    "exec_cxt.periodic.rate",
-                    "exec_cxt.event_driven.type",
-                    "exec_cxt.sync_transition",
-                    "exec_cxt.sync_activation",
-                    "exec_cxt.sync_deactivation",
-                    "exec_cxt.sync_reset",
-                    "exec_cxt.transition_timeout",
-                    "exec_cxt.activation_timeout",
-                    "exec_cxt.deactivation_timeout",
-                    "exec_cxt.reset_timeout",
-                    "exec_cxt.cpu_affinity",
-                    "logger.enable",
-                    "logger.log_level",
-                    "naming.enable",
-                    "naming.type",
-                    "naming.formats",
-                    "sdo.service.provider.available_services",
-                    "sdo.service.consumer.available_services",
-                    "sdo.service.provider.enabled_services",
-                    "sdo.service.consumer.enabled_services",
-                    "manager.instance_name"}
+					"openrtm.version",
+					"os.name",
+					"os.release",
+					"os.version",
+					"os.arch",
+					"os.hostname",
+					"corba.endpoints",
+					"corba.endpoints_ipv4",
+					"corba.endpoints_ipv6",
+					"corba.id",
+					"exec_cxt.periodic.type",
+					"exec_cxt.periodic.rate",
+					"exec_cxt.event_driven.type",
+					"exec_cxt.sync_transition",
+					"exec_cxt.sync_activation",
+					"exec_cxt.sync_deactivation",
+					"exec_cxt.sync_reset",
+					"exec_cxt.transition_timeout",
+					"exec_cxt.activation_timeout",
+					"exec_cxt.deactivation_timeout",
+					"exec_cxt.reset_timeout",
+					"exec_cxt.cpu_affinity",
+					"logger.enable",
+					"logger.log_level",
+					"naming.enable",
+					"naming.type",
+					"naming.formats",
+					"sdo.service.provider.available_services",
+					"sdo.service.consumer.available_services",
+					"sdo.service.provider.enabled_services",
+					"sdo.service.consumer.enabled_services",
+					"manager.instance_name"}
 	local prop_ = prop:getNode("port")
 	prop_:mergeProperties(self._config:getNode("port"))
 	local comp = factory:create(self)
@@ -1294,10 +1293,8 @@ function Manager:initORB()
 				end
 			end
 		end
-		
-		
-		
-		
+
+
 		if oil.VERSION == "OiL 0.6" then
 			if StringUtil.toBool(self._config:getProperty("corba.ssl.enable"), "YES", "NO", false) then
 				local security = self._config:getProperty("corba.security", "required")
@@ -1327,7 +1324,7 @@ function Manager:initORB()
 				if self.no_block then
 					flavor = "lua;corba;corba.ssl;kernel.ssl"
 				end
-				
+
 				self._orb = oil.init{
 					flavor = flavor,
 					host=host,
@@ -1374,7 +1371,7 @@ function Manager:initORB()
 				self._orb.ObjectReferrer.profiler[SSLIOPProfiler.tag] = SSLIOPProfiler
 				self._orb.ObjectReferrer.profiler.ssliop = SSLIOPProfiler
 				SSLIOPProfiler.components[self._orb.SSLIOPComponentCodec.tag] = self._orb.SSLIOPComponentCodec.compcodec
-		
+
 			else
 				if self.no_block then
 					self._orb = oil.init{ flavor = "lua;corba;", host=host, port=port }
@@ -1382,11 +1379,11 @@ function Manager:initORB()
 					self._orb = oil.init{ flavor = "cooperative;corba;", host=host, port=port }
 				end
 			end
-			
+
 		else
 			self._orb = oil.init{ flavor = "cooperative;corba;intercepted;typed;base;", host=host, port=port }
 		end
-		
+
 
 		if oil.VERSION == "OiL 0.5" then
 			oil.corba.idl.null = nil
@@ -1395,7 +1392,7 @@ function Manager:initORB()
 			oil.corba.idl = {}
 			oil.corba.idl.null = nil
 
-			
+
 			self._orb.tostring = function(self, str)
 					return tostring(str)
 			end
@@ -1444,15 +1441,14 @@ function Manager:createORBEndpoints()
 	local endpoints = {}
 	local prop = self._config:getProperty("corba.endpoints")
 
-	
 	if StringUtil.toBool(self._config:getProperty("manager.is_master"), "YES", "NO", false) then
 		local mm = self._config:getProperty("corba.master_manager", ":2810")
-		
+
 		table.insert(endpoints, mm)
 	elseif prop == "" then
 		return endpoints
 	end
-	
+
 	local strs = StringUtil.split(prop, ",")
 	for k,v in ipairs(strs) do
 		table.insert(endpoints, v)
@@ -1515,7 +1511,7 @@ function Manager:initExecContext()
 	PeriodicExecutionContext.Init(self)
 	OpenHRPExecutionContext.Init(self)
 	SimulatorExecutionContext.Init(self)
-	
+
 	return true
 end
 
@@ -1582,7 +1578,7 @@ function Manager:initManagerServant()
                                                    "YES", "NO", false) then
 	end
 
-	local otherref = nil
+	--local otherref = nil
 
 	local success, exception = oil.pcall(
 		function()
@@ -1758,8 +1754,8 @@ end
 -- @param prop プロパティ
 function Manager:configureComponent(comp, prop)
 	local category  = comp:getCategory()
-    local type_name = comp:getTypeName()
-    local inst_name = comp:getInstanceName()
+	local type_name = comp:getTypeName()
+	local inst_name = comp:getInstanceName()
 	local type_conf = category.."."..type_name..".config_file"
 	local name_conf = category.."."..inst_name..".config_file"
 	local type_prop = Properties.new()
@@ -1770,18 +1766,18 @@ function Manager:configureComponent(comp, prop)
 		if conff ~= nil then
 			name_prop:load(conff)
 			self._rtcout:RTC_INFO("Component instance conf file: %s loaded.",
-                              self._config:getProperty(name_conf))
-        	self._rtcout:RTC_DEBUG(name_prop)
+							  self._config:getProperty(name_conf))
+			self._rtcout:RTC_DEBUG(name_prop)
 			table.insert(config_fname, self._config:getProperty(name_conf))
 		else
 			print("Not found. : "..self._config:getProperty(name_conf))
 		end
 	end
-	
+
 	if self._config:findNode(category.."."..inst_name) ~= nil then
 		local temp_ = Properties.new({prop=self._config:getNode(category.."."..inst_name)})
 		local keys_ = temp_:propertyNames()
-		
+
 		if not (#keys_ == 1 and keys_[#keys_] == "config_file") then
 			name_prop:mergeProperties(self._config:getNode(category.."."..inst_name))
 			self._rtcout:RTC_INFO("Component name conf exists in rtc.conf. Merged.")
@@ -1798,8 +1794,8 @@ function Manager:configureComponent(comp, prop)
 		if conff ~= nil then
 			type_prop:load(conff)
 			self._rtcout:RTC_INFO("Component instance conf file: %s loaded.",
-                              self._config:getProperty(type_conf))
-        	self._rtcout:RTC_DEBUG(type_prop)
+							  self._config:getProperty(type_conf))
+			self._rtcout:RTC_DEBUG(type_prop)
 			table.insert(config_fname, self._config:getProperty(type_conf))
 		else
 			print("Not found. : "..self._config:getProperty(type_conf))
@@ -1861,7 +1857,7 @@ end
 function Manager:formatString(naming_format, prop)
 	local name_ = naming_format
 	local str_  = ""
-    local count = 0
+	local count = 0
 	local len_  = #name_
 	local num = 0
 	--local ok, ret = xpcall(
@@ -2009,8 +2005,8 @@ function Manager:initPreConnection()
 	for k,c in ipairs(connectors) do
 		c = StringUtil.eraseBothEndsBlank(c)
 
-		if c == "" then
-		else
+		
+		if c ~= "" then
 			local port0_str = StringUtil.split(c,"?")[1]
 			local param = StringUtil.urlparam2map(c)
 			--print(port0_str)
@@ -2028,7 +2024,7 @@ function Manager:initPreConnection()
 					local tmp = string.gsub(k,"port","")
 
 					local ret, v = StringUtil.stringTo(0, tmp)
-					
+
 					if ret and pos ~= nil then
 						table.insert(ports, p)
 					else
@@ -2078,7 +2074,6 @@ function Manager:initPreConnection()
 			end
 
 			local port0_var = CORBA_RTCUtil.get_port_by_name(comp0_ref, port0_name)
-			
 
 			if port0_var == oil.corba.idl.null then
 				self._rtcout:RTC_DEBUG("port "..port0_str.." found: ")
@@ -2086,20 +2081,20 @@ function Manager:initPreConnection()
 				if #ports == 0 then
 					local prop = Properties.new()
 
-					for k,v in pairs(configs) do
-						k = StringUtil.eraseBothEndsBlank(k)
+					for l,v in pairs(configs) do
+						l = StringUtil.eraseBothEndsBlank(l)
 						v = StringUtil.eraseBothEndsBlank(v)
-						prop:setProperty("dataport."..k,v)
+						prop:setProperty("dataport."..l,v)
 					end
 					if self._ReturnCode_t.RTC_OK ~= CORBA_RTCUtil.connect(c, prop, port0_var, oil.corba.idl.null) then
 						self._rtcout.RTC_ERROR("Connection error: "..c)
 					end
 				end
-				for k,port_str in ipairs(ports) do
+				for l,port_str in ipairs(ports) do
 
-					local tmp = StringUtil.split(port_str, "%.")
-					tmp[#tmp] = nil
-					local comp_name = StringUtil.flatten(tmp,"%.")
+					local tmp_ = StringUtil.split(port_str, "%.")
+					tmp_[#tmp_] = nil
+					local comp_name = StringUtil.flatten(tmp_,"%.")
 					local port_name = port_str
 
 					local comp_ref = nil
@@ -2125,7 +2120,7 @@ function Manager:initPreConnection()
 					end
 
 					if comp_ref ~= nil then
-						port_var = CORBA_RTCUtil.get_port_by_name(comp_ref, port_name)
+						local port_var = CORBA_RTCUtil.get_port_by_name(comp_ref, port_name)
 
 
 						if port_var == oil.corba.idl.null then
@@ -2133,20 +2128,20 @@ function Manager:initPreConnection()
 						else
 							local prop = Properties.new()
 
-							for k,v in pairs(configs) do
-								k = StringUtil.eraseBothEndsBlank(k)
+							for m,v in pairs(configs) do
+								m = StringUtil.eraseBothEndsBlank(m)
 								v = StringUtil.eraseBothEndsBlank(v)
-								prop:setProperty("dataport."..k,v)
+								prop:setProperty("dataport."..m,v)
 							end
 							--print(c)
 							--print(prop)
 							--print(port0_var)
 							--print(port_var)
-							
+
 							if self._ReturnCode_t.RTC_OK ~= CORBA_RTCUtil.connect(c, prop, port0_var, port_var) then
 								self._rtcout.RTC_ERROR("Connection error: "..c)
 							end
-							
+
 							--end
 						end
 					end
@@ -2163,7 +2158,7 @@ function Manager:initPreActivation()
 	self._rtcout:RTC_TRACE("Components pre-activation: "..tostring(self._config:getProperty("manager.components.preactivation")))
 	local comps = StringUtil.split(tostring(self._config:getProperty("manager.components.preactivation")), ",")
 	for k,c in pairs(comps) do
-		local c = StringUtil.eraseBothEndsBlank(c)
+		c = StringUtil.eraseBothEndsBlank(c)
 
 		if c ~= "" then
 			local comp_ref = nil
@@ -2249,7 +2244,7 @@ function Manager:load(fname, initfunc)
 	if not success then
 		--print(exception.type)
 		--print(exception.name)
-		
+
 		if exception.type == "NotAllowedOperation" then
 			self._rtcout:RTC_ERROR("Operation not allowed: "..exception.reason)
 			return self._ReturnCode_t.PRECONDITION_NOT_MET

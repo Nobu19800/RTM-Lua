@@ -37,7 +37,7 @@ LogstreamBase.new = function()
 	function obj:shutdown()
 		return true
 	end
-	
+
 	return obj
 end
 

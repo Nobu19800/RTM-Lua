@@ -15,6 +15,7 @@ local InPortDirectConsumer = {}
 local InPortConsumer = require "openrtm.InPortConsumer"
 local Factory = require "openrtm.Factory"
 local InPortConsumerFactory = InPortConsumer.InPortConsumerFactory
+local DataPortStatus = require "openrtm.DataPortStatus"
 
 
 
@@ -26,7 +27,7 @@ InPortDirectConsumer.new = function()
 
     local Manager = require "openrtm.Manager"
 	obj._rtcout = Manager:instance():getLogbuf("InPortDirectConsumer")
-    
+
     -- 初期化時にプロパティ設定
 	-- @param prop プロパティ
 	function obj:init(prop)

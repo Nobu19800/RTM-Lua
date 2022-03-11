@@ -428,7 +428,7 @@ RTObject.new = function(manager)
 		--print(#ec_args)
 		for i,ec_arg_ in ipairs(ec_args) do
 			local ec_type_ = ec_arg_:getProperty("type")
-			local ec_name_ = ec_arg_:getProperty("name")
+			--local ec_name_ = ec_arg_:getProperty("name")
 			--print(ec_arg_)
 			local ret_aec = false
 			for j,aec in ipairs(avail_ec_) do
@@ -732,13 +732,13 @@ RTObject.new = function(manager)
 			local _obj = {}
 			setmetatable(_obj, {__index=ComponentActionListener.PreComponentActionListener.new()})
 			_obj._memfunc = memfunc_
-			function _obj:call(ec_id)
-				self._memfunc(ec_id)
+			_obj.call = function(self_, ec_id)
+				self_._memfunc(ec_id)
 			end
 			return _obj
 		end
 
-		local listener = Noname.new(memfunc_)
+		local listener = Noname.new(memfunc)
 		self._actionListeners.preaction_[listener_type]:addListener(listener, autoclean)
 		return listener
 	end
@@ -784,13 +784,13 @@ RTObject.new = function(manager)
 			local _obj = {}
 			setmetatable(_obj, {__index=ComponentActionListener.PortActionListener.new()})
 			_obj._memfunc = memfunc_
-			function _obj:call(ec_id)
-				self._memfunc(ec_id)
+			_obj.call = function(self_, ec_id)
+				self_._memfunc(ec_id)
 			end
 			return _obj
 		end
 
-		listener = Noname.new(memfunc)
+		local listener = Noname.new(memfunc)
 		self._actionListeners.portaction_[listener_type]:addListener(listener, autoclean)
 		return listener
 	end
@@ -810,8 +810,8 @@ RTObject.new = function(manager)
 			local _obj = {}
 			setmetatable(_obj, {__index=ComponentActionListener.ExecutionContextActionListener.new()})
 			_obj._memfunc = memfunc_
-			function _obj:call(ec_id)
-				self._memfunc(ec_id)
+			_obj.call = function(self_, ec_id)
+				self_._memfunc(ec_id)
 			end
 			return _obj
 		end
@@ -1443,7 +1443,7 @@ RTObject.new = function(manager)
 
 		for i,ec in ipairs(self._eclist) do
 			ec:stop()
-			local success, exception = oil.pcall(
+			local success, _ = oil.pcall(
 				function()
 					self._orb:deactivate(ec._svr)
 				end)

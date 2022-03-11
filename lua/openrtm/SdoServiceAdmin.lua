@@ -44,12 +44,12 @@ SdoServiceAdmin.new = function(rtobj)
 		local enabledProviderTypes = StringUtil.split(prop:getProperty("sdo.service.provider.enabled_services"),",")
 		enabledProviderTypes = StringUtil.strip(enabledProviderTypes)
 
-		self._rtcout:RTC_DEBUG("sdo.service.provider.enabled_services: %s", 
+		self._rtcout:RTC_DEBUG("sdo.service.provider.enabled_services: %s",
 						prop:getProperty("sdo.service.provider.enabled_services"))
 
 		local availableProviderTypes = SdoServiceProviderFactory:instance():getIdentifiers()
 		prop:setProperty("sdo.service.provider.available_services", tostring(StringUtil.flatten(availableProviderTypes)))
-		self._rtcout:RTC_DEBUG("sdo.service.provider.available_services: %s", 
+		self._rtcout:RTC_DEBUG("sdo.service.provider.available_services: %s",
 							prop:getProperty("sdo.service.provider.available_services"))
 
 

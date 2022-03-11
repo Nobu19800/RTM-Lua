@@ -381,7 +381,7 @@ local ModulePredicate = function(prop)
 		if self._prop:getProperty("vendor") ~= "" and self._prop:getProperty("vendor") ~= prop_:getProperty("vendor") then
 			return false
 		end
-		if self._prop:getProperty("category") ~= "" and self._prop:getProperty("category") 
+		if self._prop:getProperty("category") ~= "" and self._prop:getProperty("category")
 												~= prop_:getProperty("category") then
 			return false
 		end
@@ -502,8 +502,7 @@ function Manager:activateManager()
 	local mods = StringUtil.strip(StringUtil.split(self._config:getProperty("manager.modules.preload"), ","))
 
 	for k,mod in ipairs(mods) do
-		if mod == nil or mod == "" then
-		else
+		if not(mod == nil or mod == "") then
 			--local basename = StringUtil.split(StringUtil.basename(mod),"%.")[1]
 			--basename = basename.."Init"
 
@@ -1240,7 +1239,7 @@ end
 -- @param true：設定成功
 function Manager:initLogger()
 	self._rtcout = self:getLogbuf()
-	--print(self._config:getProperty("logger.enable"), 
+	--print(self._config:getProperty("logger.enable"),
 	-- StringUtil.toBool(self._config:getProperty("logger.enable"), "YES", "NO", true))
 	if not StringUtil.toBool(self._config:getProperty("logger.enable"), "YES", "NO", true) then
 		return true

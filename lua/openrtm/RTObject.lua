@@ -1435,7 +1435,7 @@ RTObject.new = function(manager)
 		self._portAdmin:finalizePorts()
 		self._inports = {}
 		self._outports = {}
-    end
+	end
 
 	-- 全実行コンテキストの終了
 	function obj:finalizeContexts()
@@ -1447,8 +1447,8 @@ RTObject.new = function(manager)
 				function()
 					self._orb:deactivate(ec._svr)
 				end)
-			if not success then
-			end
+			--if not success then
+			--end
 			ec:exit()
 		end
 

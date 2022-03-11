@@ -38,8 +38,8 @@ OpenHRPExecutionContext.new = function()
 			"IDL:OpenRTM/ExtTrigExecutionContextService:1.0")
 
 	obj:setObjRef(ref)
-    obj:setKind(obj._ExecutionKind.PERIODIC)
-    obj:setRate(1.0 / DEFAULT_PERIOD)
+	obj:setKind(obj._ExecutionKind.PERIODIC)
+	obj:setRate(1.0 / DEFAULT_PERIOD)
 
 	obj._count  = 0
 
@@ -70,7 +70,7 @@ OpenHRPExecutionContext.new = function()
 			self._rtcout:RTC_PARANOID("Sleep:       "..slptm_.." [s]")
 		end
 		local t3_ = os.clock()
-		if period_:toDouble() > (t2_ - t0_) then
+		--if period_:toDouble() > (t2_ - t0_) then
 			--[[
 			if self._count > 1000 then
 				self._rtcout:RTC_PARANOID("sleeping...")
@@ -79,7 +79,7 @@ OpenHRPExecutionContext.new = function()
 				Timer.sleep(slptm_)
 			end
 			]]
-		end
+		--end
 
 		if self._count > 1000 then
 			local t4_ = os.clock()

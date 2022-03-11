@@ -340,8 +340,7 @@ PeriodicECOrganization.new = function(rtobj)
             local sdos = org:get_members()
             for j,sdo in ipairs(sdos) do
                 local ret,dfc = self:sdoToDFC(sdo)
-                if not ret then
-                else
+                if ret then
                     self:addRTCToEC(dfc)
                 end
             end
@@ -370,8 +369,7 @@ PeriodicECOrganization.new = function(rtobj)
             local sdos = org:get_members()
             for j,sdo in ipairs(sdos) do
                 local ret,dfc = self:sdoToDFC(sdo)
-                if not ret then
-                else
+                if ret then
                     self._ec:remove_component(dfc)
                 end
             end
@@ -532,15 +530,13 @@ PeriodicECSharedComposite.new = function(manager)
             member = string.gsub(member, "|","")
 
             member = StringUtil.eraseHeadBlank(member)
-            if member == "" then
-            else
+            if member ~= "" then
                 local rtc = mgr:getComponent(member)
                 if rtc == nil then
                     print("no RTC found: ", member)
                 else
                     local sdo = rtc:getObjRef()
-                    if sdo == oil.corba.idl.null then
-                    else
+                    if sdo ~= oil.corba.idl.null then
                         table.insert(sdos, sdo)
                     end
                 end

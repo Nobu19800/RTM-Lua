@@ -517,7 +517,7 @@ function Manager:activateManager()
 		end
 	end
 	local sdofactory_ = SdoServiceConsumerFactory:instance()
-    self._config:setProperty("sdo.service.consumer.available_services",
+	self._config:setProperty("sdo.service.consumer.available_services",
 								StringUtil.flatten(sdofactory_:getIdentifiers()))
 	return true
 end
@@ -838,7 +838,7 @@ end
 function Manager:createComponent(comp_args)
 	self._rtcout:RTC_TRACE("Manager.createComponent("..comp_args..")")
 	local comp_prop = Properties.new()
-    local comp_id   = Properties.new()
+	local comp_id   = Properties.new()
 	if not self:procComponentArgs(comp_args, comp_id, comp_prop) then
 		return nil
 	end
@@ -849,8 +849,8 @@ function Manager:createComponent(comp_args)
 		end
 	end
 	self._listeners.rtclifecycle_:preCreate(comp_args)
-	if comp_prop:findNode("exported_ports") then
-	end
+	--if comp_prop:findNode("exported_ports") then
+	--end
 	--print(comp_id)
 	local factory = self._factory:find(comp_id)
 	--print(comp_id, factory)
@@ -1212,16 +1212,16 @@ end
 -- 外部ロガーモジュール初期化
 function Manager:initLogstreamOthers()
 	local factory = LogstreamFactory:instance()
-    local pp = self._config:getNode("logger.logstream")
+	local pp = self._config:getNode("logger.logstream")
 
-    local leaf0 = pp:getLeaf()
+	local leaf0 = pp:getLeaf()
 
-    for k,l in pairs(leaf0) do
+	for k,l in pairs(leaf0) do
 		local lstype = l:getName()
 		local logstream = factory:createObject(lstype)
 		if logstream == nil then
 			self._rtcout:RTC_WARN("Logstream "..lstype.." creation failed.")
-        else
+		else
 			self._rtcout:RTC_INFO("Logstream "..lstype.." created.")
 			if not logstream:init(l) then
 				self._rtcout:RTC_WARN("Logstream "..lstype.." init failed.")
@@ -1251,15 +1251,15 @@ function Manager:initLogger()
 
 	self._rtcout:setLogLevel(self._config:getProperty("logger.log_level"))
 	self._rtcout:setLogLock(StringUtil.toBool(self._config:getProperty("logger.stream_lock"),
-                                                "enable", "disable", false))
-    self._rtcout:RTC_INFO(self._config:getProperty("openrtm.version"))
-    self._rtcout:RTC_INFO("Copyright (C) 2018")
-    self._rtcout:RTC_INFO("  Nobuhiko Miyamoto")
-    self._rtcout:RTC_INFO("  Tokyo Metropolitan University")
-    self._rtcout:RTC_INFO("Manager starting.")
-    self._rtcout:RTC_INFO("Starting local logging.")
+													"enable", "disable", false))
+	self._rtcout:RTC_INFO(self._config:getProperty("openrtm.version"))
+	self._rtcout:RTC_INFO("Copyright (C) 2018")
+	self._rtcout:RTC_INFO("  Nobuhiko Miyamoto")
+	self._rtcout:RTC_INFO("  Tokyo Metropolitan University")
+	self._rtcout:RTC_INFO("Manager starting.")
+	self._rtcout:RTC_INFO("Starting local logging.")
 
-    return true
+	return true
 end
 
 -- ロガー終了
@@ -1497,8 +1497,8 @@ function Manager:initNaming()
 			self._namingManager:registerNameServer(meth,name)
 		end
 	end
-	if StringUtil.toBool(self._config:getProperty("naming.update.enable"), "YES", "NO", true) then
-	end
+	--if StringUtil.toBool(self._config:getProperty("naming.update.enable"), "YES", "NO", true) then
+	--end
 	return true
 end
 
@@ -1565,21 +1565,21 @@ function Manager:initManagerServant()
 	if self._config:getProperty("corba.endpoints_ipv4") == "" then
 		self:setEndpointProperty(self._mgrservant:getObjRef())
 	end
-    local prop = self._config:getNode("manager")
-    --local names = StringUtil.split(prop:getProperty("naming_formats"),",")
+	local prop = self._config:getNode("manager")
+	--local names = StringUtil.split(prop:getProperty("naming_formats"),",")
 
-    if StringUtil.toBool(prop:getProperty("is_master"),
-                           "YES","NO",true) then
+	--if StringUtil.toBool(prop:getProperty("is_master"),
+	--					   "YES","NO",true) then
 		--for i, name in ipairs(names) do
 		--	local mgr_name = self:formatString(name, prop)
 		--	self._namingManager:bindManagerObject(mgr_name, self._mgrservant)
 		--end
-	end
-	if StringUtil.toBool(self._config:getProperty("corba.update_master_manager.enable"),
-                           "YES", "NO", true) and
-                           not StringUtil.toBool(self._config:getProperty("manager.is_master"),
-                                                   "YES", "NO", false) then
-	end
+	--end
+	--if StringUtil.toBool(self._config:getProperty("corba.update_master_manager.enable"),
+	--						"YES", "NO", true) and
+	--					   not StringUtil.toBool(self._config:getProperty("manager.is_master"),
+	--													"YES", "NO", false) then
+	--end
 
 	--local otherref = nil
 
@@ -1602,7 +1602,7 @@ end
 function Manager:shutdownComponents()
 	self._rtcout:RTC_TRACE("Manager.shutdownComponents()")
 	local comps = self._namingManager:getObjects()
-    for k,comp in ipairs(comps) do
+	for k,comp in ipairs(comps) do
 		local success, exception = oil.pcall(
 			function()
 				comp:exit()
@@ -1630,28 +1630,27 @@ end
 -- RTC登録解除
 -- @param comp RTC
 function Manager:cleanupComponent(comp)
-
 end
 
 -- 全RTC登録解除
 -- 一旦、削除リストに格納したRTCを削除する
 function Manager:cleanupComponents()
-    self._rtcout:RTC_VERBOSE("Manager.cleanupComponents()")
+	self._rtcout:RTC_VERBOSE("Manager.cleanupComponents()")
 
-    self._rtcout:RTC_VERBOSE(#self._finalized.comps.." components are marked as finalized.")
-    for i, _comp in ipairs(self._finalized.comps) do
+	self._rtcout:RTC_VERBOSE(#self._finalized.comps.." components are marked as finalized.")
+	for i, _comp in ipairs(self._finalized.comps) do
 		self:deleteComponent({comp=_comp})
 	end
 
-    self._finalized.comps = {}
+	self._finalized.comps = {}
 end
 
 -- RTCを削除リストに追加する
 -- @param _comp RTC
 function Manager:notifyFinalized(_comp)
-    self._rtcout:RTC_TRACE("Manager.notifyFinalized()")
+	self._rtcout:RTC_TRACE("Manager.notifyFinalized()")
 
-    --table.insert(self._finalized.comps, _comp)
+	--table.insert(self._finalized.comps, _comp)
 	self:deleteComponent({comp=_comp})
 end
 
@@ -2200,8 +2199,7 @@ end
 function Manager:initPreCreation()
 	local comps = StringUtil.strip(StringUtil.split(self._config:getProperty("manager.components.precreate"), ","))
 	for k,comp in ipairs(comps) do
-		if comp == nil or comp == "" then
-		else
+		if not(comp == nil or comp == "") then
 			self:createComponent(comp)
 		end
 	end
@@ -2225,7 +2223,7 @@ end
 -- @return ネーミングマネージャ
 function Manager:getNaming()
 	self._rtcout:RTC_TRACE("Manager.getNaming()")
-    return self._namingManager
+	return self._namingManager
 end
 
 -- モジュールのロード
@@ -2235,8 +2233,8 @@ end
 function Manager:load(fname, initfunc)
 	self._rtcout:RTC_TRACE("Manager.load(fname = "..fname..", initfunc = "..initfunc..")")
 	fname = string.gsub(fname, "\\", "./")
-    self._listeners.module_:preLoad(fname, initfunc)
-    local success, exception = oil.pcall(
+	self._listeners.module_:preLoad(fname, initfunc)
+	local success, exception = oil.pcall(
 		function()
 			if initfunc == "" then
 				initfunc = "Init"
@@ -2324,8 +2322,7 @@ function Manager:cdrMarshal(data, dataType)
 	--for i=1,#cdr do
 	--	print(i,string.byte(string.sub(cdr,i,i)))
 	--end
-	if #cdr == 0 then
-	else
+	if #cdr ~= 0 then
 		cdr = string.sub(cdr,2)
 	--elseif #cdr == 2 then
 	--	cdr = string.sub(cdr,2)

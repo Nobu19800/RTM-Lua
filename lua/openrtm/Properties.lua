@@ -237,8 +237,7 @@ Properties.new = function(argv)
 				local _str = readStr
 				_str = StringUtil.eraseHeadBlank(_str)
 				local s = string.sub(_str,0,1)
-				if s == "#" or s == "!" or s == "\n" then
-				else
+				if not(s == "#" or s == "!" or s == "\n") then
 					--_str = _str.rstrip('\r\n')
 					if string.sub(_str,-1) == "\\" and not StringUtil.isEscaped(_str, #_str-1) then
 						local tmp = string.sub(_str,0,-1)
@@ -523,9 +522,7 @@ Properties.new = function(argv)
 			local _str = StringUtil.eraseHeadBlank(readStr)
 
 
-			if string.sub(_str,1,1) == "#" or string.sub(_str,1,1) == "!" or string.sub(_str,1,1) == "\n" then
-			else
-
+			if not(string.sub(_str,1,1) == "#" or string.sub(_str,1,1) == "!" or string.sub(_str,1,1) == "\n") then
 				_str = StringUtil.eraseHeadBlank(_str)
 
 				if string.sub(_str, #_str, #_str) == "\\" and not StringUtil.isEscaped(_str, #_str) then

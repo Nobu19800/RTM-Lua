@@ -148,16 +148,16 @@ RTObjectStateMachine.new = function(id, comp)
 	end
 	-- 実行コンテキスト開始時の処理実行
 	function obj:onStartup()
-		local comp = self:getComponentObj()
-		if comp ~= nil then
-			comp:on_startup(self._id)
+		local comp_ = self:getComponentObj()
+		if comp_ ~= nil then
+			comp_:on_startup(self._id)
 		end
 	end
 	-- 実行コンテキスト停止時の処理実行
 	function obj:onShutdown()
-		local comp = self:getComponentObj()
-		if comp ~= nil then
-			comp:on_shutdown(self._id)
+		local comp_ = self:getComponentObj()
+		if comp_ ~= nil then
+			comp_:on_shutdown(self._id)
 		end
 	end
 	-- アクティブ状態遷移後の処理実行
@@ -258,7 +258,7 @@ RTObjectStateMachine.new = function(id, comp)
     -- アクション実行
 	-- @param st RTCの状態
 	function obj:onAction(st)
-		local comp_ = self:getComponentObj()
+		--local comp_ = self:getComponentObj()
 		if self._fsmVar == nil then
 			return
 		end
@@ -269,7 +269,7 @@ RTObjectStateMachine.new = function(id, comp)
     -- モード変更後の処理実行
 	-- @param st RTCの状態
 	function obj:onModeChanged(st)
-		local comp_ = self:getComponentObj()
+		--local comp_ = self:getComponentObj()
 		if self._modeVar == nil then
 			return
 		end

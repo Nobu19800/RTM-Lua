@@ -114,7 +114,7 @@ PeriodicECOrganization.new = function(rtobj)
         obj_._config  = rtobj_:get_configuration()
 
         -- メンバーの要素入れ替え
-        -- @param self 
+        -- @param self
         -- @param x 入れ替え元のオブジェクト
         -- @return 自身のオブジェクト
         local call_func = function(self, x)
@@ -125,7 +125,6 @@ PeriodicECOrganization.new = function(rtobj)
         setmetatable(obj_, {__call=call_func})
 
         -- メンバーの要素入れ替え
-        -- @param self 
         -- @param x 入れ替え元のオブジェクト
         -- @return 自身のオブジェクト
         function obj_:swap(x)

@@ -392,7 +392,7 @@ NVUtil._non_existent = function(_obj)
 		return false
 	else
 		local ret = true
-		local success, exception = oil.pcall(
+		local _, _ = oil.pcall(
 			function()
 				ret = _obj:_non_existent()
 		end)

@@ -40,16 +40,16 @@ OutPortConsumer.new = function()
 	-- @param prop プロパティ
 	-- return インターフェース削除オブジェクト
 	obj.unsubscribe.new = function(prop)
-		local obj = {}
-		obj._prop = prop
+		local obj_ = {}
+		obj_._prop = prop
 		-- インターフェース削除関数
 		-- @param self 自身のオブジェクト
 		-- @param consumer コンシューマ
 		local call_func = function(self, consumer)
 			consumer:unsubscribeInterface(self._prop)
 		end
-		setmetatable(obj, {__call=call_func})
-		return obj
+		setmetatable(obj_, {__call=call_func})
+		return obj_
 	end
 	return obj
 end

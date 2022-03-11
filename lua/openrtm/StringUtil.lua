@@ -369,7 +369,7 @@ StringUtil._stringToList = function(_type, _str)
 			table.insert(_type, _type[1])
 		end
 	elseif #_type > #list_ then
-		local sub = #_type - #list_
+		--local sub = #_type - #list_
 		for i = #list_,#_type do
 			table.remove(_type, i)
 		end
@@ -526,7 +526,7 @@ StringUtil.isURL = function(str)
 		return false
 	end
 
-	local pos,c = string.find(str, "://")
+	local pos,_ = string.find(str, "://")
 	if pos ~= 1 and pos ~= nil then
 		return true
 	end

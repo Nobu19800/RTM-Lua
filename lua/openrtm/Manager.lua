@@ -1394,7 +1394,7 @@ function Manager:initORB()
 			oil.corba.idl.null = nil
 
 
-			self._orb.tostring = function(self, str)
+			self._orb.tostring = function(self_, str)
 					return tostring(str)
 			end
 		end
@@ -1564,7 +1564,7 @@ function Manager:initManagerServant()
 		self:setEndpointProperty(self._mgrservant:getObjRef())
 	end
     local prop = self._config:getNode("manager")
-    local names = StringUtil.split(prop:getProperty("naming_formats"),",")
+    --local names = StringUtil.split(prop:getProperty("naming_formats"),",")
 
     if StringUtil.toBool(prop:getProperty("is_master"),
                            "YES","NO",true) then
@@ -1581,11 +1581,11 @@ function Manager:initManagerServant()
 
 	--local otherref = nil
 
-	local success, exception = oil.pcall(
+	local _, _ = oil.pcall(
 		function()
 		end)
-	if not success then
-	end
+	--if not success then
+	--end
 
 	return true
 end
@@ -1888,7 +1888,7 @@ function Manager:formatString(naming_format, prop)
 				num = num + 1
 				n = string.sub(name_,num,num)
 				local env = ""
-				local start = num+1
+				--local start = num+1
 				while(true) do
 					if n == '}' or n == ')' then
 						break
@@ -2006,7 +2006,7 @@ function Manager:initPreConnection()
 	for k,c in ipairs(connectors) do
 		c = StringUtil.eraseBothEndsBlank(c)
 
-		
+
 		if c ~= "" then
 			local port0_str = StringUtil.split(c,"?")[1]
 			local param = StringUtil.urlparam2map(c)
@@ -2017,19 +2017,19 @@ function Manager:initPreConnection()
 
 			local ports = {}
 			local configs = {}
-			for k,p in pairs(param) do
-				if k == "port" then
+			for l,p in pairs(param) do
+				if l == "port" then
 					table.insert(ports,p)
 				else
-					local pos = string.find(k,"port")
-					local tmp = string.gsub(k,"port","")
+					local pos = string.find(l,"port")
+					local tmp = string.gsub(l,"port","")
 
-					local ret, v = StringUtil.stringTo(0, tmp)
+					local ret, _ = StringUtil.stringTo(0, tmp)
 
 					if ret and pos ~= nil then
 						table.insert(ports, p)
 					else
-						configs[k] = p
+						configs[l] = p
 					end
 				end
 			end

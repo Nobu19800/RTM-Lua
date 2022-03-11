@@ -127,7 +127,7 @@ RingBuffer.new = function(length)
 			nsec = 0
 		end
 		if self:full() then
-			local timedwrite = self._timedwrite
+			--local timedwrite = self._timedwrite
 			local overwrite  = self._overwrite
 			if overwrite then
 				self:advanceRptr()
@@ -209,7 +209,7 @@ RingBuffer.new = function(length)
 			nsec = 0
 		end
 		if self:empty() then
-			local timedread = self._timedread
+			--local timedread = self._timedread
 			local readback  = self._readback
 			if readback then
 				if not (self._wcount > 0) then

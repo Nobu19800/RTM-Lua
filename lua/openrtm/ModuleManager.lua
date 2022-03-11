@@ -29,7 +29,7 @@ local ALLOW_URL     = "manager.modules.download_allowed"
 --local MOD_DELMOD    = "manager.modules.download_cleanup"
 --local MOD_PRELOAD   = "manager.modules.preload"
 
-
+--[[
 local DLL = {}
 
 DLL.new = function(dll)
@@ -37,6 +37,7 @@ DLL.new = function(dll)
 	obj.dll = dll
 	return obj
 end
+]]
 
 -- モジュール保持オブジェクト初期化
 -- @param dll モジュール

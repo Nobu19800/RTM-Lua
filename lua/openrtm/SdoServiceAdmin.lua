@@ -204,7 +204,7 @@ SdoServiceAdmin.new = function(rtobj)
 				return true
 			end
 		end
-   		self._rtcout:RTC_WARN("Specified SDO service provider not found: %s", id)
+		self._rtcout:RTC_WARN("Specified SDO service provider not found: %s", id)
 		return false
 	end
 
@@ -213,7 +213,7 @@ SdoServiceAdmin.new = function(rtobj)
 	-- @return true：追加成功
 	function obj:addSdoServiceConsumer(sProfile)
 		self._rtcout:RTC_TRACE("addSdoServiceConsumer(IFR = %s)",
-				   		sProfile.interface_type)
+						sProfile.interface_type)
 		local profile = sProfile
 
 
@@ -221,7 +221,7 @@ SdoServiceAdmin.new = function(rtobj)
 			self._rtcout:RTC_ERROR("Not supported consumer type. %s", profile.interface_type)
 			return false
 		end
-  
+
 		if not self:isExistingConsumerType(sProfile) then
 			self._rtcout:RTC_ERROR("type %s not exists.", profile.interface_type)
 			return false

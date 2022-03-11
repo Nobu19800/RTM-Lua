@@ -348,8 +348,8 @@ ManagerServant.new = function()
 
 	function obj:getParameterByModulename(param_name, module_name)
 		local arg = module_name[1]
-		local pos0, c1 = string.find(arg, "&"..param_name.."=")
-		local pos1, c2 = string.find(arg, "?"..param_name.."=")
+		local pos0, _ = string.find(arg, "&"..param_name.."=")
+		local pos1, _ = string.find(arg, "?"..param_name.."=")
 
 		if pos0 == nil and pos1 == nil then
 			return ""
@@ -363,7 +363,7 @@ ManagerServant.new = function()
 
 
 		local paramstr = ""
-		local endpos, c3 = string.find(string.sub(arg,pos+1), '&')
+		local endpos, _ = string.find(string.sub(arg,pos+1), '&')
 		if endpos == nil then
 			endpos = string.find(string.sub(arg,pos+1), '?')
 			if endpos == nil then
@@ -377,7 +377,7 @@ ManagerServant.new = function()
 		end
 		self._rtcout:RTC_VERBOSE(param_name.." arg: "..paramstr)
 
-		local eqpos, c4 = string.find(paramstr, "=")
+		local eqpos, _ = string.find(paramstr, "=")
 		if eqpos == nil then
 			eqpos = 0
 		end
@@ -457,7 +457,7 @@ ManagerServant.new = function()
 				end
 			end
 
-			local ret = os.execute(cmd)
+			local _ = os.execute(cmd)
 
 			--oil.tasks:suspend(0.01)
 			Timer.sleep(0.01)
@@ -556,7 +556,7 @@ ManagerServant.new = function()
 			cmd = cmd.." -d "
 
 			self._rtcout:RTC_DEBUG("Invoking command: "..cmd..".")
-			local ret = os.execute(cmd)
+			local _ = os.execute(cmd)
 			--oil.tasks:suspend(0.01)
 			Timer.sleep(0.01)
 			local count = 0
@@ -669,7 +669,7 @@ ManagerServant.new = function()
 			return self._ReturnCode_t.BAD_PARAMETER
 		end
 
-		local success, exception = oil.pcall(
+		local success, _ = oil.pcall(
 			function()
 				comp_:exit()
 			end)

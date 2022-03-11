@@ -64,7 +64,6 @@ end
 -- @param ec_id
 -- @return 実行コンテキスト
 CORBA_RTCUtil.get_actual_ec = function(rtc, ec_id)
-	local Manager = require "openrtm.Manager"
 
 	if ec_id == nil then
 		ec_id = 0

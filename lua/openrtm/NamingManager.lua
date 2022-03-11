@@ -116,7 +116,7 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 
 		local length = 500
 
-		local bl,bi = context:list(length)
+		local bl,_ = context:list(length)
 
 
 
@@ -166,7 +166,7 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 			self._rtcout:RTC_INFO("URI: "..name.." Address: "..
 								rtcuri:getAddress()..", Name: "..
 								rtcuri:getRTCName())
-			local success, exception = oil.pcall(
+			local success, _ = oil.pcall(
 				function()
 					local host = rtcuri:getAddress()
 					local cns = nil
@@ -432,7 +432,7 @@ NamingManager.new = function(manager)
 		self._rtcout:RTC_TRACE("NamingManager::bindObject("..name..")")
 		for i, n in ipairs(self._names) do
 			if n.ns ~= nil then
-				local success, exception = oil.pcall(
+				local success, _ = oil.pcall(
 					function()
 						n.ns:bindObject(name, rtobj)
 					end)
@@ -448,7 +448,7 @@ NamingManager.new = function(manager)
 		self._rtcout:RTC_TRACE("NamingManager::bindManagerObject("..name..")")
 		for i, n in ipairs(self._names) do
 			if n.ns ~= nil then
-				local success, exception = oil.pcall(
+				local success, _ = oil.pcall(
 					function()
 						n.ns:bindObject(name, mgr)
 					end)
@@ -464,7 +464,7 @@ NamingManager.new = function(manager)
 		self._rtcout:RTC_TRACE("NamingManager::bindPortObject("..name..")")
 		for i, n in ipairs(self._names) do
 			if n.ns ~= nil then
-				local success, exception = oil.pcall(
+				local success, _ = oil.pcall(
 					function()
 						n.ns:bindObject(name, port)
 					end)

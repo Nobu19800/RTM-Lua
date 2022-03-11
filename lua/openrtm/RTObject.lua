@@ -350,7 +350,7 @@ RTObject.new = function(manager)
 		self._profile.type_name = self._properties:getProperty("type_name")
 		self._profile.description = self._properties:getProperty("description")
 		self._profile.version = self._properties:getProperty("version")
- 		self._profile.vendor = self._properties:getProperty("vendor")
+		self._profile.vendor = self._properties:getProperty("vendor")
 		self._profile.category = self._properties:getProperty("category")
 	end
 
@@ -431,7 +431,7 @@ RTObject.new = function(manager)
 			local ec_name_ = ec_arg_:getProperty("name")
 			--print(ec_arg_)
 			local ret_aec = false
-			for i,aec in ipairs(avail_ec_) do
+			for j,aec in ipairs(avail_ec_) do
 				--print(aec)
 				if ec_type_ == aec then
 					ret_aec = true
@@ -452,8 +452,8 @@ RTObject.new = function(manager)
 		end
 
 		if #self._eclist == 0 then
-			default_opts = Properties.new()
-			ec_type_ = "PeriodicExecutionContext"
+			local default_opts = Properties.new()
+			local ec_type_ = "PeriodicExecutionContext"
 			local ec_ = ExecutionContextFactory:instance():createObject(ec_type_)
 			ec_:init(default_opts)
 			table.insert(self._eclist, ec_)
@@ -720,25 +720,25 @@ RTObject.new = function(manager)
 	function obj:writeAll()
 		self._rtcout:RTC_TRACE("writeAll()")
 	end
-	
+
 
 	function obj:addPreComponentActionListener(listener_type, memfunc, autoclean)
 		if autoclean == nil then
 			autoclean = true
 		end
 		local Noname = {}
-		
-		Noname.new = function(memfunc)
+
+		Noname.new = function(memfunc_)
 			local _obj = {}
 			setmetatable(_obj, {__index=ComponentActionListener.PreComponentActionListener.new()})
-			_obj._memfunc = memfunc
+			_obj._memfunc = memfunc_
 			function _obj:call(ec_id)
 				self._memfunc(ec_id)
 			end
 			return _obj
 		end
 
-		listener = Noname.new(memfunc)
+		local listener = Noname.new(memfunc_)
 		self._actionListeners.preaction_[listener_type]:addListener(listener, autoclean)
 		return listener
 	end
@@ -753,18 +753,18 @@ RTObject.new = function(manager)
 			autoclean = true
 		end
 		local Noname = {}
-		
-		Noname.new = function(memfunc)
+
+		Noname.new = function(memfunc_)
 			local _obj = {}
 			setmetatable(_obj, {__index=ComponentActionListener.PostComponentActionListener.new()})
-			_obj._memfunc = memfunc
-			function _obj:call(ec_id)
-				self._memfunc(ec_id)
+			_obj._memfunc = memfunc_
+			_obj.call = function(self_, ec_id)
+				self_._memfunc(ec_id)
 			end
 			return _obj
 		end
 
-		listener = Noname.new(memfunc)
+		local listener = Noname.new(memfunc)
 		self._actionListeners.postaction_[listener_type]:addListener(listener, autoclean)
 		return listener
 	end
@@ -780,10 +780,10 @@ RTObject.new = function(manager)
 			autoclean = true
 		end
 		local Noname = {}
-		Noname.new = function(memfunc)
+		Noname.new = function(memfunc_)
 			local _obj = {}
 			setmetatable(_obj, {__index=ComponentActionListener.PortActionListener.new()})
-			_obj._memfunc = memfunc
+			_obj._memfunc = memfunc_
 			function _obj:call(ec_id)
 				self._memfunc(ec_id)
 			end
@@ -806,17 +806,17 @@ RTObject.new = function(manager)
 			autoclean = true
 		end
 		local Noname = {}
-		Noname.new = function(memfunc)
+		Noname.new = function(memfunc_)
 			local _obj = {}
 			setmetatable(_obj, {__index=ComponentActionListener.ExecutionContextActionListener.new()})
-			_obj._memfunc = memfunc
+			_obj._memfunc = memfunc_
 			function _obj:call(ec_id)
 				self._memfunc(ec_id)
 			end
 			return _obj
 		end
 
-		listener = Noname.new(memfunc)
+		local listener = Noname.new(memfunc)
 		self._actionListeners.ecaction_[listener_type]:addListener(listener, autoclean)
 		return listener
 	end
@@ -990,10 +990,10 @@ RTObject.new = function(manager)
 	-- @param ec_id 実行コンテキストのID
 	-- @return 実行コンテキスト
 	function obj:get_context(ec_id)
-
+		local ECOTHER_OFFSET = RTObject.ECOTHER_OFFSET
 		self._rtcout:RTC_TRACE("get_context("..ec_id..")")
 		ec_id = ec_id + 1
-		if ec_id < RTObject.ECOTHER_OFFSET then
+		if ec_id < ECOTHER_OFFSET then
 			if self._ecMine[ec_id] ~= nil then
 				return self._ecMine[ec_id]
 			else
@@ -1260,13 +1260,12 @@ RTObject.new = function(manager)
 	-- 実行コンテキストアタッチ時のコールバック実行
 	-- @param ec_id 実行コンテキストのID
 	function obj:onAttachExecutionContext(ec_id)
-		
 		self._actionListeners.ecaction_[ExecutionContextActionListenerType.EC_ATTACHED]:notify(ec_id)
 	end
 	-- 実行コンテキストデタッチ時のコールバック実行
 	-- @param ec_id 実行コンテキストのID
 	function obj:onDetachExecutionContext(pprof)
-		self._actionListeners.ecaction_[ExecutionContextActionListenerType.EC_DETACHED]:notify(ec_id)
+		self._actionListeners.ecaction_[ExecutionContextActionListenerType.EC_DETACHED]:notify(pprof)
 	end
 
 	-- 生存確認
@@ -1277,8 +1276,6 @@ RTObject.new = function(manager)
 
 		for i, ec in ipairs(self._ecMine) do
 			--if exec_context:_is_equivalent(ec) then
-			local Manager = require "openrtm.Manager"
-			local orb = Manager:instance():getORB()
 
 			if NVUtil._is_equivalent(exec_context, ec, exec_context.getObjRef, ec.getObjRef) then
 				return true
@@ -1329,8 +1326,8 @@ RTObject.new = function(manager)
 		if ecs == oil.corba.idl.null then
 			return -1
 		end
-		
-		
+
+
 		for i,oec in ipairs(self._ecOther) do
 			if oec == oil.corba.idl.null then
 				self._ecOther[i] = ecs
@@ -1494,22 +1491,22 @@ RTObject.new = function(manager)
 	function obj:get_sdo_service(_id)
 		self._rtcout:RTC_TRACE("get_sdo_service(%s)", _id)
 		self._sdoSvcProfiles = self._SdoConfigImpl:getServiceProfiles()
-	
+
 		if _id == "" then
 			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
 				description="get_service(): Empty name."
 			})
 		end
-	
+
 		local index = CORBA_SeqUtil.find(self._sdoSvcProfiles, svc_name(_id))
-	
+
 		if index < 0 then
 			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
 				description="get_service(): Not found"
 			})
 		end
-		
-	
+
+
 		return self._sdoSvcProfiles[index].service
 	end
 
@@ -1567,13 +1564,13 @@ RTObject.new = function(manager)
 						description="get_service_profile(): Not found"
 				})
 		end
-  
+
 		return self._sdoSvcProfiles[index]
 	end
 
 
 
-    
+
 
 	obj:setInstanceName(uuid())
 

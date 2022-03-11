@@ -21,7 +21,7 @@ local LogstreamFile= {}
 --_G["openrtm.LogstreamFile"] = LogstreamFile
 
 -- ファイル出力ロガーストリームオブジェクト初期化
--- @return 
+-- @return LogstreamFile
 LogstreamFile.new = function()
 	local obj = {}
 	setmetatable(obj, {__index=LogstreamBase.new()})

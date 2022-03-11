@@ -65,7 +65,7 @@ end
 -- @return 実行コンテキスト
 CORBA_RTCUtil.get_actual_ec = function(rtc, ec_id)
 	local Manager = require "openrtm.Manager"
-	local ReturnCode_t  = Manager._ReturnCode_t
+
 	if ec_id == nil then
 		ec_id = 0
 	end
@@ -637,7 +637,7 @@ CORBA_RTCUtil.connect = function(name, prop, port0, port1)
 	end
 
 	local cprof = CORBA_RTCUtil.create_connector(name, prop, port0, port1)
-	local ret, prof = port0:connect(cprof)
+	local ret, _ = port0:connect(cprof)
 	ret = NVUtil.getReturnCode(ret)
 
 	--print(ret)

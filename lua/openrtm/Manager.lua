@@ -362,7 +362,7 @@ local ECFactoryPredicate = function(argv)
 	return obj
 end
 
-
+--[[
 -- モジュール一致判定関数オブジェクト初期化
 -- @param prop プロパティ
 -- @return モジュール一致判定関数オブジェクト
@@ -391,6 +391,7 @@ local ModulePredicate = function(prop)
 	setmetatable(obj, {__call=call_func})
 	return obj
 end
+]]
 
 local Finalized = {}
 

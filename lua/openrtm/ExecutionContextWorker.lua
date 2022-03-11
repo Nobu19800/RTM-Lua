@@ -332,7 +332,7 @@ ExecutionContextWorker.new = function()
 			self._rtcout:RTC_ERROR("nil reference is given.")
 			return self._ReturnCode_t.BAD_PARAMETER
 		end
-		local success, exception = oil.pcall(
+		local success, _ = oil.pcall(
 		function()
 			local ec_ = self:getECRef()
 			local id_ = comp:attach_context(ec_)

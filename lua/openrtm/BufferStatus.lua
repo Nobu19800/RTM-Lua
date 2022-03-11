@@ -26,7 +26,7 @@ local BufferStatus = {
 				TIMEOUT = 5,
 				PRECONDITION_NOT_MET = 6
 				}
-			
+
 --_G["openrtm.BufferStatus"] = BufferStatus
 
 -- バッファステータスを文字に変換

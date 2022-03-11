@@ -85,7 +85,7 @@ ConnectorListener.ConnectorDataListenerT.new = function()
 	function obj:__call__(info, cdrdata, dataType)
 		local Manager = require "openrtm.Manager"
 		local _data = Manager:instance():cdrUnmarshal(cdrdata, dataType)
-		return _data	
+		return _data
 	end
 	local call_func = function(self, info, cdrdata, data)
 		self:call(info, cdrdata, data)

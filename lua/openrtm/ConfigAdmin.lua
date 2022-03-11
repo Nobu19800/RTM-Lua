@@ -70,7 +70,7 @@ Config.new = function(name, var, def_val, trans)
 			self:notifyUpdate(self.name, val)
 			return true
 		end
-		local retd, valued = self._trans(self._var._value, self.default_value)
+		local _, valued = self._trans(self._var._value, self.default_value)
 		self._var._value = valued
 		self:notifyUpdate(self.name, val)
 		return false
@@ -97,7 +97,7 @@ ConfigAdmin.new = function(configsets)
 	-- 変数をコンフィギュレーションパラメータ設定に割り当てる
 	-- @param param_name パラメータ名
 	-- @param var 変数
-	-- @param def_val デフォルト値 
+	-- @param def_val デフォルト値
 	-- @param trans 変換関数(デフォルトはstringTo関数)
 	-- @return true：バインド成功、false：バインド失敗
 	function obj:bindParameter(param_name, var, def_val, trans)
@@ -450,7 +450,7 @@ ConfigAdmin.new = function(configsets)
     end
 
 	-- アクティブなコンフィギュレーションセット設定時コールバック設定
-	-- @param cb アクティブなコンフィギュレーションセット設定時コールバック	
+	-- @param cb アクティブなコンフィギュレーションセット設定時コールバック
 	function obj:setOnActivateSet(cb)
 		print("setOnActivateSet function is obsolete.")
 		print("Use addConfigurationSetNameListener instead.")

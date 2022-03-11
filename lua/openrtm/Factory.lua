@@ -96,7 +96,7 @@ Factory.FactoryLua.new = function(profile, new_func, delete_func, policy)
 				self._Number = self._Number + 1
 				rtobj:setProperties(self:profile())
 				local instance_name = rtobj:getTypeName()
-				local instance_name = instance_name..self._policy:onCreate(rtobj)
+				instance_name = instance_name..self._policy:onCreate(rtobj)
 				rtobj:setInstanceName(instance_name)
 				ret = rtobj
 			end)

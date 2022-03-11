@@ -104,7 +104,7 @@ CorbaNaming.new = function(orb, name_server)
 				return
 			else
 				if self:objIsNamingContext(context) then
-					local success, exception = oil.pcall(
+					local success, _ = oil.pcall(
 						function()
 							context = context:bind_new_context(self:subName(name_list, i, i))
 						end)

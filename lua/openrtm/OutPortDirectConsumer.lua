@@ -52,7 +52,7 @@ OutPortDirectConsumer.new = function()
 	function obj:setBuffer(buffer)
 		self._rtcout:RTC_TRACE("setBuffer()")
     end
-    
+
     -- コールバック関数設定
     -- @param info プロファイル
     -- @param listeners コールバック関数
@@ -134,7 +134,7 @@ OutPortDirectConsumer.new = function()
 			self._listeners.connector_[ConnectorListenerType.ON_SENDER_ERROR]:notify(self._profile)
 		end
 	end
-    
+
     return obj
 end
 

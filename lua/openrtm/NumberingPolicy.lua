@@ -17,14 +17,13 @@ local NumberingPolicyFactory = NumberingPolicyBase.NumberingPolicyFactory
 local StringUtil = require "openrtm.StringUtil"
 
 
-NumberingPolicy = {}
 -- 名前付けポリシー基底オブジェクト初期化
 -- @return 名前付けポリシーオブジェクト
 NumberingPolicy.new = function()
 	local obj = {}
-	function obj:onCreate(obj)
+	function obj:onCreate(obj_)
 	end
-	function obj:onDelete(obj)
+	function obj:onDelete(obj_)
 	end
 	return obj
 end

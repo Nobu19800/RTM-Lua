@@ -360,7 +360,7 @@ ExecutionContextWorker.new = function()
 
         local rtobj_ = self:findComponent(comp)
 
-   		if rtobj_ == nil then
+		if rtobj_ == nil then
 			self._rtcout:RTC_ERROR("no RTC found in this context.")
 			return self._ReturnCode_t.BAD_PARAMETER
 		end

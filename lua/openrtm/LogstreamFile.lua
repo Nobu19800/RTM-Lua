@@ -26,7 +26,7 @@ LogstreamFile.new = function()
 	local obj = {}
 	setmetatable(obj, {__index=LogstreamBase.new()})
 	obj.handlers = {}
-	
+
 	-- 初期化時にプロパティを設定
 	-- @param prop プロパティ
 	-- 「file_name」の要素にファイル名
@@ -50,7 +50,7 @@ LogstreamFile.new = function()
 		if StringUtil.getKeyCount(self.handlers) == 0 then
 			return false
 		end
-		
+
 		return true
 	end
 

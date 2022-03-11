@@ -15,7 +15,7 @@ local Factory = require "openrtm.Factory"
 local NumberingPolicy = require "openrtm.NumberingPolicy"
 local NumberingPolicyBase = require "openrtm.NumberingPolicyBase"
 local NumberingPolicyFactory = NumberingPolicyBase.NumberingPolicyFactory
-local StringUtil = require "openrtm.StringUtil"
+--local StringUtil = require "openrtm.StringUtil"
 
 
 NodeNumberingPolicy.new = function()
@@ -28,28 +28,26 @@ NodeNumberingPolicy.new = function()
 		local num = 0
 		while true do
 			local num_str = tostring(num)
-   
+
 			local name = _obj:getTypeName()..num_str
-		 
+
 			if not self:find(name) then
 				return num_str
 			else
 				num = num+1
 			end
 		end
-		return tostring(num)
 	end
 	function obj:onDelete(_obj)
 	end
 	function obj:find(name)
-		local rtcs = {}
 		local rtc_name = "rtcloc://*/*/"
-    	rtc_name = rtc_name..name
-   		local rtcs = self._mgr:getNaming():string_to_component(rtc_name)
-    
-    	if #rtcs > 0 then
-    		return true
-    	else
+		rtc_name = rtc_name..name
+		local rtcs = self._mgr:getNaming():string_to_component(rtc_name)
+
+		if #rtcs > 0 then
+			return true
+		else
 			return false
 		end
 	end

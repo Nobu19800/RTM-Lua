@@ -42,10 +42,10 @@ local is_equiv = function(mgr)
 	obj._mgr = mgr
 	-- マネージャのCORBAオブジェクトの一致を判定する関数
 	-- @param self 自身のオブジェクト
-	-- @param mgr 比較対象のマネージャ
+	-- @param mgr_ 比較対象のマネージャ
 	-- @return true：一致
-	local call_func = function(self, mgr)
-		return NVUtil._is_equivalent(self._mgr, mgr, self._mgr.getObjRef, mgr.getObjRef)
+	local call_func = function(self, mgr_)
+		return NVUtil._is_equivalent(self._mgr, mgr_, self._mgr.getObjRef, mgr_.getObjRef)
 	end
 	setmetatable(obj, {__call=call_func})
 	return obj
@@ -123,7 +123,7 @@ ManagerServant.new = function()
 		end
 		return true
 	end
-	
+
 	function obj:getObjRef()
 		return self._objref
 	end
@@ -182,7 +182,7 @@ ManagerServant.new = function()
 		self._rtcout:RTC_TRACE("get_components_by_name()")
 		local rtcs = self._mgr:getComponents()
 		local crtcs = {}
-		local name = StringUtil.eraseHeadBlank(name)
+		name = StringUtil.eraseHeadBlank(name)
 
 		local rtc_name = StringUtil.split(name, "/")
 		for k,rtc in ipairs(rtcs) do
@@ -283,12 +283,12 @@ ManagerServant.new = function()
 			local module_profile = {properties={}}
 			NVUtil.copyFromProperties(module_profile.properties, p)
 			table.insert(cprof, p)
-						
+
 		end
 
 
-    	if self._isMaster then
-        	for k,slave in ipairs(self._slaves) do
+		if self._isMaster then
+			for k,slave in ipairs(self._slaves) do
 				local success, exception = oil.pcall(
 					function()
 						local profs = slave:get_loaded_modules()
@@ -297,13 +297,13 @@ ManagerServant.new = function()
 				)
 				if not success then
 					self._rtcout:RTC_ERROR("Unknown exception cought.")
-          			self._rtcout:RTC_DEBUG(exception)
-          			table.remove(self._slaves, k)
+					self._rtcout:RTC_DEBUG(exception)
+					table.remove(self._slaves, k)
 				end
 			end
 		end
 
-    	return cprof
+		return cprof
 	end
 
 	-- ファクトリプロファイル一覧取得
@@ -316,12 +316,12 @@ ManagerServant.new = function()
 			local module_profile = {properties={}}
 			NVUtil.copyFromProperties(module_profile.properties, p)
 			table.insert(cprof, p)
-						
+
 		end
 
 
-    	if self._isMaster then
-        	for k,slave in ipairs(self._slaves) do
+		if self._isMaster then
+			for k,slave in ipairs(self._slaves) do
 				local success, exception = oil.pcall(
 					function()
 						local profs = slave:get_factory_profiles()
@@ -330,13 +330,13 @@ ManagerServant.new = function()
 				)
 				if not success then
 					self._rtcout:RTC_ERROR("Unknown exception cought.")
-          			self._rtcout:RTC_DEBUG(exception)
-          			table.remove(self._slaves, k)
+					self._rtcout:RTC_DEBUG(exception)
+					table.remove(self._slaves, k)
 				end
 			end
 		end
 
-    	return cprof
+		return cprof
 	end
 
 	function obj:findManagerByName(manager_name)
@@ -348,8 +348,8 @@ ManagerServant.new = function()
 
 	function obj:getParameterByModulename(param_name, module_name)
 		local arg = module_name[1]
-		local pos0, c = string.find(arg, "&"..param_name.."=")
-		local pos1, c = string.find(arg, "?"..param_name.."=")
+		local pos0, c1 = string.find(arg, "&"..param_name.."=")
+		local pos1, c2 = string.find(arg, "?"..param_name.."=")
 
 		if pos0 == nil and pos1 == nil then
 			return ""
@@ -363,7 +363,7 @@ ManagerServant.new = function()
 
 
 		local paramstr = ""
-		local endpos, c = string.find(string.sub(arg,pos+1), '&')
+		local endpos, c3 = string.find(string.sub(arg,pos+1), '&')
 		if endpos == nil then
 			endpos = string.find(string.sub(arg,pos+1), '?')
 			if endpos == nil then
@@ -377,7 +377,7 @@ ManagerServant.new = function()
 		end
 		self._rtcout:RTC_VERBOSE(param_name.." arg: "..paramstr)
 
-		local eqpos, c = string.find(paramstr, "=")
+		local eqpos, c4 = string.find(paramstr, "=")
 		if eqpos == nil then
 			eqpos = 0
 		end
@@ -400,7 +400,7 @@ ManagerServant.new = function()
 		local arg = module_name
 		local tmp = {arg}
 		local mgrstr = self:getParameterByModulename("manager_name",tmp)
-		local arg = tmp[1]
+		arg = tmp[1]
 		if mgrstr == "" then
 			return oil.corba.idl.null
 		end
@@ -470,7 +470,7 @@ ManagerServant.new = function()
 						local success, exception = oil.pcall(
 							function()
 								local prof = slave.get_configuration()
-								local prop = OpenRTM_aist.Properties()
+								local prop = Properties.new()
 								NVUtil.copyToProperties(prop, prof)
 								local name = prop.getProperty("manager.instance_name")
 
@@ -526,7 +526,7 @@ ManagerServant.new = function()
 		local arg = module_name
 		local tmp = {arg}
 		local mgrstr = self:getParameterByModulename("manager_address",tmp)
-		local arg = tmp[1]
+		arg = tmp[1]
 		if mgrstr == "" then
 			return oil.corba.idl.null
 		end
@@ -612,6 +612,8 @@ ManagerServant.new = function()
 		end
 		local tmp = {module_name}
 		self:getParameterByModulename("manager_address",tmp)
+
+		local manager_name = self:getParameterByModulename("manager_name",tmp)
 		module_name = tmp[1]
 
 		local comp_param = ManagerServant.CompParam.new(module_name)
@@ -625,7 +627,7 @@ ManagerServant.new = function()
 						local prop = Properties.new()
 						NVUtil.copyToProperties(prop, prof)
 						local slave_lang = prop:getProperty("manager.language")
-						
+
 						if slave_lang == comp_param:language() then
 							rtc = slave:create_component(module_name)
 						end
@@ -831,18 +833,18 @@ ManagerServant.new = function()
 	end
 
 	local Manager = require "openrtm.Manager"
-	obj._mgr    = Manager:instance()
+	obj._mgr = Manager:instance()
 	obj._ReturnCode_t = obj._mgr:getORB().types:lookup("::RTC::ReturnCode_t").labelvalue
 
-    obj._owner  = oil.corba.idl.null
-    obj._rtcout = obj._mgr:getLogbuf("ManagerServant")
-    obj._isMaster = false
-    obj._masters = {}
-    obj._slaves = {}
+	obj._owner  = oil.corba.idl.null
+	obj._rtcout = obj._mgr:getLogbuf("ManagerServant")
+	obj._isMaster = false
+	obj._masters = {}
+	obj._slaves = {}
 
 	local config = obj._mgr:getConfig()
 
-    obj._objref = oil.corba.idl.null
+	obj._objref = oil.corba.idl.null
 
 
 	if not obj:createINSManager() then
@@ -852,13 +854,13 @@ ManagerServant.new = function()
 
 
 
-    obj._rtcout:RTC_TRACE("Manager CORBA servant was successfully created.")
+	obj._rtcout:RTC_TRACE("Manager CORBA servant was successfully created.")
 
-    if StringUtil.toBool(config:getProperty("manager.is_master"), "YES", "NO", true) then
+	if StringUtil.toBool(config:getProperty("manager.is_master"), "YES", "NO", true) then
 		obj._rtcout:RTC_TRACE("This manager is master.")
 		obj._isMaster = true
 		return obj
-    else
+	else
 		obj._rtcout:RTC_TRACE("This manager is slave.")
 		local success, exception = oil.pcall(
 			function()
@@ -877,7 +879,7 @@ ManagerServant.new = function()
 			obj._rtcout:RTC_ERROR("Unknown exception cought.")
 			obj._rtcout:RTC_ERROR(exception)
 		end
-    end
+	end
 
 	return obj
 end

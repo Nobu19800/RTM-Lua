@@ -39,13 +39,12 @@ end
 PortConnectListener.PortConnectListener.new = function()
 	local obj = {}
 	function obj:call(portname, profile)
-		
 	end
 
 
 
 	local call_func = function(self, portname, profile)
-		self:call(info, data)
+		self:call(portname, profile)
 	end
 	setmetatable(obj, {__call=call_func})
 	return obj
@@ -90,7 +89,6 @@ end
 PortConnectListener.PortConnectRetListener.new = function()
 	local obj = {}
 	function obj:call(portname, profile, ret)
-		
 	end
 
 
@@ -162,7 +160,7 @@ PortConnectListener.PortConnectRetListenerHolder.new = function()
 	end
 	function obj:notify(portname, profile, ret)
 		for i, listener in ipairs(self._listeners) do
-			local ret = listener.listener:call(portname, profile, ret)
+			ret = listener.listener:call(portname, profile, ret)
 		end
 	end
 	return obj

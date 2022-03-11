@@ -24,16 +24,16 @@ OutPortConsumer.new = function()
 	-- @param prop プロパティ
 	-- return インターフェース追加関数オブジェクト
 	obj.subscribe.new = function(prop)
-		local obj = {}
-		obj._prop = prop
+		local obj_ = {}
+		obj_._prop = prop
 		-- インターフェース追加関数
 		-- @param self 自身のオブジェクト
 		-- @param consumer コンシューマ
 		local call_func = function(self, consumer)
 			consumer:subscribeInterface(self._prop)
 		end
-		setmetatable(obj, {__call=call_func})
-		return obj
+		setmetatable(obj_, {__call=call_func})
+		return obj_
 	end
 	obj.unsubscribe = {}
 	-- コンシューマのインターフェース削除関数オブジェクト初期化

@@ -57,26 +57,26 @@ RTObjectStateMachine.new = function(id, comp)
 
 
 	-- RTCの設定
-	-- @param comp RTC
-	function obj:setComponentAction(comp)
-		if comp.getObjRef == nil then
-			self._caVar = comp
+	-- @param comp_ RTC
+	function obj:setComponentAction(comp_)
+		if comp_.getObjRef == nil then
+			self._caVar = comp_
 		else
-			self._rtObjPtr = comp
-			self._caVar = comp:getObjRef()
+			self._rtObjPtr = comp_
+			self._caVar = comp_:getObjRef()
 		end
 	end
 	-- データフローコンポーネントの設定
-	-- @param comp RTC
-	function obj:setDataFlowComponentAction(comp)
+	-- @param comp_ RTC
+	function obj:setDataFlowComponentAction(comp_)
 	end
 	-- FSMコンポーネントの設定
-	-- @param comp RTC
-	function obj:setFsmParticipantAction(comp)
+	-- @param comp_ RTC
+	function obj:setFsmParticipantAction(comp_)
 	end
 	-- マルチモードコンポーネントの設定
-	-- @param comp RTC
-	function obj:setMultiModeComponentAction(comp)
+	-- @param comp_ RTC
+	function obj:setMultiModeComponentAction(comp_)
 	end
 
 
@@ -113,19 +113,19 @@ RTObjectStateMachine.new = function(id, comp)
 	-- 状態遷移マシンで保持しているRTCが一致するかの確認
 	-- @param comp RTC
 	-- @return true：一致、false：不一致
-	function obj:isEquivalent(comp)
+	function obj:isEquivalent(comp_)
 		--local Manager = require "openrtm.Manager"
 		--orb = Manager:instance():getORB()
-		--print(self._rtobj,comp)
-		--print(comp:getInstanceName())
+		--print(self._rtobj,comp_)
+		--print(comp_:getInstanceName())
 		--print(self._rtobj:getInstanceName())
-		--return (orb:tostring(self._rtobj)==orb:tostring(comp))
+		--return (orb:tostring(self._rtobj)==orb:tostring(comp_))
 		--print("abcde")
 
 
-		--print(comp, self._rtobj)
-		return NVUtil._is_equivalent(comp, self._rtobj, comp.getObjRef, self._rtobj.getObjRef)
-		--return (comp:getInstanceName()==self._rtobj:getInstanceName())
+		--print(comp_, self._rtobj)
+		return NVUtil._is_equivalent(comp_, self._rtobj, comp_.getObjRef, self._rtobj.getObjRef)
+		--return (comp_:getInstanceName()==self._rtobj:getInstanceName())
 	end
 
 	-- 指定状態への移行
@@ -163,17 +163,17 @@ RTObjectStateMachine.new = function(id, comp)
 	-- アクティブ状態遷移後の処理実行
 	-- @param st RTCの状態
 	function obj:onActivated(st)
-		local comp = self:getComponentObj()
+		local comp_ = self:getComponentObj()
 		--print(self._caVar)
 		--print("test",self._caVar)
-		if comp == nil then
+		if comp_ == nil then
 			return
 		end
 		--local ret = self._caVar:on_activated(self._id)
 		--print(type(ret), type(self._ReturnCode_t.RTC_OK))
 		--if ret ~= "RTC_OK" then
 		--print("aaaa")
-		if NVUtil.getReturnCode(comp:on_activated(self._id)) ~= self._ReturnCode_t.RTC_OK then
+		if NVUtil.getReturnCode(comp_:on_activated(self._id)) ~= self._ReturnCode_t.RTC_OK then
 			--print("onActivated:ERROR")
 			self._sm:goTo(self._LifeCycleState.ERROR_STATE+1)
 		end
@@ -182,49 +182,49 @@ RTObjectStateMachine.new = function(id, comp)
     -- 非アクティブ状態遷移後の処理実行
 	-- @param st RTCの状態
 	function obj:onDeactivated(st)
-		local comp = self:getComponentObj()
-		if comp == nil then
+		local comp_ = self:getComponentObj()
+		if comp_ == nil then
 			return
 		end
-		comp:on_deactivated(self._id)
+		comp_:on_deactivated(self._id)
     end
     -- エラー状態遷移時の処理実行
 	-- @param st RTCの状態
 	function obj:onAborting(st)
-		local comp = self:getComponentObj()
-		if comp == nil then
+		local comp_ = self:getComponentObj()
+		if comp_ == nil then
 			return
 		end
-		comp:on_aborting(self._id)
+		comp_:on_aborting(self._id)
     end
     -- エラー状態の処理実行
 	-- @param st RTCの状態
 	function obj:onError(st)
-		local comp = self:getComponentObj()
-		if comp == nil then
+		local comp_ = self:getComponentObj()
+		if comp_ == nil then
 			return
 		end
-		comp:on_error(self._id)
+		comp_:on_error(self._id)
     end
     -- リセット実行時の処理実行
 	-- @param st RTCの状態
 	function obj:onReset(st)
-		local comp = self:getComponentObj()
-		if comp == nil then
+		local comp_ = self:getComponentObj()
+		if comp_ == nil then
 			return
 		end
-		if NVUtil.getReturnCode(comp:on_reset(self._id)) ~= self._ReturnCode_t.RTC_OK then
+		if NVUtil.getReturnCode(comp_:on_reset(self._id)) ~= self._ReturnCode_t.RTC_OK then
 			self._sm:goTo(self._LifeCycleState.ERROR_STATE+1)
 		end
     end
     -- アクティブ状態の処理実行
 	-- @param st RTCの状態
 	function obj:onExecute(st)
-		local comp = self:getComponentObj()
-		if comp == nil then
+		local comp_ = self:getComponentObj()
+		if comp_ == nil then
 			return
 		end
-		if NVUtil.getReturnCode(comp:on_execute(self._id)) ~= self._ReturnCode_t.RTC_OK then
+		if NVUtil.getReturnCode(comp_:on_execute(self._id)) ~= self._ReturnCode_t.RTC_OK then
 			--print("onExecute:ERROR")
 			self._sm:goTo(self._LifeCycleState.ERROR_STATE+1)
 		end
@@ -232,11 +232,11 @@ RTObjectStateMachine.new = function(id, comp)
     -- 状態更新時の処理実行
 	-- @param st RTCの状態
 	function obj:onStateUpdate(st)
-		local comp = self:getComponentObj()
-		if comp == nil then
+		local comp_ = self:getComponentObj()
+		if comp_ == nil then
 			return
 		end
-		if NVUtil.getReturnCode(comp:on_state_update(self._id)) ~= self._ReturnCode_t.RTC_OK then
+		if NVUtil.getReturnCode(comp_:on_state_update(self._id)) ~= self._ReturnCode_t.RTC_OK then
 			--print("onStateUpdate:ERROR")
 			self._sm:goTo(self._LifeCycleState.ERROR_STATE+1)
 		end
@@ -245,11 +245,11 @@ RTObjectStateMachine.new = function(id, comp)
 	-- @param st RTCの状態
 	-- @return リターンコード
 	function obj:onRateChanged(st)
-		local comp = self:getComponentObj()
-		if comp == nil then
+		local comp_ = self:getComponentObj()
+		if comp_ == nil then
 			return
 		end
-		local ret = comp:on_rate_changed(self._id)
+		local ret = comp_:on_rate_changed(self._id)
 		if ret ~= self._ReturnCode_t.RTC_OK then
 			self._sm:goTo(self._LifeCycleState.ERROR_STATE+1)
 		end
@@ -258,7 +258,7 @@ RTObjectStateMachine.new = function(id, comp)
     -- アクション実行
 	-- @param st RTCの状態
 	function obj:onAction(st)
-		local comp = self:getComponentObj()
+		local comp_ = self:getComponentObj()
 		if self._fsmVar == nil then
 			return
 		end
@@ -269,7 +269,7 @@ RTObjectStateMachine.new = function(id, comp)
     -- モード変更後の処理実行
 	-- @param st RTCの状態
 	function obj:onModeChanged(st)
-		local comp = self:getComponentObj()
+		local comp_ = self:getComponentObj()
 		if self._modeVar == nil then
 			return
 		end
@@ -277,13 +277,12 @@ RTObjectStateMachine.new = function(id, comp)
 			self._sm:goTo(self._LifeCycleState.ERROR_STATE+1)
 		end
 	end
-	
+
 	function obj:getRTObject()
 		return self._rtobj
 	end
 
 	function obj:getExecutionContextHandle()
-		
 		return self._id
 	end
 

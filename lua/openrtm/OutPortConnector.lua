@@ -25,14 +25,14 @@ OutPortConnector.new = function(info)
     obj._profile = info
 	obj._endian = true
 	obj._directMode = false
-    
+
     -- プロファイル取得
     -- @return プロファイル
 	function obj:profile()
 		self._rtcout:RTC_TRACE("profile()")
 		return self._profile
 	end
-	
+
 	-- コネクタID取得
 	-- @return コネクタID
 	function obj:id()

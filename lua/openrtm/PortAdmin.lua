@@ -30,9 +30,9 @@ local comp_op = function(argv)
 	-- ポートの名前が一致しているか判定する
 	-- @param self 自身のオブジェクト
 	-- @param obj RTC
-	-- @return true：一致、false：不一致 
-	local call_func = function(self, obj)
-		name_ = obj:getProfile().name
+	-- @return true：一致、false：不一致
+	local call_func = function(self, obj_)
+		local name_ = obj_:getProfile().name
 		return (self._name == name_)
 	end
 	setmetatable(obj, {__call=call_func})
@@ -73,8 +73,8 @@ find_port.new = function(p)
 	-- @param self 自身のオブジェクト
 	-- @param p ポート
 	-- @return true：一致、false：不一致
-	local call_func = function(self, p)
-		return NVUtil._is_equivalent(self._port, p, self._port.getObjRef, p.getObjRef)
+	local call_func = function(self, p_)
+		return NVUtil._is_equivalent(self._port, p_, self._port.getObjRef, p_.getObjRef)
 	end
 	setmetatable(obj, {__call=call_func})
 	return obj
@@ -102,7 +102,7 @@ PortAdmin.new = function(orb)
     end
     -- ポートのインターフェースの非アクティブ化
 	function obj:deactivatePorts()
-		ports = self._portServants:getObjects()
+		local ports = self._portServants:getObjects()
 		for i, port in pairs(ports) do
 			port:deactivateInterfaces()
 		end
@@ -155,9 +155,9 @@ PortAdmin.new = function(orb)
 			function()
 
 			port:disconnect_all()
-			tmp = port:getProfile().name
+			local tmp = port:getProfile().name
 			--print(#self._portRefs)
-			
+
 			CORBA_SeqUtil.erase_if(self._portRefs, find_port_name.new(tmp))
 			--print(#self._portRefs)
 			port:deactivate()

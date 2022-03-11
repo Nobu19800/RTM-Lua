@@ -12,14 +12,12 @@ local OpenHRPExecutionContext= {}
 --_G["openrtm.OpenHRPExecutionContext"] = OpenHRPExecutionContext
 
 local ExecutionContextBase = require "openrtm.ExecutionContextBase"
-
-local ExecutionContextBase = require "openrtm.ExecutionContextBase"
 local ExecutionContextFactory = ExecutionContextBase.ExecutionContextFactory
 local ECFactory = require "openrtm.ECFactory"
-local oil = require "oil"
+--local oil = require "oil"
 
 local RTCUtil = require "openrtm.RTCUtil"
-local Timer = require "openrtm.Timer"
+--local Timer = require "openrtm.Timer"
 
 local DEFAULT_PERIOD = 0.000001
 
@@ -61,7 +59,7 @@ OpenHRPExecutionContext.new = function()
 
 
 		if self._count > 1000 then
-			
+
 			local excdotm = t1_ - t0_
 			local excpdotm = t2_ - t1_
 			local slptm_ = period_:toDouble() - (t2_ - t0_)

@@ -18,10 +18,8 @@ local SdoServiceAdmin = require "openrtm.SdoServiceAdmin"
 local SdoConfiguration = require "openrtm.SdoConfiguration"
 local Configuration_impl = SdoConfiguration.Configuration_impl
 local ComponentActionListener = require "openrtm.ComponentActionListener"
-local ComponentActionListeners = ComponentActionListener.ComponentActionListeners
 local PortConnectListener = require "openrtm.PortConnectListener"
 local PortConnectListeners = PortConnectListener.PortConnectListeners
-local ManagerConfig = require "openrtm.ManagerConfig"
 local ExecutionContextBase = require "openrtm.ExecutionContextBase"
 local ExecutionContextFactory = ExecutionContextBase.ExecutionContextFactory
 local StringUtil = require "openrtm.StringUtil"
@@ -32,10 +30,6 @@ local PreComponentActionListenerType = ComponentActionListener.PreComponentActio
 local PostComponentActionListenerType = ComponentActionListener.PostComponentActionListenerType
 local PortActionListenerType = ComponentActionListener.PortActionListenerType
 local ExecutionContextActionListenerType = ComponentActionListener.ExecutionContextActionListenerType
-local PreComponentActionListener = ComponentActionListener.PreComponentActionListener
-local PostComponentActionListener = ComponentActionListener.PostComponentActionListener
-local PortActionListener = ComponentActionListener.PortActionListener
-local ExecutionContextActionListener = ComponentActionListener.ExecutionContextActionListener
 local ComponentActionListeners = ComponentActionListener.ComponentActionListeners
 
 local uuid = require "uuid"
@@ -488,7 +482,7 @@ RTObject.new = function(manager)
 			ret = self._ReturnCode_t.RTC_ERROR
 		end
 		local active_set = self._properties:getProperty("configuration.active_config",
-                                              "default")
+														"default")
 		if self._configsets:haveConfig(active_set) then
 			self._rtcout:RTC_DEBUG("Active configuration set: "..active_set.." exists.")
 			self._configsets:activateConfigurationSet(active_set)
@@ -898,62 +892,62 @@ RTObject.new = function(manager)
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnInitialize(ec_id, ret)
 		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_INITIALIZE]:notify(ec_id, ret)
-    end
+	end
 	-- 終了後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnFinalize(ec_id, ret)
 		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_FINALIZE]:notify(ec_id, ret)
-    end
-    -- 実行コンテキスト開始後のコールバック関数
+	end
+	-- 実行コンテキスト開始後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnStartup(ec_id, ret)
 		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_STARTUP]:notify(ec_id, ret)
-    end
-    -- 実行コンテキスト停止後のコールバック関数
+	end
+	-- 実行コンテキスト停止後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnShutdown(ec_id, ret)
 		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_SHUTDOWN]:notify(ec_id, ret)
-    end
-    -- アクティブ化後のコールバック関数
+	end
+	-- アクティブ化後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnActivated(ec_id, ret)
 		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_ACTIVATED]:notify(ec_id, ret)
-    end
-    -- 非アクティブ化後のコールバック関数
+	end
+	-- 非アクティブ化後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnDeactivated(ec_id, ret)
 		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_DEACTIVATED]:notify(ec_id, ret)
-    end
-    -- エラー状態遷移後のコールバック関数
+	end
+	-- エラー状態遷移後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnAborting(ec_id, ret)
 		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_ABORTING]:notify(ec_id, ret)
-    end
-    -- エラー状態コールバック関数実行後のコールバック関数
+	end
+	-- エラー状態コールバック関数実行後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnError(ec_id, ret)
 		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_ERROR]:notify(ec_id, ret)
-    end
-    -- リセット実行後のコールバック関数
+	end
+	-- リセット実行後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnReset(ec_id, ret)
 		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_RESET]:notify(ec_id, ret)
-    end
-    -- アクティブ状態コールバック関数実行後のコールバック関数
+	end
+	-- アクティブ状態コールバック関数実行後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnExecute(ec_id, ret)
 		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_EXECUTE]:notify(ec_id, ret)
-    end
-    -- 状態更新後のコールバック関数
+	end
+	-- 状態更新後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnStateUpdate(ec_id, ret)
 		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_STATE_UPDATE]:notify(ec_id, ret)
-    end
-    -- 実行周期変更後のコールバック関数
+	end
+	-- 実行周期変更後のコールバック関数
 	-- @param ec_id 実行コンテキストのID
 	function obj:postOnRateChanged(ec_id, ret)
 		self._actionListeners.postaction_[PostComponentActionListenerType.POST_ON_RATE_CHANGED]:notify(ec_id, ret)
-    end
+	end
 
 	-- コンフィギュレーションパラメータの変数をバインド
 	-- @param param_name パラメータ名
@@ -982,7 +976,7 @@ RTObject.new = function(manager)
 	function obj:updateParameters(config_set)
 		self._rtcout:RTC_TRACE("updateParameters("..config_set..")")
 		self._configsets:update(config_set)
-    end
+	end
 
 
 	-- 実行コンテキスト取得
@@ -1257,23 +1251,23 @@ RTObject.new = function(manager)
 	-- @param pprof ポートプロファイル
 	function obj:onAddPort(pprof)
 		self._actionListeners.portaction_[PortActionListenerType.ADD_PORT]:notify(pprof)
-    end
-    -- ポート削除時のコールバック実行
+	end
+	-- ポート削除時のコールバック実行
 	-- @param pprof ポートプロファイル
 	function obj:onRemovePort(pprof)
 		self._actionListeners.portaction_[PortActionListenerType.REMOVE_PORT]:notify(pprof)
-    end
-    -- 実行コンテキストアタッチ時のコールバック実行
-    -- @param ec_id 実行コンテキストのID
+	end
+	-- 実行コンテキストアタッチ時のコールバック実行
+	-- @param ec_id 実行コンテキストのID
 	function obj:onAttachExecutionContext(ec_id)
 		
 		self._actionListeners.ecaction_[ExecutionContextActionListenerType.EC_ATTACHED]:notify(ec_id)
-    end
-    -- 実行コンテキストデタッチ時のコールバック実行
-    -- @param ec_id 実行コンテキストのID
+	end
+	-- 実行コンテキストデタッチ時のコールバック実行
+	-- @param ec_id 実行コンテキストのID
 	function obj:onDetachExecutionContext(pprof)
 		self._actionListeners.ecaction_[ExecutionContextActionListenerType.EC_DETACHED]:notify(ec_id)
-    end
+	end
 
 	-- 生存確認
 	-- @param exec_context 実行コンテキスト
@@ -1356,22 +1350,22 @@ RTObject.new = function(manager)
 	function obj:detach_context(ec_id)
 		ec_id = ec_id + 1
 		local ECOTHER_OFFSET = RTObject.ECOTHER_OFFSET
-    	self._rtcout:RTC_TRACE("detach_context(%d)", ec_id)
-    	local len_ = #self._ecOther
+		self._rtcout:RTC_TRACE("detach_context(%d)", ec_id)
+		local len_ = #self._ecOther
 
 		if (tonumber(ec_id) < tonumber(ECOTHER_OFFSET)) or (tonumber(ec_id - ECOTHER_OFFSET) > len_) then
 			return self._ReturnCode_t.BAD_PARAMETER
 		end
-    
-    	local index = tonumber(ec_id - ECOTHER_OFFSET)
-		
-    	if index < 0 or self._ecOther[index] == oil.corba.idl.null then
+
+		local index = tonumber(ec_id - ECOTHER_OFFSET)
+
+		if index < 0 or self._ecOther[index] == oil.corba.idl.null then
 			return self._ReturnCode_t.BAD_PARAMETER
 		end
-    
-   
-    	self._ecOther[index] = oil.corba.idl.null
-    	self:onDetachExecutionContext(ec_id)
+
+
+		self._ecOther[index] = oil.corba.idl.null
+		self:onDetachExecutionContext(ec_id)
 		return self._ReturnCode_t.RTC_OK
 	end
 

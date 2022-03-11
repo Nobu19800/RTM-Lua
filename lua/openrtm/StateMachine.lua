@@ -11,7 +11,6 @@ local StateMachine= {}
 --_G["openrtm.StateMachine"] = StateMachine
 
 
-local StringUtil = require "openrtm.StringUtil"
 
 
 StateMachine.StateHolder = {}
@@ -113,7 +112,7 @@ StateMachine.new = function(num_of_state)
 			self._selftrans = true
 		end
     end
-    
+
 	-- 状態の同期処理
 	-- @param states 状態
 	function obj:sync(states)
@@ -121,7 +120,7 @@ StateMachine.new = function(num_of_state)
 		states.curr = self._states.curr
 		states.next = self._states.next
 	end
-	
+
 	-- 状態遷移マシン実行前の処理
 	function obj:worker_pre()
 		local state = StateMachine.StateHolder.new()

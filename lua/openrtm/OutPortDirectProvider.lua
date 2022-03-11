@@ -34,19 +34,19 @@ OutPortDirectProvider.new = function()
     -- 終了処理
 	function obj:exit()
     end
-    
+
     -- 初期化時にプロパティ設定
 	-- @param prop プロパティ
 	function obj:init(prop)
     end
-    
+
 
     -- バッファ設定
     -- @param buffer バッファ
 	function obj:setBuffer(buffer)
 		self._buffer = buffer
     end
-    
+
 
     -- コールバック関数設定
 	-- @param info プロファイル
@@ -55,14 +55,14 @@ OutPortDirectProvider.new = function()
 		self._profile = info
 		self._listeners = listeners
     end
-    
+
 
     -- コネクタ設定
 	-- @param connector コネクタ
 	function obj:setConnector(connector)
 		self._connector = connector
     end
-    
+
 
     -- バッファ書き込み時コールバック
 	-- @param data データ

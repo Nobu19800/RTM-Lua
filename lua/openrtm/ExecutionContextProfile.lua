@@ -183,7 +183,7 @@ ExecutionContextProfile.new = function(kind)
 			self._rtcout:RTC_ERROR("A nil reference was given.")
 			return self._ReturnCode_t.BAD_PARAMETER
 		end
-   		local rtobj_ = comp
+		local rtobj_ = comp
 		--[[
 		if rtobj_ == oil.corba.idl.null then
 			self._rtcout:RTC_ERROR("Narrowing was failed.")

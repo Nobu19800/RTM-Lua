@@ -17,7 +17,7 @@ local Logger= {}
 --_G["openrtm.SystemLogger"] = SystemLogger
 
 Logger.LogStream = {}
-local NO_LOGGER = true
+--local NO_LOGGER = true
 
 Logger.SILENT = 0
 Logger.FATAL = 1
@@ -69,7 +69,7 @@ Logger.LogStream.new = function()
 	obj._logger_name = ""
 	obj._loggerObj = {}
 	obj._log_enable = true
-	
+
 	-- ロガーストリーム終了処理
 	function obj:shutdown()
 		for k,v in pairs(self._loggerObj) do
@@ -77,24 +77,24 @@ Logger.LogStream.new = function()
 		end
 		self._loggerObj = {}
 	end
-	
+
 	-- ロガー追加
 	-- @param loggerObj ロガー
 	function obj:addLogger(loggerObj)
 		table.insert(self._loggerObj, loggerObj)
 	end
-	
-	
+
+
 
 	-- ログレベル設定
-	-- @param level ログレベル(文字列) 
+	-- @param level ログレベル(文字列)
 	function obj:setLogLevel(level)
 		local lvl = Logger.strToLogLevel(level)
 		for k,v in pairs(self._loggerObj) do
 			v:setLogLevel(lvl)
 		end
 	end
-	
+
 	function obj:setLogLock(lock)
 		if lock == 1 then
 			self._LogLock = true
@@ -102,15 +102,15 @@ Logger.LogStream.new = function()
 			self._LogLock = false
 		end
     end
-    
+
 	function obj:enableLogLock()
 		self._LogLock = true
 	end
-	
+
 	function obj:disableLogLock()
 		self._LogLock = false
 	end
-	
+
 	-- ログ出力
 	-- @param LV ログレベル
 	-- @param msg 出力フォーマット
@@ -122,11 +122,11 @@ Logger.LogStream.new = function()
 			for k,v in pairs(self._loggerObj) do
 				v:log(msg:format(...), LV, self._logger_name)
 			end
-      
+
 		end
 		--self.release()
 	end
-	
+
 	-- ログ出力(FATAL)
 	-- @param msg 出力フォーマット
 	-- @param ... 値
@@ -140,7 +140,7 @@ Logger.LogStream.new = function()
 		end
 		--self.release()
 	end
-	
+
 	-- ログ出力(ERROR)
 	-- @param msg 出力フォーマット
 	-- @param ... 値
@@ -154,7 +154,7 @@ Logger.LogStream.new = function()
 		end
 		--self.release()
 	end
-	
+
 	-- ログ出力(WARN)
 	-- @param msg 出力フォーマット
 	-- @param ... 値
@@ -168,7 +168,7 @@ Logger.LogStream.new = function()
 		end
 		--self.release()
 	end
-	
+
 	-- ログ出力(INFO)
 	-- @param msg 出力フォーマット
 	-- @param ... 値
@@ -182,7 +182,7 @@ Logger.LogStream.new = function()
 		end
 		--self.release()
 	end
-	
+
 	-- ログ出力(DEBUG)
 	-- @param msg 出力フォーマット
 	-- @param ... 値
@@ -196,7 +196,7 @@ Logger.LogStream.new = function()
 		end
 		--self.release()
 	end
-	
+
 	-- ログ出力(TRACE)
 	-- @param msg 出力フォーマット
 	-- @param ... 値
@@ -210,7 +210,7 @@ Logger.LogStream.new = function()
 		end
 		--self.release()
 	end
-	
+
 	-- ログ出力(VERBOSE)
 	-- @param msg 出力フォーマット
 	-- @param ... 値
@@ -224,7 +224,7 @@ Logger.LogStream.new = function()
 		end
 		--self.release()
 	end
-	
+
 	-- ログ出力(PARANOID)
 	-- @param msg 出力フォーマット
 	-- @param ... 値
@@ -238,7 +238,7 @@ Logger.LogStream.new = function()
 		end
 		--self.release()
 	end
-	
+
 	-- 指定名のロガー取得
 	-- @param name ロガー名
 	-- @return ロガー

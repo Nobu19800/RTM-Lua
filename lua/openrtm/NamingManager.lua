@@ -13,7 +13,7 @@ local NamingManager= {}
 
 local oil = require "oil"
 local CorbaNaming = require "openrtm.CorbaNaming"
-local StringUtil = require "openrtm.StringUtil"
+--local StringUtil = require "openrtm.StringUtil"
 local RTCUtil = require "openrtm.RTCUtil"
 local NVUtil = require "openrtm.NVUtil"
 local CorbaConsumer = require "openrtm.CorbaConsumer"
@@ -112,7 +112,6 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 	-- @param rtcs 一致したRTC一覧
 	function obj:getComponentByName(context, name, rtcs)
 
-		local orb = Manager:instance():getORB()
 		local BindingType = orb.types:lookup("::CosNaming::BindingType").labelvalue
 
 		local length = 500
@@ -174,7 +173,6 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 					if host == "*" then
 						cns = self._cosnaming
 					else
-						local orb = Manager:instance():getORB()
 						cns = CorbaNaming.new(orb,host)
 					end
 
@@ -248,18 +246,18 @@ NamingManager.NamingOnManager.new = function(orb, mgr)
 	function obj:getManager(name)
 		if name == "*" then
 			local mgr_sev = self._mgr:getManagerServant()
-			local mgr = nil
+			local mgr_ = nil
 			if mgr_sev:is_master() then
-				mgr = mgr_sev:getObjRef()
+				mgr_ = mgr_sev:getObjRef()
 			else
 				local masters = mgr_sev:get_master_managers()
 				if #masters > 0 then
-					mgr = masters[1]
+					mgr_ = masters[1]
 				else
-					mgr = mgr_sev:getObjRef()
+					mgr_ = mgr_sev:getObjRef()
 				end
 			end
-			return mgr
+			return mgr_
 		end
 		local success, exception = oil.pcall(
 			function()
@@ -306,11 +304,11 @@ NamingManager.NamingOnManager.new = function(orb, mgr)
 			self._rtcout:RTC_INFO("URI: "..name.." Address: "..
 								rtcuri:getAddress()..", Name: "..
 								rtcuri:getRTCName())
-			local mgr = self:getManager(rtcuri:getAddress())
+			local mgr_ = self:getManager(rtcuri:getAddress())
 			local rtcname = rtcuri:getRTCName()
-			if mgr ~= oil.corba.idl.null then
-				rtc_list = mgr:get_components_by_name(rtcname)
-				local slaves = mgr:get_slave_managers()
+			if mgr_ ~= oil.corba.idl.null then
+				rtc_list = mgr_:get_components_by_name(rtcname)
+				local slaves = mgr_:get_slave_managers()
 				for k,slave in ipairs(slaves) do
 					local success, exception = oil.pcall(
 						function()
@@ -318,7 +316,7 @@ NamingManager.NamingOnManager.new = function(orb, mgr)
 					end)
 					if not success then
 						self._rtcout:RTC_DEBUG(exception)
-						mgr:remove_slave_manager(slave)
+						mgr_:remove_slave_manager(slave)
 					end
 				end
 			end
@@ -498,7 +496,7 @@ NamingManager.new = function(manager)
 				return
 			end
 		end
-		table.insert(self._mgrNames, NamingManager.Mgr.new(name, rtobj))
+		table.insert(self._mgrNames, NamingManager.Mgr.new(name, mgr))
 	end
 
 	function obj:registerPortName(name, port)

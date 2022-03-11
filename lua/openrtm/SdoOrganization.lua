@@ -46,8 +46,8 @@ local sdo_id = function(id_)
 	-- @param sdo SDO
 	-- @return true：一致
 	local call_func = function(self, sdo)
-		local id_ = sdo:get_sdo_id()
-		return (self._id == id_)
+		local ido_ = sdo:get_sdo_id()
+		return (self._id == ido_)
 	end
 	setmetatable(obj, {__call=call_func})
 	return obj
@@ -63,7 +63,7 @@ SdoOrganization.Organization_impl.new = function(sdo)
 	local Manager = require "openrtm.Manager"
 	obj._manager = Manager:instance()
 	obj._orb = obj._manager:getORB()
-	
+
 
 	obj._pId = tostring(uuid())
 
@@ -72,7 +72,7 @@ SdoOrganization.Organization_impl.new = function(sdo)
 	obj._DependencyType = obj._orb.types:lookup("::SDOPackage::DependencyType").labelvalue
 	obj._memberList  = {obj._DependencyType.OWN}
 	obj.__rtcout = obj._manager:getLogbuf("rtobject")
-	
+
 
 	-- オブジェクトリファレンス生成
 	function obj:createRef()
@@ -83,7 +83,7 @@ SdoOrganization.Organization_impl.new = function(sdo)
 	-- ID取得
 	-- @return ID
 	function obj:get_organization_id()
-    	self.__rtcout:RTC_TRACE("get_organization_id() = %s", self._pId)
+		self.__rtcout:RTC_TRACE("get_organization_id() = %s", self._pId)
 		return self._pId
 	end
 
@@ -106,9 +106,9 @@ SdoOrganization.Organization_impl.new = function(sdo)
 				description="Empty name."
 			})
 		end
-	
+
 		local index = CORBA_SeqUtil.find(self._orgProperty.properties, nv_name(name))
-	
+
 		if index < 0 then
 			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
 				description="Not found."
@@ -116,8 +116,8 @@ SdoOrganization.Organization_impl.new = function(sdo)
 		end
 
 		return self._orgProperty.properties[index].value
-	
-	
+
+
 	end
 
 	-- プロパティの設定
@@ -130,9 +130,9 @@ SdoOrganization.Organization_impl.new = function(sdo)
 				description="org_property is Empty."
 			})
 		end
-	
-	
-		
+
+
+
 		self._orgProperty = org_property
 		return true
 	end
@@ -149,11 +149,11 @@ SdoOrganization.Organization_impl.new = function(sdo)
 			})
 		end
 
-    	local index = CORBA_SeqUtil.find(self._orgProperty.properties, nv_name(name))
+		local index = CORBA_SeqUtil.find(self._orgProperty.properties, nv_name(name))
 
-    	if index < 0 then
-    		local nv = NVUtil.newNV(name, value)
-    		table.insert(self._orgProperty.properties, nv)
+		if index < 0 then
+			local nv = NVUtil.newNV(name, value)
+			table.insert(self._orgProperty.properties, nv)
 		else
 			self._orgProperty.properties[index].value = value
 		end
@@ -181,7 +181,7 @@ SdoOrganization.Organization_impl.new = function(sdo)
 		end
 
 		table.remove(self._orgProperty.properties, index)
-    	
+
 		return true
 	end
 
@@ -194,17 +194,17 @@ SdoOrganization.Organization_impl.new = function(sdo)
 	end
 
 	-- オーナーのSDOを設定
-	-- @param sdo SDO
+	-- @param sdo_ SDO
 	-- @return true：設定成功
-	function obj:set_owner(sdo)
+	function obj:set_owner(sdo_)
 		self.__rtcout:RTC_TRACE("set_owner()")
-		if sdo == oil.corba.idl.null then
+		if sdo_ == oil.corba.idl.null then
 			error(self._orb:newexcept{"SDOPackage::InvalidParameter",
 				description="set_owner(): sdo is nil"
 			})
 		end
-	
-		self._varOwner = sdo
+
+		self._varOwner = sdo_
 
 		return true
 	end
@@ -226,8 +226,8 @@ SdoOrganization.Organization_impl.new = function(sdo)
 				description="set_members(): SDOList is empty."
 			})
 		end
-	
-	
+
+
 		self._memberList = sdos
 		return true
 	end
@@ -268,7 +268,7 @@ SdoOrganization.Organization_impl.new = function(sdo)
 			})
 		end
 
-    	local index = CORBA_SeqUtil.find(self._memberList, sdo_id(id))
+		local index = CORBA_SeqUtil.find(self._memberList, sdo_id(id))
 
 		if index < 0 then
 			self.__rtcout.RTC_ERROR("remove_member(): Not found.")
@@ -276,17 +276,17 @@ SdoOrganization.Organization_impl.new = function(sdo)
 					description="remove_member(): Not found."
 			})
 		end
-      
+
 
 		table.remove(self._memberList, index)
-    	return true
+		return true
 	end
 
 	--
 	-- @return
 	function obj:get_dependency()
 		self.__rtcout:RTC_TRACE("get_dependency()")
-    	return self._dependency
+		return self._dependency
 	end
 
 	--
@@ -300,8 +300,8 @@ SdoOrganization.Organization_impl.new = function(sdo)
 			})
 		end
 
-    	self._dependency = dependency
-    	return true
+		self._dependency = dependency
+		return true
 	end
 
 	-- オブジェクトリファレンス取得

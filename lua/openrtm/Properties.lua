@@ -150,6 +150,7 @@ Properties.new = function(argv)
 				curr = _next
 			end
 
+			local retval = curr.value
 			curr.value = value
 			return retval
 		else
@@ -158,7 +159,6 @@ Properties.new = function(argv)
 			local prop = self:getNode(key)
 			return prop.value
 		end
-		return self.root
 	end
 	-- デフォルト値設定
 	-- @param key キー
@@ -231,7 +231,7 @@ Properties.new = function(argv)
 	-- @param inStream インストリーム
 	-- @return プロパティ
 	function obj:loadStream(inStream)
-		pline = ""
+		local pline = ""
 		for i, readStr in ipairs(inStream) do
 			if readStr ~= "" then
 				local _str = readStr
@@ -385,9 +385,10 @@ Properties.new = function(argv)
 			end
 		end
 		for i = 1, length do
+			local s = string.sub(_str,i,i)
 			if s == " " and not StringUtil.isEscaped(_str, i) then
 				key = string.sub(_str,1,i-1)
-				value = string.sub(_str,i+1)			
+				value = string.sub(_str,i+1)
 				return key, value
 			end
 		end
@@ -518,7 +519,7 @@ Properties.new = function(argv)
 	function obj:load(inStream)
 		local pline = ""
 		for readStr in inStream:lines() do
-			
+
 			local _str = StringUtil.eraseHeadBlank(readStr)
 
 
@@ -536,7 +537,7 @@ Properties.new = function(argv)
 				else
 					pline = pline.._str
 
-					
+
 					--print(key)
 					local key, value = self:splitKeyValue(pline)
 					key = StringUtil.unescape(key)

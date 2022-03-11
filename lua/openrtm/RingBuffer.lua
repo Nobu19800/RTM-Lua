@@ -29,17 +29,17 @@ RingBuffer.new = function(length)
 		length = RingBuffer.RINGBUFFER_DEFAULT_LENGTH
 	end
 	obj._overwrite = true
-    obj._readback = true
-    obj._timedwrite = false
-    obj._timedread  = false
-    obj._wtimeout = TimeValue.new(1,0)
-    obj._rtimeout = TimeValue.new(1,0)
-    obj._length   = length
-    obj._wpos = 0
-    obj._rpos = 0
-    obj._fillcount = 0
-    obj._wcount = 0
-    obj._buffer = {}
+	obj._readback = true
+	obj._timedwrite = false
+	obj._timedread  = false
+	obj._wtimeout = TimeValue.new(1,0)
+	obj._rtimeout = TimeValue.new(1,0)
+	obj._length   = length
+	obj._wpos = 0
+	obj._rpos = 0
+	obj._fillcount = 0
+	obj._wcount = 0
+	obj._buffer = {}
 
 	-- 初期化時にプロパティを設定
 	-- @param prop プロパティ
@@ -104,7 +104,7 @@ RingBuffer.new = function(length)
 		self._fillcount = self._fillcount + n
 		self._wcount = self._wcount + n
 		return BufferStatus.BUFFER_OK
-    end
+	end
 
 	-- データ書き込み
 	-- @param value データ
@@ -134,7 +134,7 @@ RingBuffer.new = function(length)
 			else
 				return BufferStatus.BUFFER_FULL
 			end
-			
+
 		end
 
 		self:put(value)
@@ -249,10 +249,10 @@ RingBuffer.new = function(length)
 		local policy = StringUtil.normalize(prop:getProperty("write.full_policy"))
 		if policy == "overwrite" then
 			self._overwrite  = true
-      		self._timedwrite = false
+			self._timedwrite = false
 		elseif policy == "do_nothing" then
 			self._overwrite  = false
-      		self._timedwrite = false
+			self._timedwrite = false
 		end
 
 	end
@@ -262,10 +262,10 @@ RingBuffer.new = function(length)
 		local policy = StringUtil.normalize(prop:getProperty("read.empty_policy"))
 		if policy == "readback" then
 			self._readback  = true
-      		self._timedread = false
+			self._timedread = false
 		elseif policy == "do_nothing" then
 			self._readback  = false
-      		self._timedread = false
+			self._timedread = false
 		end
 	end
 	obj:reset()

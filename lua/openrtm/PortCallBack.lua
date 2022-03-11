@@ -14,7 +14,6 @@ PortCallBack.ConnectionCallback = {}
 PortCallBack.ConnectionCallback.new = function()
 	local obj = {}
 	function obj:call(profile)
-		
 	end
 	local call_func = function(self, profile)
 		self:call(profile)
@@ -28,7 +27,6 @@ PortCallBack.DisconnectCallback = {}
 PortCallBack.DisconnectCallback.new = function()
 	local obj = {}
 	function obj:call(connector_id)
-		
 	end
 	local call_func = function(self, connector_id)
 		self:call(connector_id)
@@ -41,7 +39,6 @@ PortCallBack.OnWrite = {}
 PortCallBack.OnWrite.new = function()
 	local obj = {}
 	function obj:call(value)
-		
 	end
 	local call_func = function(self, value)
 		self:call(value)
@@ -68,7 +65,6 @@ PortCallBack.OnRead = {}
 PortCallBack.OnRead.new = function()
 	local obj = {}
 	function obj:call()
-		
 	end
 	local call_func = function(self)
 		self:call()

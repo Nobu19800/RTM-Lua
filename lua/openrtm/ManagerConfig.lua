@@ -88,7 +88,7 @@ ManagerConfig.new = function(argv)
 						idx = StringUtil.unescape(idx)
 						idx = StringUtil.eraseHeadBlank(idx)
 						idx = StringUtil.eraseTailBlank(idx)
-						
+
 						value = StringUtil.unescape(value)
 						value = StringUtil.eraseHeadBlank(value)
 						value = StringUtil.eraseTailBlank(value)

@@ -68,9 +68,8 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 		return self._objref
 	end
 
-	-- オブジェクトリファレンスの非アクティブ化	
+	-- オブジェクトリファレンスの非アクティブ化
 	function obj:deactivate()
-		local Manager = require "openrtm.Manager"
 		Manager:instance():getORB():deactivate(self._svr)
 	end
 
@@ -85,7 +84,7 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 					description="ID is empty"
 				})
 		end
-		
+
 		if not self._configsets:haveConfig(config_id) then
 			self._rtcout:RTC_ERROR("No such ConfigurationSet")
 			error(self._orb:newexcept{"SDOPackage::InternalError",
@@ -154,7 +153,7 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 		local ret = nil
 		local success, exception = oil.pcall(
 			function()
-				conf = Properties.new({key=configuration_set.id})
+				local conf = Properties.new({key=configuration_set.id})
 				toProperties(conf, configuration_set)
 
 				ret = self._configsets:setConfigurationSetValues(conf)
@@ -205,7 +204,7 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 		end
 		return ret
 	end
-	
+
 	-- 構成オブジェクト追加
 	-- @param org 構成オブジェクト
 	-- @return true：追加成功
@@ -255,7 +254,7 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 				})
 		end
 		CORBA_SeqUtil.erase_if(self._organizations, self.org_id.new(organization_id))
-		
+
 		return true
 	end
 
@@ -312,7 +311,7 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 
 		return config_sets
 	end
-	
+
 	-- デバイスプロファイル取得
 	-- @return デバイスプロファイル
 	function obj:getDeviceProfile()
@@ -337,14 +336,13 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 					service=oil.corba.idl.null}
 		end
 
-
-		-- 構成オブジェクト一覧取得
-		-- @return 構成オブジェクト一覧
-		function obj:getOrganizations()
-			return self._organizations
-		end
-
 		return self._serviceProfiles[index]
+	end
+
+	-- 構成オブジェクト一覧取得
+	-- @return 構成オブジェクト一覧
+	function obj:getOrganizations()
+		return self._organizations
 	end
 
 	obj.nv_name = {}
@@ -352,18 +350,18 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 	-- @param name_ 名前
 	-- @return 関数オブジェクト
 	obj.nv_name.new = function(name_)
-		local obj = {}
-		obj._name = tostring(name_)
+		local obj_ = {}
+		obj_._name = tostring(name_)
 		-- コールバック関数
 		-- @param nv NameValueオブジェクト
 		-- @return true：一致
 		local call_func = function(self, nv)
-			local name_ = tostring(nv.name)
-			return (self._name == name_)
+			local names_ = tostring(nv.name)
+			return (self._name == names_)
 		end
-		setmetatable(obj, {__call=call_func})
-		
-		return obj
+		setmetatable(obj_, {__call=call_func})
+
+		return obj_
 	end
 
 	obj.service_id = {}
@@ -371,17 +369,17 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 	-- @param name_ 名前
 	-- @return 関数オブジェクト
 	obj.service_id.new = function(id_)
-		local obj = {}
-		obj._id = tostring(id_)
+		local obj_ = {}
+		obj_._id = tostring(id_)
 		-- コールバック関数
 		-- @param s SDOサービスプロファイル
 		-- @return true：一致
 		local call_func = function(self, s)
-			local id_  = tostring(s.id)
-			return (self._id == id_)
+			local ids_ = tostring(s.id)
+			return (self._id == ids_)
 		end
-		setmetatable(obj, {__call=call_func})
-		return obj
+		setmetatable(obj_, {__call=call_func})
+		return obj_
 	end
 
 	obj.org_id = {}
@@ -389,17 +387,17 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 	-- @param name_ 名前
 	-- @return 関数オブジェクト
 	obj.org_id.new = function(id_)
-		local obj = {}
-		obj._id = tostring(id_)
+		local obj_ = {}
+		obj_._id = tostring(id_)
 		-- コールバック関数
 		-- @param s 構成オブジェクト
 		-- @return true：一致
 		local call_func = function(self, o)
-			local id_  = tostring(o:get_organization_id())
-			return (self._id == id_)
+			local ids_ = tostring(o:get_organization_id())
+			return (self._id == ids_)
 		end
-		setmetatable(obj, {__call=call_func})
-		return obj
+		setmetatable(obj_, {__call=call_func})
+		return obj_
 	end
 
 	obj.config_id = {}
@@ -407,17 +405,17 @@ SdoConfiguration.Configuration_impl.new = function(configAdmin, sdoServiceAdmin)
 	-- @param name_ 名前
 	-- @return 関数オブジェクト
 	obj.config_id.new = function(id_)
-		local obj = {}
-		obj._id = tostring(id_)
+		local obj_ = {}
+		obj_._id = tostring(id_)
 		-- コールバック関数
 		-- @param c コンフィギュレーションセット
 		-- @return true：一致
 		local call_func = function(self, c)
-			local id_  = tostring(c.id)
-			return (self._id == id_)
+			local ids_ = tostring(c.id)
+			return (self._id == ids_)
 		end
-		setmetatable(obj, {__call=call_func})
-		return obj
+		setmetatable(obj_, {__call=call_func})
+		return obj_
 	end
 
 

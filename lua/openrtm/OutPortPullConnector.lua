@@ -32,7 +32,7 @@ local ConnectorListenerType = ConnectorListener.ConnectorListenerType
 OutPortPullConnector.new = function(info, provider, listeners, buffer)
 	local obj = {}
 	setmetatable(obj, {__index=OutPortConnector.new(info)})
-	
+
 	-- データ書き込み
 	-- @param data data._dataを書き込み
 	-- @return リターンコード(バッファの書き込み結果による)
@@ -40,7 +40,7 @@ OutPortPullConnector.new = function(info, provider, listeners, buffer)
 		if self._directMode then
 			return DataPortStatus.PORT_OK
 		end
-	  
+
 		local Manager = require "openrtm.Manager"
 
 		local cdr_data = Manager:instance():cdrMarshal(data._data, data._type)
@@ -93,8 +93,8 @@ OutPortPullConnector.new = function(info, provider, listeners, buffer)
 	-- リングバッファを生成する
 	-- @param profile コネクタプロファイル
 	-- @return バッファ
-	function obj:createBuffer(info)
-		local buf_type = info.properties:getProperty("buffer_type","ring_buffer")
+	function obj:createBuffer(info_)
+		local buf_type = info_.properties:getProperty("buffer_type","ring_buffer")
 		return CdrBufferFactory:instance():createObject(buf_type)
 	end
 	-- コネクタ接続時のコールバック呼び出し

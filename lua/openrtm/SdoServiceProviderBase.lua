@@ -40,18 +40,15 @@ SdoServiceProviderBase.new = function()
 	-- @param profile プロファイル
 	-- @return true：再初期化成功
 	function obj:reinit(profile)
-		
 	end
 
 	-- プロファイル取得
 	-- @return プロファイル
 	function obj:getProfile()
-		
 	end
 
 	-- 終了処理
 	function obj:finalize()
-		local Manager = require "openrtm.Manager"
 		Manager:instance():getORB():deactivate(self._svr)
 	end
 	return obj

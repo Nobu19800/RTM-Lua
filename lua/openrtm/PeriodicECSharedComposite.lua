@@ -18,7 +18,6 @@ local SdoOrganization = require "openrtm.SdoOrganization"
 local Organization_impl = SdoOrganization.Organization_impl
 local RTCUtil = require "openrtm.RTCUtil"
 local RTObject = require "openrtm.RTObject"
-local ConfigurationListener = require "openrtm.ConfigurationListener"
 local ConfigurationSetListenerType = ConfigurationListener.ConfigurationSetListenerType
 local Factory = require "openrtm.Factory"
 local Properties = require "openrtm.Properties"
@@ -45,7 +44,7 @@ local periodicecsharedcomposite_spec = {
 -- 文字列を指定文字で分割
 -- @param _is 分割文字
 -- @return 分割後の文字列のリスト
-function stringToStrVec(_type, _is)
+local stringToStrVec = function(_type, _is)
     local p = StringUtil.split(_is, ",")
     return true, StringUtil.strip(p)
 end
@@ -105,47 +104,47 @@ PeriodicECOrganization.new = function(rtobj)
 
     local Member = {}
     -- 複合コンポーネントメンバー初期化
-    -- @param rtobj rtobj
+    -- @param rtobj_ rtobj
     -- @return メンバー
-    Member.new = function(rtobj)
-        local obj = {}
-        obj._rtobj   = rtobj
-        obj._profile = rtobj:get_component_profile()
-        obj._eclist  = rtobj:get_owned_contexts()
-        obj._config  = rtobj:get_configuration()
+    Member.new = function(rtobj_)
+        local obj_ = {}
+        obj_._rtobj   = rtobj_
+        obj_._profile = rtobj_:get_component_profile()
+        obj_._eclist  = rtobj_:get_owned_contexts()
+        obj_._config  = rtobj_:get_configuration()
 
         -- メンバーの要素入れ替え
         -- @param self 
-        -- @param x 入れ替え元のオブジェクト 
+        -- @param x 入れ替え元のオブジェクト
         -- @return 自身のオブジェクト
         local call_func = function(self, x)
             self:swap(x)
             return self
         end
 
-        setmetatable(obj, {__call=call_func})
+        setmetatable(obj_, {__call=call_func})
 
         -- メンバーの要素入れ替え
         -- @param self 
-        -- @param x 入れ替え元のオブジェクト 
+        -- @param x 入れ替え元のオブジェクト
         -- @return 自身のオブジェクト
-        function obj:swap(x)
-            local rtobj   = x._rtobj
+        function obj_:swap(x)
+            local rtobjs   = x._rtobj
             local profile = x._profile
             local eclist  = x._eclist
             local config  = x._config
-      
+
             x._rtobj   = self._rtobj
             x._profile = self._profile
             x._eclist  = self._eclist
             x._config  = self._config
 
-            self._rtobj   = rtobj
+            self._rtobj   = rtobjs
             self._profile = profile
             self._eclist  = eclist
             self._config  = config
         end
-        return obj
+        return obj_
     end
 
 
@@ -162,13 +161,13 @@ PeriodicECOrganization.new = function(rtobj)
             if not ret then
                 table.remove(sdo_list, StringUtil.table_index(sdo_list, sdo))
             else
-                
+
                 local member = Member.new(dfc)
                 self:stopOwnedEC(member)
                 self:addOrganizationToTarget(member)
                 self:addParticipantToEC(member)
                 self:addPort(member, self._expPorts)
-                table.insert(self._rtcMembers, member)                
+                table.insert(self._rtcMembers, member)
             end
         end
         local result = self:_add_members(sdo_list)
@@ -198,7 +197,7 @@ PeriodicECOrganization.new = function(rtobj)
                 table.insert(self._rtcMembers, member)
             end
         end
-      
+
         local result = self:_set_members(sdo_list)
         return result
     end
@@ -219,14 +218,14 @@ PeriodicECOrganization.new = function(rtobj)
                 self:removeOrganizationFromTarget(member)
                 self:startOwnedEC(member)
                 table.insert(rm_rtc, member)
-                
+
             end
         end
 
         for k,m in ipairs(rm_rtc) do
             table.remove(self._rtcMembers, StringUtil.table_index(self._rtcMembers, m))
         end
-            
+
         local result = self:_remove_member(id)
         return result
     end
@@ -236,17 +235,17 @@ PeriodicECOrganization.new = function(rtobj)
         self._rtcout:RTC_DEBUG("removeAllMembers()")
         self:updateExportedPortsList()
         for k,member in ipairs(self._rtcMembers) do
-            
+
             self:removePort(member, self._expPorts)
-            
+
             self:removeParticipantFromEC(member)
-            
+
             self:removeOrganizationFromTarget(member)
-            
+
             self:startOwnedEC(member)
-            
+
             self:_remove_member(member._profile.instance_name)
-           
+
         end
         self._rtcMembers = {}
         self._expPorts   = {}
@@ -262,10 +261,9 @@ PeriodicECOrganization.new = function(rtobj)
             return false, nil
         end
 
-        local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
         local dfc = RTCUtil.newproxy(orb, sdo,"IDL:OpenRTM/DataFlowComponent:1.0")
-        
+
         if dfc == oil.corba.idl.null then
             return false, nil
         end
@@ -281,7 +279,7 @@ PeriodicECOrganization.new = function(rtobj)
             ec:stop()
         end
     end
-    
+
     -- メンバーの実行コンテキストを開始
     -- @param member メンバー
     function obj:startOwnedEC(member)
@@ -308,7 +306,7 @@ PeriodicECOrganization.new = function(rtobj)
         if member._config == oil.corba.idl.null then
             return
         end
-        
+
         member._config:remove_organization(self._pId)
     end
 
@@ -322,22 +320,22 @@ PeriodicECOrganization.new = function(rtobj)
             else
                 return
             end
-        
+
         end
         self:addRTCToEC(member._rtobj)
     end
 
     -- RTCに複合コンポーネントのECを追加
     -- RTCが複合コンポーネントの場合は子コンポーネントにECを追加する
-    -- @param rtobj RTC
-    function obj:addRTCToEC(rtobj)
-        
+    -- @param rtobj_ RTC
+    function obj:addRTCToEC(rtobj_)
 
-        local orglist = rtobj:get_owned_organizations()
+
+        local orglist = rtobj_:get_owned_organizations()
         if #orglist == 0 then
-            self._ec:add_component(rtobj)
+            self._ec:add_component(rtobj_)
         end
-    
+
         for k,org in ipairs(orglist) do
             local sdos = org:get_members()
             for j,sdo in ipairs(sdos) do
@@ -364,7 +362,7 @@ PeriodicECOrganization.new = function(rtobj)
 
         self._ec:remove_component(member._rtobj)
 
-        
+
         local orglist = member._rtobj:get_owned_organizations()
         --print(#orglist)
 
@@ -390,7 +388,7 @@ PeriodicECOrganization.new = function(rtobj)
         end
 
         local plist = member._profile.port_profiles
-      
+
         for k,prof in ipairs(plist) do
             local port_name = prof.name
 
@@ -418,7 +416,7 @@ PeriodicECOrganization.new = function(rtobj)
 
         for k,prof in ipairs(plist) do
             local port_name = prof.name
-        
+
             self._rtcout:RTC_DEBUG("port_name: %s is in %s?", port_name,StringUtil.flatten(portlist))
             if StringUtil.table_index(portlist, port_name) == -1 then
                 self._rtcout:RTC_DEBUG("Not found: %s is in %s?", port_name,StringUtil.flatten(portlist))
@@ -446,10 +444,10 @@ PeriodicECOrganization.new = function(rtobj)
         local ports = self._rtobj:getProperties():getProperty("conf.default.exported_ports")
         local newPorts = StringUtil.split(ports, ",")
 
-    
+
         local removedPorts = StringUtil.difference(oldPorts, newPorts)
         local createdPorts = StringUtil.difference(newPorts, oldPorts)
-    
+
         self._rtcout:RTC_VERBOSE("old    ports: %s", StringUtil.flatten(oldPorts))
         self._rtcout:RTC_VERBOSE("new    ports: %s", StringUtil.flatten(newPorts))
         self._rtcout:RTC_VERBOSE("remove ports: %s", StringUtil.flatten(removedPorts))
@@ -474,14 +472,14 @@ PeriodicECSharedComposite.new = function(manager)
     local obj = {}
     setmetatable(obj, {__index=RTObject.new(manager)})
 
-  
+
     obj._members = {_value={}}
     obj:bindParameter("members", obj._members, " ", stringToStrVec)
     local Manager = require "openrtm.Manager"
     obj._rtcout = Manager:instance():getLogbuf("rtobject.periodic_ec_shared")
 
 
-    
+
 
     obj._properties:setProperty("exec_cxt.periodic.sync_transition","NO")
     obj._properties:setProperty("exec_cxt.periodic.sync_activation","NO")
@@ -495,9 +493,7 @@ PeriodicECSharedComposite.new = function(manager)
     -- RTC終了処理
     function obj:shutdown()
         self:_shutdown()
-        local Manager = require "openrtm.Manager"
-        local orb = Manager:instance():getORB()
-        
+
         orb:deactivate(self._org._svr)
     end
 
@@ -515,26 +511,26 @@ PeriodicECSharedComposite.new = function(manager)
         self._configsets:addConfigurationSetListener(
             ConfigurationSetListenerType.ON_SET_CONFIG_SET,
             setCallback.new(self._org))
-    
+
         self._configsets:addConfigurationSetListener(
             ConfigurationSetListenerType.ON_ADD_CONFIG_SET,
             addCallback.new(self._org))
 
-    
+
         local active_set = self._properties:getProperty("configuration.active_config",
                                                   "default")
-        
+
         if self._configsets:haveConfig(active_set) then
             self._configsets:update(active_set)
         else
             self._configsets:update("default")
         end
-        local Manager = require "openrtm.Manager"
+
         local mgr = Manager:instance()
         local sdos = {}
         for k,member in ipairs(self._members._value) do
             member = string.gsub(member, "|","")
-            
+
             member = StringUtil.eraseHeadBlank(member)
             if member == "" then
             else
@@ -542,7 +538,7 @@ PeriodicECSharedComposite.new = function(manager)
                 if rtc == nil then
                     print("no RTC found: ", member)
                 else
-                    sdo = rtc:getObjRef()
+                    local sdo = rtc:getObjRef()
                     if sdo == oil.corba.idl.null then
                     else
                         table.insert(sdos, sdo)
@@ -554,12 +550,12 @@ PeriodicECSharedComposite.new = function(manager)
 			function()
 				self._org:set_members(sdos)
 		end)
-        
+
         if not success then
             self._rtcout:RTC_ERROR(exception)
         end
-        
-    
+
+
         return self._ReturnCode_t.RTC_OK
     end
 
@@ -570,26 +566,24 @@ PeriodicECSharedComposite.new = function(manager)
     function obj:onActivated(exec_handle)
         self._rtcout:RTC_TRACE("onActivated(%d)", exec_handle)
         local sdos = self._org:get_members()
-    
+
         for k,sdo in ipairs(sdos) do
-            local Manager = require "openrtm.Manager"
-            local orb = Manager:instance():getORB()
             local rtc = RTCUtil.newproxy(orb, sdo,"IDL:omg.org/RTC/RTObject:1.0")
 
             self:activateChildComp(rtc)
         end
 
         local len_ = #self._members._value
-    
+
         local str_ = ""
         if len_ > 1 then
             str_ = "s were"
         else
             str_ = "was"
         end
-    
+
         self._rtcout:RTC_DEBUG("%d member RTC%s activated.", len_, str_)
-        
+
         return self._ReturnCode_t.RTC_OK
     end
 
@@ -600,21 +594,19 @@ PeriodicECSharedComposite.new = function(manager)
         local ecs = self:get_owned_contexts()
 
         local orglist = rtobj:get_owned_organizations()
-        
+
         if #orglist == 0 then
             ecs[1]:activate_component(rtobj)
         end
-          
+
         for k,org in ipairs(orglist) do
             local child_sdos = org:get_members()
             for j,child_sdo in ipairs(child_sdos) do
-                local Manager = require "openrtm.Manager"
-                local orb = Manager:instance():getORB()
                 local child = RTCUtil.newproxy(orb, child_sdo,"IDL:omg.org/RTC/RTObject:1.0")
                 self:activateChildComp(child)
             end
         end
-    
+
     end
 
     -- 非アクティブ状態遷移時のコールバック関数
@@ -624,15 +616,13 @@ PeriodicECSharedComposite.new = function(manager)
     function obj:onDeactivated(exec_handle)
         self._rtcout:RTC_TRACE("onDeactivated(%d)", exec_handle)
         local sdos = self._org:get_members()
-    
+
         for k,sdo in ipairs(sdos) do
-            local Manager = require "openrtm.Manager"
-            local orb = Manager:instance():getORB()
             local rtc = RTCUtil.newproxy(orb, sdo,"IDL:omg.org/RTC/RTObject:1.0")
 
             self:deactivateChildComp(rtc)
         end
-        
+
         return self._ReturnCode_t.RTC_OK
     end
 
@@ -646,17 +636,15 @@ PeriodicECSharedComposite.new = function(manager)
         if #orglist == 0 then
             ecs[1]:deactivate_component(rtobj)
         end
-          
+
         for k,org in ipairs(orglist) do
             local child_sdos = org:get_members()
             for j,child_sdo in ipairs(child_sdos) do
-                local Manager = require "openrtm.Manager"
-                local orb = Manager:instance():getORB()
                 local child = RTCUtil.newproxy(orb, child_sdo,"IDL:omg.org/RTC/RTObject:1.0")
                 self:deactivateChildComp(child)
             end
         end
-    
+
     end
 
 
@@ -667,15 +655,13 @@ PeriodicECSharedComposite.new = function(manager)
     function obj:onReset(exec_handle)
         self._rtcout:RTC_TRACE("onReset(%d)", exec_handle)
         local sdos = self._org:get_members()
-    
+
         for k,sdo in ipairs(sdos) do
-            local Manager = require "openrtm.Manager"
-            local orb = Manager:instance():getORB()
             local rtc = RTCUtil.newproxy(orb, sdo,"IDL:omg.org/RTC/RTObject:1.0")
 
             self:resetChildComp(rtc)
         end
-        
+
         return self._ReturnCode_t.RTC_OK
     end
 
@@ -689,17 +675,15 @@ PeriodicECSharedComposite.new = function(manager)
         if #orglist == 0 then
             ecs[1]:reset_component(rtobj)
         end
-          
+
         for k,org in ipairs(orglist) do
             local child_sdos = org:get_members()
             for j,child_sdo in ipairs(child_sdos) do
-                local Manager = require "openrtm.Manager"
-                local orb = Manager:instance():getORB()
                 local child = RTCUtil.newproxy(orb, child_sdo,"IDL:omg.org/RTC/RTObject:1.0")
                 self:resetChildComp(child)
             end
         end
-    
+
     end
     -- 終了時コールバック関数
     -- @param rtobj 子コンポーネント

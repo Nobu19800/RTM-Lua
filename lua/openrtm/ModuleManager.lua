@@ -17,17 +17,17 @@ local ModuleManager= {}
 --_G["openrtm.ModuleManager"] = ModuleManager
 
 
-local CONFIG_EXT    = "manager.modules.config_ext"
+--local CONFIG_EXT    = "manager.modules.config_ext"
 local CONFIG_PATH   = "manager.modules.config_path"
-local DETECT_MOD    = "manager.modules.detect_loadable"
+--local DETECT_MOD    = "manager.modules.detect_loadable"
 local MOD_LOADPTH   = "manager.modules.load_path"
 local INITFUNC_SFX  = "manager.modules.init_func_suffix"
 local INITFUNC_PFX  = "manager.modules.init_func_prefix"
 local ALLOW_ABSPATH = "manager.modules.abs_path_allowed"
 local ALLOW_URL     = "manager.modules.download_allowed"
-local MOD_DWNDIR    = "manager.modules.download_dir"
-local MOD_DELMOD    = "manager.modules.download_cleanup"
-local MOD_PRELOAD   = "manager.modules.preload"
+--local MOD_DWNDIR    = "manager.modules.download_dir"
+--local MOD_DELMOD    = "manager.modules.download_cleanup"
+--local MOD_PRELOAD   = "manager.modules.preload"
 
 
 local DLL = {}
@@ -267,7 +267,7 @@ ModuleManager.new = function(prop)
 		end
 
 
-		
+
 		if not self:fileExist(file_path) then
 
 			error(ModuleManager.FileNotFound.new(file_name))
@@ -334,7 +334,7 @@ ModuleManager.new = function(prop)
 	-- @return ファイルが存在した場合はファイルのパスを返す
 	-- 存在しない場合は空文字列を返す
 	function obj:findFile(fname, load_path)
-		file_name = fname
+		local file_name = fname
 
 		for k, path in ipairs(load_path) do
 			local f = nil
@@ -344,8 +344,8 @@ ModuleManager.new = function(prop)
 			else
 				f = tostring(path).."/"..tostring(file_name)
 			end
-			
-			
+
+
 			--print(self:fileExist(f))
 			if self:fileExist(f) then
 				f = string.gsub(f,"\\","/")
@@ -464,7 +464,7 @@ ModuleManager.new = function(prop)
 			path = StringUtil.dirname(path)
 			table.insert(obj._loadPath, path)
 		end
-		
+
 	end
 
 	obj._absoluteAllowed = StringUtil.toBool(prop:getProperty(ALLOW_ABSPATH),

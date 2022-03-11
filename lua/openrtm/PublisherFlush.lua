@@ -24,7 +24,7 @@ local ConnectorDataListenerType = ConnectorListener.ConnectorDataListenerType
 -- @return PublisherFlush
 PublisherFlush.new = function()
 	local obj = {}
-	setmetatable(obj, {__index=PublisherBase.new(info, provider)})
+	setmetatable(obj, {__index=PublisherBase.new()})
 	local Manager = require "openrtm.Manager"
 	obj._rtcout = Manager:instance():getLogbuf("PublisherFlush")
     obj._consumer  = nil
@@ -32,7 +32,7 @@ PublisherFlush.new = function()
     obj._profile   = nil
     obj._listeners = nil
     obj._retcode   = DataPortStatus.PORT_OK
-    
+
 	-- 初期化時にプロパティを設定
 	-- @param prop プロパティ
 	-- @return リターンコード

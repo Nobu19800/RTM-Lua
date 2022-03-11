@@ -13,9 +13,9 @@ local OutPortPushConnector= {}
 --local oil = require "oil"
 local OutPortConnector = require "openrtm.OutPortConnector"
 local DataPortStatus = require "openrtm.DataPortStatus"
-local BufferStatus = require "openrtm.BufferStatus"
+--local BufferStatus = require "openrtm.BufferStatus"
 local OutPortProvider = require "openrtm.OutPortProvider"
-local OutPortProviderFactory = OutPortProvider.OutPortProviderFactory
+--local OutPortProviderFactory = OutPortProvider.OutPortProviderFactory
 local CdrBufferBase = require "openrtm.CdrBufferBase"
 local CdrBufferFactory = CdrBufferBase.CdrBufferFactory
 local InPortConsumer = require "openrtm.InPortConsumer"
@@ -121,8 +121,8 @@ OutPortPushConnector.new = function(info, consumer, listeners, buffer)
 	-- パブリッシャー生成
 	-- @param profile コネクタプロファイル
 	-- @return パブリッシャー
-	function obj:createPublisher(info)
-		local pub_type = info.properties:getProperty("subscription_type","flush")
+	function obj:createPublisher(info_)
+		local pub_type = info_.properties:getProperty("subscription_type","flush")
 		pub_type = StringUtil.normalize(pub_type)
 		return PublisherFactory:instance():createObject(pub_type)
 	end
@@ -130,8 +130,8 @@ OutPortPushConnector.new = function(info, consumer, listeners, buffer)
 	-- バッファ作成
 	-- @param profile コネクタプロファイル
 	-- @return バッファ
-	function obj:createBuffer(info)
-		local buf_type = info.properties:getProperty("buffer_type",
+	function obj:createBuffer(info_)
+		local buf_type = info_.properties:getProperty("buffer_type",
 											   "ring_buffer")
 
 		return CdrBufferFactory:instance():createObject(buf_type)
@@ -142,14 +142,14 @@ OutPortPushConnector.new = function(info, consumer, listeners, buffer)
 			self._listeners.connector_[ConnectorListenerType.ON_CONNECT]:notify(self._profile)
 		end
 	end
-	
+
 	-- コネクタ切断時のコールバック呼び出し
 	function obj:onDisconnect()
 		if self._listeners ~= nil and self._profile ~= nil then
 			self._listeners.connector_[ConnectorListenerType.ON_DISCONNECT]:notify(self._profile)
 		end
 	end
-	
+
 	-- InPortサーバントオブジェクト設定
 	-- @param directInPort InPortサーバントオブジェクト
 	-- @return true：設定成功、false：設定失敗

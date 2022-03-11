@@ -489,7 +489,7 @@ StringUtil.dirname = function(path)
 	else
 		return ret..delimiter
 	end
-	
+
 end
 
 
@@ -569,7 +569,7 @@ StringUtil.urlparam2map = function(_str)
 	local tmp = StringUtil.split(string.sub(_str, qpos), "&")
 	local retmap = {}
 	for k, v in ipairs(tmp) do
-		pos = string.find(v, "=")
+		local pos = string.find(v, "=")
 		if pos ~= nil then
 			retmap[string.sub(v,1,pos-1)] = string.sub(v, pos+1)
 		else

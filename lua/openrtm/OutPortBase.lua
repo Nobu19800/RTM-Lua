@@ -25,7 +25,7 @@ local StringUtil = require "openrtm.StringUtil"
 local ConnectorDataListenerType = ConnectorListener.ConnectorDataListenerType
 local ConnectorListenerType = ConnectorListener.ConnectorListenerType
 local ConnectorDataListener = ConnectorListener.ConnectorDataListener
-local ConnectorListener = ConnectorListener.ConnectorListener
+ConnectorListener = ConnectorListener.ConnectorListener
 
 
 local InPortConsumer = require "openrtm.InPortConsumer"
@@ -126,8 +126,8 @@ OutPortBase.new = function(name, data_type)
 		self._rtcout:RTC_TRACE("initConsumers()")
 
 
-		local factory = InPortConsumerFactory:instance()
-		local consumer_types = factory:getIdentifiers()
+		local factory_ = InPortConsumerFactory:instance()
+		local consumer_types = factory_:getIdentifiers()
 		--print(StringUtil.flatten(consumer_types))
 		self._rtcout:RTC_PARANOID("available InPortConsumer: "..StringUtil.flatten(consumer_types))
 		local tmp_str = StringUtil.normalize(self._properties:getProperty("consumer_types"))
@@ -168,14 +168,14 @@ OutPortBase.new = function(name, data_type)
 	end
 	-- 利用可能なサービスプロバイダ一覧初期化
 	-- OutPortProviderFactoryからサービスプロバイダ一覧を取得する
-    -- 「provider_types」のプロパティが「all」の場合は、
-    -- 利用可能なサービスプロバイダを全て利用可能にする
+	-- 「provider_types」のプロパティが「all」の場合は、
+	-- 利用可能なサービスプロバイダを全て利用可能にする
 	function obj:initProviders()
 		self._rtcout:RTC_TRACE("initProviders()")
 
 
-		local factory = OutPortProviderFactory:instance()
-		local provider_types  = factory:getIdentifiers()
+		local factory_ = OutPortProviderFactory:instance()
+		local provider_types  = factory_:getIdentifiers()
 		self._rtcout:RTC_PARANOID("available OutPortProviders: "..StringUtil.flatten(provider_types))
 		local tmp_str = StringUtil.normalize(self._properties:getProperty("provider_types"))
 		if self._properties:hasKey("provider_types") and tmp_str  ~= "all" then
@@ -258,7 +258,7 @@ OutPortBase.new = function(name, data_type)
 		if dflow_type == "push" then
 			self._rtcout:RTC_PARANOID("dataflow_type = push .... create PushConnector")
 
-			consumer = self:createConsumer(cprof, prop)
+			local consumer = self:createConsumer(cprof, prop)
 
 			--print(consumer)
 			if consumer == nil then
@@ -343,7 +343,7 @@ OutPortBase.new = function(name, data_type)
 		elseif dflow_type == "pull" then
 			self._rtcout:RTC_PARANOID("dataflow_type = pull .... create PullConnector")
 
-			provider = self:createProvider(cprof, prop)
+			local provider = self:createProvider(cprof, prop)
 			if provider == nil then
 				return self._ReturnCode_t.BAD_PARAMETER
 			end
@@ -405,9 +405,9 @@ OutPortBase.new = function(name, data_type)
 				elseif provider_ ~= nil then
 					self._rtcout:RTC_TRACE("OutPortPullConnector created")
 				end
-				
+
 				if StringUtil.normalize(prop:getProperty("interface_type")) == "direct" then
-					
+
 					if consumer_ ~= nil then
 						local inport = self:getLocalInPort(profile)
 						if inport == nil then
@@ -472,7 +472,7 @@ OutPortBase.new = function(name, data_type)
 		self._rtcout:RTC_ERROR("provider creation failed")
 		return nil
 	end
-	
+
 	-- サービスコンシューマ作成
 	-- 「interface_type」の要素にインターフェース型を指定
 	-- 「consumer」のノードにコンシューマのプロパティを指定
@@ -501,7 +501,7 @@ OutPortBase.new = function(name, data_type)
 
 			if not consumer:subscribeInterface(cprof.properties) then
 				self._rtcout:RTC_ERROR("interface subscription failed.")
-				InPortConsumerFactory:instance():deleteObject(provider)
+				InPortConsumerFactory:instance():deleteObject(consumer)
 				return nil
 			end
 			return consumer
@@ -530,7 +530,7 @@ OutPortBase.new = function(name, data_type)
 	-- 指定コネクタプロファイルのコネクタを削除
 	-- @param connector_profile コネクタプロファイル
 	function obj:unsubscribeInterfaces(connector_profile)
-	    self._rtcout:RTC_TRACE("unsubscribeInterfaces()")
+		self._rtcout:RTC_TRACE("unsubscribeInterfaces()")
 
 		local id = connector_profile.connector_id
 		self._rtcout:RTC_PARANOID("connector_id: "..id)
@@ -576,28 +576,28 @@ OutPortBase.new = function(name, data_type)
 		end
 		self._rtcout:RTC_TRACE("addConnectorDataListener()")
 
-		   if listener_type < ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM then
+		if listener_type < ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM then
 			self._rtcout:RTC_TRACE("addConnectorDataListener(%s)", ConnectorDataListener.toString(listener_type))
-      		self._listeners.connectorData_[listener_type]:addListener(listener, autoclean)
+			self._listeners.connectorData_[listener_type]:addListener(listener, autoclean)
 			return
 		end
 
-	    self._rtcout:RTC_ERROR("addConnectorDataListener(): Unknown Listener Type")
+		self._rtcout:RTC_ERROR("addConnectorDataListener(): Unknown Listener Type")
 
 	end
 
 	function obj:removeConnectorDataListener(listener_type, listener)
-    	self._rtcout:RTC_TRACE("removeConnectorDataListener()")
+		self._rtcout:RTC_TRACE("removeConnectorDataListener()")
 
 		if listener_type < ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM then
 			self._rtcout:RTC_TRACE("removeConnectorDataListener(%s)", ConnectorDataListener.toString(listener_type))
-    		self._listeners.connectorData_[listener_type]:removeListener(listener)
+			self._listeners.connectorData_[listener_type]:removeListener(listener)
 			return
 		end
 
-    	self._rtcout:RTC_ERROR("removeConnectorDataListener(): Unknown Listener Type")
+		self._rtcout:RTC_ERROR("removeConnectorDataListener(): Unknown Listener Type")
 	end
-	
+
 
 	function obj:addConnectorListener(listener_type, listener, autoclean)
 		if autoclean == nil then
@@ -607,24 +607,24 @@ OutPortBase.new = function(name, data_type)
 
 		   if listener_type < ConnectorListenerType.CONNECTOR_LISTENER_NUM then
 			self._rtcout:RTC_TRACE("addConnectorListener(%s)", ConnectorListener.toString(listener_type))
-      		self._listeners.connector_[listener_type]:addListener(listener, autoclean)
+			self._listeners.connector_[listener_type]:addListener(listener, autoclean)
 			return
 		end
 
-	    self._rtcout:RTC_ERROR("addConnectorListener(): Unknown Listener Type")
+		self._rtcout:RTC_ERROR("addConnectorListener(): Unknown Listener Type")
 
 	end
 
 	function obj:removeConnectorListener(listener_type, listener)
-    	self._rtcout:RTC_TRACE("removeConnectorListener()")
+		self._rtcout:RTC_TRACE("removeConnectorListener()")
 
 		if listener_type < ConnectorListenerType.CONNECTOR_LISTENER_NUM then
 			self._rtcout:RTC_TRACE("removeConnectorListener(%s)", ConnectorListener.toString(listener_type))
-    		self._listeners.connector_[listener_type]:removeListener(listener)
+			self._listeners.connector_[listener_type]:removeListener(listener)
 			return
 		end
 
-    	self._rtcout:RTC_ERROR("removeConnectorListener(): Unknown Listener Type")
+		self._rtcout:RTC_ERROR("removeConnectorListener(): Unknown Listener Type")
 	end
 
 	function obj:getLocalInPort(profile)
@@ -633,17 +633,17 @@ OutPortBase.new = function(name, data_type)
 		for k,p in pairs(profile.ports) do
 			if not NVUtil._is_equivalent(self, p, self.getObjRef, p.getObjRef) then
 				self._rtcout:RTC_DEBUG("Peer port found: %s.", tostring(p))
-				
+
 				if p.getObjRef == nil then
 					return nil
 				end
-        		self._rtcout:RTC_DEBUG("OutPortBase servant pointer is obtained.")
-        		return p
+				self._rtcout:RTC_DEBUG("OutPortBase servant pointer is obtained.")
+				return p
 			end
 		end
 		return nil
 	end
-	
+
 
 	return obj
 end

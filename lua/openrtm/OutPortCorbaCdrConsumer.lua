@@ -15,7 +15,7 @@ local OutPortCorbaCdrConsumer= {}
 local oil = require "oil"
 local OutPortConsumer = require "openrtm.OutPortConsumer"
 local NVUtil = require "openrtm.NVUtil"
-local BufferStatus = require "openrtm.BufferStatus"
+--local BufferStatus = require "openrtm.BufferStatus"
 local DataPortStatus = require "openrtm.DataPortStatus"
 local CorbaConsumer = require "openrtm.CorbaConsumer"
 
@@ -46,14 +46,14 @@ OutPortCorbaCdrConsumer.new = function()
 	function obj:init(prop)
 		self._rtcout:RTC_TRACE("init()")
     end
-    
+
     -- バッファの設定
     -- @param buffer バッファ
 	function obj:setBuffer(buffer)
 		self._rtcout:RTC_TRACE("setBuffer()")
 		self._buffer = buffer
     end
-    
+
     -- コールバック関数設定
     -- @param info プロファイル
     -- @param listeners コールバック関数
@@ -129,7 +129,7 @@ OutPortCorbaCdrConsumer.new = function()
 		end
 		return false
     end
-    
+
     -- プロパティからインターフェース設定解除
     -- IOR文字列、もしくはリファレンスを取得
     -- dataport.corba_cdr.outport_ior
@@ -171,7 +171,6 @@ OutPortCorbaCdrConsumer.new = function()
 			return false
 		end
 
-		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
 		local _obj = RTCUtil.newproxy(orb, ior,"IDL:OpenRTM/OutPortCdr:1.0")
 
@@ -207,7 +206,6 @@ OutPortCorbaCdrConsumer.new = function()
 
 		local _obj = NVUtil.any_from_any(properties[index].value)
 
-		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
 
 		_obj = orb:narrow(_obj, "IDL:OpenRTM/OutPortCdr:1.0")
@@ -244,7 +242,7 @@ OutPortCorbaCdrConsumer.new = function()
 		end
 
 
-		ior = NVUtil.any_from_any(properties[index].value)
+		local ior = NVUtil.any_from_any(properties[index].value)
 
 
 		if ior == "" then
@@ -252,7 +250,6 @@ OutPortCorbaCdrConsumer.new = function()
 			return false
 		end
 
-		local Manager = require "openrtm.Manager"
 		local orb = Manager:instance():getORB()
 		local var = RTCUtil.newproxy(orb, ior,"IDL:OpenRTM/OutPortCdr:1.0")
 		if not NVUtil._is_equivalent(self:_ptr(true), var, self:_ptr(true).getObjRef, var.getObjRef) then
@@ -282,13 +279,13 @@ OutPortCorbaCdrConsumer.new = function()
 		local _obj = NVUtil.any_from_any(properties[index].value)
 
 
-		if obj == nil then
+		if _obj == nil then
 			return false
 		end
 
 		local obj_ptr = self:_ptr(true)
 
-		if obj_ptr == nil or not NVUtil._is_equivalent(obj_ptr, obj, obj_ptr.getObjRef, obj.getObjRef) then
+		if obj_ptr == nil or not NVUtil._is_equivalent(obj_ptr, _obj, obj_ptr.getObjRef, _obj.getObjRef) then
 			return false
 		end
 

@@ -14,8 +14,6 @@ local DEFAULT_PERIOD = 0.000001
 
 
 local ExecutionContextBase = require "openrtm.ExecutionContextBase"
-
-local ExecutionContextBase = require "openrtm.ExecutionContextBase"
 local ExecutionContextFactory = ExecutionContextBase.ExecutionContextFactory
 local ECFactory = require "openrtm.ECFactory"
 local Task = require "openrtm.Task"

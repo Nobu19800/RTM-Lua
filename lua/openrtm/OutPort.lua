@@ -40,23 +40,23 @@ OutPort.new = function(name, value, data_type, buffer)
 
 	obj._directNewData = false
     obj._directValue = value
-	
+
 	function obj:name()
 		return self._name
 	end
-    
+
     -- データ書き込み
-    -- @param value 送信データ
+    -- @param value_ 送信データ
     -- @return true：送信成功、false：送信失敗
-	function obj:write(value)
-		if value == nil then
-			value = self._value
+	function obj:write(value_)
+		if value_ == nil then
+			value_ = self._value
 		end
 		--print(self._value.data)
 
 
 		if self._OnWrite ~= nil then
-			self._OnWrite:call(value)
+			self._OnWrite:call(value_)
 		end
 
 		local conn_size = #self._connectors
@@ -67,14 +67,14 @@ OutPort.new = function(name, value, data_type, buffer)
 
 
 		if self._OnWriteConvert ~= nil then
-			value = self._OnWriteConvert:call(value)
+			value_ = self._OnWriteConvert:call(value_)
 		end
 
 		local result = true
 
 		for i, con in ipairs(self._connectors) do
 			if not con:directMode() then
-				local ret = con:write({_data=value, _type=self._data_type})
+				local ret = con:write({_data=value_, _type=self._data_type})
 				if ret ~= DataPortStatus.PORT_OK then
 					result = false
 					if ret == DataPortStatus.CONNECTION_LOST then
@@ -82,7 +82,7 @@ OutPort.new = function(name, value, data_type, buffer)
 					end
 				end
 			else
-				self._directValue = value
+				self._directValue = value_
 				self._directNewData = true
 			end
 		end

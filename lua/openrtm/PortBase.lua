@@ -56,9 +56,9 @@ find_port_ref.new = function(port_ref)
 	-- @param self 自身のオブジェクト
 	-- @param port_ref ポート
 	-- @return true：一致、false：不一致
-	local call_func = function(self, port_ref)
+	local call_func = function(self, port_ref_)
 		--print(self._port_ref, port_ref, self._port_ref._is_equivalent, port_ref._is_equivalent)
-		return NVUtil._is_equivalent(self._port_ref, port_ref, self._port_ref.getPortRef, port_ref.getPortRef)
+		return NVUtil._is_equivalent(self._port_ref, port_ref_, self._port_ref.getPortRef, port_ref_.getPortRef)
 		--[[local ret = false
 		local success, exception = oil.pcall(
 			function()
@@ -87,8 +87,8 @@ find_interface.new = function(name, pol)
 	-- @param prof インターフェースのプロファイル
 	-- @return true：一致、false：不一致
 	local call_func = function(self, prof)
-		local name = prof.instance_name
-		return ((self._name == name) and (self._pol == prof.polarity))
+		local name_ = prof.instance_name
+		return ((self._name == name_) and (self._pol == prof.polarity))
 	end
 	setmetatable(obj, {__call=call_func})
 	return obj
@@ -458,7 +458,7 @@ PortBase.new = function(name)
 	-- ポートが生存しているかを確認
 	-- @param ports ポート
 	-- @return true：生存、false：消滅済み
- 	function obj:checkPorts(ports)
+	function obj:checkPorts(ports)
 		local ret = true
 		for i, port in ipairs(ports) do
 			--print(NVUtil._non_existent(port))
@@ -474,14 +474,14 @@ PortBase.new = function(name)
 	-- IDが空かを判定
 	-- @param コネクタプロファイル
 	-- @return true：空
- 	function obj:isEmptyId(connector_profile)
+	function obj:isEmptyId(connector_profile)
 		return (connector_profile.connector_id == "")
 	end
 
 	-- コネクタIDがすでに登録済みかを確認
 	-- @param id_ コネクタID
 	-- @return true：登録済み、false：未登録
- 	function obj:isExistingConnId(id_)
+	function obj:isExistingConnId(id_)
 		return (CORBA_SeqUtil.find(self._profile.connector_profiles,
                                            find_conn_id.new(id_)) >= 0)
 	end
@@ -808,7 +808,7 @@ PortBase.new = function(name)
 
 
 		for i, con in ipairs(plist) do
-			tmpret = self:disconnect(con.connector_id)
+			local tmpret = self:disconnect(con.connector_id)
 			if tmpret ~= self._ReturnCode_t.RTC_OK then
 				retcode = tmpret
 			end
@@ -828,7 +828,6 @@ PortBase.new = function(name)
 	-- オブジェクトリファレンス生成
 	function obj:createRef()
 		--print("createRef")
-		local Manager = require "openrtm.Manager"
 		self._svr = Manager:instance():getORB():newservant(self, nil, "IDL:omg.org/RTC/PortService:1.0")
 		self._objref = RTCUtil.getReference(Manager:instance():getORB(), self._svr, "IDL:omg.org/RTC/PortService:1.0")
 		self._profile.port_ref = self._objref
@@ -836,7 +835,6 @@ PortBase.new = function(name)
 
 	-- インターフェースの非アクティブ化
 	function obj:deactivate()
-		local Manager = require "openrtm.Manager"
 		if self._svr ~= nil then
 			Manager:instance():getORB():deactivate(self._svr)
 		end

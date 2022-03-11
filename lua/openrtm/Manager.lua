@@ -1858,7 +1858,7 @@ function Manager:formatString(naming_format, prop)
 	local name_ = naming_format
 	local str_  = ""
 	local count = 0
-	local len_  = #name_
+	--local len_  = #name_
 	local num = 0
 	--local ok, ret = xpcall(
 	--		function()

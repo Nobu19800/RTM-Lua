@@ -8,7 +8,6 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 ]]
 
 local SdoServiceAdmin= {}
-local StringUtil = require "openrtm.StringUtil"
 local SdoServiceProviderBase = require "openrtm.SdoServiceProviderBase"
 local SdoServiceProviderFactory = SdoServiceProviderBase.SdoServiceProviderFactory
 local StringUtil = require "openrtm.StringUtil"
@@ -26,25 +25,25 @@ local uuid = require "uuid"
 SdoServiceAdmin.new = function(rtobj)
 	local obj = {}
 	obj._rtobj = rtobj
-    obj._consumerTypes = {}
-    obj._providers = {}
+	obj._consumerTypes = {}
+	obj._providers = {}
 	obj._consumers = {}
 	obj._allConsumerEnabled = false
 	local Manager = require "openrtm.Manager"
 	obj._manager = Manager:instance()
-	
+
 	obj._rtcout = obj._manager:getLogbuf("rtobject.sdo_config")
-    -- 初期化時にRTC設定
-    -- @param rtobj RTC
-	function obj:init(rtobj)
+	-- 初期化時にRTC設定
+	-- @param rtobj RTC
+	function obj:init(rtobj_)
 		self._rtcout:RTC_TRACE("SdoServiceAdmin::SdoServiceAdmin(%s)",
-		rtobj:getProperties():getProperty("instance_name"))
+		rtobj_:getProperties():getProperty("instance_name"))
 
 		local prop = self._rtobj:getProperties()
 
 		local enabledProviderTypes = StringUtil.split(prop:getProperty("sdo.service.provider.enabled_services"),",")
 		enabledProviderTypes = StringUtil.strip(enabledProviderTypes)
-		
+
 		self._rtcout:RTC_DEBUG("sdo.service.provider.enabled_services: %s", prop:getProperty("sdo.service.provider.enabled_services"))
 
 		local availableProviderTypes = SdoServiceProviderFactory:instance():getIdentifiers()
@@ -53,10 +52,10 @@ SdoServiceAdmin.new = function(rtobj)
 
 
 		local activeProviderTypes = {}
-		
+
 		for i,ep_type in ipairs(enabledProviderTypes) do
 			local tmp = string.lower(ep_type)
-			
+
 			if tmp == "all" then
 				--print(tmp)
 				activeProviderTypes = availableProviderTypes
@@ -81,10 +80,10 @@ SdoServiceAdmin.new = function(rtobj)
 				interface_type = tostring(ap_type),
 				properties = properties,
 				service = svc._svr}
-				
-				
 
-			if not svc:init(rtobj, prof) then
+
+
+			if not svc:init(rtobj_, prof) then
 				svc:finalize()
 			else
 				table.insert(self._providers, svc)
@@ -96,7 +95,7 @@ SdoServiceAdmin.new = function(rtobj)
 
 		local constypes = prop:getProperty("sdo.service.consumer.enabled_services")
 
-		
+
 		self._consumerTypes = StringUtil.split(constypes,",")
 		self._consumerTypes = StringUtil.strip(self._consumerTypes)
 		self._rtcout:RTC_DEBUG("sdo.service.consumer.enabled_services: %s", tostring(constypes))
@@ -106,7 +105,7 @@ SdoServiceAdmin.new = function(rtobj)
 		self._rtcout:RTC_DEBUG("sdo.service.consumer.available_services: %s",
 			prop:getProperty("sdo.service.consumer.available_services"))
 
-		
+
 
 		for i, ctype in ipairs(self._consumerTypes) do
 			local tmp = string.lower(ctype)
@@ -164,7 +163,7 @@ SdoServiceAdmin.new = function(rtobj)
 	-- @return サービスプロバイダ
 	function obj:getServiceProvider(id)
 		local prof = self:getServiceProviderProfile(id)
-    	return prof.service
+		return prof.service
 	end
 
 	-- サービスプロバイダ追加
@@ -173,18 +172,18 @@ SdoServiceAdmin.new = function(rtobj)
 	-- @return true：追加成功
 	function obj:addSdoServiceProvider(prof, provider)
 		self._rtcout:RTC_TRACE("SdoServiceAdmin::addSdoServiceProvider(if=%s)",
-                           prof.interface_type)
-    	local id = prof.id
-    	for i,provider in ipairs(self._providers) do
-    		if id == tostring(provider:getProfile().id) then
-    			self._rtcout:RTC_ERROR("SDO service(id=%s, ifr=%s) already exists",
+							   prof.interface_type)
+		local id = prof.id
+		for i,provider_ in ipairs(self._providers) do
+			if id == tostring(provider_:getProfile().id) then
+				self._rtcout:RTC_ERROR("SDO service(id=%s, ifr=%s) already exists",
 							   tostring(prof.id), tostring(prof.interface_type))
 				return false
 			end
 		end
 
 		table.insert(self._providers, provider)
-    	return true
+		return true
 	end
 
 	-- サービスプロバイダ削除
@@ -192,21 +191,21 @@ SdoServiceAdmin.new = function(rtobj)
 	-- @return true：削除成功
 	function obj:removeSdoServiceProvider(id)
 		self._rtcout:RTC_TRACE("removeSdoServiceProvider(%d)", id)
-    
-    	local strid = id
-    	
+
+		local strid = id
+
 		for i,provider in ipairs(self._providers) do
 			if strid == tostring(provider:getProfile().id) then
-        		provider:finalize()
-        		local factory = SdoServiceProviderFactory:instance()
-    			factory:deleteObject(self._providers[i])
+				provider:finalize()
+				local factory = SdoServiceProviderFactory:instance()
+				factory:deleteObject(self._providers[i])
 				table.remove(self._providers, i)
-    			self._rtcout:RTC_INFO("SDO service provider has been deleted: %s", id)
+				self._rtcout:RTC_INFO("SDO service provider has been deleted: %s", id)
 				return true
 			end
 		end
    		self._rtcout:RTC_WARN("Specified SDO service provider not found: %s", id)
-    	return false
+		return false
 	end
 
 	-- サービスコンシューマ追加
@@ -214,55 +213,55 @@ SdoServiceAdmin.new = function(rtobj)
 	-- @return true：追加成功
 	function obj:addSdoServiceConsumer(sProfile)
 		self._rtcout:RTC_TRACE("addSdoServiceConsumer(IFR = %s)",
-                           sProfile.interface_type)
-    	local profile = sProfile
-    
+				   		sProfile.interface_type)
+		local profile = sProfile
 
-    	if not self:isEnabledConsumerType(sProfile) then
-    		self._rtcout:RTC_ERROR("Not supported consumer type. %s", profile.interface_type)
+
+		if not self:isEnabledConsumerType(sProfile) then
+			self._rtcout:RTC_ERROR("Not supported consumer type. %s", profile.interface_type)
 			return false
 		end
   
-    	if not self:isExistingConsumerType(sProfile) then
-      		self._rtcout:RTC_ERROR("type %s not exists.", profile.interface_type)
+		if not self:isExistingConsumerType(sProfile) then
+			self._rtcout:RTC_ERROR("type %s not exists.", profile.interface_type)
 			return false
 		end
-    	if tostring(profile.id) ==  "" then
-    		self._rtcout:RTC_WARN("No id specified. It should be given by clients.")
+		if tostring(profile.id) ==  "" then
+			self._rtcout:RTC_WARN("No id specified. It should be given by clients.")
 			return false
 		end
 
 
 		local id = tostring(sProfile.id)
-    	for i,consumer in ipairs(self._consumers) do
-      		if id == tostring(self._consumers[i]:getProfile().id) then
-        		self._rtcout:RTC_INFO("Existing consumer is reinitilized.")
-        		self._rtcout:RTC_DEBUG("Propeteis are: %s",
-                               NVUtil.toString(sProfile.properties))
+		for i,consumer in ipairs(self._consumers) do
+			if id == tostring(self._consumers[i]:getProfile().id) then
+				self._rtcout:RTC_INFO("Existing consumer is reinitilized.")
+				self._rtcout:RTC_DEBUG("Propeteis are: %s",
+								NVUtil.toString(sProfile.properties))
 				return consumer:reinit(sProfile)
 			end
 		end
 
 
-    	local factory = SdoServiceConsumerFactory:instance()
-    	local ctype = tostring(profile.interface_type)
-    	local consumer = factory:createObject(ctype)
+		local factory = SdoServiceConsumerFactory:instance()
+		local ctype = tostring(profile.interface_type)
+		local consumer = factory:createObject(ctype)
 
 
-    	if not consumer:init(self._rtobj, sProfile) then
-    		self._rtcout:RTC_WARN("SDO service initialization was failed.")
-    		self._rtcout:RTC_DEBUG("id:         %s", tostring(sProfile.id))
-    		self._rtcout:RTC_DEBUG("IFR:        %s", tostring(sProfile.interface_type))
-    		self._rtcout:RTC_DEBUG("properties: %s", NVUtil.toString(sProfile.properties))
-      		factory:deleteObject(consumer)
-      		self._rtcout:RTC_INFO("SDO consumer was deleted by initialization failure")
+		if not consumer:init(self._rtobj, sProfile) then
+			self._rtcout:RTC_WARN("SDO service initialization was failed.")
+			self._rtcout:RTC_DEBUG("id:         %s", tostring(sProfile.id))
+			self._rtcout:RTC_DEBUG("IFR:        %s", tostring(sProfile.interface_type))
+			self._rtcout:RTC_DEBUG("properties: %s", NVUtil.toString(sProfile.properties))
+			factory:deleteObject(consumer)
+			self._rtcout:RTC_INFO("SDO consumer was deleted by initialization failure")
 			return false
 		end
 
 
-    	table.insert(self._consumers, consumer)
+		table.insert(self._consumers, consumer)
 
-    	return true
+		return true
 	end
 
 	-- サービスコンシューマ削除
@@ -271,25 +270,25 @@ SdoServiceAdmin.new = function(rtobj)
 	function obj:removeSdoServiceConsumer(id)
 		if id == "" then
 			self._rtcout:RTC_ERROR("removeSdoServiceConsumer(): id is invalid.")
-    		return false
+			return false
 		end
 		self._rtcout:RTC_TRACE("removeSdoServiceConsumer(id = %s)", id)
 
-    	local strid = id
+		local strid = id
 
 		for idx,cons in ipairs(self._consumers) do
-    		if strid == tostring(cons:getProfile().id) then
-        		cons:finalize()
-        		table.remove(self._consumers, idx)
-    			local factory = SdoServiceConsumerFactory:instance()
-        		factory:deleteObject(cons)
-        		self._rtcout:RTC_INFO("SDO service has been deleted: %s", id)
+			if strid == tostring(cons:getProfile().id) then
+				cons:finalize()
+				table.remove(self._consumers, idx)
+				local factory = SdoServiceConsumerFactory:instance()
+				factory:deleteObject(cons)
+				self._rtcout:RTC_INFO("SDO service has been deleted: %s", id)
 				return true
 			end
 		end
 
-    	self._rtcout:RTC_WARN("Specified SDO consumer not found: %s", id)
-    	return false
+		self._rtcout:RTC_WARN("Specified SDO consumer not found: %s", id)
+		return false
 	end
 
 	-- 指定コンシューマ型が有効かの確認
@@ -300,17 +299,17 @@ SdoServiceAdmin.new = function(rtobj)
 			return true
 		end
 
-    	for i, consumer in ipairs(self._consumerTypes) do
-    		if consumer == tostring(sProfile.interface_type) then
-    			self._rtcout:RTC_DEBUG("%s is supported SDO service.",
+		for i, consumer in ipairs(self._consumerTypes) do
+			if consumer == tostring(sProfile.interface_type) then
+				self._rtcout:RTC_DEBUG("%s is supported SDO service.",
 							   tostring(sProfile.interface_type))
 				return true
 			end
 		end
 
-    	self._rtcout:RTC_WARN("Consumer type is not supported: %s",
-                          tostring(sProfile.interface_type))
-    	return false
+		self._rtcout:RTC_WARN("Consumer type is not supported: %s",
+							   tostring(sProfile.interface_type))
+		return false
 	end
 
 	-- 指定コンシューマ型が存在するかの確認
@@ -320,16 +319,16 @@ SdoServiceAdmin.new = function(rtobj)
 		local factory = SdoServiceConsumerFactory:instance()
 		local consumerTypes = factory:getIdentifiers()
 		--print(#consumerTypes, sProfile.interface_type)
-    	for i, consumer in ipairs(consumerTypes) do
-    		if consumer == tostring(sProfile.interface_type) then
-    			self._rtcout:RTC_DEBUG("%s exists in the SDO service factory.", tostring(sProfile.interface_type))
-        		self._rtcout:RTC_PARANOID("Available SDO serices in the factory: %s", tostring(StringUtil.flatten(consumerTypes)))
+		for i, consumer in ipairs(consumerTypes) do
+			if consumer == tostring(sProfile.interface_type) then
+				self._rtcout:RTC_DEBUG("%s exists in the SDO service factory.", tostring(sProfile.interface_type))
+				self._rtcout:RTC_PARANOID("Available SDO serices in the factory: %s", tostring(StringUtil.flatten(consumerTypes)))
 				return true
 			end
 		end
-    	self._rtcout:RTC_WARN("No available SDO service in the factory: %s",
-                          tostring(sProfile.interface_type))
-    	return false
+		self._rtcout:RTC_WARN("No available SDO service in the factory: %s",
+						   tostring(sProfile.interface_type))
+		return false
 	end
 
 	-- uuid取得
@@ -346,7 +345,7 @@ SdoServiceAdmin.new = function(rtobj)
 		ifrvstr[2] = string.lower(ifrvstr[2])
 		ifrvstr[2] = string.gsub(ifrvstr[2], "%.", "_")
 		ifrvstr[2] = string.gsub(ifrvstr[2], "/", "%.")
-    	return ifrvstr[2]
+		return ifrvstr[2]
 	end
 
 	return obj

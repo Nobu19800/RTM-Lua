@@ -1555,7 +1555,7 @@ end
 -- @return true：初期化成功、false：初期化失敗
 function Manager:initManagerServant()
 	self._rtcout:RTC_TRACE("Manager.initManagerServant()")
-    if not StringUtil.toBool(
+	if not StringUtil.toBool(
 		self._config:getProperty("manager.corba_servant"), "YES","NO",true) then
 		return true
 	end
@@ -1565,7 +1565,7 @@ function Manager:initManagerServant()
 	if self._config:getProperty("corba.endpoints_ipv4") == "" then
 		self:setEndpointProperty(self._mgrservant:getObjRef())
 	end
-	local prop = self._config:getNode("manager")
+	--local prop = self._config:getNode("manager")
 	--local names = StringUtil.split(prop:getProperty("naming_formats"),",")
 
 	--if StringUtil.toBool(prop:getProperty("is_master"),

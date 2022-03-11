@@ -334,7 +334,7 @@ PortBase.new = function(name)
 		NVUtil.copyToProperties(prop, connector_profile.properties)
 
 
-		local default_value = StringUtil.toBool(self._properties:getProperty("allow_dup_connection"), "YES","NO",false)
+		--local default_value = StringUtil.toBool(self._properties:getProperty("allow_dup_connection"), "YES","NO",false)
 
 		--if not StringUtil.toBool(prop:getProperty("dataport.allow_dup_connection"), "YES","NO",default_value) then
 		--end

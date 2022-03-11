@@ -1443,7 +1443,7 @@ RTObject.new = function(manager)
 
 		for i,ec in ipairs(self._eclist) do
 			ec:stop()
-			local success, _ = oil.pcall(
+			local _, _ = oil.pcall(
 				function()
 					self._orb:deactivate(ec._svr)
 				end)

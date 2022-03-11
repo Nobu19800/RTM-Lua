@@ -52,6 +52,13 @@ if ORB_Dummy_ENABLE == nil then
 	ORB_Dummy_ENABLE = false
 end
 
+local ORB_Dummy
+local Dummy_NameServer
+local NameServer_dummy
+local Dummy_InPortCDR
+local Dummy_OutPortCDR
+
+
 if ORB_Dummy_ENABLE then
 
 	oil.corba = {}

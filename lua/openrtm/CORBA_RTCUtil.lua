@@ -1158,12 +1158,13 @@ CORBA_RTCUtil.RTCURIObject.new = function(uri, isrtcname, isrtcloc)
 
 		local spos = addrname:find("/")
 
+		local hostport
 
 		if spos ~= nil then
-			local hostport = addrname:sub(1, spos-1)
+			hostport = addrname:sub(1, spos-1)
 			self._rtcpath = addrname:sub(spos+1, #addrname)
 		else
-			local hostport = addrname
+			hostport = addrname
 		end
 
 		if hostport ~= "*" then

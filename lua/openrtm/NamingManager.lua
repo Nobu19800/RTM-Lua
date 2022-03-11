@@ -169,7 +169,7 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 			local success, _ = oil.pcall(
 				function()
 					local host = rtcuri:getAddress()
-					local cns = nil
+					local cns
 					if host == "*" then
 						cns = self._cosnaming
 					else
@@ -246,7 +246,7 @@ NamingManager.NamingOnManager.new = function(orb, mgr)
 	function obj:getManager(name)
 		if name == "*" then
 			local mgr_sev = self._mgr:getManagerServant()
-			local mgr_ = nil
+			local mgr_
 			if mgr_sev:is_master() then
 				mgr_ = mgr_sev:getObjRef()
 			else

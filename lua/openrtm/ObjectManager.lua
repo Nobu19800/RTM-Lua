@@ -63,7 +63,7 @@ ObjectManager.new = function(predicate)
 	-- @return オブジェクト
 	function obj:find(id)
 		--print(id)
-		local predi = nil
+		local predi
 		if type(id) == "string" then
 			predi = self._predicate({name=id})
 		else

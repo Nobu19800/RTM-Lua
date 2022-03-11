@@ -354,7 +354,7 @@ ManagerServant.new = function()
 		if pos0 == nil and pos1 == nil then
 			return ""
 		end
-		local pos = 0
+		local pos
 		if pos1 == nil then
 			pos = pos0
 		else
@@ -362,7 +362,7 @@ ManagerServant.new = function()
 		end
 
 
-		local paramstr = ""
+		local paramstr
 		local endpos, _ = string.find(string.sub(arg,pos+1), '&')
 		if endpos == nil then
 			endpos = string.find(string.sub(arg,pos+1), '?')
@@ -743,7 +743,7 @@ ManagerServant.new = function()
 	-- マスターマネージャかスレーブマネージャかの確認
 	-- @return true：マスターマネージャ、false：スレーブマネージャ
 	function obj:is_master()
-		local ret = ""
+		local ret
 		if self._isMaster then
 			ret = "YES"
 		else

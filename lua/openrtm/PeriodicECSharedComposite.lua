@@ -574,7 +574,7 @@ PeriodicECSharedComposite.new = function(manager)
 
         local len_ = #self._members._value
 
-        local str_ = ""
+        local str_
         if len_ > 1 then
             str_ = "s were"
         else

@@ -151,7 +151,7 @@ TimeValue.new = function(sec, usec)
 		usec = tonumber(usec)
 	end
 	if sec ~= nil and usec == nil then
-		local dbHalfAdj_ = 0.0
+		local dbHalfAdj_
 		if sec >= 0.0 then
 			dbHalfAdj_ = 0.5
 		else

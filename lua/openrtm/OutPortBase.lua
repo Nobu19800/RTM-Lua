@@ -137,7 +137,7 @@ OutPortBase.new = function(name, data_type)
 			self._rtcout:RTC_DEBUG("allowed consumers: "..self._properties:getProperty("consumer_types"))
 
 			local temp_types = consumer_types
-			consumer_types = {}
+
 			local active_types = StringUtil.split(self._properties:getProperty("consumer_types"), ",")
 
 			table.sort(temp_types)
@@ -182,7 +182,7 @@ OutPortBase.new = function(name, data_type)
 			self._rtcout:RTC_DEBUG("allowed providers: "..self._properties:getProperty("allowed"))
 
 			local temp_types = provider_types
-			provider_types = {}
+
 			local active_types = StringUtil.split(self._properties:getProperty("provider_types"), ",")
 
 			table.sort(temp_types)

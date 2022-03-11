@@ -373,8 +373,8 @@ Properties.new = function(argv)
 	-- @return プロパティ
 	function obj:splitKeyValue(_str)
 
-		local key = ""
-		local value = ""
+		local key
+		local value
 		local length = #_str
 		for i = 1, length do
 			local s = string.sub(_str,i,i)
@@ -455,7 +455,7 @@ Properties.new = function(argv)
 	function obj:_store(out, curr_name, curr)
 		if #curr.leaf > 0 then
 			for i = 1, #curr.leaf do
-				local next_name = ""
+				local next_name
 				if curr_name == "" then
 					next_name = curr.leaf[i].name
 				else

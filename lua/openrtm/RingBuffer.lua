@@ -120,12 +120,14 @@ RingBuffer.new = function(length)
 	-- @param nsec タイムアウト時間[ns]
 	-- @return バッファステータス
 	function obj:write(value, sec, nsec)
+		--[[
 		if sec == nil then
 			sec = -1
 		end
 		if nsec == nil then
 			nsec = 0
 		end
+		]]
 		if self:full() then
 			--local timedwrite = self._timedwrite
 			local overwrite  = self._overwrite
@@ -202,12 +204,14 @@ RingBuffer.new = function(length)
 	-- @return バッファステータス
 	-- BUFFER_OK：正常にデータ読み込み、BUFFER_EMPTY：バッファが空
 	function obj:read(value, sec, nsec)
+		--[[
 		if sec == nil then
 			sec = -1
 		end
 		if nsec == nil then
 			nsec = 0
 		end
+		]]
 		if self:empty() then
 			--local timedread = self._timedread
 			local readback  = self._readback

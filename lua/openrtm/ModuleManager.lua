@@ -338,7 +338,7 @@ ModuleManager.new = function(prop)
 		local file_name = fname
 
 		for k, path in ipairs(load_path) do
-			local f = nil
+			local f
 			local suffix = self._properties:getProperty("manager.modules.Lua.suffixes")
 			if string.find(fname, "."..suffix) == nil then
 				f = tostring(path).."/"..tostring(file_name).."."..suffix

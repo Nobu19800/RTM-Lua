@@ -204,7 +204,7 @@ CorbaNaming.new = function(orb, name_server)
 	-- {{id="id1",kind="kind1"},...}
 	-- @return オブジェクト
 	function obj:resolve(name)
-		local name_ = ""
+		local name_
 		if type(name) == "string" then
 			name_ = self:toName(name)
 		else

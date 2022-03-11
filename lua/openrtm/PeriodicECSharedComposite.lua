@@ -212,7 +212,8 @@ PeriodicECOrganization.new = function(rtobj)
         for k,member in ipairs(self._rtcMembers) do
             if tostring(id) == tostring(member._profile.instance_name) then
                 self:removePort(member, self._expPorts)
-                self._rtobj:getProperties():setProperty("conf.default.exported_ports", StringUtil.flatten(self._expPorts))
+                self._rtobj:getProperties():setProperty("conf.default.exported_ports",
+                                                StringUtil.flatten(self._expPorts))
                 self:removeParticipantFromEC(member)
                 self:removeOrganizationFromTarget(member)
                 self:startOwnedEC(member)

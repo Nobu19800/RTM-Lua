@@ -36,7 +36,7 @@ PeriodicExecutionContext.new = function()
 	obj._rtcout = Manager:instance():getLogbuf("rtobject.periodic_ec")
 	obj._rtcout:RTC_TRACE("PeriodicExecutionContext.__init__()")
 	obj._svc = false
-    obj._nowait = false
+	obj._nowait = false
 
 	--ref = Manager:instance():getORB():tostring(obj)
 	obj._svr = Manager:instance():getORB():newservant(obj, nil, "IDL:omg.org/RTC/ExecutionContextService:1.0")
@@ -45,11 +45,12 @@ PeriodicExecutionContext.new = function()
 	--print(ref:start())
 	--print(svr)
 	obj:setObjRef(ref)
-    obj:setKind(obj._ExecutionKind.PERIODIC)
-    obj:setRate(1.0 / DEFAULT_PERIOD)
-    obj._rtcout:RTC_DEBUG("Actual rate: "..obj._profile:getPeriod():sec().." [sec], "..obj._profile:getPeriod():usec().." [usec]")
+	obj:setKind(obj._ExecutionKind.PERIODIC)
+	obj:setRate(1.0 / DEFAULT_PERIOD)
+	obj._rtcout:RTC_DEBUG("Actual rate: "..obj._profile:getPeriod():sec()
+					.." [sec], "..obj._profile:getPeriod():usec().." [usec]")
 
-    obj._cpu = {}
+	obj._cpu = {}
 
 	-- コルーチンで周期実行処理
 	-- @return 0：正常

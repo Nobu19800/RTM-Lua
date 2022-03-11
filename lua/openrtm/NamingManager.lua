@@ -125,7 +125,8 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 			--print(NVUtil.getBindingType(i.binding_type), BindingType.ncontext)
 			--print(i.binding_name)
 			if NVUtil.getBindingType(i.binding_type) == BindingType.ncontext then
-				local next_context = RTCUtil.newproxy(orb, context:resolve(i.binding_name),"IDL:omg.org/CosNaming/NamingContext:1.0")
+				local next_context = RTCUtil.newproxy(orb, context:resolve(i.binding_name),
+							"IDL:omg.org/CosNaming/NamingContext:1.0")
 				--print(next_context)
 				self:getComponentByName(next_context, name, rtcs)
 			elseif NVUtil.getBindingType(i.binding_type) == BindingType.nobject then

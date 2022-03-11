@@ -31,7 +31,8 @@ SimulatorExecutionContext.new = function()
 
 
 	obj._svr = Manager:instance():getORB():newservant(obj, nil, "IDL:OpenRTM/ExtTrigExecutionContextService:1.0")
-	local ref = RTCUtil.getReference(Manager:instance():getORB(), obj._svr, "IDL:OpenRTM/ExtTrigExecutionContextService:1.0")
+	local ref = RTCUtil.getReference(Manager:instance():getORB(), obj._svr,
+								"IDL:OpenRTM/ExtTrigExecutionContextService:1.0")
 	obj:setObjRef(ref)
 
 

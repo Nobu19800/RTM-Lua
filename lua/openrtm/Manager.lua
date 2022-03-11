@@ -321,7 +321,8 @@ local FactoryPredicate = function(argv)
 		--print(_prop:)
 		--print(self._impleid,_prop:getProperty("implementation_id"))
 		--print(self._impleid, self._vendor, self._category, self._version)
-		--print(_prop:getProperty("implementation_id"), _prop:getProperty("vendor"), _prop:getProperty("category"), _prop:getProperty("implementation_id"))
+		--print(_prop:getProperty("implementation_id"), _prop:getProperty("vendor"),
+		-- _prop:getProperty("category"), _prop:getProperty("implementation_id"))
 		if self._impleid ~= _prop:getProperty("implementation_id") then
 			return false
 		end
@@ -380,7 +381,8 @@ local ModulePredicate = function(prop)
 		if self._prop:getProperty("vendor") ~= "" and self._prop:getProperty("vendor") ~= prop_:getProperty("vendor") then
 			return false
 		end
-		if self._prop:getProperty("category") ~= "" and self._prop:getProperty("category") ~= prop_:getProperty("category") then
+		if self._prop:getProperty("category") ~= "" and self._prop:getProperty("category") 
+												~= prop_:getProperty("category") then
 			return false
 		end
 		if self._prop:getProperty("version") ~= "" and self._prop:getProperty("version") ~= prop_:getProperty("version") then
@@ -1238,7 +1240,8 @@ end
 -- @param true：設定成功
 function Manager:initLogger()
 	self._rtcout = self:getLogbuf()
-	--print(self._config:getProperty("logger.enable"), StringUtil.toBool(self._config:getProperty("logger.enable"), "YES", "NO", true))
+	--print(self._config:getProperty("logger.enable"), 
+	-- StringUtil.toBool(self._config:getProperty("logger.enable"), "YES", "NO", true))
 	if not StringUtil.toBool(self._config:getProperty("logger.enable"), "YES", "NO", true) then
 		return true
 	end
@@ -2000,7 +2003,8 @@ end
 -- rtc.confに以下のように記述
 -- manager.components.preconnect: ConsoleIn0.out?port=ConsoleOut0.in&dataflow_type=pull
 function Manager:initPreConnection()
-	self._rtcout:RTC_TRACE("Connection pre-connection: "..tostring(self._config:getProperty("manager.components.preconnect")))
+	self._rtcout:RTC_TRACE("Connection pre-connection: "..tostring(
+		self._config:getProperty("manager.components.preconnect")))
 	local connectors = StringUtil.split(tostring(self._config:getProperty("manager.components.preconnect")), ",")
 
 	for k,c in ipairs(connectors) do
@@ -2156,7 +2160,8 @@ end
 -- rtc.confに以下のように記述
 -- manager.components.preactivation: ConsoleIn0, ConsoleOut0
 function Manager:initPreActivation()
-	self._rtcout:RTC_TRACE("Components pre-activation: "..tostring(self._config:getProperty("manager.components.preactivation")))
+	self._rtcout:RTC_TRACE("Components pre-activation: "..tostring(
+		self._config:getProperty("manager.components.preactivation")))
 	local comps = StringUtil.split(tostring(self._config:getProperty("manager.components.preactivation")), ",")
 	for k,c in pairs(comps) do
 		c = StringUtil.eraseBothEndsBlank(c)

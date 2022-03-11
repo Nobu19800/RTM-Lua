@@ -34,7 +34,8 @@ OpenHRPExecutionContext.new = function()
 	obj._rtcout:RTC_TRACE("OpenHRPExecutionContext.__init__()")
 
 	obj._svr = Manager:instance():getORB():newservant(obj, nil, "IDL:OpenRTM/ExtTrigExecutionContextService:1.0")
-	local ref = RTCUtil.getReference(Manager:instance():getORB(), obj._svr, "IDL:OpenRTM/ExtTrigExecutionContextService:1.0")
+	local ref = RTCUtil.getReference(Manager:instance():getORB(), obj._svr,
+			"IDL:OpenRTM/ExtTrigExecutionContextService:1.0")
 
 	obj:setObjRef(ref)
     obj:setKind(obj._ExecutionKind.PERIODIC)

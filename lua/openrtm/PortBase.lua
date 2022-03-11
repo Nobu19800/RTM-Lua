@@ -109,28 +109,29 @@ PortBase.new = function(name)
 	--print("test3:",obj, obj._objref)
 
 
-    obj._profile = {name="", interfaces={}, port_ref=oil.corba.idl.null, connector_profiles={}, owner=oil.corba.idl.null, properties={}}
+	obj._profile = {name="", interfaces={}, port_ref=oil.corba.idl.null,
+			connector_profiles={}, owner=oil.corba.idl.null, properties={}}
 
 
-    if name == nil then
+	if name == nil then
 		obj._profile.name = "unknown.unknown"
-    else
+	else
 		obj._profile.name = obj._ownerInstanceName.."."..name
 	end
 
 
-    obj._profile.owner = oil.corba.idl.null
+	obj._profile.owner = oil.corba.idl.null
 
 
-    obj._rtcout = Manager:instance():getLogbuf(name)
-    obj._onPublishInterfaces = nil
-    obj._onSubscribeInterfaces = nil
-    obj._onConnected = nil
-    obj._onUnsubscribeInterfaces = nil
-    obj._onDisconnected = nil
-    obj._onConnectionLost = nil
-    obj._connectionLimit   = -1
-    obj._portconnListeners = nil
+	obj._rtcout = Manager:instance():getLogbuf(name)
+	obj._onPublishInterfaces = nil
+	obj._onSubscribeInterfaces = nil
+	obj._onConnected = nil
+	obj._onUnsubscribeInterfaces = nil
+	obj._onDisconnected = nil
+	obj._onConnectionLost = nil
+	obj._connectionLimit   = -1
+	obj._portconnListeners = nil
 	obj._properties = Properties.new()
 	obj._svr = nil
 	obj._connectors = {}

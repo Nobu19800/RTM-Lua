@@ -45,6 +45,7 @@ local ManagerInfo = require "openrtm.ManagerInfo"
 
 local Timer = require "openrtm.Timer"
 
+local ORB_Dummy_ENABLE = _G["ORB_Dummy_ENABLE"]
 -- ORB_Dummy_ENABLEをtrueに設定した場合、
 -- oil関連の処理はすべてダミー関数に置き換えられる
 if ORB_Dummy_ENABLE == nil then

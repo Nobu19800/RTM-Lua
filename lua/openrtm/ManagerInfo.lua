@@ -16,7 +16,7 @@ end
 
 
 ManagerInfo.is_main = function()
-	return (debug.getinfo(5 + (offset or 0)) == nil)
+	return (debug.getinfo(5 + (_G["offset"] or 0)) == nil)
 end
 
 return ManagerInfo

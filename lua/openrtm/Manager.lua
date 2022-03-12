@@ -272,7 +272,7 @@ if ORB_Dummy_ENABLE then
 	_G["Dummy_NameServer"] = Dummy_NameServer
 	_G["NameServer_dummy"] = NameServer_dummy
 	_G["Dummy_InPortCDR"] = Dummy_InPortCDR
-	_G["Dummy_OutPortCDR"] = Dummy_OutPortCDR	
+	_G["Dummy_OutPortCDR"] = Dummy_OutPortCDR
 
 end
 

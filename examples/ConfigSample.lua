@@ -113,7 +113,7 @@ end
 -- @param manager マネージャ
 local MyModuleInit = function(manager)
 	ConfigSample.Init(manager)
-	local comp = manager:createComponent("ConfigSample")
+	manager:createComponent("ConfigSample")
 end
 
 -- ConfigSample.luaを直接実行している場合はマネージャの起動を行う

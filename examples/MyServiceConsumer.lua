@@ -52,7 +52,7 @@ MyServiceConsumer.new = function(manager)
 	local obj = {}
 	-- RTObjectをメタオブジェクトに設定する
 	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
-	
+
 	-- サービスポート生成
 	obj._myServicePort = openrtm.CorbaPort.new("MyService")
 	-- コンシューマオブジェクト生成
@@ -139,7 +139,7 @@ end
 -- @param manager マネージャ
 local MyModuleInit = function(manager)
 	MyServiceConsumer.Init(manager)
-	local comp = manager:createComponent("MyServiceConsumer")
+	manager:createComponent("MyServiceConsumer")
 end
 
 -- MyServiceConsumer.luaを直接実行している場合はマネージャの起動を行う

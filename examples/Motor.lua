@@ -64,9 +64,9 @@ Motor.new = function(manager)
 	function obj:onExecute(ec_id)
 		--print("Motor")
 		if self._inIn:isNew() then
-    		local data = self._inIn:read()
-    		print("Motor Received data: ", data.data)
-    		self._d_out.data = data.data *2
+			local data = self._inIn:read()
+			print("Motor Received data: ", data.data)
+			self._d_out.data = data.data *2
 			self._outOut:write()
 		end
 		return self._ReturnCode_t.RTC_OK
@@ -86,7 +86,7 @@ end
 -- @param manager マネージャ
 local MyModuleInit = function(manager)
 	Motor.Init(manager)
-	local comp = manager:createComponent("Motor")
+	manager:createComponent("Motor")
 end
 
 
@@ -95,7 +95,7 @@ end
 if openrtm.Manager.is_main() then
 	local manager = openrtm.Manager
 	manager:init(arg)
-	
+
 	manager:setModuleInitProc(MyModuleInit)
 	manager:activateManager()
 	manager:runManager()

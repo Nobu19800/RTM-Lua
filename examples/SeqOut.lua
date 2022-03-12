@@ -35,7 +35,7 @@ SeqOut.new = function(manager)
 	local obj = {}
 	-- RTObjectをメタオブジェクトに設定する
 	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
-	
+
 	-- データ格納変数
 	obj._d_octet = openrtm.RTCUtil.instantiateDataType("::RTC::TimedOctet")
 	obj._d_short = openrtm.RTCUtil.instantiateDataType("::RTC::TimedShort")
@@ -65,7 +65,7 @@ SeqOut.new = function(manager)
 	-- 初期化時のコールバック関数
 	-- @return リターンコード
 	function obj:onInitialize()
-		
+
 		-- ポート追加
 		self:addOutPort("Octet",self._octetOut)
 		self:addOutPort("Short",self._shortOut)
@@ -100,7 +100,8 @@ SeqOut.new = function(manager)
 		print(string.format('%3.2s   %10.8s %10.8s %10.8s %10.8s %10.8s',
 			' ', 'octet', 'short', 'long', 'float', 'double'))
 		print(string.format('%3.2s   %7s[%s] %10.8s %10.8s %10.8s %10.8s',
-			' ', self._d_octet.data, string.char(self._d_octet.data), self._d_short.data, self._d_long.data, self._d_float.data, self._d_double.data))
+			' ', self._d_octet.data, string.char(self._d_octet.data), self._d_short.data, 
+			self._d_long.data, self._d_float.data, self._d_double.data))
 		print("-------------------------------------------------------------")
 		print("                 Sequence Data                     ")
 		print("-------------------------------------------------------------")
@@ -112,7 +113,8 @@ SeqOut.new = function(manager)
 			doubleSeq[i] = math.random(0, 10.0)
 
 			print(string.format('%3.2s : %7s[%s] %10.8s %10.8s %10.8s %10.8s',
-				tostring(i), string.byte(string.sub(octetSeq,i,i)), string.sub(octetSeq,i,i), shortSeq[i], longSeq[i], floatSeq[i], doubleSeq[i]))
+				tostring(i), string.byte(string.sub(octetSeq,i,i)), string.sub(octetSeq,i,i), 
+				shortSeq[i], longSeq[i], floatSeq[i], doubleSeq[i]))
 		end
 
 		print("\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r")
@@ -153,7 +155,7 @@ end
 -- @param manager マネージャ
 local MyModuleInit = function(manager)
 	SeqOut.Init(manager)
-	local comp = manager:createComponent("SeqOut")
+	manager:createComponent("SeqOut")
 end
 
 

@@ -108,21 +108,22 @@ MyServiceProvider.new = function(manager)
 	local obj = {}
 	-- RTObjectをメタオブジェクトに設定する
 	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
-	
+
 	-- サービスポート生成
 	obj._myServicePort = openrtm.CorbaPort.new("MyService")
 	-- プロバイダオブジェクト生成
 	obj._myservice0 = MyServiceSVC_impl.new()
-		
-		
+
+
 	-- 初期化時のコールバック関数
 	-- @return リターンコード
 	function obj:onInitialize()
 		-- サービスポートにプロバイダオブジェクトを登録
 		local fpath = openrtm.StringUtil.dirname(string.sub(debug.getinfo(1)["source"],2))
 		local _str = string.gsub(fpath,"\\","/").."idl/MyService.idl"
-		
-		self._myServicePort:registerProvider("myservice0", "MyService", self._myservice0, _str, "IDL:SimpleService/MyService:1.0")
+
+		self._myServicePort:registerProvider("myservice0", "MyService", self._myservice0, _str, 
+												"IDL:SimpleService/MyService:1.0")
 		-- ポート追加
 		self:addPort(self._myServicePort)
 
@@ -145,7 +146,7 @@ end
 -- @param manager マネージャ
 local MyModuleInit = function(manager)
 	MyServiceProvider.Init(manager)
-	local comp = manager:createComponent("MyServiceProvider")
+	manager:createComponent("MyServiceProvider")
 end
 
 -- MyServiceProvider.luaを直接実行している場合はマネージャの起動を行う

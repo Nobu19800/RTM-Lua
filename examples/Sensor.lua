@@ -64,9 +64,9 @@ Sensor.new = function(manager)
 	function obj:onExecute(ec_id)
 		--print("Sensor")
 		if self._inIn:isNew() then
-    		local data = self._inIn:read()
-    		print("Sensor Received data: ", data.data)
-    		self._d_out.data = data.data *2
+			local data = self._inIn:read()
+			print("Sensor Received data: ", data.data)
+			self._d_out.data = data.data *2
 			self._outOut:write()
 		end
 		return self._ReturnCode_t.RTC_OK
@@ -86,7 +86,7 @@ end
 -- @param manager マネージャ
 local MyModuleInit = function(manager)
 	Sensor.Init(manager)
-	local comp = manager:createComponent("Sensor")
+	manager:createComponent("Sensor")
 end
 
 
@@ -95,7 +95,7 @@ end
 if openrtm.Manager.is_main() then
 	local manager = openrtm.Manager
 	manager:init(arg)
-	
+
 	manager:setModuleInitProc(MyModuleInit)
 	manager:activateManager()
 	manager:runManager()

@@ -22,7 +22,7 @@ local consolein_spec = {
   ["lang_type"]="script"}
 
 
--- 
+
 local DataListener = {}
 
 
@@ -40,11 +40,11 @@ DataListener.new = function(name)
 	function obj:call(info, cdrdata)
 		local data = self:__call__(info, cdrdata, "::RTC::TimedLong")
 		print("------------------------------")
-    	print("Listener:       "..self._name)
-    	print("Profile::name:  "..info.name)
-    	print("Profile::id:    "..info.id)
-    	print("Data:           "..data.data)
-    	print("------------------------------")
+		print("Listener:       "..self._name)
+		print("Profile::name:  "..info.name)
+		print("Profile::id:    "..info.id)
+		print("Data:           "..data.data)
+		print("------------------------------")
 		return openrtm.ConnectorListener.ConnectorListenerStatus.NO_CHANGE
 	end
 	return obj
@@ -64,9 +64,9 @@ ConnListener.new = function(name)
 	-- @return リスナステータス
 	function obj:call(info)
 		print("------------------------------")
-    	print("Listener:       "..self._name)
-    	print("Profile::name:  "..info.name)
-    	print("Profile::id:    "..info.id)
+		print("Listener:       "..self._name)
+		print("Profile::name:  "..info.name)
+		print("Profile::id:    "..info.id)
 		print("------------------------------")
 		return openrtm.ConnectorListener.ConnectorListenerStatus.NO_CHANGE
 	end
@@ -153,7 +153,7 @@ end
 -- @param manager マネージャ
 local MyModuleInit = function(manager)
 	ConsoleIn.Init(manager)
-	local comp = manager:createComponent("ConsoleIn")
+	manager:createComponent("ConsoleIn")
 end
 
 

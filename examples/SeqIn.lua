@@ -34,7 +34,7 @@ SeqIn.new = function(manager)
 	local obj = {}
 	-- RTObjectをメタオブジェクトに設定する
 	setmetatable(obj, {__index=openrtm.RTObject.new(manager)})
-	
+
 	-- データ格納変数
 	obj._d_octet = openrtm.RTCUtil.instantiateDataType("::RTC::TimedOctet")
 	obj._d_short = openrtm.RTCUtil.instantiateDataType("::RTC::TimedShort")
@@ -64,7 +64,7 @@ SeqIn.new = function(manager)
 	-- 初期化時のコールバック関数
 	-- @return リターンコード
 	function obj:onInitialize()
-		
+
 		-- ポート追加
 		self:addInPort("Octet",self._octetIn)
 		self:addInPort("Short",self._shortIn)
@@ -165,7 +165,7 @@ end
 -- @param manager マネージャ
 local MyModuleInit = function(manager)
 	SeqIn.Init(manager)
-	local comp = manager:createComponent("SeqIn")
+	manager:createComponent("SeqIn")
 end
 
 

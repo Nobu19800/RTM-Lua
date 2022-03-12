@@ -19,11 +19,11 @@ local main = function()
 		fullname = string.gsub(fullname, "//", "/")
 		local dirname   = openrtm.StringUtil.dirname(arg[1])
 		local basename  = openrtm.StringUtil.basename(arg[1])
-		
+
 		local classname = string.lower(openrtm.StringUtil.split(basename,"%.")[1])
 		local comp_spec_name = classname.."_spec"
 
-		
+
 		local f = io.open(fullname, "r")
 		if f == nil then
 			print("Load failed. file name: ", fullname)
@@ -35,12 +35,13 @@ local main = function()
 		end
 		f:close()
 		package.path = package.path..";"..dirname.."?.lua"
-		
+
 		local ext_pos = string.find(basename, ".lua")
+		local import_name
 		if ext_pos ~= nil then
 			import_name = string.sub(basename,1,ext_pos-1)
 		end
-		
+
 		local mo = require(tostring(import_name))
 		local profs = nil
 		local dummy_manager = {}
@@ -56,7 +57,7 @@ local main = function()
 				print(v..":"..profs:getProperty(v))
 			end
 		end
-		
+
 	end
 end
 

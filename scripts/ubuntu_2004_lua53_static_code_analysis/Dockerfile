@@ -18,6 +18,6 @@ RUN luarocks install luacheck
 
 CMD cd /root/RTM-Lua\
  && luacheck lua/openrtm/*.lua\
- && luacheck lua/samples/*.lua\
- && luacheck lua/utils/*.lua
+ && luacheck samples/*.lua\
+ && luacheck utils/*.lua
 

@@ -58,7 +58,6 @@ local NameServer_dummy
 local Dummy_InPortCDR
 local Dummy_OutPortCDR
 
-
 if ORB_Dummy_ENABLE then
 
 	oil.corba = {}
@@ -268,6 +267,12 @@ if ORB_Dummy_ENABLE then
 		--print("test2:",ret,ref)
 		return ret
 	end
+
+	_G["ORB_Dummy"] = ORB_Dummy
+	_G["Dummy_NameServer"] = Dummy_NameServer
+	_G["NameServer_dummy"] = NameServer_dummy
+	_G["Dummy_InPortCDR"] = Dummy_InPortCDR
+	_G["Dummy_OutPortCDR"] = Dummy_OutPortCDR	
 
 end
 

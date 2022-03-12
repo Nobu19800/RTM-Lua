@@ -37,7 +37,7 @@ RTCの状態の操作、コネクタの接続などができます。
 ![tutorial5](https://user-images.githubusercontent.com/6216077/47963215-3714cd00-e06c-11e8-8e97-547e7aef1df1.png)
 
 ## RTCの起動
-OpenRTM Luaの`samples`フォルダ内の以下のバッチファイルを実行するとサンプルのRTCが起動します。
+OpenRTM Luaの`examples`フォルダ内の以下のバッチファイルを実行するとサンプルのRTCが起動します。
 `ConsoleIn`は標準入力した数値をOutPortから出力するサンプル、`ConsoleOut`はInPortに入力した数値を標準出力するサンプルコンポーネントです。
 今回は`ConsoleIn`で標準入力した数値を`ConsoleOut`に送信して表示するシステムを構築します。
 

@@ -33,6 +33,10 @@ $LPEG_SOURCE_DIR = "${WORKSPACE}\lpeg-${LPEG_VERSION}"
 $LPEG_BUILD_DIR = "${WORKSPACE}\build_lpeg"
 $LCOVTOOLS_SOURCE_DIR = "${WORKSPACE}\lcovtools"
 $LCOVTOOLS_BUILD_DIR = "${WORKSPACE}\build_lcovtools"
+$OPENRTM_EXTFILES_NAME = "openrtm-lua-0.5.0-lua5.1-files"
+$OPENRTM_EXTFILES_DIR = "${WORKSPACE}\${OPENRTM_EXTFILES_NAME}"
+$OPENRTM_SOURCE_DIR = "${WORKSPACE}\RTM-Lua"
+$OPENRTM_SOURCE_CC_DIR = "${WORKSPACE}\RTM-Lua-cc"
 
 
 if((Test-Path $LUA_BUILD_DIR) -eq $true){
@@ -99,19 +103,55 @@ $(Get-Content "${LCOVTOOLS_SOURCE_DIR}\luacov_tmp.cpp") -replace "int luaopen_lc
 Move-Item "${LCOVTOOLS_SOURCE_DIR}\luacov_tmp2.cpp" "${LCOVTOOLS_SOURCE_DIR}\luacov.cpp" -force
 cmake "$LCOVTOOLS_SOURCE_DIR" -DCMAKE_INSTALL_PREFIX="${env:LUA_DIR}" -B "$LCOVTOOLS_BUILD_DIR" -A $ARCH
 cmake --build "$LCOVTOOLS_BUILD_DIR" --config Release
-cmake --build "$LCOVTOOLS_BUILD_DIR" --config Release --target install
+#cmake --build "$LCOVTOOLS_BUILD_DIR" --config Release --target install
 
 
 Remove-Item ${env:LUA_DIR}\include -Recurse -Force
 Remove-Item ${env:LUA_DIR}\lib -Recurse -Force
 
 
+if((Test-Path $OPENRTM_EXTFILES_DIR) -eq $false){
+  Invoke-WebRequest "https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0b/${OPENRTM_EXTFILES_NAME}.zip" -OutFile "${WORKSPACE}\${OPENRTM_EXTFILES_NAME}.zip"
+  Expand-Archive -Path "${OPENRTM_EXTFILES_NAME}.zip" -DestinationPath "${WORKSPACE}" -Force
+}
+
+Copy-Item "${OPENRTM_EXTFILES_DIR}\examples" -destination "${env:LUA_DIR}\" -recurse
+Copy-Item "${OPENRTM_EXTFILES_DIR}\Licenses" -destination "${env:LUA_DIR}\" -recurse
+Copy-Item "${OPENRTM_EXTFILES_DIR}\lua" -destination "${env:LUA_DIR}\" -recurse -force
+Copy-Item "${OPENRTM_EXTFILES_DIR}\moon" -destination "${env:LUA_DIR}\" -recurse -force
+Copy-Item "${OPENRTM_EXTFILES_DIR}\utils" -destination "${env:LUA_DIR}\" -recurse -force
+
+
 $LUA_INSTASLL_CC_DIR = "${WORKSPACE}\install\${LUA_INSTASLL_CC_DIR_NAME}"
 if((Test-Path $LUA_INSTASLL_CC_DIR) -eq $true){
   Remove-Item $LUA_INSTASLL_CC_DIR -Recurse
 }
-Copy-Item "$env:LUA_DIR" -destination "$LUA_INSTASLL_CC_DIR" -recurse
 
+Copy-Item "$env:LUA_DIR" -destination "$LUA_INSTASLL_CC_DIR" -recurse -force
+
+if((Test-Path $OPENRTM_SOURCE_DIR) -eq $false){
+  git clone https://github.com/Nobu19800/RTM-Lua -b corba_cdr_no_support $OPENRTM_SOURCE_DIR
+}
+if((Test-Path $OPENRTM_SOURCE_CC_DIR) -eq $false){
+  git clone https://github.com/Nobu19800/RTM-Lua -b corba_cdr_support $OPENRTM_SOURCE_CC_DIR
+}
+
+
+Copy-Item "${OPENRTM_SOURCE_DIR}\examples" -destination "${env:LUA_DIR}\" -recurse -force
+Copy-Item "${OPENRTM_SOURCE_DIR}\idl" -destination "${env:LUA_DIR}\lua\" -recurse
+Copy-Item "${OPENRTM_SOURCE_DIR}\moon" -destination "${env:LUA_DIR}\" -recurse -force
+Copy-Item "${OPENRTM_SOURCE_DIR}\examples" -destination "${env:LUA_DIR}\" -recurse -force
+Copy-Item "${OPENRTM_SOURCE_DIR}\lua" -destination "${env:LUA_DIR}\" -recurse -force
+Copy-Item "${OPENRTM_SOURCE_DIR}\utils\rtcd.lua" -destination "${env:LUA_DIR}\utils\"
+Copy-Item "${OPENRTM_SOURCE_DIR}\utils\rtc.conf" -destination "${env:LUA_DIR}\utils\"
+
+Copy-Item "${OPENRTM_SOURCE_CC_DIR}\examples" -destination "${LUA_INSTASLL_CC_DIR}\" -recurse -force
+Copy-Item "${OPENRTM_SOURCE_CC_DIR}\idl" -destination "${LUA_INSTASLL_CC_DIR}\lua\" -recurse
+Copy-Item "${OPENRTM_SOURCE_CC_DIR}\moon" -destination "${LUA_INSTASLL_CC_DIR}\" -recurse -force
+Copy-Item "${OPENRTM_SOURCE_CC_DIR}\examples" -destination "${LUA_INSTASLL_CC_DIR}\" -recurse -force
+Copy-Item "${OPENRTM_SOURCE_CC_DIR}\lua" -destination "${LUA_INSTASLL_CC_DIR}\" -recurse -force
+Copy-Item "${OPENRTM_SOURCE_CC_DIR}\utils\rtcd.lua" -destination "${LUA_INSTASLL_CC_DIR}\utils\"
+Copy-Item "${OPENRTM_SOURCE_CC_DIR}\utils\rtc.conf" -destination "${LUA_INSTASLL_CC_DIR}\utils\"
 
 Compress-Archive -Path "$env:LUA_DIR" -DestinationPath "${WORKSPACE}\install\${LUA_INSTASLL_DIR_NAME}.zip" -Force
 Compress-Archive -Path "$LUA_INSTASLL_CC_DIR" -DestinationPath "${WORKSPACE}\install\${LUA_INSTASLL_CC_DIR_NAME}.zip" -Force

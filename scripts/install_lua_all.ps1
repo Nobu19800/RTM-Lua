@@ -1,3 +1,5 @@
+$OPENRTMLUA_VERSION = "0.5.0"
+
 $VERSION_OMIT = "OFF"
 $ARCH = "x64"
 $env:OPENSSL_ROOT_DIR = "C:\workspace\openssl\x64"

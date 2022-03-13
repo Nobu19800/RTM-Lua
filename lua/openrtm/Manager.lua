@@ -2063,7 +2063,7 @@ function Manager:initPreConnection()
 			local tmp = StringUtil.split(port0_str,"%.")
 			tmp[#tmp] = nil
 
-			local comp0_name = StringUtil.flatten(tmp,"%.")
+			local comp0_name = StringUtil.flatten(tmp,".")
 
 			local port0_name = port0_str
 			local comp0_ref = nil
@@ -2110,7 +2110,7 @@ function Manager:initPreConnection()
 
 					local tmp_ = StringUtil.split(port_str, "%.")
 					tmp_[#tmp_] = nil
-					local comp_name = StringUtil.flatten(tmp_,"%.")
+					local comp_name = StringUtil.flatten(tmp_,".")
 					local port_name = port_str
 
 					local comp_ref = nil

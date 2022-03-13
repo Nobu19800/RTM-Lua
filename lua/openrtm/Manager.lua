@@ -241,11 +241,11 @@ if ORB_Dummy_ENABLE then
 
 		if idl == "IDL:omg.org/CosNaming/NamingContext:1.0" then
 			ret = NameServer_dummy
-		elseif idl == "IDL:OpenRTM/InPortCdr:1.0" and ref == "IOR:Dummy" then
+		elseif idl == "IDL:openrtm.aist.go.jp/OpenRTM/InPortCdr:1.0" and ref == "IOR:Dummy" then
 			ret = Dummy_InPortCDR.new()
 		elseif idl == "IDL:omg.org/RTC/DataPushService:1.0" and ref == "IOR:Dummy" then
 			ret = Dummy_InPortCDR.new()
-		elseif idl == "IDL:OpenRTM/OutPortCdr:1.0" and ref == "IOR:Dummy" then
+		elseif idl == "IDL:openrtm.aist.go.jp/OpenRTM/OutPortCdr:1.0" and ref == "IOR:Dummy" then
 			ret = Dummy_OutPortCDR.new()
 		elseif idl == "IDL:omg.org/RTC/DataPullService:1.0" and ref == "IOR:Dummy" then
 			ret = Dummy_OutPortCDR.new()
@@ -1418,7 +1418,7 @@ function Manager:initORB()
 		self._orb:loadidlfile(Manager:findIdLFile("RTC.idl"))
 		self._orb:loadidlfile(Manager:findIdLFile("OpenRTM.idl"))
 		self._orb:loadidlfile(Manager:findIdLFile("DataPort.idl"))
-		self._orb:loadidlfile(Manager:findIdLFile("DataPort_OpenRTM.idl"))
+
 		self._orb:loadidlfile(Manager:findIdLFile("Manager.idl"))
 		self._orb:loadidlfile(Manager:findIdLFile("InterfaceDataTypes.idl"))
 	end
@@ -2058,7 +2058,7 @@ function Manager:initPreConnection()
 				configs["dataflow_type"] = "push"
 			end
 			if configs["interface_type"] == nil then
-				configs["interface_type"] = "corba_cdr"
+				configs["interface_type"] = "data_service"
 			end
 			local tmp = StringUtil.split(port0_str,"%.")
 			tmp[#tmp] = nil

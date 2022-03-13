@@ -136,7 +136,7 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 						function()
 							local cc = CorbaConsumer.new()
 							cc:setObject(context:resolve(i.binding_name))
-							local _obj = RTCUtil.newproxy(orb, cc:getObject(),"IDL:omg.org/RTC/RTObject:1.0")
+							local _obj = RTCUtil.newproxy(orb, cc:getObject(),"IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
 
 							if not NVUtil._non_existent(_obj) then
 								table.insert(rtcs, _obj)
@@ -205,7 +205,7 @@ NamingManager.NamingOnCorba.new = function(orb, names)
 							return rtc_list
 						end
 
-						_obj = RTCUtil.newproxy(orb, _obj,"IDL:omg.org/RTC/RTObject:1.0")
+						_obj = RTCUtil.newproxy(orb, _obj,"IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
 
 
 						table.insert(rtc_list, _obj)
@@ -269,7 +269,7 @@ NamingManager.NamingOnManager.new = function(orb, mgr)
 
 
 				mgr = RTCUtil.newproxy(self._orb, mgrloc,"IDL:RTM/Manager:1.0")
-				--mgr = RTCUtil.newproxy(self._orb, mgrloc,"IDL:omg.org/RTC/RTObject:1.0")
+				--mgr = RTCUtil.newproxy(self._orb, mgrloc,"IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
 
 				--print(mgrloc)
 

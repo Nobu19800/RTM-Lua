@@ -262,7 +262,7 @@ PeriodicECOrganization.new = function(rtobj)
         end
 
 		local orb = Manager:instance():getORB()
-        local dfc = RTCUtil.newproxy(orb, sdo,"IDL:OpenRTM/DataFlowComponent:1.0")
+        local dfc = RTCUtil.newproxy(orb, sdo,"IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
 
         if dfc == oil.corba.idl.null then
             return false, nil

@@ -9,10 +9,10 @@ Copyright (c) 2017 Nobuhiko Miyamoto
 
 -- 各ファクトリの登録を実行する
 local FactoryInit= function()
-	local InPortCorbaCdrProvider = require "openrtm.InPortCorbaCdrProvider"
-	local InPortCorbaCdrConsumer = require "openrtm.InPortCorbaCdrConsumer"
-	local OutPortCorbaCdrProvider = require "openrtm.OutPortCorbaCdrProvider"
-	local OutPortCorbaCdrConsumer = require "openrtm.OutPortCorbaCdrConsumer"
+	--local InPortCorbaCdrProvider = require "openrtm.InPortCorbaCdrProvider"
+	--local InPortCorbaCdrConsumer = require "openrtm.InPortCorbaCdrConsumer"
+	--local OutPortCorbaCdrProvider = require "openrtm.OutPortCorbaCdrProvider"
+	--local OutPortCorbaCdrConsumer = require "openrtm.OutPortCorbaCdrConsumer"
 	local InPortDSProvider = require "openrtm.InPortDSProvider"
 	local InPortDSConsumer = require "openrtm.InPortDSConsumer"
 	local OutPortDSProvider = require "openrtm.OutPortDSProvider"
@@ -31,10 +31,10 @@ local FactoryInit= function()
 
 	CdrRingBuffer.Init()
 
-	InPortCorbaCdrConsumer.Init()
-	InPortCorbaCdrProvider.Init()
-	OutPortCorbaCdrConsumer.Init()
-	OutPortCorbaCdrProvider.Init()
+	--InPortCorbaCdrConsumer.Init()
+	--InPortCorbaCdrProvider.Init()
+	--OutPortCorbaCdrConsumer.Init()
+	--OutPortCorbaCdrProvider.Init()
 	InPortDSConsumer.Init()
 	InPortDSProvider.Init()
 	OutPortDSConsumer.Init()

@@ -1375,9 +1375,9 @@ RTObject.new = function(manager)
 
 	-- オブジェクトリファレンス生成
 	function obj:createRef()
-		self._svr = self._orb:newservant(self, nil, "IDL:OpenRTM/DataFlowComponent:1.0")
+		self._svr = self._orb:newservant(self, nil, "IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
 		--print(type(self._svr))
-		self._objref = RTCUtil.getReference(self._orb, self._svr, "IDL:OpenRTM/DataFlowComponent:1.0")
+		self._objref = RTCUtil.getReference(self._orb, self._svr, "IDL:openrtm.aist.go.jp/OpenRTM/DataFlowComponent:1.0")
 	end
 
 	-- 終了時コールバック実行

@@ -30,9 +30,9 @@ SimulatorExecutionContext.new = function()
 	local Manager = require "openrtm.Manager"
 
 
-	obj._svr = Manager:instance():getORB():newservant(obj, nil, "IDL:OpenRTM/ExtTrigExecutionContextService:1.0")
+	obj._svr = Manager:instance():getORB():newservant(obj, nil, "IDL:openrtm.aist.go.jp/OpenRTM/ExtTrigExecutionContextService:1.0")
 	local ref = RTCUtil.getReference(Manager:instance():getORB(), obj._svr,
-								"IDL:OpenRTM/ExtTrigExecutionContextService:1.0")
+								"IDL:openrtm.aist.go.jp/OpenRTM/ExtTrigExecutionContextService:1.0")
 	obj:setObjRef(ref)
 
 

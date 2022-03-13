@@ -38,9 +38,9 @@ InPortCorbaCdrProvider.new = function()
     obj:setInterfaceType("corba_cdr")
 
 	local orb = Manager:instance():getORB()
-	obj._svr = orb:newservant(obj, nil, "IDL:OpenRTM/InPortCdr:1.0")
+	obj._svr = orb:newservant(obj, nil, "IDL:openrtm.aist.go.jp/OpenRTM/InPortCdr:1.0")
 	local str = orb:tostring(obj._svr)
-	obj._objref = RTCUtil.getReference(orb, obj._svr, "IDL:OpenRTM/InPortCdr:1.0")
+	obj._objref = RTCUtil.getReference(orb, obj._svr, "IDL:openrtm.aist.go.jp/OpenRTM/InPortCdr:1.0")
 
 
 

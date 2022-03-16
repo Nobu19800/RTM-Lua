@@ -1,6 +1,66 @@
 # ダウンロード
 ## OpenRTM Lua版
 
+### Ver.0.5.0(corba_cdr対応版)
+#### Lua 5.1
+
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.1 32bit]()
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.1 64bit]()
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.1 ARM]()
+
+#### LuaJIT
+
+
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 LuaJIT 32bit]()
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 LuaJIT 64bit]()
+
+#### Lua 5.2
+
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.2 32bit]()
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.2 64bit]()
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.2 ARM]()
+
+#### Lua 5.3
+
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.3 32bit]()
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.3 64bit]()
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.3 ARM]()
+
+#### Lua 5.4
+
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.4 32bit]()
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.4 64bit]()
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.4 ARM]()
+
+
+### Ver.0.5.0(通常版)
+#### Lua 5.1
+
+* [OpenRTM Lua 0.5.0 通常版 Lua5.1 32bit]()
+* [OpenRTM Lua 0.5.0 通常版 Lua5.1 64bit]()
+* [OpenRTM Lua 0.5.0 通常版 Lua5.1 ARM]()
+
+#### LuaJIT
+
+* [OpenRTM Lua 0.5.0 通常版 LuaJIT 32bit]()
+* [OpenRTM Lua 0.5.0 通常版 LuaJIT 64bit]()
+
+#### Lua 5.2
+* [OpenRTM Lua 0.5.0 通常版 Lua5.2 32bit]()
+* [OpenRTM Lua 0.5.0 通常版 Lua5.2 64bit]()
+* [OpenRTM Lua 0.5.0 通常版 Lua5.2 ARM]()
+
+#### Lua 5.3
+* [OpenRTM Lua 0.5.0 通常版 Lua5.3 32bit]()
+* [OpenRTM Lua 0.5.0 通常版 Lua5.3 64bit]()
+* [OpenRTM Lua 0.5.0 通常版 Lua5.3 ARM]()
+
+#### Lua 5.4
+* [OpenRTM Lua 0.5.0 通常版 Lua5.4 32bit]()
+* [OpenRTM Lua 0.5.0 通常版 Lua5.4 64bit]()
+* [OpenRTM Lua 0.5.0 通常版 Lua5.4 ARM]()
+
+
 
 ### Ver.0.4.1(corba_cdr対応版)
 #### Lua 5.1

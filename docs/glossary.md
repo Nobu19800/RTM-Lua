@@ -836,8 +836,6 @@ TCP/IP上のGIOPの実装を`IIOP`、UDP上のGIOPの実装を`DIOP`、共有メ
 INS(Interoperable Naming Service)はCORBAオブジェクトを名前解決する機能。
 `coabeloc`、`corbaname`形式が利用できる。
 
-### SSLIOP
-
 
 #### corbaloc
 `corbaloc`は指定アドレス、ポート番号で特定の名前に関連付けたCORBAオブジェクトの参照を取得する方式。
@@ -904,6 +902,9 @@ print(rtc.get_component_profile())
 
 
 OiLでは`corbaname`はサポートしていません。
+
+
+### SSLIOP
 
 ## ネームサーバー
 ネームサーバー(もしくはネーミングサービス)はCORBAオブジェクトの参照を名前で登録して検索しやすくする仕組みです。

@@ -64,6 +64,7 @@
     - [INS](#ins)
         - [corbaloc](#corbaloc)
         - [corbaname](#corbaname)
+    - [SSLIOP](#ssliop)
 - [ネームサーバー](#ネームサーバー)
 - [OpenRTM-aist](#openrtm-aist)
 - [rtc.conf](#rtcconf)
@@ -834,6 +835,9 @@ TCP/IP上のGIOPの実装を`IIOP`、UDP上のGIOPの実装を`DIOP`、共有メ
 ### INS
 INS(Interoperable Naming Service)はCORBAオブジェクトを名前解決する機能。
 `coabeloc`、`corbaname`形式が利用できる。
+
+### SSLIOP
+
 
 #### corbaloc
 `corbaloc`は指定アドレス、ポート番号で特定の名前に関連付けたCORBAオブジェクトの参照を取得する方式。

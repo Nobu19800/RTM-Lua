@@ -109,7 +109,7 @@ AviUtlやNScripter2上でもRTCを起動できますが、実用性は皆無で�
 
 例：
 
-* V-REP(ロボットシミュレータ), [動画](https://www.youtube.com/watch?v=EaQ2oOxfhSY)
+* CoppeliaSim、V-REP(ロボットシミュレータ), [動画](https://www.youtube.com/watch?v=EaQ2oOxfhSY)
 * BizHawk(ゲームエミュレータ), [動画](https://www.youtube.com/watch?v=5dYfUjRzzQ8)
 * Laputan Blueprints(剛体シミュレータ), [動画](https://www.youtube.com/watch?v=FS52TlHDKiU)
 * AviUtl(動画編集ソフト)

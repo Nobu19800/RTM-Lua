@@ -154,3 +154,9 @@ OiL 0.7のみサポートする。
 * OpenRTM.idlの`#pragma prefix "openrtm.aist.go.jp"`を削除してDataPort.idlを読み込めるようにしたcorba_cdr対応版を配布
 
 corba_cdr対応版はOpenRTM-aist 1.2以前、OpenRTM.NETと通信できるようになったかわりにOpenRTM.idlで定義したインターフェースが使えないため、様々な何らかの問題が発生する可能性はある。少なくとも、複合コンポーネント、トリガ駆動の実行コンテキストを外部から利用するのは不可。OpenRTM Luaで使用する分には問題なし。
+
+## 0.5.0(2021年3月 日)
+
+* セキュアな通信(SSLIOP)への対応
+* Lua 5.2環境でManagerをノンブロッキングで実行したにもかかわらずブロックされていた不具合の修正
+* 静的解析での警告、バグ修正

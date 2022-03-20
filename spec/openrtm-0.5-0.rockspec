@@ -1,5 +1,5 @@
 package = "openrtm"
-version = "0.4-12"
+version = "0.5-0"
 source = {
    url = "git://github.com/Nobu19800/RTM-Lua"
 }
@@ -16,13 +16,12 @@ description = {
 
 
 dependencies = {
-   "lua >= 5.1,< 5.3",
-   --"oil",
-   --"luaidl",
+   "lua >= 5.1,<= 5.4",
+   "oil",
+   "luaidl",
    "loop",
    "luasocket >= 2.0.2",
-   --"lualogging",
-   --"lua-rfc-4122-uuid-generator",
+   "lualogging",
    "uuid >= 0.2"
 }
 
@@ -148,7 +147,8 @@ build = {
         ["openrtm.Timer"] = "lua/openrtm/Timer.lua",
         ["openrtm.TimeValue"] = "lua/openrtm/TimeValue.lua",
         ["openrtm.Typename"] = "lua/openrtm/Typename.lua",
-        ["openrtm.version"] = "lua/openrtm/version.lua"
+        ["openrtm.version"] = "lua/openrtm/version.lua",
+        ["openrtm.ssliop.Profiler"] = "lua/openrtm/ssliop/Profiler.lua"
     },
    install = {
       lua = {

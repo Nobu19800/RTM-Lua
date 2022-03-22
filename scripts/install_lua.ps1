@@ -160,10 +160,10 @@ if((Test-Path $LUA_INSTASLL_CC_DIR) -eq $true){
 Copy-Item "$env:LUA_DIR" -destination "$LUA_INSTASLL_CC_DIR" -recurse
 
 if((Test-Path $OPENRTM_SOURCE_DIR) -eq $false){
-  git clone https://github.com/Nobu19800/RTM-Lua -b corba_cdr_no_support $OPENRTM_SOURCE_DIR
+  git clone https://github.com/Nobu19800/RTM-Lua -b corba_cdr_support $OPENRTM_SOURCE_DIR
 }
 if((Test-Path $OPENRTM_SOURCE_CC_DIR) -eq $false){
-  git clone https://github.com/Nobu19800/RTM-Lua -b corba_cdr_support $OPENRTM_SOURCE_CC_DIR
+  git clone https://github.com/Nobu19800/RTM-Lua $OPENRTM_SOURCE_CC_DIR
 }
 
 

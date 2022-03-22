@@ -501,8 +501,8 @@ LGPLライセンス
 
 
 
-### Lua 5.2
-* [Lua-5.2](https://www.lua.org/)(MITライセンス)
+### Lua 5.2、5.3、5.4
+* [Lua-5.2,5.3,5.4](https://www.lua.org/)(MITライセンス)
 * [OiL-0.7](https://github.com/renatomaia/oil)(MITライセンス)
 * [loop-collections](https://github.com/renatomaia/loop-collections)(MITライセンス)
 * [LOOP](https://github.com/renatomaia/loop)(MITライセンス)
@@ -515,9 +515,10 @@ LGPLライセンス
 * [loop-objects](https://github.com/renatomaia/loop-objects)(MITライセンス)
 * [loop-debugging](https://github.com/renatomaia/loop-debugging)(MITライセンス)
 * [struct](https://luarocks.org/modules/luarocks/struct)(MITライセンス)
+* [luasec](https://github.com/brunoos/luasec)(MITライセンス)
+* [openssl](https://www.openssl.org/)(Apacheライセンス)
 
-
-### Lua 5.1、5.2共通
+### Lua 5.1、5.2、5.3、5.4共通
 * [LuaLogging](https://github.com/Neopallium/lualogging)(MITライセンス)
 * [MoonScript](http://moonscript.org)(MITライセンス)
 * [LPeg](https://luarocks.org/modules/gvvaughan/lpeg)(MITライセンス)

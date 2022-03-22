@@ -272,6 +272,8 @@ PortBase.new = function(name)
 		if not success then
 			self._rtcout:RTC_WARN(exception)
 		end
+		
+		ret = NVUtil.getReturnCode(ret)
 
 
 		if ret ~= self._ReturnCode_t.RTC_OK then

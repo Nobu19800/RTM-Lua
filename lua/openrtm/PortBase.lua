@@ -272,7 +272,7 @@ PortBase.new = function(name)
 		if not success then
 			self._rtcout:RTC_WARN(exception)
 		end
-		
+
 		ret = NVUtil.getReturnCode(ret)
 
 

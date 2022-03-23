@@ -1,5 +1,6 @@
 # CoppeliaSim上で動作するRTCの作成方法
 このページでは物理シミュレータCoppeliaSim上で動作する上で動作するRTCを作成して、以下のようにPython版サンプルコンポーネントのジョイスティックコンポーネントと接続して車体を操作するシステムの作成を行います。
+CoppeliaSim 4.3で動作確認しています。
 
 * [動画](https://www.youtube.com/watch?v=EaQ2oOxfhSY)
 
@@ -7,45 +8,45 @@
 ## CoppeliaSimのインストール
 以下からCoppeliaSimのインストーラーを入手してインストールしてください。
 
-* [Coppelia Robotics CoppeliaSim: Create. Compose. Simulate. Any Robot.](http://www.coppeliarobotics.com/downloads.html)
+* [Robot simulator CoppeliaSim: create, compose, simulate, any robot - Coppelia Robotics](https://coppeliarobotics.com/downloads)
 
 ## CoppeliaSimにOpenRTM Lua版をインストール
-CoppeliaSimをインストールしたフォルダ(`C:\Program Files\CoppeliaSim`、もしくは任意ディレクトリの`CoppeliaSim_PRO_EDU_V3_5_0_Linux`)にOpenRTM Lua版の各ファイルをコピーします。
+CoppeliaSimをインストールしたフォルダ(`C:\Program Files\CoppeliaSim`、もしくは任意ディレクトリの`CoppeliaSim_Edu_V4_3_0_Ubuntu18_04`)にOpenRTM Lua版の各ファイルをコピーします。
 
-以下から64bit用のOpenRTM Lua版ファイル一式(OpenRTM Lua x.y.z Lua5.1 64bit)をダウンロードしてください。
+以下から64bit用のOpenRTM Lua版ファイル一式(OpenRTM Lua x.y.z *** Lua5.3 64bit バージョン名削除(CoppeliaSim向け))をダウンロードしてください。
 
 * [ダウンロード](download.md)
 
 OpenRTM Lua版からCoppeliaSimにファイルをコピーします。
 
-`openrtm-lua-x.y.z-x64-lua5.1\lua\`以下のファイルを全て`C:\Program Files\CoppeliaSim3\CoppeliaSim_PRO_EDU\lua\`以下にコピーしてください。
-Ubuntuの場合は任意ディレクトリの`CoppeliaSim_PRO_EDU_V3_5_0_Linux`以下にコピーします。
+`openrtm-lua-x.y.z-cc-x64-lua5.3-versionomit\lua`フォルダを`C:\Program Files\CoppeliaRobotics\CoppeliaSimEdu\`以下にコピーして上書きしてください。
+Ubuntuの場合は任意ディレクトリの`CoppeliaSim_Edu_V4_3_0_Ubuntu18_04`以下にコピーします。
 
-![openrtmlua340](https://user-images.githubusercontent.com/6216077/37710309-97ec79f4-2d50-11e8-9f3c-3efd55eac308.png)
-
-
-**※CoppeliaSim、もしくはCoppeliaSimの新しいバージョンの場合はidlフォルダを一階層上のディレクトリ(`C:\Program Files\CoppeliaSim3\CoppeliaSim_PRO_EDU`、もしくは`CoppeliaSim_PRO_EDU_V3_5_0_Linux`)にコピーする必要があります。**
-
-![luaopenrtm1](https://user-images.githubusercontent.com/6216077/70972534-f0a2f600-20e6-11ea-99ad-a2069fb66cfa.png)
+![imagecopy1](https://user-images.githubusercontent.com/6216077/159617150-7f146c4d-5237-430c-b080-551de01d61e9.png)
 
 
+`openrtm-lua-x.y.z-cc-x64-lua5.3-versionomit\lua\idl`フォルダを(`C:\Program Files\CoppeliaRobotics\CoppeliaSimEdu`、もしくは`CoppeliaSim_Edu_V4_3_0_Ubuntu18_04`)にコピーします。
 
-以下、WindowsとUbuntuでコピーするファイルが違います。Ubuntuで使いたいという奇特な人は注意してください。
+![imagecopy2](https://user-images.githubusercontent.com/6216077/159617239-ad974670-253e-4d12-8db3-7e4c343e086a.png)
+
+
+
+以下、WindowsとUbuntuでコピーするファイルが違います。Ubuntuで使いたいという人は注意してください。
 
 ### Windowsの場合
 
-`openrtm-lua-x.y.z-x64-lua5.1\clibs\`以下のファイルを全て`C:\Program Files\CoppeliaSim3\CoppeliaSim_PRO_EDU\`以下にコピーしてください。
+`openrtm-lua-x.y.z-cc-x64-lua5.3-versionomit\clibs\`以下のファイルを全て`C:\Program Files\CoppeliaSim3\CoppeliaSim_PRO_EDU\luar\`以下にコピーしてください。
 
 
-![openrtmlua360](https://user-images.githubusercontent.com/6216077/37710315-9af9581a-2d50-11e8-803d-560ab910f990.png)
+![imagecopy3](https://user-images.githubusercontent.com/6216077/159617327-ae718b96-19f5-4740-b1bd-d9e0f55a9eab.png)
 
 ### Ubuntuの場合
 
-以下から`luamodule_linux`を入手してください。
+以下から`luamodule_ubuntu_lua53`を入手してください。
 
 * [ダウンロード](download.md)
 
-中身のファイルを全て`CoppeliaSim3\CoppeliaSim_PRO_EDU\`以下にコピーしてください。
+中身のファイルを全て`CoppeliaSim_Edu_V4_3_0_Ubuntu18_04/`以下にコピーしてください。
 
 ![vrep200](https://user-images.githubusercontent.com/6216077/44310099-d5997680-a40b-11e8-9ccd-8d271ece7ccf.png)
 
@@ -63,7 +64,7 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 
 |||
 |---|---|
-|モジュール名|VRepSample|
+|モジュール名|CoppeliaSimSample|
 
 
 ### アクティビティ
@@ -78,45 +79,81 @@ RTC BuilderによるRTCの基本的な作成手順は以下のページを参考
 |データ型|RTC::TimedFloatSeq|
 
 
-### VRepSample.luaの編集
+### CoppeliaSimSample.luaの編集
 
 ソースコードの先頭付近に以下の行を追加して、シミュレーションのスレッドと自動的に切り替える機能をオフにしてください。
-機能をオフにした場合、`simSwitchThread`関数によりシミュレーションを進める必要があります。
 
 ```Lua
-simSetThreadAutomaticSwitch(false)
+sim.setThreadAutomaticSwitch(false)
 ```
 
 `onExecute`関数を以下のように編集してください。
 
 ```Lua
 	function obj:onExecute(ec_id)
-            simSwitchThread()
-            if self._inIn:isNew() then
-                local data = self._inIn:read()
-                local joint_front_left_wheel=simGetObjectHandle('joint_front_left_wheel')
-                local joint_front_right_wheel=simGetObjectHandle('joint_front_right_wheel')
-                local joint_back_right_wheel=simGetObjectHandle('joint_back_right_wheel')
-                local joint_back_left_wheel=simGetObjectHandle('joint_back_left_wheel')
+		if self._inIn:isNew() then
+			local data = self._inIn:read()
+			local joint_front_left_wheel=sim.getObjectHandle('joint_front_left_wheel')
+			local joint_front_right_wheel=sim.getObjectHandle('joint_front_right_wheel')
+			local joint_back_right_wheel=sim.getObjectHandle('joint_back_right_wheel')
+			local joint_back_left_wheel=sim.getObjectHandle('joint_back_left_wheel')
 
-                simSetJointTargetVelocity(joint_front_left_wheel, data.data[2]/50+data.data[1]/50)
-                simSetJointTargetVelocity(joint_front_right_wheel, -data.data[2]/50+data.data[1]/50)
-                simSetJointTargetVelocity(joint_back_right_wheel, -data.data[2]/50+data.data[1]/50)
-                simSetJointTargetVelocity(joint_back_left_wheel, data.data[2]/50+data.data[1]/50)
-            end
-            return self._ReturnCode_t.RTC_OK
+			sim.setJointTargetVelocity(joint_front_left_wheel, data.data[2]/50+data.data[1]/50)
+			sim.setJointTargetVelocity(joint_front_right_wheel, -data.data[2]/50+data.data[1]/50)
+			sim.setJointTargetVelocity(joint_back_right_wheel, -data.data[2]/50+data.data[1]/50)
+			sim.setJointTargetVelocity(joint_back_left_wheel, data.data[2]/50+data.data[1]/50)
+		end
+		return self._ReturnCode_t.RTC_OK
 	end
 ```
-
-`simSwitchThread`関数によりシミュレーションを1ステップ進めています。
 
 InPortで読み込んだデータを車輪の速度に入力しています。
 
 
 CoppeliaSimの関数については以下のページが参考になります。
 
-* [Virtual Robot Experimentation Platform
-USER MANUAL](http://www.coppeliarobotics.com/helpFiles/en/apiOverview.htm)
+* [regular API reference](https://www.coppeliarobotics.com/helpFiles/en/apiFunctions.htm)
+
+Managerの起動やRTCの生成処理を初期化処理の`sysCall_init`関数で呼ぶ必要があります。
+またデフォルトではRTCは周期実行コンテキストを使用しますが、トリガ駆動実行コンテキスト(`OpenHRPExecutionContext`)に変更します。
+
+
+```Lua
+if openrtm.Manager.is_main() then
+	function sysCall_init()
+		local manager = openrtm.Manager
+		manager:init({"-o","exec_cxt.periodic.type:OpenHRPExecutionContext"})
+		manager:setModuleInitProc(MyModuleInit)
+		manager:activateManager()
+		manager:runManager(true)
+	end
+```
+
+Manager、RTCの更新処理を`sysCall_actuation`、`sysCall_sensing`関数に記述します。
+これでシミュレーション更新時にManagerの更新、RTCのコールバック関数呼び出し処理が実行されます。
+
+```Lua
+function sysCall_actuation()
+    local openrtm = require "openrtm"
+    local mgr = openrtm.Manager
+    mgr:step()
+
+    local comp = mgr:getComponent("CoppeliaSimSample0")
+    local ec = comp:get_owned_contexts()[1]
+    ec:tick()
+end
+```
+
+Managerの終了処理を`sysCall_cleanup`関数に記述することで、シミュレーション終了時にManager、RTCが終了します。
+
+```Lua
+function sysCall_cleanup()
+    local openrtm = require "openrtm"
+    local mgr = openrtm.Manager
+    mgr:shutdown()
+end
+```
+
 
 ## 動作確認
 ### ネームサーバー起動
@@ -137,8 +174,8 @@ TkJoyStickコンポーネントを入手して、`TkJoyStickComp.exe`を実行�
 ![openrtmlua380](https://user-images.githubusercontent.com/6216077/37711260-7f81a71a-2d53-11e8-8af2-60da43c26fe0.png)
 `new scene(scene1)`のツリーから`Robotnik_Summit_XL`の名前の右にあるアイコンをクリックするとLuaスクリプトの編集ウインドウが起動します。
 ![openrtmlua390](https://user-images.githubusercontent.com/6216077/37711268-858b96ac-2d53-11e8-86e6-6f98ca931ed9.png)
-その上に先ほど作成した`VRepSample.lua`のソースコードを全て上書きしてください。
-![openrtmlua420](https://user-images.githubusercontent.com/6216077/37711275-8b10246c-2d53-11e8-940d-0753acb63c8c.png)
+その上に先ほど作成した`CoppeliaSimSample.lua`のソースコードを全て上書きしてください。
+![imagesourcecode](https://user-images.githubusercontent.com/6216077/159617516-d100a335-6f04-44c1-96d1-5435310cd3c7.png)
 ### RTC起動
 
 CoppeliaSim上で以下のボタンを押すとシミュレーションが開始してRTCが起動します。
@@ -148,46 +185,63 @@ CoppeliaSim上で以下のボタンを押すとシミュレーションが開始
 
 まずRTCの起動に成功している場合は、以下のようにネームサービスビューにRTCが表示されます。
 
-![openrtmlua550](https://user-images.githubusercontent.com/6216077/38161053-f6efeed6-3502-11e8-8b12-57f12b3ea6fb.png)
+![system0](https://user-images.githubusercontent.com/6216077/159617836-40c13ce0-4b16-43a9-8783-cce2dc9e799b.png)
 
 `Open New System Editor`ボタンを押してシステムダイアグラムを表示してください。
 
-![openrtmlua560](https://user-images.githubusercontent.com/6216077/38161073-1fc67a14-3503-11e8-9060-9c843854d4bc.png)
+![system1](https://user-images.githubusercontent.com/6216077/159617650-58fd739e-551b-4409-bdbc-294c9a601419.png)
 
 ネームサービスビューからシステムダイアグラムにRTCをドラックアンドドロップしてください。
 
-![openrtmlua570](https://user-images.githubusercontent.com/6216077/38161105-70eb8f10-3503-11e8-9b5d-c4435d4b4bba.png)
+![sysrem3](https://user-images.githubusercontent.com/6216077/159617720-a89bb964-6893-4a3d-b2ea-8e2f7938ade2.png)
 
 
-`TkJoyStick0`の`pos`のOutPortを、VRepSample0のinのInPortにドラックアンドドロップしてください。 これで通信ができるようになります。
+`TkJoyStick0`の`pos`のOutPortを、`CoppeliaSimSample0`inのInPortにドラックアンドドロップしてください。 これで通信ができるようになります。
 
-![openrtmlua580](https://user-images.githubusercontent.com/6216077/38161120-cd5672ec-3503-11e8-8a8d-065fa7c2e5ab.png)
+![system4](https://user-images.githubusercontent.com/6216077/159617914-f3129269-8dd2-438d-ba54-1261e14488e6.png)
+
+ここで`TkJoyStick0`の実行周期を10Hz定します。デフォルトでは1000Hzですが、CoppeliaSimSample0側のデータ受信の頻度が多いとシミュレーションが遅くなるため調整します。
+システムダイアグラム上の`TkJoyStick0`をクリックして選択後に、Execution Context Viewタブを表示します。
+その後、`rate`を`10`に変更後、`適用`ボタンを押します。
+
+![system5](https://user-images.githubusercontent.com/6216077/159617959-943f6bf9-1949-457e-8af2-7d689a311cdf.png)
 
 `All Activate`ボタンを押すと`TkJoyStick0`からデータが送信されるため操作ができるようになります。
 
-![openrtmlua590](https://user-images.githubusercontent.com/6216077/38161127-e8b34b6e-3503-11e8-8a9a-4e96c2a41ba4.png)
+![system6](https://user-images.githubusercontent.com/6216077/159618029-466616a9-7eef-4f93-98c4-3cd8a14eee5d.png)
 
 
 ### コネクタ接続、RTCのアクティブ化の自動化
 
-VRepSample.luaのmanager:init関数の引数を以下のように変更してください。
+CoppeliaSimSample.luaのmanager:init関数の引数を以下のように変更してください。
 
 ```Lua
-manager:init({"-o", "manager.components.preconnect:VRepSample0.in?port=rtcname://localhost/TkJoyStick0.pos", "-o", "manager.components.preactivation:VRepSample0,rtcname://localhost/TkJoyStick0"})
+manager:init({"-o","exec_cxt.periodic.type:OpenHRPExecutionContext",
+	"-o", "manager.components.preconnect:CoppeliaSimSample0.in?port=rtcname://localhost/TkJoyStick0.pos",
+	"-o", "manager.components.preactivation:CoppeliaSimSample0,rtcname://localhost/TkJoyStick0",})
 ```
 
 `-o`オプションでパラメータの設定ができます。
 
-* `"-o", "manager.components.preconnect:VRepSample0.in?port=rtcname://localhost/TkJoyStick0.pos"`
+* `"-o", "manager.components.preconnect:CoppeliaSimSample0.in?port=rtcname://localhost/TkJoyStick0.pos"`
 
-起動時に接続するポートを指定します。 この場合は`VRepSample0`というRTCの`in`というデータポートを、`TkJoyStick0`というRTCの`pos`というポートに接続します。
+起動時に接続するポートを指定します。 この場合は`CoppeliaSimSample0`というRTCの`in`というデータポートを、`TkJoyStick0`というRTCの`pos`というポートに接続します。
 
 ただし、`TkJoyStick0`は別プロセスで起動しているため、`rtcname形式`による指定が必要になります。 `rtcname形式`はネームサーバーからRTCを取得する方法です。`rtcname://アドレス/RTC名.ポート名`で指定します。
 
-* `"-o","manager.components.preactivation:VRepSample0,rtcname://localhost/TkJoyStick0"`
+* `"-o","manager.components.preactivation:CoppeliaSimSample0,rtcname://localhost/TkJoyStick0"`
+
+また、以下のコードを追加することでTkJoyStick0の実行周期を変更できます。
+
+```Lua
+local naming = manager:getNaming()
+local comps = naming:string_to_component("rtcname://localhost/TkJoyStick0")
+local ec = comps[1]:get_owned_contexts()[1]
+ec:set_rate(10)
+```
 
 
 起動時にアクティブ化するRTCを指定します。
 
 ### rtc.confのパス
-`coppeliaSim.exe`、もしくは`vrep.exe`と同じフォルダのrtc.confを読み込みます。
+`coppeliaSim.exe`と同じフォルダのrtc.confを読み込みます。

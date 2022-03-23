@@ -830,7 +830,7 @@ IOR(Interoperable Object Reference)はCORBAオブジェクトの情報を文字�
 ### GIOP
 GIOP(General Inter-ORB Protocol)はORBが通信するための通信プロトコル。
 GIOPという文字(4byte)、バージョン(2byte)、メッセージフラグ(1byte)、メッセージ型(1byte)、メッセージ本体のサイズ(4byte)の合計12byteのヘッダーの後ろにメッセージ本体を格納する。
-TCP/IP上のGIOPの実装を`IIOP`、UDP上のGIOPの実装を`DIOP`、共有メモリ上のGIOPの実装を`SHMIOP`、UNIXドメインソケット上のGIOPの実装を`UIOP`、IIOPでSSLによる暗号化を行う`SSLIOP`というプロトコルがあります。
+TCP/IP上のGIOPの実装を`IIOP`、UDP上のGIOPの実装を`DIOP`、共有メモリ上のGIOPの実装を`SHMIOP`、UNIXドメインソケット上のGIOPの実装を`UIOP`、SSL/TLSによる暗号化とサーバー・クライアント認証を行う`SSLIOP`というプロトコルがあります。
 
 ### INS
 INS(Interoperable Naming Service)はCORBAオブジェクトを名前解決する機能。
@@ -905,6 +905,32 @@ OiLでは`corbaname`はサポートしていません。
 
 
 ### SSLIOP
+[OMG CORBA Security Service](https://www.omg.org/spec/SEC/1.8/)仕様では、セキュリティポリシーのモデル、認証、アクセス制御、メッセージ保護、委譲、監査、否認不可の機能を定義していますが、その一つとしてSSL/TLSによるサーバー・クライアント認証とGIOPメッセージの暗号化での通信プロトコルであるSSLIOPを定義しています。
+
+OiL 0.6以降でもSSLIOPはサポートしていますが、OpenRTM Luaではrtc.confに設定を追加することで使用可能です。
+OpenSSLで自己認証局と自己署名証明書を生成して確認してください。
+
+```
+corba.ssl.enable: YES
+corba.security: required
+corba.ssl.key_file: certs/server.pem
+corba.ssl.certificate: certs/root.crt
+corba.ssl.cafile: certs/root.crt
+corba.ssl.protocol: tlsv1_2
+corba.ssl.verify: peer, fail_if_no_peer_cert
+```
+
+| オプション名 | デフォルト値 | 意味 |
+| ------------- | ------------- | ------------- |
+|corba.ssl.enable|NO|YES：SSLIOPを有効にする、NO：SSLIOPを無効にする|
+|corba.security|required|required：SSLIOP通信以外を拒否する、preferred：SSLIOP通信を優先する(IIOP通信も受け入れる)|
+|corba.ssl.key_file||秘密鍵|
+|corba.ssl.certificate||サーバー証明書兼クライアント証明書|
+|corba.ssl.cafile||ルート証明書のファイル名|
+|corba.ssl.capath||ルート証明書を格納したパス|
+|corba.ssl.protocol|tlsv1_2|有効にするSSL/TLSのバージョン(sslv23、tlsv1、tlsv1_1、tlsv1_2)|
+|corba.ssl.verify|peer, fail_if_no_peer_cert|認証方法(none、client_once、peer、fail_if_no_peer_cert)|
+
 
 ## ネームサーバー
 ネームサーバー(もしくはネーミングサービス)はCORBAオブジェクトの参照を名前で登録して検索しやすくする仕組みです。

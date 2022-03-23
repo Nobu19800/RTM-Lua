@@ -4,61 +4,71 @@
 ### Ver.0.5.0(corba_cdr対応版)
 #### Lua 5.1
 
-* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.1 32bit]()
-* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.1 64bit]()
-* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.1 ARM]()
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.1 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-Win32-lua5.1.zip)
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.1 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-x64-lua5.1.zip)
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.1 ARM 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-ARM-lua5.1.zip)
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.1 ARM 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-ARM64-lua5.1.zip)
 
 #### LuaJIT
 
 
-* [OpenRTM Lua 0.5.0 corba_cdr対応版 LuaJIT 32bit]()
-* [OpenRTM Lua 0.5.0 corba_cdr対応版 LuaJIT 64bit]()
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 LuaJIT 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-Win32-LuaJIT2.0.5.zip)
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 LuaJIT 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-x64-LuaJIT2.0.5.zip)
 
 #### Lua 5.2
 
-* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.2 32bit]()
-* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.2 64bit]()
-* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.2 ARM]()
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.2 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-Win32-lua5.2.zip)
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.2 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-x64-lua5.2.zip)
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.2 ARM 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-ARM-lua5.2.zip)
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.2 ARM 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-ARM64-lua5.2.zip)
 
 #### Lua 5.3
 
-* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.3 32bit]()
-* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.3 64bit]()
-* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.3 ARM]()
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.3 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-Win32-lua5.3.zip)
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.3 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-x64-lua5.3.zip)
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.3 ARM 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-ARM-lua5.3.zip)
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.3 ARM 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-ARM64-lua5.3.zip)
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.3 64bit バージョン名削除(CoppeliaSim向け)](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-x64-lua5.3-versionomit.zip)
 
 #### Lua 5.4
 
-* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.4 32bit]()
-* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.4 64bit]()
-* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.4 ARM]()
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.4 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-Win32-lua5.4.zip)
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.4 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-x64-lua5.4.zip)
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.4 ARM 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-ARM-lua5.4.zip)
+* [OpenRTM Lua 0.5.0 corba_cdr対応版 Lua5.4 ARM 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-cc-ARM64-lua5.4.zip)
 
 
 ### Ver.0.5.0(通常版)
 #### Lua 5.1
 
-* [OpenRTM Lua 0.5.0 通常版 Lua5.1 32bit]()
-* [OpenRTM Lua 0.5.0 通常版 Lua5.1 64bit]()
-* [OpenRTM Lua 0.5.0 通常版 Lua5.1 ARM]()
+* [OpenRTM Lua 0.5.0 通常版 Lua5.1 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-Win32-lua5.1.zip)
+* [OpenRTM Lua 0.5.0 通常版 Lua5.1 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-x64-lua5.1.zip)
+* [OpenRTM Lua 0.5.0 通常版 Lua5.1 ARM 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-ARM-lua5.1.zip)
+* [OpenRTM Lua 0.5.0 通常版 Lua5.1 ARM 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-ARM64-lua5.1.zip)
 
 #### LuaJIT
 
-* [OpenRTM Lua 0.5.0 通常版 LuaJIT 32bit]()
-* [OpenRTM Lua 0.5.0 通常版 LuaJIT 64bit]()
+* [OpenRTM Lua 0.5.0 通常版 LuaJIT 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-Win32-LuaJIT2.0.5.zip)
+* [OpenRTM Lua 0.5.0 通常版 LuaJIT 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-x64-LuaJIT2.0.5.zip)
 
 #### Lua 5.2
-* [OpenRTM Lua 0.5.0 通常版 Lua5.2 32bit]()
-* [OpenRTM Lua 0.5.0 通常版 Lua5.2 64bit]()
-* [OpenRTM Lua 0.5.0 通常版 Lua5.2 ARM]()
+* [OpenRTM Lua 0.5.0 通常版 Lua5.2 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-Win32-lua5.2.zip)
+* [OpenRTM Lua 0.5.0 通常版 Lua5.2 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-x64-lua5.2.zip)
+* [OpenRTM Lua 0.5.0 通常版 Lua5.2 ARM 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-ARM-lua5.2.zip)
+* [OpenRTM Lua 0.5.0 通常版 Lua5.2 ARM 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-ARM64-lua5.2.zip)
 
 #### Lua 5.3
-* [OpenRTM Lua 0.5.0 通常版 Lua5.3 32bit]()
-* [OpenRTM Lua 0.5.0 通常版 Lua5.3 64bit]()
-* [OpenRTM Lua 0.5.0 通常版 Lua5.3 ARM]()
+* [OpenRTM Lua 0.5.0 通常版 Lua5.3 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-Win32-lua5.3.zip)
+* [OpenRTM Lua 0.5.0 通常版 Lua5.3 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-x64-lua5.3.zip)
+* [OpenRTM Lua 0.5.0 通常版 Lua5.3 ARM 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-ARM-lua5.3.zip)
+* [OpenRTM Lua 0.5.0 通常版 Lua5.3 ARM 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-ARM64-lua5.3.zip)
+* [OpenRTM Lua 0.5.0 通常版 Lua5.3 64bit バージョン名削除(CoppeliaSim向け)](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-x64-lua5.3-versionomit.zip)
 
 #### Lua 5.4
-* [OpenRTM Lua 0.5.0 通常版 Lua5.4 32bit]()
-* [OpenRTM Lua 0.5.0 通常版 Lua5.4 64bit]()
-* [OpenRTM Lua 0.5.0 通常版 Lua5.4 ARM]()
+* [OpenRTM Lua 0.5.0 通常版 Lua5.4 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-Win32-lua5.4.zip)
+* [OpenRTM Lua 0.5.0 通常版 Lua5.4 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-x64-lua5.4.zip)
+* [OpenRTM Lua 0.5.0 通常版 Lua5.4 ARM 32bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-ARM-lua5.4.zip)
+* [OpenRTM Lua 0.5.0 通常版 Lua5.4 ARM 64bit](https://github.com/Nobu19800/RTM-Lua/releases/download/v0.5.0/openrtm-lua-0.5.0-ARM64-lua5.4.zip)
 
 
 
@@ -119,39 +129,20 @@
 
 
 ### Ver.0.3.1
-#### Lua 5.1
-* [OpenRTM Lua 0.3.1 Lua5.1 32bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1debT3wxp3ICqGlPt99wS7u_VfnCHcekg&export=download)
-* [OpenRTM Lua 0.3.1 Lua5.1 64bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1sHN2jW323t3ZQeCk76hue38ACsccqX-6&export=download)
-
-#### LuaJIT
-* [OpenRTM Lua 0.3.1 LuaJIT 32bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1VYF3MAOucnwzIQWBlmTmawqraerDVW_s&export=download)
-* [OpenRTM Lua 0.3.1 LuaJIT 64bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1goXi2rB2HIHrEy-x05-t6oCoemNJlnsQ&export=download)
-
-#### Lua 5.2
-* [OpenRTM Lua 0.3.1 Lua5.2 32bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1_t5sMJpXUA-V14Ctx-odTMtLTClYPkiJ&export=download)
-* [OpenRTM Lua 0.3.1 Lua5.2 64bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=13rB140a13AASqSamBrqR7H9n7Zsd4Sna&export=download)
+* ダウンロード停止
 
 
 ### Ver.0.3.0
-* [OpenRTM Lua 0.3.0 32bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1OoMTZVibrLxtrs1O5hcRxItRYSOzjAiN&export=download)
-* [OpenRTM Lua 0.3.0 64bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1KEg08bwgvpLG2RBMbCx7E7lgi3tat05k&export=download)
-* [OpenRTM Lua 0.3.0 LuaJIT 32bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1LV1yHg7URo9dowy_d9w-2_bBxm4RLGil&export=download)
-* [OpenRTM Lua 0.3.0 LuaJIT 64bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1mlBAX1swNCqv2XY9Q6_X39igGI-JbNkq&export=download)
+* ダウンロード停止
 
 ### Ver.0.2.1
-* [OpenRTM Lua 0.2.1 32bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1RQOpAX5YSexGWcGD0vmaOHKrb89gUQwu&export=download)
-* [OpenRTM Lua 0.2.1 64bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1Dam2ldQSl1i_IFzmviUyvgz56W8UapbK&export=download)
-* [OpenRTM Lua 0.2.1 LuaJIT 32bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1wZDib0A8PqQGh_Zn9lPMK1mj2BUvwjYC&export=download)
-* [OpenRTM Lua 0.2.1 LuaJIT 64bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1UebjUeMkR4zDjrFlFXsF1zNgdr67lPp6&export=download)
+* ダウンロード停止
 
 ### Ver.0.2.0
-* [OpenRTM Lua 0.2.0 32bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1K3xtSL6v4ahhq0QXbUV-3bYsIjj8IxK6&export=download)
-* [OpenRTM Lua 0.2.0 64bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1H10TDk9ZDYiLMxItEVRS4P2hbEdYp0ur&export=download)
-* [OpenRTM Lua 0.2.0 LuaJIT 32bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1cNubNGlyD3vhOqzvIx0WQx-6T9pvWanj&export=download)
-* [OpenRTM Lua 0.2.0 LuaJIT 64bit](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1DISAEiUv2y42NddGLCiA7C95Qx8-RVid&export=download)
+* ダウンロード停止
 
 ### Ver.0.1.1
-* [OpenRTM Lua 0.1.1](https://drive.google.com/a/nobu777.net/uc?authuser=0&id=1GifXYwg9fkym20ijqrYwdqPaY4Spqb--&export=download)
+* ダウンロード停止
 
 ### Ver.0.1.0
 * ダウンロード停止

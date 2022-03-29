@@ -21,6 +21,7 @@ local ModuleManager= {}
 local CONFIG_PATH   = "manager.modules.config_path"
 --local DETECT_MOD    = "manager.modules.detect_loadable"
 local MOD_LOADPTH   = "manager.modules.load_path"
+local MOD_LUA_LOADPTH   = "manager.modules.Lua.load_paths"
 local INITFUNC_SFX  = "manager.modules.init_func_suffix"
 local INITFUNC_PFX  = "manager.modules.init_func_prefix"
 local ALLOW_ABSPATH = "manager.modules.abs_path_allowed"
@@ -457,6 +458,11 @@ ModuleManager.new = function(prop)
 
 	for k, v in pairs(obj._loadPath) do
 		obj._loadPath[k] = StringUtil.eraseHeadBlank(v)
+	end
+
+	local luaLoadPath = StringUtil.split(prop:getProperty(MOD_LUA_LOADPTH,"./"), ",")
+	for k, v in pairs(luaLoadPath) do
+		obj._loadPath[#obj._loadPath+1] = StringUtil.eraseHeadBlank(v)
 	end
 
 	for k, v in pairs(system_path) do
